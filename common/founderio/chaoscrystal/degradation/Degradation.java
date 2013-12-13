@@ -16,6 +16,9 @@ public class Degradation {
 		this.aspects = aspects;
 		this.amounts = amounts;
 		this.degraded = degraded;
+		if(aspects.length != amounts.length) {
+			throw new RuntimeException("Mismatch in aspects<>amounts.");
+		}
 	}
 
 	@Override

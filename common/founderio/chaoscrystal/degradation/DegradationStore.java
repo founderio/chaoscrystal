@@ -31,13 +31,13 @@ public class DegradationStore {
 			ItemStack degraded) {
 		Degradation[] geds = degradations.get(source.itemID);
 		if(geds == null) {
-			geds = new Degradation[0];
+			geds = new Degradation[1];
 		} else {
 			Degradation[] geds2 = new Degradation[geds.length];
 			System.arraycopy(geds, 0, geds2, 0, geds.length);
 			geds = geds2;
 		}
-		geds[geds.length - 2] = new Degradation(source, aspects, amounts, degraded);
+		geds[geds.length - 1] = new Degradation(source, aspects, amounts, degraded);
 		degradations.put(source.itemID, geds);
 	}
 }

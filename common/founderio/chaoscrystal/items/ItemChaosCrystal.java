@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
@@ -33,15 +34,18 @@ public class ItemChaosCrystal extends Item {
 		}
 		
 		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 1.9f, par3EntityPlayer.posZ);
-		entity.aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
-		if (entity.aspectStore == null) {
-			entity.aspectStore = new NBTTagCompound();
+		if(par1ItemStack.getTagCompound() != null) {
+			entity.aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
+			if (entity.aspectStore == null) {
+				entity.aspectStore = new NBTTagCompound();
+			}
 		}
+		
 		
 		par2World.spawnEntityInWorld(entity);
 		entity.playSpawnSound();
 		
-		return new ItemStack(0, 0, 0);
+		return new ItemStack(ChaosCrystalMain.itemChaosCrystal, 0);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
