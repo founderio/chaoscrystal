@@ -21,9 +21,10 @@ public class GenCrystalPillars implements IWorldGenerator {
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world,
 			IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		int count =1;// 5 + random.nextInt(10);
+		int count = 1;
 		
 		for(int i = 0; i < count; i++) {
+			int meta = random.nextInt(2);
 			int x = random.nextInt(16);
 			int z = random.nextInt(16);
 			int xAbsolute = chunkX * 16 + x;
@@ -46,7 +47,7 @@ public class GenCrystalPillars implements IWorldGenerator {
 							if(ws < 2)
 								ws = 2;
 							if(zscroll*zscroll + xscroll*xscroll < ws) {
-								world.setBlock(xAbsolute + xscroll, y + yBase, zAbsolute + zscroll, ChaosCrystalMain.blockBase.blockID, 0, 3);
+								world.setBlock(xAbsolute + xscroll, y + yBase, zAbsolute + zscroll, ChaosCrystalMain.blockBase.blockID, meta, 3);
 							}
 						}
 					}
