@@ -76,9 +76,9 @@ public class EntityChaosCrystal extends Entity {
                 		this.worldObj.setBlock((int)this.posX + offX, (int)this.posY + offY, (int)this.posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
                 		
                 		for (int i = 0; i < degradation.aspects.length; i++) {
-                    		int aspect = this.aspectStore.getInteger("aspect_" + degradation.aspects[i]);
+                    		int aspect = this.aspectStore.getInteger(degradation.aspects[i]);
                     		aspect += degradation.amounts[i];
-                    		this.aspectStore.setInteger("aspect_" + degradation.aspects[i], aspect);
+                    		this.aspectStore.setInteger(degradation.aspects[i], aspect);
         				}
                 		
                 		try {

@@ -8,10 +8,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class ItemChaosCrystal extends Item {
@@ -63,7 +65,18 @@ public class ItemChaosCrystal extends Item {
 			par3List.add("This ChaosCrystal is used and empty.");
 			return;
 		}
-		par3List.add(String.format("Water: %d", aspectStore.getInteger("water")));
+		boolean hasAspects = false;
+		for(String aspect : Aspects.ASPECTS) {
+			int asp = aspectStore.getInteger(aspect);
+			if(asp > 0) {
+				hasAspects = true;
+				par3List.add(String.format("%s: %d", LanguageRegistry.instance().getStringLocalization(Constants.MOD_ID + ".aspect." + aspect), asp));
+			}
+		}
+		if(!hasAspects) {
+			par3List.add("This ChaosCrystal has no aspects stored.");
+		}
+		
 	}
 	
 }

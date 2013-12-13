@@ -28,6 +28,7 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
+import founderio.chaoscrystal.worldgen.GenCrystalFloats;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
 /**
@@ -74,19 +75,24 @@ public class ChaosCrystalMain {
 		
 		//TODO: setup stuff if needed, get cfgs
 		
-		config.save();
 		
 		itemChaosCrystal = new ItemChaosCrystal(getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200));
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
 		//TODO: setup properties
 		
-		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.rock);
+		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.glass);
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(CreativeTabs.tabBlock);
+		blockBase.setHardness(4);
+		blockBase.setLightValue(0.2f);
+		blockBase.setResistance(0);
+		blockBase.setStepSound(Block.soundGlassFootstep);
 		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
-		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
+		config.save();
+		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
+		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
 		
 		if(forceBiome) {
 			//Just a test: remove all other biomes...
@@ -108,6 +114,7 @@ public class ChaosCrystalMain {
 		proxy.registerRenderStuff();
 		
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
+		GameRegistry.registerWorldGenerator(new GenCrystalFloats());
 		
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), " D ", "D D", " D ", 'D', Item.diamond);
 		

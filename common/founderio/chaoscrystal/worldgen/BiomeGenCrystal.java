@@ -1,10 +1,13 @@
 package founderio.chaoscrystal.worldgen;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.SpawnListEntry;
 
@@ -15,17 +18,25 @@ public class BiomeGenCrystal extends BiomeGenBase {
 	public BiomeGenCrystal(int par1) {
 		super(par1);
 		this.spawnableCreatureList.clear();
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityCreeper.class, 10, 1, 6));
-        this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 10, 1, 6));
+        this.spawnableMonsterList.clear();
         this.spawnableCaveCreatureList.clear();
         this.spawnableWaterCreatureList.clear();
+		this.spawnableMonsterList.add(new SpawnListEntry(EntityCreeper.class, 10, 1, 6));
+        this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 10, 1, 6));
         this.topBlock = (byte)ChaosCrystalMain.blockBase.blockID;
-        this.fillerBlock = (byte)ChaosCrystalMain.blockBase.blockID;//TODO: custom blocks
+        this.fillerBlock = (byte)Block.dirt.blockID;//TODO: custom blocks
+        this.setDisableRain();
+        this.temperature = 0.3f;
         this.theBiomeDecorator.treesPerChunk = -999;
         this.theBiomeDecorator.deadBushPerChunk = 0;
         this.theBiomeDecorator.reedsPerChunk = 0;
         this.theBiomeDecorator.cactiPerChunk = 0;
         this.biomeName = Constants.ID_BIOME_CRYSTAL;
+	}
+	
+	@Override
+	public int getWaterColorMultiplier() {
+		return 0x003333;
 	}
 
 }
