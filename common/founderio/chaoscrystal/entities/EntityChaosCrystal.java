@@ -1,12 +1,13 @@
 package founderio.chaoscrystal.entities;
 
-import founderio.chaoscrystal.ChaosCrystalMain;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.degradation.Degradation;
 
 public class EntityChaosCrystal extends Entity {
 
@@ -25,6 +26,9 @@ public class EntityChaosCrystal extends Entity {
 
 	public NBTTagCompound aspectStore;
 	public int age;
+	public int lastDegrade = 0;
+	public final int degradeInterval = 30;
+	public final int degradeRange = 10;
 	
 	@Override
 	public boolean canBeCollidedWith() {
@@ -42,7 +46,33 @@ public class EntityChaosCrystal extends Entity {
         this.worldObj.theProfiler.startSection("entityBaseTick");
         
         this.age++;
-        //TODO: Extraction, hurting, stuff...
+        if(!this.worldObj.isRemote) {
+        	if(age-lastDegrade > degradeInterval) {
+            	int offX = this.rand.nextInt(degradeRange);
+            	int offY = this.rand.nextInt(degradeRange);
+            	int offZ = this.rand.nextInt(degradeRange);
+            	
+            	int id = this.worldObj.getBlockId((int)this.posX + offX, (int)this.posY + offY, (int)this.posZ + offZ);
+            	int meta = this.worldObj.getBlockMetadata((int)this.posX + offX, (int)this.posY + offY, (int)this.posZ + offZ);
+            	
+            	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
+            	if(degradation != null) {
+            		this.worldObj.setBlock((int)this.posX + offX, (int)this.posY + offY, (int)this.posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
+            		
+            		for (int i = 0; i < degradation.aspects.length; i++) {
+                		int aspect = this.aspectStore.getInteger("aspect_" + degradation.aspects[i]);
+                		aspect += degradation.amounts[i];
+                		this.aspectStore.setInteger("aspect_" + degradation.aspects[i], aspect);
+    				}
+            	} else {
+            		this.worldObj.setBlock((int)this.posX + offX, (int)this.posY + offY, (int)this.posZ + offZ, 0, 0, 1 + 2);
+            		this.worldObj.createExplosion(this, (int)this.posX + offX, (int)this.posY + offY, (int)this.posZ + offZ, 1, false);
+            	}
+            	
+            	
+            }
+        }
+        
         
         this.worldObj.theProfiler.endSection();
 	}

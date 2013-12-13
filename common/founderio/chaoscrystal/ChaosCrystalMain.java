@@ -15,6 +15,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 
@@ -30,6 +31,8 @@ public class ChaosCrystalMain {
 	
 	@SidedProxy(clientSide = "founderio.chaoscrystal.ClientProxy", serverSide = "founderio.chaoscrystal.CommonProxy")
 	public static CommonProxy proxy;
+	
+	public static DegradationStore degradationStore;
 	
 	public static Item itemChaosCrystal;
 	
@@ -64,5 +67,7 @@ public class ChaosCrystalMain {
 		proxy.registerRenderStuff();
 		
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), " D ", "D D", " D ", 'D', Item.diamond);
+		
+		degradationStore = new DegradationStore();
 	}
 }
