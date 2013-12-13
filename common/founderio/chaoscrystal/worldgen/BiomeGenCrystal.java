@@ -1,6 +1,7 @@
 package founderio.chaoscrystal.worldgen;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySlime;
@@ -24,6 +25,7 @@ public class BiomeGenCrystal extends BiomeGenBase {
         this.theBiomeDecorator.deadBushPerChunk = 0;
         this.theBiomeDecorator.reedsPerChunk = 0;
         this.theBiomeDecorator.cactiPerChunk = 0;
+        this.biomeName = Constants.ID_BIOME_CRYSTAL;
 	}
 
 }

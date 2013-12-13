@@ -28,6 +28,7 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
+import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
 /**
  * @author Oliver
@@ -69,6 +70,8 @@ public class ChaosCrystalMain {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
+		boolean forceBiome = config.get("Settings", "force_biomes", false).getBoolean(false);
+		
 		//TODO: setup stuff if needed, get cfgs
 		
 		config.save();
@@ -85,11 +88,12 @@ public class ChaosCrystalMain {
 		
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
 		
-		//Just a test: remove all other biomes... TODO: make config for testing purposes..
-//		for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
-//			GameRegistry.removeBiome(biome);
-//		}
-		
+		if(forceBiome) {
+			//Just a test: remove all other biomes...
+			for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
+				GameRegistry.removeBiome(biome);
+			}
+		}
 		
 		GameRegistry.addBiome(biomeCrystal);
 		BiomeManager.addSpawnBiome(biomeCrystal);
@@ -102,6 +106,8 @@ public class ChaosCrystalMain {
 		
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 75, 1, false);
 		proxy.registerRenderStuff();
+		
+		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
 		
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), " D ", "D D", " D ", 'D', Item.diamond);
 		
