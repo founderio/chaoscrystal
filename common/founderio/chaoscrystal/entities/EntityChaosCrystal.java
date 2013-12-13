@@ -119,6 +119,7 @@ public class EntityChaosCrystal extends Entity {
 			aspectStore = new NBTTagCompound();
 		}
 		age = nbttagcompound.getInteger("age");
+		lastDegrade = nbttagcompound.getInteger("lastDegrade");
 		isInSuckMode = nbttagcompound.getBoolean("suckMode");
 	}
 
@@ -126,6 +127,7 @@ public class EntityChaosCrystal extends Entity {
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setCompoundTag("aspectStore", aspectStore);
 		nbttagcompound.setInteger("age", age);
+		nbttagcompound.setInteger("lastDegrade", lastDegrade);
 		nbttagcompound.setBoolean("suckMode", isInSuckMode);
 	}
 
