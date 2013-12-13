@@ -5,8 +5,12 @@ package founderio.chaoscrystal;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -23,6 +27,7 @@ import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
+import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 
 /**
  * @author Oliver
@@ -43,6 +48,8 @@ public class ChaosCrystalMain {
 	
 	public static BlockBase blockBase;
 	
+	public static BiomeGenCrystal biomeCrystal;
+	
 	private Configuration config;
 	
 	private int getItemId(String id, int defaultId) {
@@ -51,6 +58,10 @@ public class ChaosCrystalMain {
 	
 	private int getBlockId(String id, int defaultId) {
 		return config.get("Blocks", id, defaultId).getInt();
+	}
+	
+	private int getBiomeId(String id, int defaultId) {
+		return config.get("Biomes", id, defaultId).getInt();
 	}
 	
 	@EventHandler
@@ -66,10 +77,22 @@ public class ChaosCrystalMain {
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
 		//TODO: setup properties
 		
-		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 18201), Material.rock);
+		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.rock);
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
+		blockBase.setCreativeTab(CreativeTabs.tabBlock);
+		
+		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
+		
+		//Just a test: remove all other biomes... TODO: make config for testing purposes..
+//		for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
+//			GameRegistry.removeBiome(biome);
+//		}
+		
+		
+		GameRegistry.addBiome(biomeCrystal);
+		BiomeManager.addSpawnBiome(biomeCrystal);
 	}
 	
 	@EventHandler

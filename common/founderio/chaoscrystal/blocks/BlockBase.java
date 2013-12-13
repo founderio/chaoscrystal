@@ -38,9 +38,8 @@ public class BlockBase extends Block {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		iconList = new Icon[metaList.length];
-		for(int i = 0; i < metaList.length; i++) {
-			par1IconRegister.registerIcon(Constants.MOD_ID + ":" + metaList[i]);
-		}
+		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystalline");
+		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystal");
 	}
 	
 	@Override
@@ -48,5 +47,11 @@ public class BlockBase extends Block {
 	public Icon getIcon(int par1, int par2) {
 		int idx = MathHelper.clamp_int(par2, 0, iconList.length - 1);
 		return iconList[idx];
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public int getRenderBlockPass() {
+		return 1;
 	}
 }
