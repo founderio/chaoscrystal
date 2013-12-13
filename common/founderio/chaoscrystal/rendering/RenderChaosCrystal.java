@@ -51,6 +51,7 @@ public class RenderChaosCrystal extends Render {
         if (this.renderManager.options.fancyGraphics)
         {
             GL11.glPushMatrix();
+            GL11.glTranslatef((float)d0, (float)d1 + 0/*bobbing*/, (float)d2);
 
             if (renderInFrame)
             {
@@ -66,6 +67,7 @@ public class RenderChaosCrystal extends Render {
             int j = itemstack.stackSize;
 
             GL11.glTranslatef(-f9, -f10, -((f12 + f11)));
+            
 
                 GL11.glTranslatef(0f, 0f, f12 + f11);
 
@@ -78,7 +80,6 @@ public class RenderChaosCrystal extends Render {
                     this.bindTexture(TextureMap.locationItemsTexture);
                 }
 
-               // GL11.glColor4f(par5, par6, par7, 1.0F);
                 ItemRenderer.renderItemIn2D(tessellator, f5, f6, f4, f7, ((Icon)par2Icon).getIconWidth(), ((Icon)par2Icon).getIconHeight(), f12);
 
                 if (itemstack.hasEffect(0))
@@ -116,17 +117,15 @@ public class RenderChaosCrystal extends Render {
         }
         else
         {
-           //for (int l = 0; l < par3; ++l)
-           // {
+           
                 GL11.glPushMatrix();
-
+                GL11.glTranslatef((float)d0, (float)d1 + 0/*bobbing*/, (float)d2);
 
                 if (!renderInFrame)
                 {
                     GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
                 }
 
-               // GL11.glColor4f(par5, par6, par7, 1.0F);
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, 1.0F, 0.0F);
                 tessellator.addVertexWithUV((double)(0.0F - f9), (double)(0.0F - f10), 0.0D, (double)f4, (double)f7);
@@ -135,7 +134,6 @@ public class RenderChaosCrystal extends Render {
                 tessellator.addVertexWithUV((double)(0.0F - f9), (double)(1.0F - f10), 0.0D, (double)f4, (double)f6);
                 tessellator.draw();
                 GL11.glPopMatrix();
-            //}
         }
 	}
 

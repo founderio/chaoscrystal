@@ -61,6 +61,7 @@ public class ChaosCrystalMain {
 //		langReg.
 		
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 75, 1, false);
+		proxy.registerRenderStuff();
 		
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), " D ", "D D", " D ", 'D', Item.diamond);
 	}

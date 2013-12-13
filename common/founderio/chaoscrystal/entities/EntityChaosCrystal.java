@@ -2,6 +2,7 @@ package founderio.chaoscrystal.entities;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,7 +23,7 @@ public class EntityChaosCrystal extends Entity {
         this.setPosition(par2, par4, par6);
 	}
 
-	protected NBTTagCompound aspectStore;
+	public NBTTagCompound aspectStore;
 	public int age;
 	
 	@Override
@@ -47,11 +48,25 @@ public class EntityChaosCrystal extends Entity {
 	}
 	
 	@Override
+	public void onStruckByLightning(EntityLightningBolt par1EntityLightningBolt) {
+		this.playSound("mob.blaze.death", 1, .2f);
+	}
+	
+	public void playSpawnSound() {
+		this.playSound("mob.wither.death", 1, .2f);
+		this.playSound("mob.enderdragon.end", 1, .2f);
+	}
+	
+	@Override
 	public boolean hitByEntity(Entity par1Entity) {
+		
+
 		
 		if(this.worldObj.isRemote) {
 			return true;
 		}
+
+		this.playSound("mob.blaze.hit", 1, .2f);
 		
 		EntityItem item = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, buildItemStack());
 		item.delayBeforeCanPickup = 0;

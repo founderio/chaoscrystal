@@ -32,7 +32,14 @@ public class ItemChaosCrystal extends Item {
 			return new ItemStack(0, 0, 0);
 		}
 		
-		par2World.spawnEntityInWorld(new EntityChaosCrystal(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 1.9f, par3EntityPlayer.posZ));
+		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 1.9f, par3EntityPlayer.posZ);
+		entity.aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
+		if (entity.aspectStore == null) {
+			entity.aspectStore = new NBTTagCompound();
+		}
+		
+		par2World.spawnEntityInWorld(entity);
+		entity.playSpawnSound();
 		
 		return new ItemStack(0, 0, 0);
 	}
