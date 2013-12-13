@@ -88,7 +88,8 @@ public class DegradationHelper {
 	            		try {
 	                		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
 	                		DataOutputStream dos = new DataOutputStream(bos);
-	
+
+		            		dos.writeInt(0);
 	                		dos.writeInt(posX + offX);
 	                		dos.writeInt(posY + offY);
 	                		dos.writeInt(posZ + offZ);
@@ -154,9 +155,10 @@ public class DegradationHelper {
 					}
 	        		
 	        		try {
-	            		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
+	            		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 8);
 	            		DataOutputStream dos = new DataOutputStream(bos);
 	            		
+	            		dos.writeInt(0);
 						dos.writeInt(posX);
 						dos.writeInt(posY);
 	            		dos.writeInt(posZ);

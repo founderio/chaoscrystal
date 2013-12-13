@@ -1,23 +1,12 @@
 package founderio.chaoscrystal.entities;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-
-import cpw.mods.fml.common.network.PacketDispatcher;
-
-import net.minecraft.block.Block;
-import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.Constants;
-import founderio.chaoscrystal.degradation.Degradation;
 import founderio.chaoscrystal.degradation.DegradationHelper;
 
 public class EntityChaosCrystal extends Entity {

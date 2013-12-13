@@ -25,8 +25,10 @@ import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
+import founderio.chaoscrystal.entities.EntityFocus;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
+import founderio.chaoscrystal.items.ItemFocus;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 import founderio.chaoscrystal.worldgen.GenCrystalFloats;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
@@ -47,6 +49,7 @@ public class ChaosCrystalMain {
 	public static DegradationStore degradationStore;
 	
 	public static Item itemChaosCrystal;
+	public static Item itemFocus;
 	
 	public static BlockBase blockBase;
 	
@@ -80,6 +83,9 @@ public class ChaosCrystalMain {
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
 		//TODO: setup properties
 		
+		itemFocus = new ItemFocus(getItemId(Constants.ID_ITEM_FOCUS, 18201));
+		itemFocus.setUnlocalizedName(Constants.ID_ITEM_FOCUS);
+		
 		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.glass);
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(CreativeTabs.tabBlock);
@@ -92,6 +98,7 @@ public class ChaosCrystalMain {
 		
 		config.save();
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
+		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
 		
 		if(forceBiome) {
@@ -110,7 +117,8 @@ public class ChaosCrystalMain {
 //		LanguageRegistry langReg = LanguageRegistry.instance();
 //		langReg.
 		
-		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 75, 1, false);
+		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 128, 1, false);
+		EntityRegistry.registerModEntity(EntityFocus.class, Constants.NAME_ENTITY_FOCUS, 1, this, 128, 1, false);
 		proxy.registerRenderStuff();
 		
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());

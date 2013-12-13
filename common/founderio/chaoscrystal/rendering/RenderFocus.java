@@ -1,20 +1,19 @@
 package founderio.chaoscrystal.rendering;
 
-import org.lwjgl.opengl.GL11;
-
-import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.entities.EntityChaosCrystal;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.entities.EntityFocus;
 
 public class RenderFocus extends Render {
 
@@ -25,14 +24,13 @@ public class RenderFocus extends Render {
 	public void doRender(Entity entity, double d0, double d1, double d2,
 			float f, float f1) {
 
-		EntityChaosCrystal ecc = (EntityChaosCrystal)entity;
+		EntityFocus ef = (EntityFocus)entity;
 		
 		Tessellator tessellator = Tessellator.instance;
 
-        ItemStack itemstack = ecc.buildItemStack();
+        ItemStack itemstack = ef.buildItemStack();
        
-        Icon par2Icon = ChaosCrystalMain.itemChaosCrystal.getIcon(itemstack, 0);
-        boolean renderInFrame = false;
+        Icon par2Icon = ChaosCrystalMain.itemFocus.getIcon(itemstack, 0);
         
         /*
          * From here: More or less same as RenderItem.renderDroppedItem
@@ -53,14 +51,8 @@ public class RenderFocus extends Render {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)d0, (float)d1 + 0/*bobbing*/, (float)d2);
 
-            if (renderInFrame)
-            {
-                GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
-            }
-            else
-            {
-                GL11.glRotatef(((float)ecc.age / 20.0F) * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
-            }
+            GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
 
             float f12 = 0.0625F;
             f11 = 0.021875F;
@@ -121,10 +113,8 @@ public class RenderFocus extends Render {
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float)d0, (float)d1 + 0/*bobbing*/, (float)d2);
 
-                if (!renderInFrame)
-                {
-                    GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
-                }
+                GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+                GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
 
                 tessellator.startDrawingQuads();
                 tessellator.setNormal(0.0F, 1.0F, 0.0F);
