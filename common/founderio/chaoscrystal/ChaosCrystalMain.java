@@ -12,8 +12,10 @@ import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.LanguageRegistry;
+import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 
 /**
@@ -21,6 +23,7 @@ import founderio.chaoscrystal.items.ItemChaosCrystal;
  *
  */
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false)
 public class ChaosCrystalMain {
 	@Instance(Constants.MOD_ID)
 	public static ChaosCrystalMain instance;
@@ -56,6 +59,8 @@ public class ChaosCrystalMain {
 	public void init(FMLInitializationEvent event) {
 //		LanguageRegistry langReg = LanguageRegistry.instance();
 //		langReg.
+		
+		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 75, 1, false);
 		
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), " D ", "D D", " D ", 'D', Item.diamond);
 	}
