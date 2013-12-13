@@ -4,6 +4,7 @@
 package founderio.chaoscrystal;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;
@@ -16,9 +17,11 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
+import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 
 /**
@@ -38,10 +41,16 @@ public class ChaosCrystalMain {
 	
 	public static Item itemChaosCrystal;
 	
+	public static BlockBase blockBase;
+	
 	private Configuration config;
 	
 	private int getItemId(String id, int defaultId) {
 		return config.get("Items", id, defaultId).getInt();
+	}
+	
+	private int getBlockId(String id, int defaultId) {
+		return config.get("Blocks", id, defaultId).getInt();
 	}
 	
 	@EventHandler
@@ -57,7 +66,10 @@ public class ChaosCrystalMain {
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
 		//TODO: setup properties
 		
+		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 18201), Material.rock);
+		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
 		
+		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
 	}
 	
 	@EventHandler
