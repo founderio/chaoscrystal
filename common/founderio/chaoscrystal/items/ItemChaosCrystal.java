@@ -14,6 +14,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
+import founderio.chaoscrystal.degradation.DegradationHelper;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class ItemChaosCrystal extends Item {
@@ -41,6 +42,9 @@ public class ItemChaosCrystal extends Item {
 			if (entity.aspectStore == null) {
 				entity.aspectStore = new NBTTagCompound();
 			}
+			entity.isInSuckMode = DegradationHelper.isAspectStoreEmpty(entity.aspectStore);
+		} else {
+			entity.isInSuckMode = true;
 		}
 		
 		

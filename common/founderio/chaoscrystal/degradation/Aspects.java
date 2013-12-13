@@ -12,9 +12,12 @@ public static final String ASPECT_HEAT = "heat";
 public static final String ASPECT_CRAFTING = "crafting";
 public static final String ASPECT_STRUCTURE = "structure";
 public static final String ASPECT_WOOD = "crafting";
+public static final String ASPECT_METAL = "metal";
+public static final String ASPECT_VALUE = "value";
+public static final String ASPECT_CRYSTAL = "crystal";
 
 public static final String[] ASPECTS = new String[] {
 	ASPECT_GROWTH,ASPECT_EARTH,ASPECT_WATER,ASPECT_LIGHT,ASPECT_LIVING,ASPECT_HEAT,
-	ASPECT_CRAFTING,ASPECT_STRUCTURE,ASPECT_WOOD
+	ASPECT_CRAFTING,ASPECT_STRUCTURE,ASPECT_WOOD,ASPECT_METAL,ASPECT_VALUE,ASPECT_CRYSTAL
 };
 }
