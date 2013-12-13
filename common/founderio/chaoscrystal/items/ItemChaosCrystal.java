@@ -2,11 +2,13 @@ package founderio.chaoscrystal.items;
 
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -74,7 +76,8 @@ public class ItemChaosCrystal extends Item {
 			int asp = aspectStore.getInteger(aspect);
 			if(asp > 0) {
 				hasAspects = true;
-				par3List.add(String.format("%s: %d", LanguageRegistry.instance().getStringLocalization(Constants.MOD_ID + ".aspect." + aspect), asp));
+				
+				par3List.add(String.format("%s: %d", StatCollector.translateToLocal(Constants.MOD_ID + ".aspect." + aspect), asp));
 			}
 		}
 		if(!hasAspects) {

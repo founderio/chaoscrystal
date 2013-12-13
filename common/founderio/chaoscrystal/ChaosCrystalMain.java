@@ -139,6 +139,16 @@ public class ChaosCrystalMain {
 				new int[]{5},
 				new ItemStack(Block.dirt, 0, 1));
 		degradationStore.registerDegradation(
+				new ItemStack(Block.tilledField, 0, 0),
+				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
+				new int[]{2, 1},
+				new ItemStack(Block.dirt, 0, 0));
+		degradationStore.registerDegradation(
+				new ItemStack(Block.tilledField, 0, 1),
+				new String[]{Aspects.ASPECT_WATER},
+				new int[]{1},
+				new ItemStack(Block.tilledField, 0, 1));
+		degradationStore.registerDegradation(
 				new ItemStack(Block.dirt, 0, 1),
 				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIVING},
 				new int[]{5, 2},
@@ -174,6 +184,11 @@ public class ChaosCrystalMain {
 					new int[]{},
 					new ItemStack(0, 0, 0));
 		}
+		degradationStore.registerDegradation(
+				new ItemStack(Block.glass),
+				new String[]{Aspects.ASPECT_HEAT, Aspects.ASPECT_STRUCTURE},
+				new int[]{5, 2},
+				new ItemStack(Block.sand, 0, 0));
 		
 		//TODO: All-Meta Match
 		//TODO: Ore Dict Match
@@ -378,14 +393,14 @@ public class ChaosCrystalMain {
 
 		degradationStore.registerDegradation(
 				new ItemStack(ChaosCrystalMain.blockBase, 0, 0),
-				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
-				new int[]{12, 5, 5},
-				new ItemStack(0, 0, 0));
+				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_HEAT},
+				new int[]{5, 2, 4},
+				new ItemStack(ChaosCrystalMain.blockBase, 0, 1));
 		degradationStore.registerDegradation(
 				new ItemStack(ChaosCrystalMain.blockBase, 0, 1),
 				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
 				new int[]{15, 5, 5},
-				new ItemStack(0, 0, 0));
+				new ItemStack(Block.glass, 0, 0));
 		
 		degradationStore.debugOutput();
 		System.out.println();
