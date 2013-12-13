@@ -13,7 +13,6 @@ import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.common.registry.LanguageRegistry;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 

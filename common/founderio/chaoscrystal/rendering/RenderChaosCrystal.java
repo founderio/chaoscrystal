@@ -1,20 +1,19 @@
 package founderio.chaoscrystal.rendering;
 
-import org.lwjgl.opengl.GL11;
-
-import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.entities.EntityChaosCrystal;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class RenderChaosCrystal extends Render {
 
@@ -35,8 +34,7 @@ public class RenderChaosCrystal extends Render {
         boolean renderInFrame = false;
         
         /*
-         * From here: More or less same as RenderItem.renderDroppedItem
-         * Except variable names...
+         * From here: Based on RenderItem.renderDroppedItem
          */
         
         float f4 = ((Icon)par2Icon).getMinU();
@@ -64,7 +62,6 @@ public class RenderChaosCrystal extends Render {
 
             float f12 = 0.0625F;
             f11 = 0.021875F;
-            int j = itemstack.stackSize;
 
             GL11.glTranslatef(-f9, -f10, -((f12 + f11)));
             

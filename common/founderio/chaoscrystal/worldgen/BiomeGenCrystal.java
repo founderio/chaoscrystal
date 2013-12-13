@@ -1,20 +1,18 @@
 package founderio.chaoscrystal.worldgen;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.Constants;
 import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySlime;
-import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.SpawnListEntry;
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Constants;
 
 public class BiomeGenCrystal extends BiomeGenBase {
 
 	
 	
+	@SuppressWarnings("unchecked")
 	public BiomeGenCrystal(int par1) {
 		super(par1);
 		this.spawnableCreatureList.clear();

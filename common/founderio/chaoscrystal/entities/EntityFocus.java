@@ -6,19 +6,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.Constants;
-import founderio.chaoscrystal.degradation.Aspects;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
+import cpw.mods.fml.common.network.PacketDispatcher;
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.degradation.Aspects;
 
 public class EntityFocus extends Entity {
 
@@ -63,8 +60,6 @@ public class EntityFocus extends Entity {
 	@Override
 	public boolean hitByEntity(Entity par1Entity) {
 		
-
-		
 		if(this.worldObj.isRemote) {
 			return true;
 		}
@@ -82,7 +77,7 @@ public class EntityFocus extends Entity {
 	}
 	
 	public ItemStack buildItemStack() {
-		ItemStack is = new ItemStack(ChaosCrystalMain.itemFocus);
+		ItemStack is = new ItemStack(ChaosCrystalMain.itemFocus, 1, mode);
 //		NBTTagCompound comp = new NBTTagCompound();
 //		comp.setCompoundTag("aspectStore", aspectStore);
 //		

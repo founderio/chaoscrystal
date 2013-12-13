@@ -1,8 +1,6 @@
 package founderio.chaoscrystal.blocks;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -11,7 +9,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
@@ -28,11 +25,12 @@ public class BlockBase extends Block {
 		super(par1, par2Material);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs,
 			List par3List) {
-		for(int i = 0; i < metaList.length; i++) {
+		for (int i = 0; i < metaList.length; i++) {
 			par3List.add(new ItemStack(par1, 1, i));
 		}
 	}
@@ -51,18 +49,18 @@ public class BlockBase extends Block {
 		int idx = MathHelper.clamp_int(par2, 0, iconList.length - 1);
 		return iconList[idx];
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public int getRenderBlockPass() {
 		return 1;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public int damageDropped(int par1) {
 		return MathHelper.clamp_int(par1, 0, iconList.length - 1);

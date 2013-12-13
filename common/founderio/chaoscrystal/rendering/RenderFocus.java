@@ -33,8 +33,7 @@ public class RenderFocus extends Render {
         Icon par2Icon = ChaosCrystalMain.itemFocus.getIcon(itemstack, 0);
         
         /*
-         * From here: More or less same as RenderItem.renderDroppedItem
-         * Except variable names...
+         * From here: Based on RenderItem.renderDroppedItem
          */
         
         float f4 = ((Icon)par2Icon).getMinU();
@@ -49,14 +48,13 @@ public class RenderFocus extends Render {
         if (this.renderManager.options.fancyGraphics)
         {
             GL11.glPushMatrix();
-            GL11.glTranslatef((float)d0, (float)d1 + 0/*bobbing*/, (float)d2);
+            GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 
             GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
             GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
 
             float f12 = 0.0625F;
             f11 = 0.021875F;
-            int j = itemstack.stackSize;
 
             GL11.glTranslatef(-f9, -f10, -((f12 + f11)));
             
@@ -109,29 +107,25 @@ public class RenderFocus extends Render {
         }
         else
         {
-           
-                GL11.glPushMatrix();
-                GL11.glTranslatef((float)d0, (float)d1 + 0/*bobbing*/, (float)d2);
+            GL11.glPushMatrix();
+            GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 
-                GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
-                GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
 
-                tessellator.startDrawingQuads();
-                tessellator.setNormal(0.0F, 1.0F, 0.0F);
-                tessellator.addVertexWithUV((double)(0.0F - f9), (double)(0.0F - f10), 0.0D, (double)f4, (double)f7);
-                tessellator.addVertexWithUV((double)(f8 - f9), (double)(0.0F - f10), 0.0D, (double)f5, (double)f7);
-                tessellator.addVertexWithUV((double)(f8 - f9), (double)(1.0F - f10), 0.0D, (double)f5, (double)f6);
-                tessellator.addVertexWithUV((double)(0.0F - f9), (double)(1.0F - f10), 0.0D, (double)f4, (double)f6);
-                tessellator.draw();
-                GL11.glPopMatrix();
+            tessellator.startDrawingQuads();
+            tessellator.setNormal(0.0F, 1.0F, 0.0F);
+            tessellator.addVertexWithUV((double)(0.0F - f9), (double)(0.0F - f10), 0.0D, (double)f4, (double)f7);
+            tessellator.addVertexWithUV((double)(f8 - f9), (double)(0.0F - f10), 0.0D, (double)f5, (double)f7);
+            tessellator.addVertexWithUV((double)(f8 - f9), (double)(1.0F - f10), 0.0D, (double)f5, (double)f6);
+            tessellator.addVertexWithUV((double)(0.0F - f9), (double)(1.0F - f10), 0.0D, (double)f4, (double)f6);
+            tessellator.draw();
+            GL11.glPopMatrix();
         }
 	}
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 }

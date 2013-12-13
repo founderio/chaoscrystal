@@ -74,8 +74,6 @@ public class EntityChaosCrystal extends Entity {
 	@Override
 	public boolean hitByEntity(Entity par1Entity) {
 		
-
-		
 		if(this.worldObj.isRemote) {
 			return true;
 		}
