@@ -98,7 +98,7 @@ public class DegradationHelper {
 	                		dos.writeInt(world.provider.dimensionId);
 	                		
 	                		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-	                		degradationPacket.channel = Constants.CHANNEL_NAME;
+	                		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
 	                		degradationPacket.data = bos.toByteArray();
 	                		degradationPacket.length = bos.size();
 	
@@ -167,7 +167,7 @@ public class DegradationHelper {
 	            		dos.writeInt(world.provider.dimensionId);
 	            		
 	            		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-	            		degradationPacket.channel = Constants.CHANNEL_NAME;
+	            		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
 	            		degradationPacket.data = bos.toByteArray();
 	            		degradationPacket.length = bos.size();
 	

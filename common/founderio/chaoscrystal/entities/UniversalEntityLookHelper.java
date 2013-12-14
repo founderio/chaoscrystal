@@ -1,7 +1,14 @@
 package founderio.chaoscrystal.entities;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
+import founderio.chaoscrystal.Constants;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.MathHelper;
 
 public class UniversalEntityLookHelper
@@ -12,18 +19,16 @@ public class UniversalEntityLookHelper
     /**
      * The amount of change that is made each update for an entity facing a direction.
      */
-    private float deltaLookYaw;
+    private float deltaLookYaw = .1f;
 
     /**
      * The amount of change that is made each update for an entity facing a direction.
      */
-    private float deltaLookPitch;
+    private float deltaLookPitch = .1f;
 
-    /** Whether or not the entity is trying to look at something. */
-    private boolean isLooking;
-    private double posX;
-    private double posY;
-    private double posZ;
+    public double posX;
+    public double posY;
+    public double posZ;
 
     public UniversalEntityLookHelper(Entity par1EntityLiving)
     {
@@ -33,7 +38,7 @@ public class UniversalEntityLookHelper
     /**
      * Sets position to look at using entity
      */
-    public void setLookPositionWithEntity(Entity par1Entity, float par2, float par3)
+    public void setLookPositionWithEntity(Entity par1Entity)
     {
         this.posX = par1Entity.posX;
 
@@ -47,63 +52,43 @@ public class UniversalEntityLookHelper
         }
 
         this.posZ = par1Entity.posZ;
-        this.deltaLookYaw = par2;
-        this.deltaLookPitch = par3;
-        this.isLooking = true;
+        sendLookUpdate();
     }
 
     /**
      * Sets position to look at
      */
-    public void setLookPosition(double par1, double par3, double par5, float par7, float par8)
+    public void setLookPosition(double par1, double par3, double par5)
     {
         this.posX = par1;
         this.posY = par3;
         this.posZ = par5;
-        this.deltaLookYaw = par7;
-        this.deltaLookPitch = par8;
-        this.isLooking = true;
+        sendLookUpdate();
     }
+    
+    public void sendLookUpdate() {
+    	try {
+    		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 3 + Double.SIZE * 3);
+    		DataOutputStream dos = new DataOutputStream(bos);
 
-    /**
-     * Updates look
-     */
-    public void onUpdateLook()
-    {
-        this.entity.rotationPitch = 0.0F;
+    		dos.writeInt(1);
+    		dos.writeInt(entity.worldObj.provider.dimensionId);
+    		dos.writeInt(entity.entityId);
+    		dos.writeDouble(posX);
+    		dos.writeDouble(posY);
+    		dos.writeDouble(posZ);
+    		
+    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
+    		degradationPacket.data = bos.toByteArray();
+    		degradationPacket.length = bos.size();
 
-        if (this.isLooking)
-        {
-            this.isLooking = false;
-            double d0 = this.posX - this.entity.posX;
-            double d1 = this.posY - (this.entity.posY + (double)this.entity.getEyeHeight());
-            double d2 = this.posZ - this.entity.posZ;
-            double d3 = (double)MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-            float f = (float)(Math.atan2(d2, d0) * 180.0D / Math.PI) - 90.0F;
-            float f1 = (float)(-(Math.atan2(d1, d3) * 180.0D / Math.PI));
-            this.entity.rotationPitch = this.updateRotation(this.entity.rotationPitch, f1, this.deltaLookPitch);
-            this.entity.rotationYaw = this.updateRotation(this.entity.rotationYaw, f, this.deltaLookYaw);
-        }
-        else
-        {
-            this.entity.rotationYaw = this.updateRotation(this.entity.rotationYaw, .1f, 10.0F);
-        }
-    }
-
-    private float updateRotation(float par1, float par2, float par3)
-    {
-        float f3 = MathHelper.wrapAngleTo180_float(par2 - par1);
-
-        if (f3 > par3)
-        {
-            f3 = par3;
-        }
-
-        if (f3 < -par3)
-        {
-            f3 = -par3;
-        }
-
-        return par1 + f3;
+    		dos.close();
+    		
+    		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, entity.worldObj.provider.dimensionId, degradationPacket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

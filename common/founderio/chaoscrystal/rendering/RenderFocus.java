@@ -50,12 +50,14 @@ public class RenderFocus extends Render {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 
-            GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
+           
+            GL11.glRotatef(ef.rotationYaw, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(180.0F - ef.rotationPitch, 1.0F, 0.0F, 0.0F);
 
+            
             float f12 = 0.0625F;
             f11 = 0.021875F;
-
+            
             GL11.glTranslatef(-f9, -f10, -((f12 + f11)));
             
 

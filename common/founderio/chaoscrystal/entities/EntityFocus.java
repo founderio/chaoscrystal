@@ -34,7 +34,7 @@ public class EntityFocus extends Entity {
         lookHelper = new UniversalEntityLookHelper(this);
 	}
 	
-	private UniversalEntityLookHelper lookHelper;
+	public UniversalEntityLookHelper lookHelper;
 	
 	/**
 	 * 0 = Transfer
@@ -45,7 +45,7 @@ public class EntityFocus extends Entity {
 	public int lastTransfer = 0;
 	
 	public final int transferRange = 20;
-	public final int transferInterval = 30;
+	public final int transferInterval = 60;
 
 	@Override
 	protected void entityInit() {
@@ -108,7 +108,7 @@ public class EntityFocus extends Entity {
             			EntityChaosCrystal crystal1 = (EntityChaosCrystal) ents.get(this.rand.nextInt(ents.size()));
                 		EntityChaosCrystal crystal2 = (EntityChaosCrystal) ents.get(this.rand.nextInt(ents.size()));
                 		
-                		lookHelper.setLookPositionWithEntity(crystal2, .5f, .5f);
+                		lookHelper.setLookPositionWithEntity(crystal2);
                 		
                 		try {
                     		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
@@ -124,7 +124,7 @@ public class EntityFocus extends Entity {
                     		dos.writeInt(this.worldObj.provider.dimensionId);
                     		
                     		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-                    		degradationPacket.channel = Constants.CHANNEL_NAME;
+                    		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
                     		degradationPacket.data = bos.toByteArray();
                     		degradationPacket.length = bos.size();
 
@@ -151,7 +151,7 @@ public class EntityFocus extends Entity {
                     		dos.writeInt(this.worldObj.provider.dimensionId);
                     		
                     		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-                    		degradationPacket.channel = Constants.CHANNEL_NAME;
+                    		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
                     		degradationPacket.data = bos.toByteArray();
                     		degradationPacket.length = bos.size();
 
@@ -178,18 +178,21 @@ public class EntityFocus extends Entity {
             		
                 }
         	}
-        	lookHelper.onUpdateLook();
         }
         
         
         this.worldObj.theProfiler.endSection();
 	}
 
+	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		mode = nbttagcompound.getInteger("mode");
 		age = nbttagcompound.getInteger("age");
 		lastTransfer = nbttagcompound.getInteger("lastTransfer");
+		lookHelper.posX = nbttagcompound.getDouble("lookX");
+		lookHelper.posY = nbttagcompound.getDouble("lookY");
+		lookHelper.posY = nbttagcompound.getDouble("lookY");
 	}
 
 	@Override
@@ -197,6 +200,9 @@ public class EntityFocus extends Entity {
 		nbttagcompound.setInteger("mode", mode);
 		nbttagcompound.setInteger("age", age);
 		nbttagcompound.setInteger("lastTransfer", lastTransfer);
+		nbttagcompound.setDouble("lookX", lookHelper.posX);
+		nbttagcompound.setDouble("lookY", lookHelper.posY);
+		nbttagcompound.setDouble("lookY", lookHelper.posZ);
 	}
 
 }
