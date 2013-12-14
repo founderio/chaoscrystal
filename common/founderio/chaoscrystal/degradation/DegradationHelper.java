@@ -15,6 +15,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.ChaosCrystalNetworkHandler;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
@@ -94,30 +95,10 @@ public class DegradationHelper {
 		    				}
 		            		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.source.itemID, degradation.source.getItemDamage(), 1 + 2);
 		            		
-		            		try {
-		                		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
-		                		DataOutputStream dos = new DataOutputStream(bos);
-
-			            		dos.writeInt(0);
-		                		dos.writeInt(posX + offX);
-		                		dos.writeInt(posY + offY);
-		                		dos.writeInt(posZ + offZ);
-		    					dos.writeInt(-offX);
-		    					dos.writeInt(-offY);
-		                		dos.writeInt(-offZ);
-		                		dos.writeInt(world.provider.dimensionId);
-		                		
-		                		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-		                		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
-		                		degradationPacket.data = bos.toByteArray();
-		                		degradationPacket.length = bos.size();
-		
-		                		dos.close();
-		                		
-		                		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, world.provider.dimensionId, degradationPacket);
-		    				} catch (IOException e) {
-		    					e.printStackTrace();
-		    				}
+		            		ChaosCrystalNetworkHandler.spawnParticleEffect(world.provider.dimensionId, 0,
+			        				posX+offX, posY+offY, posZ+offZ,
+			        				-offX, -offY, -offZ);
+		            		
 		        		} else {
 		        			//System.out.println("Not Capable! " + Arrays.asList(degradation.aspects));
 		        		}
@@ -171,30 +152,11 @@ public class DegradationHelper {
 		            		entity.setAspect(degradation.aspects[i], aspectAmount);
 						}
 		        		
-		        		try {
-		            		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 8);
-		            		DataOutputStream dos = new DataOutputStream(bos);
-		            		
-		            		dos.writeInt(0);
-							dos.writeInt(posX);
-							dos.writeInt(posY);
-		            		dos.writeInt(posZ);
-		            		dos.writeInt(offX);
-		            		dos.writeInt(offY);
-		            		dos.writeInt(offZ);
-		            		dos.writeInt(world.provider.dimensionId);
-		            		
-		            		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-		            		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
-		            		degradationPacket.data = bos.toByteArray();
-		            		degradationPacket.length = bos.size();
-		
-		            		dos.close();
-		            		
-		            		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, world.provider.dimensionId, degradationPacket);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+		        		ChaosCrystalNetworkHandler.spawnParticleEffect(world.provider.dimensionId, 0,
+		        				posX, posY, posZ,
+		        				offX, offY, offZ);
+		        		
+		        		
 		        	} else {
 		        		System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
 		        		world.setBlock(posX + offX, posY + offY, posZ + offZ, 0, 0, 1 + 2);

@@ -1,7 +1,9 @@
 package founderio.chaoscrystal;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Random;
 
@@ -17,6 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.DegradationParticles;
@@ -26,6 +29,41 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 
 	private Random rnd = new Random();
 	
+	public static void spawnParticleEffect(int dimension, int effect,
+			int sourceX, int sourceY, int sourceZ,
+			int offX, int offY, int offZ) {
+		try {
+    		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
+    		DataOutputStream dos = new DataOutputStream(bos);
+
+    		dos.writeInt(effect);
+    		dos.writeInt(dimension);
+    		dos.writeInt(sourceX);
+    		dos.writeInt(sourceY);
+    		dos.writeInt(sourceZ);
+			dos.writeInt(offX);
+			dos.writeInt(offY);
+    		dos.writeInt(offZ);
+    		
+    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+    		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
+    		degradationPacket.data = bos.toByteArray();
+    		degradationPacket.length = bos.size();
+
+    		dos.close();
+    		
+    		PacketDispatcher.sendPacketToAllAround(sourceX, sourceY, sourceZ, 128, dimension, degradationPacket);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void spawnParticleEffects(Entity from, Entity to, int effect) {
+		spawnParticleEffect(from.worldObj.provider.dimensionId, effect,
+				(int)from.posX, (int)from.posY, (int)from.posZ,
+				(int)(to.posX - from.posX), (int)(to.posY - from.posY), (int)(to.posZ - from.posZ));
+	}
+	
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
@@ -34,13 +72,13 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 			
 			try {
 				int type = dis.readInt();
+				int dimension = dis.readInt();
 				int posX = dis.readInt();
 				int posY = dis.readInt();
 				int posZ = dis.readInt();
 				int offX = dis.readInt();
 				int offY = dis.readInt();
 				int offZ = dis.readInt();
-				int dimension = dis.readInt();
 
 				for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
 					Minecraft.getMinecraft().effectRenderer.addEffect(
@@ -65,7 +103,7 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 				if(type==1) {
 					//Unused
 				} else if(type==2) {
-					// EntityLook
+					// Update player's selected stack
 					int dimension = dis.readInt();
 					String playerName = dis.readUTF();
 					String aspect = dis.readUTF();

@@ -15,6 +15,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.ChaosCrystalNetworkHandler;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
 
@@ -120,58 +121,10 @@ public class EntityFocusTransfer extends Entity {
     	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
     	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
             		
-            		try {
-                		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
-                		DataOutputStream dos = new DataOutputStream(bos);
-
-	            		dos.writeInt(1);
-                		dos.writeInt((int)posX);
-                		dos.writeInt((int)posY);
-                		dos.writeInt((int)posZ);
-    					dos.writeInt((int)(crystal2.posX - posX));
-    					dos.writeInt((int)(crystal2.posY - posY));
-                		dos.writeInt((int)(crystal2.posZ - posZ));
-                		dos.writeInt(this.worldObj.provider.dimensionId);
-                		
-                		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-                		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
-                		degradationPacket.data = bos.toByteArray();
-                		degradationPacket.length = bos.size();
-
-                		dos.close();
-                		
-                		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, this.worldObj.provider.dimensionId, degradationPacket);
-    				} catch (IOException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
-    				}
-            		//TODO: Make Wrapper for this function :-/
-            		
-            		try {
-                		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
-                		DataOutputStream dos = new DataOutputStream(bos);
-
-	            		dos.writeInt(1);
-                		dos.writeInt((int)crystal1.posX);
-                		dos.writeInt((int)crystal1.posY);
-                		dos.writeInt((int)crystal1.posZ);
-    					dos.writeInt((int)(posX - crystal1.posX));
-    					dos.writeInt((int)(posY - crystal1.posY));
-    					dos.writeInt((int)(posZ - crystal1.posZ));
-                		dos.writeInt(this.worldObj.provider.dimensionId);
-                		
-                		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-                		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
-                		degradationPacket.data = bos.toByteArray();
-                		degradationPacket.length = bos.size();
-
-                		dos.close();
-                		
-                		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, this.worldObj.provider.dimensionId, degradationPacket);
-    				} catch (IOException e) {
-    					// TODO Auto-generated catch block
-    					e.printStackTrace();
-    				}
+    	    		ChaosCrystalNetworkHandler.spawnParticleEffects(this, crystal2, 1);
+    	    		ChaosCrystalNetworkHandler.spawnParticleEffects(crystal1, this, 1);
+    	    		
+    	    		
             		
             		for(String aspect : Aspects.ASPECTS) {
             			int aspects = crystal1.getAspect(aspect) + crystal2.getAspect(aspect);
