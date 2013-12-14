@@ -1,23 +1,15 @@
 package founderio.chaoscrystal.entities;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
 
 public class EntityFocusFilter extends Entity {

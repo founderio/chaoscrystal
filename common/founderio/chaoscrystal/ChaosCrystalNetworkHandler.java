@@ -8,22 +8,18 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.DegradationParticles;
-import founderio.chaoscrystal.entities.EntityFocusFilter;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
 

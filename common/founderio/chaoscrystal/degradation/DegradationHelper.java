@@ -1,22 +1,15 @@
 package founderio.chaoscrystal.degradation;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
-import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.ChaosCrystalNetworkHandler;
-import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class DegradationHelper {
