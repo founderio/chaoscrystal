@@ -80,18 +80,23 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 				int offY = dis.readInt();
 				int offZ = dis.readInt();
 
-				for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
-					Minecraft.getMinecraft().effectRenderer.addEffect(
-							new DegradationParticles(
-									DimensionManager.getWorld(dimension),
-							posX + rnd.nextDouble(),
-							posY + rnd.nextDouble(),
-							posZ + rnd.nextDouble(),
-							offX + rnd.nextDouble(),
-							offY + rnd.nextDouble(),
-							offZ + rnd.nextDouble(),
-							type));
+				World w = DimensionManager.getWorld(dimension);
+				if(w != null) {
+					for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
+						Minecraft.getMinecraft().effectRenderer.addEffect(
+								new DegradationParticles(
+										w,
+								posX + rnd.nextDouble(),
+								posY + rnd.nextDouble(),
+								posZ + rnd.nextDouble(),
+								offX + rnd.nextDouble(),
+								offY + rnd.nextDouble(),
+								offZ + rnd.nextDouble(),
+								type));
+					}
 				}
+				
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
