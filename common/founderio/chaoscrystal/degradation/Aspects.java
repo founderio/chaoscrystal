@@ -20,4 +20,22 @@ public static final String[] ASPECTS = new String[] {
 	ASPECT_GROWTH,ASPECT_EARTH,ASPECT_WATER,ASPECT_LIGHT,ASPECT_LIVING,ASPECT_HEAT,
 	ASPECT_CRAFTING,ASPECT_STRUCTURE,ASPECT_WOOD,ASPECT_METAL,ASPECT_VALUE,ASPECT_CRYSTAL
 };
+
+public static boolean isAspect(String aspect) {
+	for(String asp : ASPECTS){
+		if(asp.equals(aspect)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+public static int getAspectDisplayId(String aspect) {
+	for(int i = 0; i < ASPECTS.length; i++) {
+		if(ASPECTS[i].equals(aspect)) {
+			return i;
+		}
+	}
+	return -1;
+}
 }
