@@ -17,5 +17,4 @@ public class ItemBlockBase extends ItemBlockWithMetadata {
 		int idx = MathHelper.clamp_int(par1ItemStack.itemID, 0, BlockBase.metaList.length - 1);
 		return "tile." + BlockBase.metaList[idx];
 	}
-
 }
