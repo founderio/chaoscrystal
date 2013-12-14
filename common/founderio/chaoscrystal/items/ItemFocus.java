@@ -7,12 +7,15 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
-import founderio.chaoscrystal.entities.EntityFocus;
+import founderio.chaoscrystal.entities.EntityFocusBorder;
+import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class ItemFocus extends Item {
 
@@ -21,26 +24,39 @@ public class ItemFocus extends Item {
 		this.setHasSubtypes(true);
 	}
 	
+	@SideOnly(Side.CLIENT)
+	Icon[] iconList;
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_transfer");
+		iconList = new Icon[3];
+		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_transfer");
+		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_border");
+		iconList[2] = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_filter");
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Icon getIconFromDamage(int par1) {
+		return iconList[MathHelper.clamp_int(par1, 0, 3)];
 	}
 	
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
-		if(par2World.isRemote) {
-			return new ItemStack(0, 0, 0);
+		if(!par2World.isRemote) {
+			if(par1ItemStack.getItemDamage() == 0) {
+				EntityFocusTransfer entity = new EntityFocusTransfer(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				par2World.spawnEntityInWorld(entity);
+			} else if(par1ItemStack.getItemDamage() == 1) {
+				EntityFocusBorder entity = new EntityFocusBorder(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				par2World.spawnEntityInWorld(entity);
+			}
+			//entity.playSpawnSound();
 		}
 		
-		EntityFocus entity = new EntityFocus(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 2, (int)par3EntityPlayer.posZ, par3EntityPlayer.cameraYaw, par3EntityPlayer.cameraPitch);
-		entity.mode = par1ItemStack.getItemDamage();
-		
-		par2World.spawnEntityInWorld(entity);
-		//entity.playSpawnSound();
-		
-		return new ItemStack(ChaosCrystalMain.itemFocus, par1ItemStack.stackSize - 1);
+		return new ItemStack(ChaosCrystalMain.itemFocus, par1ItemStack.stackSize - 1, par1ItemStack.getItemDamage());
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -48,7 +64,7 @@ public class ItemFocus extends Item {
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(int par1, CreativeTabs par2CreativeTabs,
 			List par3List) {
-		for(int meta = 0; meta < 2; meta++) {
+		for(int meta = 0; meta < 3; meta++) {
 			par3List.add(new ItemStack(par1, 1, meta));
 		}
 	}

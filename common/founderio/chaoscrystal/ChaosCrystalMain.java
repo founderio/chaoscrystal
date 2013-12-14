@@ -25,7 +25,8 @@ import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
-import founderio.chaoscrystal.entities.EntityFocus;
+import founderio.chaoscrystal.entities.EntityFocusBorder;
+import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemFocus;
@@ -76,7 +77,7 @@ public class ChaosCrystalMain {
 		
 		boolean forceBiome = config.get("Settings", "force_biomes", false).getBoolean(false);
 		
-		//TODO: setup stuff if needed, get cfgs
+		//TODO: Get cfgs for ranges etc. of foci, crystals
 		
 		
 		itemChaosCrystal = new ItemChaosCrystal(getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200));
@@ -118,7 +119,8 @@ public class ChaosCrystalMain {
 //		langReg.
 		
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 128, 1, false);
-		EntityRegistry.registerModEntity(EntityFocus.class, Constants.NAME_ENTITY_FOCUS, 1, this, 128, 1, false);
+		EntityRegistry.registerModEntity(EntityFocusTransfer.class, Constants.NAME_ENTITY_FOCUS_TRANSFER, 1, this, 128, 1, false);
+		EntityRegistry.registerModEntity(EntityFocusBorder.class, Constants.NAME_ENTITY_FOCUS_BORDER, 2, this, 128, 1, false);
 		proxy.registerRenderStuff();
 		
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());

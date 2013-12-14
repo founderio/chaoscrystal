@@ -42,11 +42,9 @@ public class ItemChaosCrystal extends Item {
 			if (entity.aspectStore == null) {
 				entity.aspectStore = new NBTTagCompound();
 			}
-			entity.isInSuckMode = DegradationHelper.isAspectStoreEmpty(entity.aspectStore);
-		} else {
-			entity.isInSuckMode = true;
+			 //DegradationHelper.isAspectStoreEmpty(entity.aspectStore);
 		}
-		
+		entity.isInSuckMode = !par3EntityPlayer.isSneaking();//
 		
 		par2World.spawnEntityInWorld(entity);
 		entity.playSpawnSound();

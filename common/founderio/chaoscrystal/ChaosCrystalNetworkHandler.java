@@ -15,7 +15,6 @@ import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import founderio.chaoscrystal.entities.DegradationParticles;
-import founderio.chaoscrystal.entities.EntityFocus;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
 

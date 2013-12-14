@@ -13,7 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.entities.EntityFocus;
+import founderio.chaoscrystal.entities.EntityFocusBorder;
+import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class RenderFocus extends Render {
 
@@ -24,13 +25,20 @@ public class RenderFocus extends Render {
 	public void doRender(Entity entity, double d0, double d1, double d2,
 			float f, float f1) {
 
-		EntityFocus ef = (EntityFocus)entity;
 		
 		Tessellator tessellator = Tessellator.instance;
-
-        ItemStack itemstack = ef.buildItemStack();
-       
-        Icon par2Icon = ChaosCrystalMain.itemFocus.getIcon(itemstack, 0);
+		ItemStack itemstack;
+		
+		if(entity instanceof EntityFocusTransfer) {
+			EntityFocusTransfer ef = (EntityFocusTransfer)entity;
+        	itemstack = ef.buildItemStack();
+		} else if(entity instanceof EntityFocusBorder) {
+			EntityFocusBorder ef = (EntityFocusBorder)entity;
+        	itemstack = ef.buildItemStack();
+		} else {
+			return;
+		}
+        Icon par2Icon = ChaosCrystalMain.itemFocus.getIconFromDamage(itemstack.getItemDamage());
         
         /*
          * From here: Based on RenderItem.renderDroppedItem
@@ -51,8 +59,8 @@ public class RenderFocus extends Render {
             GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 
            
-            GL11.glRotatef(ef.rotationYaw, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(180.0F - ef.rotationPitch, 1.0F, 0.0F, 0.0F);
+            GL11.glRotatef(entity.rotationYaw, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(180.0F - entity.rotationPitch, 1.0F, 0.0F, 0.0F);
 
             
             float f12 = 0.0625F;
@@ -112,8 +120,8 @@ public class RenderFocus extends Render {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)d0, (float)d1, (float)d2);
 
-            GL11.glRotatef(ef.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(ef.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef(entity.rotationYaw * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(entity.rotationPitch * (180F / (float)Math.PI), 0.0F, 0.0F, 1.0F);
 
             tessellator.startDrawingQuads();
             tessellator.setNormal(0.0F, 1.0F, 0.0F);
