@@ -137,7 +137,11 @@ public class ChaosCrystalMain {
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
 		GameRegistry.registerWorldGenerator(new GenCrystalFloats());
 		
-		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), " D ", "D D", " D ", 'D', Item.diamond);
+		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), "RDR", "RER", "RDR", 'D', Item.diamond, 'R', new ItemStack(blockBase, 1, 1), 'E', Item.enderPearl);
+		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 0), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 4));
+		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 1), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 10));
+		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 2), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 5));
+		GameRegistry.addRecipe(new ItemStack(itemCrystalGlasses, 1, 0), "BBB", "BGB", " B ", 'B', new ItemStack(blockBase, 1, 0), 'G', Block.thinGlass);
 		
 		degradationStore = new DegradationStore();
 		
