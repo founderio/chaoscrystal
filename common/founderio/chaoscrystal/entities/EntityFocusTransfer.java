@@ -11,6 +11,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
@@ -44,12 +45,15 @@ public class EntityFocusTransfer extends Entity {
 	public final int transferInterval = 60;
 	public final float deltaRotation = 15f;
 	
-	public double lookX;
-	public double lookY;
-	public double lookZ;
+	public float lookX;
+	public float lookY;
+	public float lookZ;
 
 	@Override
 	protected void entityInit() {
+		this.dataWatcher.addObject(10, Float.valueOf(lookX));
+		this.dataWatcher.addObject(11, Float.valueOf(lookY));
+		this.dataWatcher.addObject(12, Float.valueOf(lookZ));
 	}
 	
 	@Override
@@ -108,10 +112,13 @@ public class EntityFocusTransfer extends Entity {
         			EntityChaosCrystal crystal1 = (EntityChaosCrystal) ents.get(this.rand.nextInt(ents.size()));
             		EntityChaosCrystal crystal2 = (EntityChaosCrystal) ents.get(this.rand.nextInt(ents.size()));
             		
-            		lookX = crystal1.posX;
-            		lookY = (crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0D;
-            		lookZ = crystal1.posZ;
-            		sendLookUpdate();
+            		lookX = (float)crystal1.posX;
+            		lookY = (float)(crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0f;
+            		lookZ = (float)crystal1.posZ;
+
+    	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
+    	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
+    	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
             		
             		try {
                 		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
@@ -177,75 +184,54 @@ public class EntityFocusTransfer extends Entity {
         		}
         	}
         }
-//        
-//        double d0 = lookX - posX;
-//        double d1 = lookY - posY;
-//        double d2 = lookZ - posZ;
-//        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-//        rotationYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
-//        rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
-//        
-       // float offYaw = targetYaw - rotationYaw;
-//        if(offYaw > deltaRotation) {
-//        	offYaw = deltaRotation;
-//        }
-//        if(offYaw < -deltaRotation) {
-//        	offYaw = -deltaRotation;
-//        }
-       // float offPitch = targetPitch - rotationPitch;
-//        if(offPitch > deltaRotation) {
-//        	offPitch = deltaRotation;
-//        }
-//        if(offPitch < -deltaRotation) {
-//        	offPitch = -deltaRotation;
-//        }
-       // this.rotationPitch = targetPitch;
-       // this.rotationYaw = targetYaw;
+        
+        lookX = this.dataWatcher.getWatchableObjectFloat(10);
+        lookY = this.dataWatcher.getWatchableObjectFloat(11);
+        lookZ = this.dataWatcher.getWatchableObjectFloat(12);
+
+        double d0 = lookX - posX;
+        double d1 = lookY - posY;
+        double d2 = lookZ - posZ;
+        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+        float targetYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
+        float targetPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
+
+        final float deltaRotation = 3f;
+        float offYaw = targetYaw - rotationYaw;
+        if(offYaw > deltaRotation) {
+        	offYaw = deltaRotation;
+        }
+        if(offYaw < -deltaRotation) {
+        	offYaw = -deltaRotation;
+        }
+        float offPitch = targetPitch - rotationPitch;
+        if(offPitch > deltaRotation) {
+        	offPitch = deltaRotation;
+        }
+        if(offPitch < -deltaRotation) {
+        	offPitch = -deltaRotation;
+        }
+        this.rotationPitch += offPitch;
+        this.rotationYaw += offYaw;
         this.worldObj.theProfiler.endSection();
 	}
-
-	public void sendLookUpdate() {
-    	try {
-    		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 3 + Double.SIZE * 3);
-    		DataOutputStream dos = new DataOutputStream(bos);
-
-    		dos.writeInt(1);
-    		dos.writeInt(worldObj.provider.dimensionId);
-    		dos.writeInt(entityId);
-    		dos.writeDouble(lookX);
-    		dos.writeDouble(lookY);
-    		dos.writeDouble(lookZ);
-    		
-    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
-    		degradationPacket.data = bos.toByteArray();
-    		degradationPacket.length = bos.size();
-
-    		dos.close();
-    		
-    		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, worldObj.provider.dimensionId, degradationPacket);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    }
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		age = nbttagcompound.getInteger("age");
 		lastTransfer = nbttagcompound.getInteger("lastTransfer");
-		lookX = nbttagcompound.getDouble("lookX");
-		lookY = nbttagcompound.getDouble("lookY");
-		lookZ = nbttagcompound.getDouble("lookZ");
+		lookX = nbttagcompound.getFloat("lookX");
+		lookY = nbttagcompound.getFloat("lookY");
+		lookZ = nbttagcompound.getFloat("lookZ");
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("age", age);
 		nbttagcompound.setInteger("lastTransfer", lastTransfer);
-		nbttagcompound.setDouble("lookX", lookX);
-		nbttagcompound.setDouble("lookY", lookY);
-		nbttagcompound.setDouble("lookZ", lookZ);
+		nbttagcompound.setFloat("lookX", lookX);
+		nbttagcompound.setFloat("lookY", lookY);
+		nbttagcompound.setFloat("lookZ", lookZ);
 	}
 
 }

@@ -116,7 +116,6 @@ public class DegradationHelper {
 		                		
 		                		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, world.provider.dimensionId, degradationPacket);
 		    				} catch (IOException e) {
-		    					// TODO Auto-generated catch block
 		    					e.printStackTrace();
 		    				}
 		        		} else {
@@ -194,7 +193,6 @@ public class DegradationHelper {
 		            		
 		            		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, world.provider.dimensionId, degradationPacket);
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 		        	} else {

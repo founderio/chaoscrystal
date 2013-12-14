@@ -63,33 +63,7 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 				int type = dis.readInt();
 				
 				if(type==1) {
-					// EntityLook
-					int dimension = dis.readInt();
-					int entity = dis.readInt();
-					double lookX = dis.readDouble();
-					double lookY = dis.readDouble();
-					double lookZ = dis.readDouble();
-					
-					World w = DimensionManager.getWorld(dimension);
-					if(w != null) {
-						Entity e = w.getEntityByID(entity);
-						
-						if(e != null) {
-//							if(e instanceof EntityFocus) {
-//								((EntityFocus)e).lookX = lookX;
-//								((EntityFocus)e).lookY = lookY;
-//								((EntityFocus)e).lookZ = lookZ;
-//							} else {
-								double d0 = lookX - e.posX;
-						        double d1 = lookY - e.posY;
-						        double d2 = lookZ - e.posZ;
-						        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-						        e.rotationYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
-						        e.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
-//							}
-						}
-						
-					}
+					//Unused
 				} else if(type==2) {
 					// EntityLook
 					int dimension = dis.readInt();
