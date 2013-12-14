@@ -29,6 +29,7 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
+import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemFocus;
@@ -54,6 +55,7 @@ public class ChaosCrystalMain {
 	
 	public static Item itemChaosCrystal;
 	public static Item itemFocus;
+	public static Item itemCrystalGlasses;
 	
 	public static BlockBase blockBase;
 	
@@ -91,6 +93,9 @@ public class ChaosCrystalMain {
 		itemFocus = new ItemFocus(getItemId(Constants.ID_ITEM_FOCUS, 18201));
 		itemFocus.setUnlocalizedName(Constants.ID_ITEM_FOCUS);
 		
+		itemCrystalGlasses = new ItemCrystalGlasses(getItemId(Constants.ID_ITEM_CRYSTALGLASSES, 18202));
+		itemCrystalGlasses.setUnlocalizedName(Constants.ID_ITEM_CRYSTALGLASSES);
+		
 		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.glass);
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(CreativeTabs.tabBlock);
@@ -104,6 +109,7 @@ public class ChaosCrystalMain {
 		config.save();
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
+		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
 		
 		if(forceBiome) {

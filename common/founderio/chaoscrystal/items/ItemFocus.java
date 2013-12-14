@@ -93,13 +93,13 @@ public class ItemFocus extends Item {
 			EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
 		switch(par1ItemStack.getItemDamage()) {
 		case 0:
-			par3List.add("Focus: Transfer");
+			par3List.add("Transfer");
 			break;
 		case 1:
-			par3List.add("Focus: Border");
+			par3List.add("Border");
 			break;
 		case 2:
-			par3List.add("Focus: Filter");
+			par3List.add("Filter");
 			String selectedAspect;
 			NBTTagCompound tags = par1ItemStack.getTagCompound();
 			if(tags != null) {
@@ -113,7 +113,7 @@ public class ItemFocus extends Item {
 			par3List.add("Aspect: " + StatCollector.translateToLocal(Constants.MOD_ID + ".aspect." + selectedAspect));
 			break;
 		default:
-			par3List.add("Focus: Unknown");
+			par3List.add("Unknown");
 			break;
 		}
 		
