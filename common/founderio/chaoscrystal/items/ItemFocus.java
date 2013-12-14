@@ -34,14 +34,13 @@ public class ItemFocus extends Item {
 			return new ItemStack(0, 0, 0);
 		}
 		
-		EntityFocus entity = new EntityFocus(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 1.9f, par3EntityPlayer.posZ, par3EntityPlayer.cameraYaw, par3EntityPlayer.cameraPitch);
+		EntityFocus entity = new EntityFocus(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 2, (int)par3EntityPlayer.posZ, par3EntityPlayer.cameraYaw, par3EntityPlayer.cameraPitch);
 		entity.mode = par1ItemStack.getItemDamage();
-		//TODO: set type depending on meta
 		
 		par2World.spawnEntityInWorld(entity);
 		//entity.playSpawnSound();
 		
-		return new ItemStack(ChaosCrystalMain.itemFocus, 0);
+		return new ItemStack(ChaosCrystalMain.itemFocus, par1ItemStack.stackSize - 1);
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

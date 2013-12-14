@@ -36,7 +36,7 @@ public class ItemChaosCrystal extends Item {
 			return new ItemStack(0, 0, 0);
 		}
 		
-		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 1.9f, par3EntityPlayer.posZ);
+		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 2, (int)par3EntityPlayer.posZ);
 		if(par1ItemStack.getTagCompound() != null) {
 			entity.aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
 			if (entity.aspectStore == null) {

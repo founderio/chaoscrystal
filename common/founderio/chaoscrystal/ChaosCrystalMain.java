@@ -81,7 +81,7 @@ public class ChaosCrystalMain {
 		
 		itemChaosCrystal = new ItemChaosCrystal(getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200));
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
-		//TODO: setup properties
+		itemChaosCrystal.setMaxStackSize(1);
 		
 		itemFocus = new ItemFocus(getItemId(Constants.ID_ITEM_FOCUS, 18201));
 		itemFocus.setUnlocalizedName(Constants.ID_ITEM_FOCUS);
