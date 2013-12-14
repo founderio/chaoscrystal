@@ -136,7 +136,6 @@ public class RenderChaosCrystal extends Render {
 
 	@Override
 	protected ResourceLocation getEntityTexture(Entity entity) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

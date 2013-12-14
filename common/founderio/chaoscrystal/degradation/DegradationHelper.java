@@ -85,7 +85,6 @@ public class DegradationHelper {
 						}
 		        		
 		        		if(capable) {
-		        			//System.out.println("Capable! " + Arrays.asList(degradation.aspects));
 		        			hit++;
 		        			
 		        			for (int i = 0; i < degradation.aspects.length; i++) {
@@ -99,8 +98,6 @@ public class DegradationHelper {
 			        				posX+offX, posY+offY, posZ+offZ,
 			        				-offX, -offY, -offZ);
 		            		
-		        		} else {
-		        			//System.out.println("Not Capable! " + Arrays.asList(degradation.aspects));
 		        		}
 		        		
 		        	} else {

@@ -62,8 +62,6 @@ public class EntityChaosCrystal extends Entity {
 		this.dataWatcher.updateObject(10 + Aspects.getAspectDisplayId(aspect), Integer.valueOf(value));
 	}
 	
-	//TODO: reformat aspectStore to dataWatcher storage
-	
 	@Override
 	public void onUpdate() {
         this.worldObj.theProfiler.startSection("entityBaseTick");

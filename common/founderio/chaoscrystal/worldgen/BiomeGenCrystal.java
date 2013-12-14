@@ -22,7 +22,7 @@ public class BiomeGenCrystal extends BiomeGenBase {
 		this.spawnableMonsterList.add(new SpawnListEntry(EntityCreeper.class, 10, 1, 6));
         this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 10, 1, 6));
         this.topBlock = (byte)ChaosCrystalMain.blockBase.blockID;
-        this.fillerBlock = (byte)Block.dirt.blockID;//TODO: custom blocks
+        this.fillerBlock = (byte)Block.dirt.blockID;
         this.setDisableRain();
         this.temperature = 0.3f;
         this.theBiomeDecorator.treesPerChunk = -999;
