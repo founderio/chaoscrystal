@@ -61,26 +61,28 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 					// EntityLook
 					int dimension = dis.readInt();
 					int entity = dis.readInt();
-					double posX = dis.readDouble();
-					double posY = dis.readDouble();
-					double posZ = dis.readDouble();
+					double lookX = dis.readDouble();
+					double lookY = dis.readDouble();
+					double lookZ = dis.readDouble();
 					
 					World w = DimensionManager.getWorld(dimension);
 					if(w != null) {
 						Entity e = w.getEntityByID(entity);
 						
-						double d0 = posX - e.posX;
-				        double d1 = posY - e.posY;
-				        double d2 = posZ - e.posZ;
-				        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-				        e.rotationYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
-				        e.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
 						
-						if(e instanceof EntityFocus) {
-							((EntityFocus)e).lookHelper.posX = posX;
-							((EntityFocus)e).lookHelper.posY = posY;
-							((EntityFocus)e).lookHelper.posZ = posZ;
-						}
+						
+//						if(e instanceof EntityFocus) {
+//							((EntityFocus)e).lookX = lookX;
+//							((EntityFocus)e).lookY = lookY;
+//							((EntityFocus)e).lookZ = lookZ;
+//						} else {
+							double d0 = lookX - e.posX;
+					        double d1 = lookY - e.posY;
+					        double d2 = lookZ - e.posZ;
+					        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+					        e.rotationYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
+					        e.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
+//						}
 					}
 				}
 			} catch (IOException e) {
