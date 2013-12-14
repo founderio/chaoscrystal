@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationHelper;
 
 public class EntityChaosCrystal extends Entity {
@@ -27,11 +28,9 @@ public class EntityChaosCrystal extends Entity {
         this.setPosition(par2, par4, par6);
 	}
 
-	public NBTTagCompound aspectStore;
 	public int age;
 	public int lastDegrade = 0;
 	public final int degradeInterval = 1;
-	public boolean isInSuckMode = true;
 	
 	@Override
 	public boolean canBeCollidedWith() {
@@ -41,8 +40,29 @@ public class EntityChaosCrystal extends Entity {
 	@Override
 	protected void entityInit() {
 		this.age = 0;
-		this.aspectStore = new NBTTagCompound();
+		this.dataWatcher.addObject(9, Byte.valueOf((byte) 0));
+		for(int i = 0; i < Aspects.ASPECTS.length; i++) {
+			this.dataWatcher.addObject(10 + i, Integer.valueOf(0));
+		}
 	}
+	
+	public boolean isInSuckMode() {
+		return this.dataWatcher.getWatchableObjectByte(9) == 1;
+	}
+	
+	public void setSuckMode(boolean value) {
+		this.dataWatcher.updateObject(9, Byte.valueOf((byte)(value ? 1 : 0)));
+	}
+	
+	public int getAspect(String aspect) {
+		return this.dataWatcher.getWatchableObjectInt(10 + Aspects.getAspectDisplayId(aspect));
+	}
+	
+	public void setAspect(String aspect, int value) {
+		this.dataWatcher.updateObject(10 + Aspects.getAspectDisplayId(aspect), Integer.valueOf(value));
+	}
+	
+	//TODO: reformat aspectStore to dataWatcher storage
 	
 	@Override
 	public void onUpdate() {
@@ -60,7 +80,7 @@ public class EntityChaosCrystal extends Entity {
         				double distZ = ((EntityFocusFilter) obj).posZ - posZ;
         				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
         				if(tmp_dist < EntityFocusFilter.focusRange*EntityFocusFilter.focusRange) {
-        					String asp = ((EntityFocusFilter)obj).aspect;
+        					String asp = ((EntityFocusFilter)obj).getAspect();
         					if(!filterAspects.contains(asp)) {
         						filterAspects.add(asp);
         					}
@@ -83,10 +103,10 @@ public class EntityChaosCrystal extends Entity {
         		}
         		
         		lastDegrade = age;
-        		if(isInSuckMode) {
-        			DegradationHelper.suckAspect(this, worldObj, aspectStore, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
+        		if(isInSuckMode()) {
+        			DegradationHelper.suckAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
         		} else {
-        			DegradationHelper.releaseAspect(this, worldObj, aspectStore, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
+        			DegradationHelper.releaseAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
         		}
             	
             }
@@ -124,11 +144,19 @@ public class EntityChaosCrystal extends Entity {
 		
 		return true;
 	}
+	
+	private NBTTagCompound getAspectStore() {
+		NBTTagCompound comp = new NBTTagCompound();
+		for(String aspect : Aspects.ASPECTS) {
+			comp.setInteger(aspect, getAspect(aspect));
+		}
+		return comp;
+	}
 
 	public ItemStack buildItemStack() {
 		ItemStack is = new ItemStack(ChaosCrystalMain.itemChaosCrystal);
 		NBTTagCompound comp = new NBTTagCompound();
-		comp.setCompoundTag("aspectStore", aspectStore);
+		comp.setCompoundTag("aspectStore", getAspectStore());
 		
 		is.setTagCompound(comp);
 		return is;
@@ -136,21 +164,25 @@ public class EntityChaosCrystal extends Entity {
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		aspectStore = nbttagcompound.getCompoundTag("aspectStore");
-		if(aspectStore == null) {
-			aspectStore = new NBTTagCompound();
+		NBTTagCompound aspectStore = nbttagcompound.getCompoundTag("aspectStore");
+		if(aspectStore != null) {
+			if (aspectStore != null) {
+				for(String aspect : Aspects.ASPECTS) {
+					setAspect(aspect, aspectStore.getInteger(aspect));
+				}
+			}
 		}
 		age = nbttagcompound.getInteger("age");
 		lastDegrade = nbttagcompound.getInteger("lastDegrade");
-		isInSuckMode = nbttagcompound.getBoolean("suckMode");
+		setSuckMode(nbttagcompound.getBoolean("suckMode"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		nbttagcompound.setCompoundTag("aspectStore", aspectStore);
+		nbttagcompound.setCompoundTag("aspectStore", getAspectStore());
 		nbttagcompound.setInteger("age", age);
 		nbttagcompound.setInteger("lastDegrade", lastDegrade);
-		nbttagcompound.setBoolean("suckMode", isInSuckMode);
+		nbttagcompound.setBoolean("suckMode", isInSuckMode());
 	}
 
 }

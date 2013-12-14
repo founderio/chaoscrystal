@@ -60,14 +60,15 @@ public class ItemFocus extends Item {
 				EntityFocusFilter entity = new EntityFocusFilter(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
 				NBTTagCompound tags = par1ItemStack.getTagCompound();
 				if(tags != null) {
-					entity.aspect = tags.getString("aspect");
-					if(!Aspects.isAspect(entity.aspect)) {
-						entity.aspect = Aspects.ASPECTS[0];
+					String aspect = tags.getString("aspect");
+					if(!Aspects.isAspect(aspect)) {
+						aspect = Aspects.ASPECTS[0];
 					}
+					entity.setAspect(aspect);
 				} else {
-					entity.aspect = Aspects.ASPECTS[0];
+					entity.setAspect(Aspects.ASPECTS[0]);
 				}
-				System.out.println("Spawning Entity with aspect: " + entity.aspect);
+				//System.out.println("Spawning Entity with aspect: " + entity.aspect);
 				par2World.spawnEntityInWorld(entity);
 			}
 			//entity.playSpawnSound();

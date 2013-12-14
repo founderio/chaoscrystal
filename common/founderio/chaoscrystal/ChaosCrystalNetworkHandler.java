@@ -20,6 +20,7 @@ import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.DegradationParticles;
+import founderio.chaoscrystal.entities.EntityFocusFilter;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
 

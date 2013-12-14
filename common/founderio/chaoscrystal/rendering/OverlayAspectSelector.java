@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -19,10 +20,13 @@ import net.minecraftforge.event.ForgeSubscribe;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
-
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
+import founderio.chaoscrystal.entities.EntityChaosCrystal;
+import founderio.chaoscrystal.entities.EntityFocusBorder;
+import founderio.chaoscrystal.entities.EntityFocusFilter;
+import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class OverlayAspectSelector extends Gui {
 	
@@ -87,77 +91,186 @@ public class OverlayAspectSelector extends Gui {
 	
 	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
-	public void onRenderExperienceBar(RenderGameOverlayEvent event) {
+	public void onRenderHud(RenderGameOverlayEvent event) {
+		
+		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
+		
+		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID) {
+			Minecraft.getMinecraft().entityRenderer.getMouseOver(0);
+			if(Minecraft.getMinecraft().objectMouseOver != null) {
+				Entity lookingAt = Minecraft.getMinecraft().objectMouseOver.entityHit;
+				
+				if(lookingAt != null) {
+					if(lookingAt instanceof EntityChaosCrystal) {
+						EntityChaosCrystal e = (EntityChaosCrystal)lookingAt;
+						
+						int centerW = event.resolution.getScaledWidth()/2;
+						int centerH = event.resolution.getScaledHeight()/2;
+						
+						int offset = 0;
+						int colOffset = 0;
+						final int colWidth = 64;
+						
+						GL11.glPushMatrix();
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				        GL11.glEnable(GL11.GL_BLEND);
+				        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				        
+				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
+						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+						
+						for(String aspect : Aspects.ASPECTS) {
+							int asp = e.getAspect(aspect);
+
+							Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+							this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
+
+							Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
+							
+							
+							if(offset >= 30) {
+								offset = 0;
+								colOffset += colWidth;
+							} else {
+								offset += 10;
+							}
+						}
+						
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+				
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glPopMatrix();
+					} else if(lookingAt instanceof EntityFocusFilter) {
+						int centerW = event.resolution.getScaledWidth()/2;
+						int centerH = event.resolution.getScaledHeight()/2;
+						
+						GL11.glPushMatrix();
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				        GL11.glEnable(GL11.GL_BLEND);
+				        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				        
+				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter.png"));
+						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+						
+				        
+				        String aspect = ((EntityFocusFilter)lookingAt).getAspect();
+				        System.out.println("Rendering with " + aspect + " " + lookingAt.worldObj.isRemote);
+				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+						this.drawTexturedModalRectScaled(centerW + 5, centerH, 0, 0, 10, 10, 256, 256);
+						
+				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+						
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glPopMatrix();
+					} else if(lookingAt instanceof EntityFocusBorder) {
+						int centerW = event.resolution.getScaledWidth()/2;
+						int centerH = event.resolution.getScaledHeight()/2;
+						
+						GL11.glPushMatrix();
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				        GL11.glEnable(GL11.GL_BLEND);
+				        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				        
+				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_border.png"));
+						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+					
+				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+						
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glPopMatrix();
+					} else if(lookingAt instanceof EntityFocusTransfer) {
+						int centerW = event.resolution.getScaledWidth()/2;
+						int centerH = event.resolution.getScaledHeight()/2;
+						
+						GL11.glPushMatrix();
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				        GL11.glEnable(GL11.GL_BLEND);
+				        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				        
+				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_transfer.png"));
+						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+
+				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+				        
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glPopMatrix();
+					}
+				}
+			}
+		}
 		
 		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
-		if(currentItem == null || currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
-			return;
-		}
-		if(currentItem.getItemDamage() != 2) {
-			return;
-		}
 		
-		String selectedAspect;
-		int aspectIndex;
-		NBTTagCompound tags = currentItem.getTagCompound();
-		if(tags != null) {
-			selectedAspect = tags.getString("aspect");
-			aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
-			if(aspectIndex == -1) {
+		
+		if(currentItem != null && currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
+			
+			String selectedAspect;
+			int aspectIndex;
+			NBTTagCompound tags = currentItem.getTagCompound();
+			if(tags != null) {
+				selectedAspect = tags.getString("aspect");
+				aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
+				if(aspectIndex == -1) {
+					selectedAspect = Aspects.ASPECTS[0];
+					aspectIndex = 0;
+				}
+			} else {
 				selectedAspect = Aspects.ASPECTS[0];
 				aspectIndex = 0;
 			}
-		} else {
-			selectedAspect = Aspects.ASPECTS[0];
-			aspectIndex = 0;
+			
+			int center = event.resolution.getScaledWidth()/2;
+			int bottom = event.resolution.getScaledHeight() - 60;
+			
+			
+			GL11.glPushMatrix();
+	        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+	        GL11.glEnable(GL11.GL_BLEND);
+	        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+	        
+	        
+	        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
+	        this.drawTexturedModalRectScaled(center - 8, bottom, 0, 0, 16, 16, 256, 256);
+			
+	        GL11.glColor4f(0.08F, 0.08F, 0.08F, 0.10003F);
+	        
+	        if(aspectIndex > 0) {
+	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
+	            this.drawTexturedModalRectScaled(center - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+	    		
+	        }
+	        
+	        if(aspectIndex < Aspects.ASPECTS.length - 1) {
+	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
+	            this.drawTexturedModalRectScaled(center - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+	    		
+	        }
+	        
+	        GL11.glColor4f(0.08F, 0.08F, 0.08F, 0.1000F);
+	        
+	        if(aspectIndex > 1) {
+	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
+	            this.drawTexturedModalRectScaled(center - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+	    		
+	        }
+	        
+	        if(aspectIndex < Aspects.ASPECTS.length - 2) {
+	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
+	            this.drawTexturedModalRectScaled(center - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+	    		
+	        }
+	        
+			Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+	
+	        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glPopMatrix();
 		}
-		
-		int center = event.resolution.getScaledWidth()/2;
-		int bottom = event.resolution.getScaledHeight() - 60;
-		
-		
-		GL11.glPushMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        
-        
-        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
-        this.drawTexturedModalRectScaled(center - 8, bottom, 0, 0, 16, 16, 256, 256);
-		
-        GL11.glColor4f(0.08F, 0.08F, 0.08F, 0.10003F);
-        
-        if(aspectIndex > 0) {
-        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
-            this.drawTexturedModalRectScaled(center - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
-    		
-        }
-        
-        if(aspectIndex < Aspects.ASPECTS.length - 1) {
-        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
-            this.drawTexturedModalRectScaled(center - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
-    		
-        }
-        
-        GL11.glColor4f(0.08F, 0.08F, 0.08F, 0.1000F);
-        
-        if(aspectIndex > 1) {
-        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
-            this.drawTexturedModalRectScaled(center - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
-    		
-        }
-        
-        if(aspectIndex < Aspects.ASPECTS.length - 2) {
-        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
-            this.drawTexturedModalRectScaled(center - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
-    		
-        }
-        
-		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
-
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
 		
 	}
 	

@@ -37,13 +37,14 @@ public class ItemChaosCrystal extends Item {
 		
 		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 2, (int)par3EntityPlayer.posZ);
 		if(par1ItemStack.getTagCompound() != null) {
-			entity.aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
-			if (entity.aspectStore == null) {
-				entity.aspectStore = new NBTTagCompound();
+			NBTTagCompound aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
+			if (aspectStore != null) {
+				for(String aspect : Aspects.ASPECTS) {
+					entity.setAspect(aspect, aspectStore.getInteger(aspect));
+				}
 			}
-			 //DegradationHelper.isAspectStoreEmpty(entity.aspectStore);
 		}
-		entity.isInSuckMode = !par3EntityPlayer.isSneaking();//
+		entity.setSuckMode(!par3EntityPlayer.isSneaking());
 		
 		par2World.spawnEntityInWorld(entity);
 		entity.playSpawnSound();

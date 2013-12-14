@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -43,13 +45,20 @@ public class EntityFocusFilter extends Entity {
 	public double lookY;
 	public double lookZ;
 	
-	public String aspect = Aspects.ASPECTS[0];
 	
 	public static final int focusRange = 10;
 
 	@Override
 	protected void entityInit() {
-		System.out.println("Spawned with aspect: " + aspect);
+		this.dataWatcher.addObject(30, Aspects.ASPECTS[0]);
+	}
+	
+	public String getAspect() {
+		return this.dataWatcher.getWatchableObjectString(30);
+	}
+	
+	public void setAspect(String aspect) {
+		this.dataWatcher.updateObject(30, aspect);
 	}
 	
 	@Override
@@ -179,10 +188,11 @@ public class EntityFocusFilter extends Entity {
 		lookX = nbttagcompound.getDouble("lookX");
 		lookY = nbttagcompound.getDouble("lookY");
 		lookZ = nbttagcompound.getDouble("lookZ");
-		aspect = nbttagcompound.getString("aspect");
+		String aspect = nbttagcompound.getString("aspect");
 		if(!Aspects.isAspect(aspect)) {
 			aspect = Aspects.ASPECTS[0];
 		}
+		setAspect(aspect);
 	}
 
 	@Override
@@ -191,7 +201,7 @@ public class EntityFocusFilter extends Entity {
 		nbttagcompound.setDouble("lookX", lookX);
 		nbttagcompound.setDouble("lookY", lookY);
 		nbttagcompound.setDouble("lookZ", lookZ);
-		nbttagcompound.setString("aspect", aspect);
+		nbttagcompound.setString("aspect", getAspect());
 	}
 
 }

@@ -167,11 +167,11 @@ public class EntityFocusTransfer extends Entity {
     				}
             		
             		for(String aspect : Aspects.ASPECTS) {
-            			int aspects = crystal1.aspectStore.getInteger(aspect) + crystal2.aspectStore.getInteger(aspect);
+            			int aspects = crystal1.getAspect(aspect) + crystal2.getAspect(aspect);
             			int asp1 = aspects/2;
             			int asp2 = aspects - asp1;
-            			crystal1.aspectStore.setInteger(aspect, asp1);
-            			crystal2.aspectStore.setInteger(aspect, asp2);
+            			crystal1.setAspect(aspect, asp1);
+            			crystal2.setAspect(aspect, asp2);
             		}
             		
         		}

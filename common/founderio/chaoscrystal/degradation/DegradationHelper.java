@@ -16,6 +16,7 @@ import net.minecraftforge.common.Configuration;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class DegradationHelper {
 	private static final Random rand = new Random();
@@ -45,7 +46,7 @@ public class DegradationHelper {
 		return !hasAspects;
 	}
 	
-	public static void releaseAspect(Entity entity, World world, NBTTagCompound aspectStore, int posX, int posY, int posZ, List<String> filter, double range) {
+	public static void releaseAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, double range) {
 		//System.out.println(entity.entityId + " " + range);
 		int hit = 0;
 		int tries = 0;
@@ -75,7 +76,7 @@ public class DegradationHelper {
 		        		
 		        		
 		        		for (int i = 0; i < degradation.aspects.length; i++) {
-		            		int aspectAmount = aspectStore.getInteger(degradation.aspects[i]);
+		            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
 		            		if(aspectAmount < degradation.amounts[i]) {
 		            			capable = false;
 		            			break;
@@ -87,9 +88,9 @@ public class DegradationHelper {
 		        			hit++;
 		        			
 		        			for (int i = 0; i < degradation.aspects.length; i++) {
-		                		int aspectAmount = aspectStore.getInteger(degradation.aspects[i]);
+		                		int aspectAmount = entity.getAspect(degradation.aspects[i]);
 		                		aspectAmount -= degradation.amounts[i];
-		                		aspectStore.setInteger(degradation.aspects[i], aspectAmount);
+		                		entity.setAspect(degradation.aspects[i], aspectAmount);
 		    				}
 		            		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.source.itemID, degradation.source.getItemDamage(), 1 + 2);
 		            		
@@ -136,7 +137,7 @@ public class DegradationHelper {
 		}
 	}
 	
-	public static void suckAspect(Entity entity, World world, NBTTagCompound aspectStore, int posX, int posY, int posZ, List<String> filter, double range) {
+	public static void suckAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, double range) {
 		
 		int hit = 0;
 		int tries = 0;
@@ -164,11 +165,11 @@ public class DegradationHelper {
 		        		
 		        		hit++;
 		        		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
-		        		
+		        		//TODO: limit aspects to (?) 1.000.000
 		        		for (int i = 0; i < degradation.aspects.length; i++) {
-		            		int aspectAmount = aspectStore.getInteger(degradation.aspects[i]);
+		            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
 		            		aspectAmount += degradation.amounts[i];
-		            		aspectStore.setInteger(degradation.aspects[i], aspectAmount);
+		            		entity.setAspect(degradation.aspects[i], aspectAmount);
 						}
 		        		
 		        		try {
