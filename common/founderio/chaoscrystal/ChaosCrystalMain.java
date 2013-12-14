@@ -22,7 +22,9 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
+import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -58,6 +60,7 @@ public class ChaosCrystalMain {
 	public static Item itemCrystalGlasses;
 	
 	public static BlockBase blockBase;
+	public static BlockApparatus blockApparatus;
 	
 	public static BiomeGenCrystal biomeCrystal;
 	
@@ -104,6 +107,10 @@ public class ChaosCrystalMain {
 		blockBase.setResistance(0);
 		blockBase.setStepSound(Block.soundGlassFootstep);
 		
+		blockApparatus = new BlockApparatus(getBlockId(Constants.ID_BLOCK_REENACTOR, 231), Material.rock);
+		blockApparatus.setUnlocalizedName(Constants.ID_BLOCK_REENACTOR);
+		
+		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
 		config.save();
@@ -111,6 +118,9 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
+		GameRegistry.registerBlock(blockApparatus, Constants.ID_BLOCK_REENACTOR);
+		
+		GameRegistry.registerTileEntity(TileEntityApparatus.class, Constants.ID_TILEENTITY_REENACTOR);
 		
 		if(forceBiome) {
 			//Just a test: remove all other biomes...
