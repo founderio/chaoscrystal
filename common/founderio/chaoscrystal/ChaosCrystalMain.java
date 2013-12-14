@@ -12,6 +12,7 @@ import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -30,6 +31,7 @@ import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemFocus;
+import founderio.chaoscrystal.rendering.OverlayAspectSelector;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 import founderio.chaoscrystal.worldgen.GenCrystalFloats;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
@@ -122,6 +124,8 @@ public class ChaosCrystalMain {
 		EntityRegistry.registerModEntity(EntityFocusTransfer.class, Constants.NAME_ENTITY_FOCUS_TRANSFER, 1, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusBorder.class, Constants.NAME_ENTITY_FOCUS_BORDER, 2, this, 128, 1, false);
 		proxy.registerRenderStuff();
+		
+		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
 		
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
 		GameRegistry.registerWorldGenerator(new GenCrystalFloats());
