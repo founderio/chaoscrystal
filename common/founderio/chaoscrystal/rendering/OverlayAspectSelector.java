@@ -25,7 +25,7 @@ public class OverlayAspectSelector extends Gui {
         
 		for(String aspect : Aspects.ASPECTS) {
 			
-			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_water.png"));
+			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
 
 			int center = event.resolution.getScaledWidth()/2;
 			int bottom = event.resolution.getScaledHeight() - 220;
@@ -34,8 +34,6 @@ public class OverlayAspectSelector extends Gui {
 			this.drawTexturedModalRectScaled(center + offset, bottom, 0, 0, 16, 16, 256, 256);
 			offset += 16;
 		}
-		
-		
 		
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);

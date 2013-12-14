@@ -78,6 +78,7 @@ public class ChaosCrystalMain {
 		config.load();
 		
 		boolean forceBiome = config.get("Settings", "force_biomes", false).getBoolean(false);
+		config.get("Settings", "degradation_debugOutput", false);
 		
 		//TODO: Get cfgs for ranges etc. of foci, crystals
 		
@@ -117,9 +118,7 @@ public class ChaosCrystalMain {
 	
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
-//		LanguageRegistry langReg = LanguageRegistry.instance();
-//		langReg.
-		
+
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusTransfer.class, Constants.NAME_ENTITY_FOCUS_TRANSFER, 1, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusBorder.class, Constants.NAME_ENTITY_FOCUS_BORDER, 2, this, 128, 1, false);
@@ -416,8 +415,9 @@ public class ChaosCrystalMain {
 				new int[]{15, 5, 5},
 				new ItemStack(Block.glass, 0, 0));
 		
-		degradationStore.debugOutput();
-		System.out.println();
+		if(config.get("Settings", "degradation_debugOutput", false).getBoolean(false)) {
+			degradationStore.debugOutput();
+		}
 		
 	}
 }
