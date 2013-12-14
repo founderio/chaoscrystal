@@ -7,13 +7,16 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
@@ -83,6 +86,17 @@ public class ItemFocus extends Item {
 			break;
 		case 2:
 			par3List.add("Focus: Filter");
+			String selectedAspect;
+			NBTTagCompound tags = par1ItemStack.getTagCompound();
+			if(tags != null) {
+				selectedAspect = tags.getString("aspect");
+				if(!Aspects.isAspect(selectedAspect)) {
+					selectedAspect = Aspects.ASPECTS[0];
+				}
+			} else {
+				selectedAspect = Aspects.ASPECTS[0];
+			}
+			par3List.add("Aspect: " + StatCollector.translateToLocal(Constants.MOD_ID + ".aspect." + selectedAspect));
 			break;
 		default:
 			par3List.add("Focus: Unknown");

@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -17,14 +18,54 @@ import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
 
 public class OverlayAspectSelector extends Gui {
+	
+	@ForgeSubscribe(priority = EventPriority.NORMAL)
+	public void onMouseWheel(MouseEvent event) {
+		if(!Minecraft.getMinecraft().thePlayer.isSneaking()) {
+			return;
+		}
+		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
+		if(currentItem == null || currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
+			return;
+		}
+		if(currentItem.getItemDamage() != 2) {
+			return;
+		}
+		if(event.dwheel == 0) {
+			return;
+		}
+		event.setCanceled(true);
+		int aspectIndex;
+		NBTTagCompound tags = currentItem.getTagCompound();
+		if(tags != null) {
+			String selectedAspect = tags.getString("aspect");
+			aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
+			if(aspectIndex == -1) {
+				aspectIndex = 0;
+			}
+		} else {
+			tags = new NBTTagCompound();
+			aspectIndex = 0;
+		}
+		if(event.dwheel > 0 &&  aspectIndex < Aspects.ASPECTS.length - 1) {
+			aspectIndex++;
+        }
+		if(event.dwheel < 0 &&  aspectIndex > 0) {
+			aspectIndex--;
+        }
+		tags.setString("aspect", Aspects.ASPECTS[aspectIndex]);
+		currentItem.setTagCompound(tags);
+	}
+	
+	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onRenderExperienceBar(RenderGameOverlayEvent event) {
 		
 		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
-		if(currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
+		if(currentItem == null || currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
 			return;
 		}
-		if(currentItem.getItemDamage() != 1) {
+		if(currentItem.getItemDamage() != 2) {
 			return;
 		}
 		
@@ -64,7 +105,7 @@ public class OverlayAspectSelector extends Gui {
     		
         }
         
-        if(aspectIndex < Aspects.ASPECTS.length) {
+        if(aspectIndex < Aspects.ASPECTS.length - 1) {
         	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
             this.drawTexturedModalRectScaled(center - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
     		
@@ -78,23 +119,12 @@ public class OverlayAspectSelector extends Gui {
     		
         }
         
-        if(aspectIndex < Aspects.ASPECTS.length - 1) {
+        if(aspectIndex < Aspects.ASPECTS.length - 2) {
         	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
             this.drawTexturedModalRectScaled(center - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
     		
         }
         
-        int offset = 0;
-        
-		for(String aspect : Aspects.ASPECTS) {
-			
-			
-			
-	       // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			offset += 16;
-		}
-		
-		
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);

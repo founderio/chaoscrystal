@@ -1,11 +1,18 @@
 package founderio.chaoscrystal.entities;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Constants;
 
 public class EntityFocusBorder extends Entity {
 
@@ -27,7 +34,11 @@ public class EntityFocusBorder extends Entity {
 	 * 0 = Transfer
 	 * 1 = border
 	 */
-//	public int age = 0;
+	public int age = 0;
+	
+	public double lookX;
+	public double lookY;
+	public double lookZ;
 
 	@Override
 	protected void entityInit() {
@@ -66,12 +77,68 @@ public class EntityFocusBorder extends Entity {
 		return is;
 	}
 	
+	public void sendLookUpdate() {
+    	try {
+    		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 3 + Double.SIZE * 3);
+    		DataOutputStream dos = new DataOutputStream(bos);
+
+    		dos.writeInt(1);
+    		dos.writeInt(worldObj.provider.dimensionId);
+    		dos.writeInt(entityId);
+    		dos.writeDouble(lookX);
+    		dos.writeDouble(lookY);
+    		dos.writeDouble(lookZ);
+    		
+    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
+    		degradationPacket.data = bos.toByteArray();
+    		degradationPacket.length = bos.size();
+
+    		dos.close();
+    		
+    		PacketDispatcher.sendPacketToAllAround(posX, posY, posZ, 128, worldObj.provider.dimensionId, degradationPacket);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+	
 	@Override
 	public void onUpdate() {
         this.worldObj.theProfiler.startSection("entityBaseTick");
-//        this.age++;
-//        if(!this.worldObj.isRemote) {
-//        }
+        this.age++;
+        if(!this.worldObj.isRemote) {
+        	EntityChaosCrystal crystal1 = null;
+    		double dist = Double.MAX_VALUE;
+            
+            for(Object obj : this.worldObj.loadedEntityList) {
+    			if(obj instanceof EntityChaosCrystal) {
+    				double distX = ((EntityChaosCrystal) obj).posX - posX;
+    				double distY = ((EntityChaosCrystal) obj).posY - posY;
+    				double distZ = ((EntityChaosCrystal) obj).posZ - posZ;
+    				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
+    				if(tmp_dist < dist) {
+    					crystal1 = (EntityChaosCrystal)obj;
+    					dist = tmp_dist;
+    				}
+    			}
+    		}
+            
+            if(crystal1 != null) {
+            	lookX = crystal1.posX;
+	    		lookY = (crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0D;
+	    		lookZ = crystal1.posZ;
+	    		sendLookUpdate();
+            } else if(age % 20 == 0) {
+            	lookX = posX + (this.rand.nextDouble() - 0.5) * 10;
+            	lookY = posY;
+            	lookZ = posZ + (this.rand.nextDouble() - 0.5) * 10;
+        		sendLookUpdate();
+            }
+        }
+        
+        
+        
 //        
 //        double d0 = lookX - posX;
 //        double d1 = lookY - posY;
@@ -102,11 +169,17 @@ public class EntityFocusBorder extends Entity {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 //		age = nbttagcompound.getInteger("age");
+		lookX = nbttagcompound.getDouble("lookX");
+		lookY = nbttagcompound.getDouble("lookY");
+		lookZ = nbttagcompound.getDouble("lookZ");
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 //		nbttagcompound.setInteger("age", age);
+		nbttagcompound.setDouble("lookX", lookX);
+		nbttagcompound.setDouble("lookY", lookY);
+		nbttagcompound.setDouble("lookZ", lookZ);
 	}
 
 }
