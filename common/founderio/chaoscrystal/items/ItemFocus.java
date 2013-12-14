@@ -3,6 +3,7 @@ package founderio.chaoscrystal.items;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,6 +18,7 @@ public class ItemFocus extends Item {
 
 	public ItemFocus(int par1) {
 		super(par1);
+		this.setHasSubtypes(true);
 	}
 	
 	@Override
@@ -33,6 +35,7 @@ public class ItemFocus extends Item {
 		}
 		
 		EntityFocus entity = new EntityFocus(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 1.9f, par3EntityPlayer.posZ, par3EntityPlayer.cameraYaw, par3EntityPlayer.cameraPitch);
+		entity.mode = par1ItemStack.getItemDamage();
 		//TODO: set type depending on meta
 		
 		par2World.spawnEntityInWorld(entity);
@@ -41,7 +44,15 @@ public class ItemFocus extends Item {
 		return new ItemStack(ChaosCrystalMain.itemFocus, 0);
 	}
 	
-	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(int par1, CreativeTabs par2CreativeTabs,
+			List par3List) {
+		for(int meta = 0; meta < 2; meta++) {
+			par3List.add(new ItemStack(par1, 1, meta));
+		}
+	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override

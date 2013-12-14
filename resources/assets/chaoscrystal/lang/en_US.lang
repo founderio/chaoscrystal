@@ -1,5 +1,6 @@
 chaoscrystal.chaoscrystal=Chaos Crystal
 item.chaoscrystal.chaoscrystal.name=Chaos Crystal
+item.chaoscrystal.focus.name=Focus
 tile.chaoscrystal.base.name=Crystal (Base)
 tile.chaoscrystal.base.crystalline.name=Crystalline Energy
 tile.chaoscrystal.base.crystal.name=Crystal
