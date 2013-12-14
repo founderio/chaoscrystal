@@ -27,6 +27,7 @@ import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
+import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
@@ -122,6 +123,7 @@ public class ChaosCrystalMain {
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusTransfer.class, Constants.NAME_ENTITY_FOCUS_TRANSFER, 1, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusBorder.class, Constants.NAME_ENTITY_FOCUS_BORDER, 2, this, 128, 1, false);
+		EntityRegistry.registerModEntity(EntityFocusFilter.class, Constants.NAME_ENTITY_FOCUS_FILTER, 3, this, 128, 1, false);
 		proxy.registerRenderStuff();
 		
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
@@ -160,7 +162,7 @@ public class ChaosCrystalMain {
 				new ItemStack(Block.tilledField, 0, 1),
 				new String[]{Aspects.ASPECT_WATER},
 				new int[]{1},
-				new ItemStack(Block.tilledField, 0, 1));
+				new ItemStack(Block.tilledField, 0, 0));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.dirt, 0, 1),
 				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIVING},
@@ -188,8 +190,8 @@ public class ChaosCrystalMain {
 		for(int meta = 0; meta < 16; meta++) {//meh, just catch them all.
 			degradationStore.registerDegradation(
 					new ItemStack(Block.waterStill, 0, meta),
-					new String[]{},
-					new int[]{},
+					new String[]{Aspects.ASPECT_WATER},
+					new int[]{5},
 					new ItemStack(0, 0, 0));
 			degradationStore.registerDegradation(
 					new ItemStack(Block.waterMoving, 0, meta),

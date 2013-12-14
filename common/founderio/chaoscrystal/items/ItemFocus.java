@@ -18,6 +18,7 @@ import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
+import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class ItemFocus extends Item {
@@ -54,6 +55,19 @@ public class ItemFocus extends Item {
 				par2World.spawnEntityInWorld(entity);
 			} else if(par1ItemStack.getItemDamage() == 1) {
 				EntityFocusBorder entity = new EntityFocusBorder(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				par2World.spawnEntityInWorld(entity);
+			} else if(par1ItemStack.getItemDamage() == 2) {
+				EntityFocusFilter entity = new EntityFocusFilter(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				NBTTagCompound tags = par1ItemStack.getTagCompound();
+				if(tags != null) {
+					entity.aspect = tags.getString("aspect");
+					if(!Aspects.isAspect(entity.aspect)) {
+						entity.aspect = Aspects.ASPECTS[0];
+					}
+				} else {
+					entity.aspect = Aspects.ASPECTS[0];
+				}
+				System.out.println("Spawning Entity with aspect: " + entity.aspect);
 				par2World.spawnEntityInWorld(entity);
 			}
 			//entity.playSpawnSound();

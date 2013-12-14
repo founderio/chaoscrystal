@@ -1,5 +1,8 @@
 package founderio.chaoscrystal.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.item.EntityItem;
@@ -47,11 +50,43 @@ public class EntityChaosCrystal extends Entity {
         this.age++;
         if(!this.worldObj.isRemote) {
         	if(age-lastDegrade > degradeInterval) {
+        		
+        		List<String> filterAspects = new ArrayList<String>();
+        		
+        		for(Object obj : this.worldObj.loadedEntityList) {
+        			if(obj instanceof EntityFocusFilter) {
+        				double distX = ((EntityFocusFilter) obj).posX - posX;
+        				double distY = ((EntityFocusFilter) obj).posY - posY;
+        				double distZ = ((EntityFocusFilter) obj).posZ - posZ;
+        				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
+        				if(tmp_dist < EntityFocusFilter.focusRange*EntityFocusFilter.focusRange) {
+        					String asp = ((EntityFocusFilter)obj).aspect;
+        					if(!filterAspects.contains(asp)) {
+        						filterAspects.add(asp);
+        					}
+        				}
+        			}
+        		}
+        		
+        		double range = DegradationHelper.degradeRange * DegradationHelper.degradeRange * DegradationHelper.degradeRange;
+        		
+        		for(Object obj : this.worldObj.loadedEntityList) {
+        			if(obj instanceof EntityFocusBorder) {
+        				double distX = ((EntityFocusBorder) obj).posX - posX;
+        				double distY = ((EntityFocusBorder) obj).posY - posY;
+        				double distZ = ((EntityFocusBorder) obj).posZ - posZ;
+        				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
+        				if(tmp_dist < range) {
+        					range = tmp_dist;
+        				}
+        			}
+        		}
+        		
         		lastDegrade = age;
         		if(isInSuckMode) {
-        			DegradationHelper.suckAspect(this, worldObj, aspectStore, (int)posX, (int)posY, (int)posZ);
+        			DegradationHelper.suckAspect(this, worldObj, aspectStore, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
         		} else {
-        			DegradationHelper.releaseAspect(this, worldObj, aspectStore, (int)posX, (int)posY, (int)posZ);
+        			DegradationHelper.releaseAspect(this, worldObj, aspectStore, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
         		}
             	
             }

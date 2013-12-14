@@ -6,7 +6,11 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.PlayerControllerMP;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.MathHelper;
@@ -14,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.Player;
+import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.DegradationParticles;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
@@ -36,7 +41,7 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 				int offZ = dis.readInt();
 				int dimension = dis.readInt();
 
-				for(int i = 0; i < 20 + rnd.nextInt(20); i++) {
+				for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
 					Minecraft.getMinecraft().effectRenderer.addEffect(
 							new DegradationParticles(
 									DimensionManager.getWorld(dimension),
@@ -68,20 +73,47 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 					if(w != null) {
 						Entity e = w.getEntityByID(entity);
 						
+						if(e != null) {
+//							if(e instanceof EntityFocus) {
+//								((EntityFocus)e).lookX = lookX;
+//								((EntityFocus)e).lookY = lookY;
+//								((EntityFocus)e).lookZ = lookZ;
+//							} else {
+								double d0 = lookX - e.posX;
+						        double d1 = lookY - e.posY;
+						        double d2 = lookZ - e.posZ;
+						        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
+						        e.rotationYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
+						        e.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
+//							}
+						}
 						
-						
-//						if(e instanceof EntityFocus) {
-//							((EntityFocus)e).lookX = lookX;
-//							((EntityFocus)e).lookY = lookY;
-//							((EntityFocus)e).lookZ = lookZ;
-//						} else {
-							double d0 = lookX - e.posX;
-					        double d1 = lookY - e.posY;
-					        double d2 = lookZ - e.posZ;
-					        float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-					        e.rotationYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
-					        e.rotationPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
-//						}
+					}
+				} else if(type==2) {
+					// EntityLook
+					int dimension = dis.readInt();
+					String playerName = dis.readUTF();
+					String aspect = dis.readUTF();
+
+					World w = DimensionManager.getWorld(dimension);
+					
+					if(w != null) {
+						EntityPlayer e = w.getPlayerEntityByName(playerName);
+						if(e != null) {
+							ItemStack currentItem = e.inventory.getCurrentItem();
+							if(currentItem == null || currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
+								return;
+							}
+							if(currentItem.getItemDamage() != 2) {
+								return;
+							}
+							NBTTagCompound tags = currentItem.getTagCompound();
+							if(tags == null) {
+								tags = new NBTTagCompound();
+							}
+							tags.setString("aspect", aspect);
+							currentItem.setTagCompound(tags);
+						}
 					}
 				}
 			} catch (IOException e) {

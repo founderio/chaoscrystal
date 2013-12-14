@@ -1,10 +1,15 @@
 package founderio.chaoscrystal.rendering;
 
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -12,6 +17,8 @@ import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 
 import org.lwjgl.opengl.GL11;
+
+import cpw.mods.fml.common.network.PacketDispatcher;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
@@ -55,6 +62,27 @@ public class OverlayAspectSelector extends Gui {
         }
 		tags.setString("aspect", Aspects.ASPECTS[aspectIndex]);
 		currentItem.setTagCompound(tags);
+		
+		try {
+    		ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
+    		DataOutputStream dos = new DataOutputStream(bos);
+
+    		dos.writeInt(2);
+    		dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
+    		dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
+    		dos.writeUTF(Aspects.ASPECTS[aspectIndex]);
+    		
+    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
+    		degradationPacket.data = bos.toByteArray();
+    		degradationPacket.length = bos.size();
+
+    		dos.close();
+    		
+    		PacketDispatcher.sendPacketToServer(degradationPacket);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	

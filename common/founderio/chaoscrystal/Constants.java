@@ -19,4 +19,5 @@ public class Constants {
 	public static final String NAME_ENTITY_CHAOSCRYSTAL = "chaoscrystal.chaoscrystal";
 	public static final String NAME_ENTITY_FOCUS_TRANSFER = "chaoscrystal.focus.transfer";
 	public static final String NAME_ENTITY_FOCUS_BORDER = "chaoscrystal.focus.border";
+	public static final String NAME_ENTITY_FOCUS_FILTER = "chaoscrystal.focus.filter";
 }
