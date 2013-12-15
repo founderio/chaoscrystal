@@ -34,8 +34,15 @@ public class DegradationParticles extends EntityPortalFX {
 	@Override
 	public void renderParticle(Tessellator par1Tessellator, float par2,
 			float par3, float par4, float par5, float par6, float par7) {
+		Tessellator tess = new Tessellator();
+		tess.startDrawingQuads();
+		tess.setBrightness(getBrightnessForRender(par2));
+		
 		Minecraft.getMinecraft().renderEngine.bindTexture(chaosParticles);
-		super.renderParticle(par1Tessellator, par2, par3, par4, par5, par6, par7);
+		super.renderParticle(tess, par2, par3, par4, par5, par6, par7);
+		
+		tess.draw();
+		
 		Minecraft.getMinecraft().renderEngine.bindTexture(particleTextures);
 	}
 }

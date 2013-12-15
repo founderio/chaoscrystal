@@ -77,7 +77,7 @@ public class EntityChaosCrystal extends Entity {
         				double distY = ((EntityFocusFilter) obj).posY - posY;
         				double distZ = ((EntityFocusFilter) obj).posZ - posZ;
         				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
-        				if(tmp_dist < EntityFocusFilter.focusRange*EntityFocusFilter.focusRange) {
+        				if(tmp_dist < EntityFocusFilter.focusRange*EntityFocusFilter.focusRange*EntityFocusFilter.focusRange) {
         					String asp = ((EntityFocusFilter)obj).getAspect();
         					if(!filterAspects.contains(asp)) {
         						filterAspects.add(asp);

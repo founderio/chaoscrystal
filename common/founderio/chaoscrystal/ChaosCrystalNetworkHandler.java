@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.EntityReddustFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,21 +28,28 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 
 	private Random rnd = new Random();
 	
-	public static void spawnParticleEffect(int dimension, int effect,
-			int sourceX, int sourceY, int sourceZ,
-			int offX, int offY, int offZ) {
+	public static void spawnParticleEffects(int dimension, int effect,
+			float sourceX, float sourceY, float sourceZ,
+			float offX, float offY, float offZ) {
+		spawnParticleEffects(dimension, effect, sourceX, sourceY, sourceZ, offX, offY, offZ, 1);
+	}
+	
+	public static void spawnParticleEffects(int dimension, int effect,
+			float sourceX, float sourceY, float sourceZ,
+			float offX, float offY, float offZ, float variation) {
 		try {
-    		ByteArrayOutputStream bos = new ByteArrayOutputStream(Integer.SIZE * 7);
+    		ByteArrayOutputStream bos = new ByteArrayOutputStream(Float.SIZE * 7 + Integer.SIZE * 2);
     		DataOutputStream dos = new DataOutputStream(bos);
 
     		dos.writeInt(effect);
     		dos.writeInt(dimension);
-    		dos.writeInt(sourceX);
-    		dos.writeInt(sourceY);
-    		dos.writeInt(sourceZ);
-			dos.writeInt(offX);
-			dos.writeInt(offY);
-    		dos.writeInt(offZ);
+    		dos.writeFloat(sourceX);
+    		dos.writeFloat(sourceY);
+    		dos.writeFloat(sourceZ);
+			dos.writeFloat(offX);
+			dos.writeFloat(offY);
+    		dos.writeFloat(offZ);
+    		dos.writeFloat(variation);
     		
     		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
     		degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
@@ -56,15 +65,28 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 	}
 	
 	public static void spawnParticleEffects(Entity from, Entity to, int effect) {
-		spawnParticleEffect(from.worldObj.provider.dimensionId, effect,
-				(int)to.posX, (int)to.posY, (int)to.posZ,
-				(int)(from.posX - to.posX), (int)(from.posY - to.posY), (int)(from.posZ - to.posZ));
+		spawnParticleEffects(from.worldObj.provider.dimensionId, effect,
+				(float)to.posX, (float)to.posY, (float)to.posZ,
+				(float)(from.posX - to.posX), (float)(from.posY - to.posY), (float)(from.posZ - to.posZ));
 	}
 	
 	public static void spawnParticleEffects(Entity from, TileEntity to, int effect) {
-		spawnParticleEffect(from.worldObj.provider.dimensionId, effect,
+		spawnParticleEffects(from.worldObj.provider.dimensionId, effect,
 				to.xCoord, to.yCoord, to.zCoord,
-				(int)(from.posX - to.xCoord), (int)(from.posY - to.yCoord), (int)(from.posZ - to.zCoord));
+				(float)(from.posX - to.xCoord), (float)(from.posY - to.yCoord), (float)(from.posZ - to.zCoord));
+	}
+	
+	public static void spawnParticleEffects(Entity to, int effect) {
+		spawnParticleEffects(to.worldObj.provider.dimensionId, effect,
+				(float)to.posX, (float)to.posY, (float)to.posZ,
+				0, 0, 0, 0.5f);
+	}
+	
+	public static void spawnParticleEffects(int dimension, int effect,
+			float sourceX, float sourceY, float sourceZ) {
+		spawnParticleEffects(dimension, effect,
+				sourceX + 0.5f, sourceY + 0.7f, sourceZ + 0.5f,
+				0, 0, 0, 1.0f);
 	}
 	
 	@Override
@@ -76,26 +98,39 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 			try {
 				int type = dis.readInt();
 				int dimension = dis.readInt();
-				int posX = dis.readInt();
-				int posY = dis.readInt();
-				int posZ = dis.readInt();
-				int offX = dis.readInt();
-				int offY = dis.readInt();
-				int offZ = dis.readInt();
+				float posX = dis.readFloat();
+				float posY = dis.readFloat();
+				float posZ = dis.readFloat();
+				float offX = dis.readFloat();
+				float offY = dis.readFloat();
+				float offZ = dis.readFloat();
+				float variation = dis.readFloat();
 
 				World w = DimensionManager.getWorld(dimension);
 				if(w != null) {
-					for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
-						Minecraft.getMinecraft().effectRenderer.addEffect(
-								new DegradationParticles(
-										w,
-								posX + rnd.nextDouble(),
-								posY + rnd.nextDouble(),
-								posZ + rnd.nextDouble(),
-								offX + rnd.nextDouble(),
-								offY + rnd.nextDouble(),
-								offZ + rnd.nextDouble(),
-								type));
+					float varHalf = variation/2;
+					if(type == 2) {
+						for(int i = 0; i < 5 + rnd.nextInt(20); i++) {
+							Minecraft.getMinecraft().effectRenderer.addEffect(
+									new EntityAuraFX(
+											w,
+									posX + rnd.nextDouble()*variation-varHalf,
+									posY + rnd.nextDouble()*variation-varHalf,
+									posZ + rnd.nextDouble()*variation-varHalf, 1, 1, 1));
+						}
+					} else {
+						for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
+							Minecraft.getMinecraft().effectRenderer.addEffect(
+									new DegradationParticles(
+											w,
+									posX + rnd.nextDouble()*variation-varHalf,
+									posY + rnd.nextDouble()*variation-varHalf,
+									posZ + rnd.nextDouble()*variation-varHalf,
+									offX + rnd.nextDouble()*variation-varHalf,
+									offY + rnd.nextDouble()*variation-varHalf,
+									offZ + rnd.nextDouble()*variation-varHalf,
+									type));
+						}
 					}
 				}
 				
