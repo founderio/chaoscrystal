@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
@@ -56,8 +57,14 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 	
 	public static void spawnParticleEffects(Entity from, Entity to, int effect) {
 		spawnParticleEffect(from.worldObj.provider.dimensionId, effect,
-				(int)from.posX, (int)from.posY, (int)from.posZ,
-				(int)(to.posX - from.posX), (int)(to.posY - from.posY), (int)(to.posZ - from.posZ));
+				(int)to.posX, (int)to.posY, (int)to.posZ,
+				(int)(from.posX - to.posX), (int)(from.posY - to.posY), (int)(from.posZ - to.posZ));
+	}
+	
+	public static void spawnParticleEffects(Entity from, TileEntity to, int effect) {
+		spawnParticleEffect(from.worldObj.provider.dimensionId, effect,
+				to.xCoord, to.yCoord, to.zCoord,
+				(int)(from.posX - to.xCoord), (int)(from.posY - to.yCoord), (int)(from.posZ - to.zCoord));
 	}
 	
 	@Override

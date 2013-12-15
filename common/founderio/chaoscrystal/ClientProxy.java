@@ -1,5 +1,6 @@
 package founderio.chaoscrystal;
 
+import net.minecraftforge.client.MinecraftForgeClient;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
@@ -19,6 +20,9 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, new RenderFocus());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, new RenderFocus());
 		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, new TileEntityRenderer());
+		TileEntityRenderer render = new TileEntityRenderer();
+		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, render);
+		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockApparatus.blockID, render);
 	}
 }

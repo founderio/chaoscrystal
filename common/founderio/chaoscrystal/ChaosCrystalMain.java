@@ -155,6 +155,36 @@ public class ChaosCrystalMain {
 		
 		degradationStore = new DegradationStore();
 		
+		degradationStore.registerRepair(Item.pickaxeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.pickaxeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Item.pickaxeGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.pickaxeStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Item.pickaxeWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		
+		degradationStore.registerRepair(Item.axeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.axeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Item.axeGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.axeStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Item.axeWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		
+		degradationStore.registerRepair(Item.shovelDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.shovelIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Item.shovelGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.shovelStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Item.shovelWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+
+		degradationStore.registerRepair(Item.hoeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.hoeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Item.hoeGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.hoeStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Item.hoeWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+
+		degradationStore.registerRepair(Item.swordDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.swordIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Item.swordGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Item.swordStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Item.swordWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		
 		/*
 		 * Grass, Dirt
 		 */
@@ -361,18 +391,18 @@ public class ChaosCrystalMain {
 				new ItemStack(Block.stone));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.oreIron, 0, 0),
-				new String[]{Aspects.ASPECT_METAL, Aspects.ASPECT_VALUE},
-				new int[]{15, 1},
+				new String[]{Aspects.ASPECT_METAL},
+				new int[]{80},
 				new ItemStack(Block.stone));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.oreDiamond, 0, 0),
 				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE},
-				new int[]{15, 15},
+				new int[]{500, 500},
 				new ItemStack(Block.stone));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.oreEmerald, 0, 0),
 				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE},
-				new int[]{15, 10},
+				new int[]{500, 400},
 				new ItemStack(Block.stone));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.oreRedstone, 0, 0),
@@ -402,18 +432,18 @@ public class ChaosCrystalMain {
 				new ItemStack(Block.oreGold));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.blockIron, 0, 0),
-				new String[]{Aspects.ASPECT_METAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
-				new int[]{15*8, 1*8, 5},
+				new String[]{Aspects.ASPECT_METAL, Aspects.ASPECT_STRUCTURE},
+				new int[]{80*8, 5},
 				new ItemStack(Block.oreIron));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.blockDiamond, 0, 0),
 				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
-				new int[]{15*8, 15*8, 5},
+				new int[]{500*8, 500*8, 5},
 				new ItemStack(Block.oreDiamond));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.blockEmerald, 0, 0),
 				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
-				new int[]{15*8, 10*8, 5},
+				new int[]{500*8, 400*8, 5},
 				new ItemStack(Block.oreEmerald));
 		degradationStore.registerDegradation(
 				new ItemStack(Block.blockRedstone, 0, 0),

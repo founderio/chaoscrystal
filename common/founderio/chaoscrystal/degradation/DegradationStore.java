@@ -11,10 +11,20 @@ public class DegradationStore {
 	
 	private HashMap<Integer, Degradation[]> degradations;
 	private HashMap<Integer, Degradation[]> degradationsInverse;
+	private HashMap<Integer, Repair> repairs;
 	
 	public DegradationStore() {
 		degradations = new HashMap<Integer, Degradation[]>();
 		degradationsInverse = new HashMap<Integer, Degradation[]>();
+		repairs = new HashMap<Integer, Repair>();
+	}
+	
+	public Repair getRepair(int id) {
+		return repairs.get(id);
+	}
+	
+	public void registerRepair(int itemId, String[] aspects, int[] amounts) {
+		repairs.put(itemId, new Repair(itemId, aspects, amounts));
 	}
 	
 	public Degradation getDegradation(int id, int meta) {

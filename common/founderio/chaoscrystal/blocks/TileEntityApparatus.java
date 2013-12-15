@@ -1,5 +1,6 @@
 package founderio.chaoscrystal.blocks;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -10,10 +11,15 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.degradation.Repair;
+import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 
 public class TileEntityApparatus extends TileEntity implements IInventory, ISidedInventory {
 
+	public final int stepsPerTick = 5;
+	
 	private ItemStack[] inventory;
 	
 	public TileEntityApparatus() {
@@ -125,6 +131,58 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;//TODO: verify!!
+	}
+	
+	public boolean processAspects(EntityChaosCrystal crystal) {
+		//TODO: take aspects needed for repair
+		
+		ItemStack is = getStackInSlot(0);
+		
+		if(is == null || is.itemID == 0) {
+			return false;
+		} else {
+			int maxDmg = is.getMaxDamage();
+			int curDmg = is.getItemDamage();
+			System.out.println(maxDmg);
+			if(curDmg == 0) {
+				return false;
+			}
+			
+			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.itemID);
+			
+			boolean didRepair = false;
+			
+			for(int step = 0; step < stepsPerTick && curDmg > 0; step++) {
+				boolean capable = true;
+				for(int a = 0; a < rep.aspects.length; a++) {
+					if(crystal.getAspect(rep.aspects[a]) < rep.amounts[a]) {
+						capable = false;
+					}
+				}
+				if(!capable) {
+					break;
+				}
+				didRepair = true;
+				
+				for(int a = 0; a < rep.aspects.length; a++) {
+					crystal.setAspect(rep.aspects[a], crystal.getAspect(rep.aspects[a]) - rep.amounts[a]);
+				}
+				
+				curDmg--;
+				is.setItemDamage(curDmg);
+			}
+			
+			if(didRepair) {
+				updateState();
+			}
+			
+			return didRepair;
+			
+		}
+	}
+	
+	public void updateState() {
+		PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 128, worldObj.provider.dimensionId, getDescriptionPacket());
 	}
 	
 	@Override

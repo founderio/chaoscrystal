@@ -8,15 +8,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
@@ -26,6 +31,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.Degradation;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -34,6 +40,13 @@ import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class OverlayAspectSelector extends Gui {
+	
+	private RenderItem ri;
+	
+	public OverlayAspectSelector() {
+		ri = new RenderItem();
+		ri.setRenderManager(RenderManager.instance);
+	}
 	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onMouseWheel(MouseEvent event) {
@@ -97,6 +110,10 @@ public class OverlayAspectSelector extends Gui {
 	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onRenderHud(RenderGameOverlayEvent event) {
+		
+		if(event.type != ElementType.CROSSHAIRS) {
+			return;
+		}
 		
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
 		
@@ -221,11 +238,14 @@ public class OverlayAspectSelector extends Gui {
 								Minecraft.getMinecraft().objectMouseOver.blockY,
 								Minecraft.getMinecraft().objectMouseOver.blockZ);
 			        	
+			    		int centerW = event.resolution.getScaledWidth()/2;
+						int centerH = event.resolution.getScaledHeight()/2;
+			    		boolean doRenderMiniBlock = false;
 			        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
-			        	if(degradation != null) {
-			        		int centerW = event.resolution.getScaledWidth()/2;
-							int centerH = event.resolution.getScaledHeight()/2;
-							
+			        	if(degradation == null) {
+			        		
+			        	} else {
+			        		doRenderMiniBlock = true;
 							int offset = 0;
 							int colOffset = 0;
 							final int colWidth = 64;
@@ -257,12 +277,62 @@ public class OverlayAspectSelector extends Gui {
 							}
 							
 
-							Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+							
 					
 					        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 							GL11.glDisable(GL11.GL_BLEND);
 							GL11.glPopMatrix();
 			        	}
+			        	
+			        	TileEntity te = w.getBlockTileEntity(Minecraft.getMinecraft().objectMouseOver.blockX,
+								Minecraft.getMinecraft().objectMouseOver.blockY,
+								Minecraft.getMinecraft().objectMouseOver.blockZ);
+			        	if(te != null) {
+			        		if(te instanceof TileEntityApparatus) {
+			        			doRenderMiniBlock = true;
+			        			ItemStack its = ((TileEntityApparatus) te).getStackInSlot(0);
+			        			if(its != null && its.itemID != 0) {
+			        				ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+				        					its, centerW - 16 - 5, centerH + 16, true);
+			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+			        						its, centerW - 16 - 5, centerH + 16);
+			        			}
+			        			
+			        		}
+//			        		else if(te instanceof TileEntityChest) {
+//			        			doRenderMiniBlock = true;
+//			        			int offset = 0;
+//			        			int colOffset = 0;
+//			        			int stacks = ((TileEntityChest) te).getSizeInventory();
+//			        			
+//			        			for(int i = 0; i < stacks; i++) {
+//			        				ItemStack its = ((TileEntityChest) te).getStackInSlot(i);
+//			        				if(its != null && its.itemID != 0) {
+//				        				ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+//					        					its, centerW - 16 - 5 - colOffset, centerH + 16 + offset, true);
+//				        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+//				        						its, centerW - 16 - 5 - colOffset, centerH + 16 + offset);
+//				        			
+//				        				offset += 16;
+//				        				if(offset >= 16*3) {
+//											offset = 0;
+//											colOffset += 16;
+//										} else {
+//											offset += 16;
+//										}
+//			        				}
+//			        				
+//			        			}
+//			        		}
+			        	}
+			        	
+			        	if(doRenderMiniBlock) {
+			        		ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, new ItemStack(id, 1, meta), centerW - 16 - 5, centerH, true);
+			        	}
+			        	
+			        	Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+			        	GL11.glDisable(GL11.GL_BLEND);
+			        	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 			    	}
 				}
 			}
