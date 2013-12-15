@@ -70,6 +70,7 @@ public class ChaosCrystalMain {
 	public static boolean cfg_forceBiome = false;
 	public static boolean cfg_debugOutput = false;
 	public static boolean cfg_nonDestructive = false;
+	public static boolean cfg_sneakToShowAspects = false;
 	
 	private int getItemId(String id, int defaultId) {
 		return config.get("Items", id, defaultId).getInt();
@@ -96,6 +97,7 @@ public class ChaosCrystalMain {
 			config.get("Settings", "max_spect_storage", cfg_maxAspectStorage).set(cfg_maxAspectStorage);
 		}
 		cfg_nonDestructive = config.get("Settings", "non_destructive", cfg_nonDestructive).getBoolean(cfg_nonDestructive);
+		cfg_sneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(false);
 		//TODO: Get cfgs for ranges etc. of foci, crystals
 		
 		

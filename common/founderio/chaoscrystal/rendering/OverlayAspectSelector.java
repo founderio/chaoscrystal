@@ -216,7 +216,9 @@ public class OverlayAspectSelector extends Gui {
 		
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
 		
-		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID) {
+		boolean specialSkip = ChaosCrystalMain.cfg_sneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		
+		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID && !specialSkip) {
 			MovingObjectPosition mop = getMouseOver(0);
 			
 			if(mop != null) {
