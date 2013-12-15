@@ -6,12 +6,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.ClientProxy;
 import founderio.chaoscrystal.Constants;
 
 public class RenderItemManual implements IItemRenderer {
@@ -34,7 +36,7 @@ public class RenderItemManual implements IItemRenderer {
 	}
 	
 	public static int page = 1;
-	public static final int maxPage = 6;
+	public static final int maxPage = 7;
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
@@ -130,6 +132,53 @@ public class RenderItemManual implements IItemRenderer {
 			        fr.drawSplitString("This is a filter focus.\n\n" +
 			        		"Place it close to a chaos crystal to filter the aspects it can extract or add. You can add multiple filter foci to allow more than one aspect type.\n" +
 			        		"You can change the aspect for the filter with shift + mouse wheel when holding it in your hand.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 7:
+			        //GL11.glEnable(GL11.GL_ALPHA_TEST);
+			        GL11.glEnable(GL11.GL_DEPTH_TEST);
+			        GL11.glPushMatrix();
+//			        float f2 = Minecraft.getMinecraft().thePlayer.prevRotationPitch;
+//			        
+//			        float f7 = 1.0F - f2 / 45.0F + 0.1F;
+//
+//		            if (f7 < 0.0F)
+//		            {
+//		                f7 = 0.0F;
+//		            }
+//
+//		            if (f7 > 1.0F)
+//		            {
+//		                f7 = 1.0F;
+//		            }
+//		            f7 = -MathHelper.cos(f7 * (float)Math.PI) * 0.5F + 0.5F;
+//		            float f3 = Minecraft.getMinecraft().thePlayer.prevRenderArmPitch;
+//		            float f4 = Minecraft.getMinecraft().thePlayer.prevRenderArmYaw;
+//		            
+//		            GL11.glRotatef(f2, 1.0F, 0.0F, 0.0F);
+//		            GL11.glRotatef(Minecraft.getMinecraft().thePlayer.prevRotationYaw, 0.0F, 1.0F, 0.0F);
+//		            
+//		            
+//		            GL11.glRotatef((Minecraft.getMinecraft().thePlayer.rotationPitch - f3) * -0.1F, 1.0F, 0.0F, 0.0F);
+//		            GL11.glRotatef((Minecraft.getMinecraft().thePlayer.rotationYaw - f4) * -0.1F, 0.0F, 1.0F, 0.0F);
+////		            GL11.glRotatef(-180f, 1.0f, 0, 0);
+//		            //GL11.glRotatef(f7 * 85.0F, 0.0F, 0.0F, 1.0F);
+//		            GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+//		            
+//			       // GL11.glRotatef(-25f, 0, 1.0f, 0);
+//		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.blockApparatus, 1, 2), b1, b2);
+			        GL11.glScalef(10,  10,  10);
+			        GL11.glRotatef(-90f, 1f, 0, 0);
+			        GL11.glRotatef(45f, 0, 1f, 0);
+			        ClientProxy.render.renderModelAt(b1+2.2f, b1+3, 0.4f);
+			        
+			        GL11.glPopMatrix();
+			        GL11.glDisable(GL11.GL_DEPTH_TEST);
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        GL11.glDisable(GL11.GL_LIGHTING);
+			        GL11.glColor4f(1, 1, 1, 1);
+			        fr.drawSplitString("This is the reenactor.\n\n" +
+			        		"Place it near an active transfer focus. When you put a damaged tool or weapon in the apparatus by right clicking it the reenactor wil slowly repair it using the aspects transferred from nearby chaos crystals.",
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
 		        }

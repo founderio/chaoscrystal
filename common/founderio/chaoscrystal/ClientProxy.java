@@ -14,6 +14,9 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
+	
+	public static TileEntityRenderer render;
+	
 	@Override
 	public void registerRenderStuff() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityChaosCrystal.class, new RenderChaosCrystal());
@@ -21,7 +24,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, new RenderFocus());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, new RenderFocus());
 		
-		TileEntityRenderer render = new TileEntityRenderer();
+		render = new TileEntityRenderer();
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockApparatus.blockID, render);
