@@ -17,7 +17,8 @@ public class BlockBase extends Block {
 
 	public static final String[] metaList = new String[] {
 		Constants.ID_BLOCK_BASE_CRYSTALLINE,
-		Constants.ID_BLOCK_BASE_CRYSTAL
+		Constants.ID_BLOCK_BASE_CRYSTAL,
+		Constants.ID_BLOCK_BASE_CRYSTALLINE_LIGHT,
 	};
 	public Icon[] iconList;
 	
@@ -41,6 +42,7 @@ public class BlockBase extends Block {
 		iconList = new Icon[metaList.length];
 		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystalline");
 		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystal");
+		iconList[2] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystalline_light");
 	}
 	
 	@Override

@@ -6,7 +6,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
@@ -40,10 +39,6 @@ public class RenderItemManual implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		//switch(type) {
-		//case FIRST_PERSON_MAP:
-			
-			//this.bufferedImage.updateDynamicTexture();
 	        byte b1 = 0;
 	        byte b2 = 0;
 	        int w = 135;
@@ -135,46 +130,17 @@ public class RenderItemManual implements IItemRenderer {
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
 		        case 7:
-			        //GL11.glEnable(GL11.GL_ALPHA_TEST);
 			        GL11.glEnable(GL11.GL_DEPTH_TEST);
 			        GL11.glPushMatrix();
-//			        float f2 = Minecraft.getMinecraft().thePlayer.prevRotationPitch;
-//			        
-//			        float f7 = 1.0F - f2 / 45.0F + 0.1F;
-//
-//		            if (f7 < 0.0F)
-//		            {
-//		                f7 = 0.0F;
-//		            }
-//
-//		            if (f7 > 1.0F)
-//		            {
-//		                f7 = 1.0F;
-//		            }
-//		            f7 = -MathHelper.cos(f7 * (float)Math.PI) * 0.5F + 0.5F;
-//		            float f3 = Minecraft.getMinecraft().thePlayer.prevRenderArmPitch;
-//		            float f4 = Minecraft.getMinecraft().thePlayer.prevRenderArmYaw;
-//		            
-//		            GL11.glRotatef(f2, 1.0F, 0.0F, 0.0F);
-//		            GL11.glRotatef(Minecraft.getMinecraft().thePlayer.prevRotationYaw, 0.0F, 1.0F, 0.0F);
-//		            
-//		            
-//		            GL11.glRotatef((Minecraft.getMinecraft().thePlayer.rotationPitch - f3) * -0.1F, 1.0F, 0.0F, 0.0F);
-//		            GL11.glRotatef((Minecraft.getMinecraft().thePlayer.rotationYaw - f4) * -0.1F, 0.0F, 1.0F, 0.0F);
-////		            GL11.glRotatef(-180f, 1.0f, 0, 0);
-//		            //GL11.glRotatef(f7 * 85.0F, 0.0F, 0.0F, 1.0F);
-//		            GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
-//		            
-//			       // GL11.glRotatef(-25f, 0, 1.0f, 0);
-//		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.blockApparatus, 1, 2), b1, b2);
+
 			        GL11.glScalef(10,  10,  10);
 			        GL11.glRotatef(-90f, 1f, 0, 0);
 			        GL11.glRotatef(45f, 0, 1f, 0);
+			        
 			        ClientProxy.render.renderModelAt(b1+2.2f, b1+3, 0.4f);
 			        
 			        GL11.glPopMatrix();
 			        GL11.glDisable(GL11.GL_DEPTH_TEST);
-			        GL11.glDisable(GL11.GL_ALPHA_TEST);
 			        GL11.glDisable(GL11.GL_LIGHTING);
 			        GL11.glColor4f(1, 1, 1, 1);
 			        fr.drawSplitString("This is the reenactor.\n\n" +
@@ -194,36 +160,11 @@ public class RenderItemManual implements IItemRenderer {
 	        GL11.glDisable(GL11.GL_BLEND);
 	        
 	        
-//	        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("textures/map/map_icons.png"););
-//	        int k1 = 0;
-//
-//	        for (Iterator iterator = par3MapData.playersVisibleOnMap.values().iterator(); iterator.hasNext(); ++k1)
-//	        {
-//	            MapCoord mapcoord = (MapCoord)iterator.next();
-//	            GL11.glPushMatrix();
-//	            GL11.glTranslatef((float)b1 + (float)mapcoord.centerX / 2.0F + 64.0F, (float)b2 + (float)mapcoord.centerZ / 2.0F + 64.0F, -0.02F);
-//	            GL11.glRotatef((float)(mapcoord.iconRotation * 360) / 16.0F, 0.0F, 0.0F, 1.0F);
-//	            GL11.glScalef(4.0F, 4.0F, 3.0F);
-//	            GL11.glTranslatef(-0.125F, 0.125F, 0.0F);
-//	            float f1 = (float)(mapcoord.iconSize % 4 + 0) / 4.0F;
-//	            float f2 = (float)(mapcoord.iconSize / 4 + 0) / 4.0F;
-//	            float f3 = (float)(mapcoord.iconSize % 4 + 1) / 4.0F;
-//	            float f4 = (float)(mapcoord.iconSize / 4 + 1) / 4.0F;
-//	            tessellator.startDrawingQuads();
-//	            tessellator.addVertexWithUV(-1.0D, 1.0D, (double)((float)k1 * 0.001F), (double)f1, (double)f2);
-//	            tessellator.addVertexWithUV(1.0D, 1.0D, (double)((float)k1 * 0.001F), (double)f3, (double)f2);
-//	            tessellator.addVertexWithUV(1.0D, -1.0D, (double)((float)k1 * 0.001F), (double)f3, (double)f4);
-//	            tessellator.addVertexWithUV(-1.0D, -1.0D, (double)((float)k1 * 0.001F), (double)f1, (double)f4);
-//	            tessellator.draw();
-//	            GL11.glPopMatrix();
-//	        }
 
 	        GL11.glPushMatrix();
 	        GL11.glTranslatef(0.0F, 0.0F, -0.04F);
 	        GL11.glScalef(1.0F, 1.0F, 1.0F);
 	        GL11.glPopMatrix();
-//	        GL11.glPopMatrix();
-		//}
 	}
 
 }

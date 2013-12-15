@@ -49,6 +49,22 @@ public class GenCrystalFloats implements IWorldGenerator {
 				
 			}
 		}
+		
+		count = 1 + random.nextInt(3);
+		
+		for(int i = 0; i < count; i++) {
+			int meta = 2;
+			int x = random.nextInt(16);
+			int z = random.nextInt(16);
+			int xAbsolute = chunkX * 16 + x;
+			int zAbsolute = chunkZ * 16 + z;
+			if(allowedBiomes.contains(world.getBiomeGenForCoords(xAbsolute, zAbsolute).biomeName)) {
+				int yBase = 10;
+				yBase += random.nextInt(world.getActualHeight() - yBase - 50);
+				
+				world.setBlock(xAbsolute, yBase, zAbsolute, ChaosCrystalMain.blockBase.blockID, meta, 3);
+			}
+		}
 	}
 
 }

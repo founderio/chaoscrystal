@@ -487,6 +487,18 @@ public class ChaosCrystalMain {
 				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
 				new int[]{15, 5, 5},
 				new ItemStack(Block.glass, 0, 0));
+		degradationStore.registerDegradation(
+				new ItemStack(ChaosCrystalMain.blockBase, 0, 2),
+				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIGHT},
+				new int[]{15, 5, 5, 150},
+				new ItemStack(Block.glass, 0, 0));
+		
+
+		degradationStore.registerDegradation(
+				new ItemStack(Block.glowStone),
+				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIGHT},
+				new int[]{15, 5, 5, 20},
+				new ItemStack(Block.glass, 0, 0));
 		
 		if(cfg_debugOutput) {
 			degradationStore.debugOutput();
