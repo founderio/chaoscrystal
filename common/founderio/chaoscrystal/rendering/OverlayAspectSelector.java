@@ -6,14 +6,18 @@ import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
+import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 
@@ -23,6 +27,7 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
+import founderio.chaoscrystal.degradation.Degradation;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -200,6 +205,65 @@ public class OverlayAspectSelector extends Gui {
 						GL11.glDisable(GL11.GL_BLEND);
 						GL11.glPopMatrix();
 					}
+				}
+				
+				if(Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
+					World w = Minecraft.getMinecraft().thePlayer.worldObj;
+					int id = w.getBlockId(
+							Minecraft.getMinecraft().objectMouseOver.blockX,
+							Minecraft.getMinecraft().objectMouseOver.blockY,
+							Minecraft.getMinecraft().objectMouseOver.blockZ);
+			    	
+			    	if(id != 0) {// We can't extract air...
+			    		
+			    		int meta = w.getBlockMetadata(
+			    				Minecraft.getMinecraft().objectMouseOver.blockX,
+								Minecraft.getMinecraft().objectMouseOver.blockY,
+								Minecraft.getMinecraft().objectMouseOver.blockZ);
+			        	
+			        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
+			        	if(degradation != null) {
+			        		int centerW = event.resolution.getScaledWidth()/2;
+							int centerH = event.resolution.getScaledHeight()/2;
+							
+							int offset = 0;
+							int colOffset = 0;
+							final int colWidth = 64;
+							
+							GL11.glPushMatrix();
+					        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					        GL11.glEnable(GL11.GL_BLEND);
+					        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					        
+//					        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
+//							this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+							//TODO: Render Block icon?
+							for(int i = 0; i < degradation.aspects.length; i++) {
+								String aspect = degradation.aspects[i];
+								int asp = degradation.amounts[i];
+
+								Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+								this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
+
+								Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
+								
+								
+								if(offset >= 30) {
+									offset = 0;
+									colOffset += colWidth;
+								} else {
+									offset += 10;
+								}
+							}
+							
+
+							Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+					
+					        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+							GL11.glDisable(GL11.GL_BLEND);
+							GL11.glPopMatrix();
+			        	}
+			    	}
 				}
 			}
 		}

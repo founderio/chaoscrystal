@@ -6,6 +6,9 @@ import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.INetworkManager;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 
 
@@ -123,11 +126,32 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return true;//TODO: verify!!
 	}
+	
+	@Override
+	public Packet getDescriptionPacket() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		writePropertiesToNBT(nbt);
+		
+		Packet132TileEntityData packet = new Packet132TileEntityData(xCoord, yCoord, zCoord, 0, nbt);
+		
+		return packet;
+	}
+	
+	@Override
+	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+		NBTTagCompound nbt = pkt.data;
+		
+		readPropertiesFromNBT(nbt);
+	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound par1nbtTagCompound) {
 		super.writeToNBT(par1nbtTagCompound);
 		
+		writePropertiesToNBT(par1nbtTagCompound);
+	}
+	
+	private void writePropertiesToNBT(NBTTagCompound par1nbtTagCompound) {
 		NBTTagList items = new NBTTagList();
 		for(int i = 0; i < inventory.length; i++) {
 			ItemStack is = inventory[i];
@@ -145,6 +169,10 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 	public void readFromNBT(NBTTagCompound par1nbtTagCompound) {
 		super.readFromNBT(par1nbtTagCompound);
 		
+		readPropertiesFromNBT(par1nbtTagCompound);
+	}
+	
+	private void readPropertiesFromNBT(NBTTagCompound par1nbtTagCompound) {
 		NBTTagList items = par1nbtTagCompound.getTagList("inventory");
 		if(items != null) {
 			for(int i = 0; i < items.tagCount(); i++) {

@@ -1,5 +1,6 @@
 package founderio.chaoscrystal.blocks;
 
+import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,6 +47,8 @@ public class BlockApparatus extends BlockContainer {
 				te.setInventorySlotContents(0, null);
 			}
 		}
+		
+		PacketDispatcher.sendPacketToAllAround(par2, par3, par4, 128, par1World.provider.dimensionId, te.getDescriptionPacket());
 		
 		return true;
 	}
