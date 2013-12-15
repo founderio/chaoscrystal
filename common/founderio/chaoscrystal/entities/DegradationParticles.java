@@ -1,12 +1,11 @@
 package founderio.chaoscrystal.entities;
 
-import founderio.chaoscrystal.Constants;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EffectRenderer;
 import net.minecraft.client.particle.EntityPortalFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import founderio.chaoscrystal.Constants;
 
 public class DegradationParticles extends EntityPortalFX {
 

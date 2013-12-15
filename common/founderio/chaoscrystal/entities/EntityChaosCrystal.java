@@ -106,7 +106,7 @@ public class EntityChaosCrystal extends Entity {
         		} else {
         			DegradationHelper.releaseAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
         		}
-            	
+        		
             }
         }
         

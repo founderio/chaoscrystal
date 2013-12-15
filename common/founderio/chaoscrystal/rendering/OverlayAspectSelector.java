@@ -281,8 +281,8 @@ public class OverlayAspectSelector extends Gui {
 			        			//doRenderMiniBlock = true;
 			        			ItemStack its = ((TileEntityApparatus) te).getStackInSlot(0);
 			        			if(its != null && its.itemID != 0) {
-			        				ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-				        					its, centerW - 16 - 5, centerH, true);
+			        				ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+				        					its, centerW - 16 - 5, centerH);
 			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
 			        						its, centerW - 16 - 5, centerH);
 			        			}

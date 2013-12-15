@@ -66,6 +66,11 @@ public class ChaosCrystalMain {
 	
 	private Configuration config;
 	
+	public static int cfg_maxAspectStorage = 1000000;
+	public static boolean cfg_forceBiome = false;
+	public static boolean cfg_debugOutput = false;
+	public static boolean cfg_nonDestructive = false;
+	
 	private int getItemId(String id, int defaultId) {
 		return config.get("Items", id, defaultId).getInt();
 	}
@@ -83,9 +88,14 @@ public class ChaosCrystalMain {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
-		boolean forceBiome = config.get("Settings", "force_biomes", false).getBoolean(false);
-		config.get("Settings", "degradation_debugOutput", false);
-		
+		cfg_forceBiome = config.get("Settings", "force_biomes", cfg_forceBiome).getBoolean(cfg_forceBiome);
+		cfg_debugOutput = config.get("Settings", "degradation_debug_output", cfg_debugOutput).getBoolean(cfg_debugOutput);
+		cfg_maxAspectStorage = config.get("Settings", "max_aspect_storage", cfg_maxAspectStorage).getInt(cfg_maxAspectStorage);
+		if(cfg_maxAspectStorage < 10) {
+			cfg_maxAspectStorage = 10;
+			config.get("Settings", "max_spect_storage", cfg_maxAspectStorage).set(cfg_maxAspectStorage);
+		}
+		cfg_nonDestructive = config.get("Settings", "non_destructive", cfg_nonDestructive).getBoolean(cfg_nonDestructive);
 		//TODO: Get cfgs for ranges etc. of foci, crystals
 		
 		
@@ -122,7 +132,7 @@ public class ChaosCrystalMain {
 		
 		GameRegistry.registerTileEntity(TileEntityApparatus.class, Constants.ID_TILEENTITY_REENACTOR);
 		
-		if(forceBiome) {
+		if(cfg_forceBiome) {
 			//Just a test: remove all other biomes...
 			for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
 				GameRegistry.removeBiome(biome);
@@ -185,6 +195,10 @@ public class ChaosCrystalMain {
 		degradationStore.registerRepair(Item.swordStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
 		degradationStore.registerRepair(Item.swordWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 		
+		degradationStore.registerRepair(itemCrystalGlasses.itemID, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
+		
+		ItemStack nullStack = new ItemStack(0, 0, 0);
+		
 		/*
 		 * Grass, Dirt
 		 */
@@ -223,7 +237,7 @@ public class ChaosCrystalMain {
 				new ItemStack(Block.sand),
 				new String[]{Aspects.ASPECT_EARTH},
 				new int[]{5},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.blockClay),
 				new String[]{Aspects.ASPECT_WATER, Aspects.ASPECT_STRUCTURE},
@@ -242,12 +256,12 @@ public class ChaosCrystalMain {
 					new ItemStack(Block.waterStill, 0, meta),
 					new String[]{Aspects.ASPECT_WATER},
 					new int[]{5},
-					new ItemStack(0, 0, 0));
+					nullStack);
 			degradationStore.registerDegradation(
 					new ItemStack(Block.waterMoving, 0, meta),
 					new String[]{},
 					new int[]{},
-					new ItemStack(0, 0, 0));
+					nullStack);
 		}
 		degradationStore.registerDegradation(
 				new ItemStack(Block.glass),
@@ -276,65 +290,65 @@ public class ChaosCrystalMain {
 					new ItemStack(Block.leaves, 0, meta),
 					new String[]{Aspects.ASPECT_LIVING},
 					new int[]{5},
-					new ItemStack(0, 0, 0));
+					nullStack);
 			degradationStore.registerDegradation(
 					new ItemStack(Block.vine, 0, meta),
 					new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH},
 					new int[]{3, 3},
-					new ItemStack(0, 0, 0));
+					nullStack);
 		}
 		for(int meta = 0; meta < 4; meta++) {
 			degradationStore.registerDegradation(
 					new ItemStack(Block.tallGrass, 0, meta),
 					new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH, Aspects.ASPECT_WATER},
 					new int[]{3, 3, 2},
-					new ItemStack(0, 0, 0));
+					nullStack);
 		}
 		degradationStore.registerDegradation(
 				new ItemStack(Block.waterlily),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH, Aspects.ASPECT_WATER},
 				new int[]{3, 3, 2},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.melon),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WATER},
 				new int[]{5, 5, 5, 2},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.pumpkin),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WATER},
 				new int[]{5, 5, 5, 1},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.plantYellow),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH, Aspects.ASPECT_WATER},
 				new int[]{2, 2, 1},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.plantRed),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH, Aspects.ASPECT_WATER},
 				new int[]{2, 2, 1},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.mushroomCapBrown),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE},
 				new int[]{2, 5},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.mushroomCapRed),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE},
 				new int[]{2, 5},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.reed),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WATER},
 				new int[]{3, 5, 2},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.cactus),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WATER},
 				new int[]{3, 5, 5},
-				new ItemStack(0, 0, 0));
+				nullStack);
 		
 		/*
 		 * Stone
@@ -467,7 +481,7 @@ public class ChaosCrystalMain {
 				new int[]{15, 5, 5},
 				new ItemStack(Block.glass, 0, 0));
 		
-		if(config.get("Settings", "degradation_debugOutput", false).getBoolean(false)) {
+		if(cfg_debugOutput) {
 			degradationStore.debugOutput();
 		}
 		

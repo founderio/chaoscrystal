@@ -125,17 +125,20 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		return true;//TODO: verify!!
+		ItemStack is = getStackInSlot(i);
+		if(is != null && is.itemID != 0) {
+			return false;
+		} else {
+			return j == 1 && isItemValidForSlot(i, itemstack);
+		}
 	}
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;//TODO: verify!!
+		return itemstack.getItemDamage() == 0;
 	}
 	
 	public boolean processAspects(EntityChaosCrystal crystal) {
-		//TODO: take aspects needed for repair
-		
 		ItemStack is = getStackInSlot(0);
 		
 		if(is == null || is.itemID == 0) {
@@ -143,13 +146,16 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 		} else {
 			int maxDmg = is.getMaxDamage();
 			int curDmg = is.getItemDamage();
-			System.out.println(maxDmg);
+
 			if(curDmg == 0) {
 				return false;
 			}
 			
 			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.itemID);
 			
+			if(rep == null) {
+				return false;
+			}
 			boolean didRepair = false;
 			
 			for(int step = 0; step < stepsPerTick && curDmg > 0; step++) {

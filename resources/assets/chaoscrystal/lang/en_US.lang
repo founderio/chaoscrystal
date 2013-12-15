@@ -1,9 +1,11 @@
 chaoscrystal.chaoscrystal=Chaos Crystal
 item.chaoscrystal.chaoscrystal.name=Chaos Crystal
 item.chaoscrystal.focus.name=Focus
+item.chaoscrystal.crystalglasses.name=Crystal Glasses
 tile.chaoscrystal.base.name=Crystal (Base)
 tile.chaoscrystal.base.crystalline.name=Crystalline Energy
 tile.chaoscrystal.base.crystal.name=Crystal
+tile.chaoscrystal.reenactor.name=Reenactor
 chaoscrystal.aspect.growth=Growth
 chaoscrystal.aspect.earth=Earth
 chaoscrystal.aspect.water=Water

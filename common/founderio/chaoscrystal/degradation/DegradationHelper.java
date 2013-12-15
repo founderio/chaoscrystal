@@ -127,30 +127,35 @@ public class DegradationHelper {
 		        	
 		        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
 		        	if(degradation != null) {
-		        		if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
-		        			//System.out.println(Arrays.asList(degradation.aspects) + "Mismatching filter: " + filter);
+		        		if(degradation.degraded.itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
 		        			continue;
 		        		}
-		        		//System.out.println("Matching filter! Aspects: " + Arrays.asList(degradation.aspects) + Arrays.asList(degradation.amounts));
 		        		
-		        		hit++;
-		        		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
-		        		//TODO: limit aspects to (?) 1.000.000
-		        		for (int i = 0; i < degradation.aspects.length; i++) {
-		            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
-		            		aspectAmount += degradation.amounts[i];
-		            		entity.setAspect(degradation.aspects[i], aspectAmount);
-						}
+		        		if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
+		        			continue;
+		        		}
 		        		
-		        		ChaosCrystalNetworkHandler.spawnParticleEffect(world.provider.dimensionId, 0,
-		        				posX, posY, posZ,
-		        				offX, offY, offZ);
-		        		
+		        		if(canFitAspects(degradation.aspects, degradation.amounts, entity)) {
+		        			hit++;
+			        		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
+			        		
+			        		for (int i = 0; i < degradation.aspects.length; i++) {
+			            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
+			            		aspectAmount += degradation.amounts[i];
+			            		entity.setAspect(degradation.aspects[i], aspectAmount);
+							}
+			        		
+			        		ChaosCrystalNetworkHandler.spawnParticleEffect(world.provider.dimensionId, 0,
+			        				posX, posY, posZ,
+			        				offX, offY, offZ);
+		        		}
 		        		
 		        	} else {
 		        		System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
-		        		world.setBlock(posX + offX, posY + offY, posZ + offZ, 0, 0, 1 + 2);
-		        		world.createExplosion(entity, posX + offX, posY + offY, posZ + offZ, 1, false);
+		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
+			        		world.setBlock(posX + offX, posY + offY, posZ + offZ, 0, 0, 1 + 2);
+			        		world.createExplosion(entity, posX + offX, posY + offY, posZ + offZ, 1, false);
+		        		}
 		        	}
 		    	}
 	    	}
@@ -158,5 +163,14 @@ public class DegradationHelper {
 		if(hit > 0) {
     		entity.playSound("mob.enderdragon.growl", 0.1f, 0.1f);
 		}
+	}
+	
+	public static boolean canFitAspects(String[] aspects, int[] amounts, EntityChaosCrystal crystal) {
+		for(int a = 0; a < aspects.length; a++) {
+			if(crystal.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfg_maxAspectStorage) {
+				return false;
+			}
+		}
+		return true;
 	}
 }
