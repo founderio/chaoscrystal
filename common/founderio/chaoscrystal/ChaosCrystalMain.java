@@ -31,10 +31,11 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
-import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
+import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
+import founderio.chaoscrystal.items.ItemManual;
 import founderio.chaoscrystal.rendering.OverlayAspectSelector;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 import founderio.chaoscrystal.worldgen.GenCrystalFloats;
@@ -58,6 +59,7 @@ public class ChaosCrystalMain {
 	public static Item itemChaosCrystal;
 	public static Item itemFocus;
 	public static Item itemCrystalGlasses;
+	public static Item itemManual;
 	
 	public static BlockBase blockBase;
 	public static BlockApparatus blockApparatus;
@@ -110,6 +112,9 @@ public class ChaosCrystalMain {
 		
 		itemCrystalGlasses = new ItemCrystalGlasses(getItemId(Constants.ID_ITEM_CRYSTALGLASSES, 18202));
 		itemCrystalGlasses.setUnlocalizedName(Constants.ID_ITEM_CRYSTALGLASSES);
+		
+		itemManual = new ItemManual(getItemId(Constants.ID_ITEM_MANUAL, 18203));
+		itemManual.setUnlocalizedName(Constants.ID_ITEM_MANUAL);
 		
 		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.glass);
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);

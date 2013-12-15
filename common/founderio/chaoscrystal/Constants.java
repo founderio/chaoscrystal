@@ -12,6 +12,7 @@ public class Constants {
 	public static final String ID_ITEM_CHAOSCRYSTAL = "chaoscrystal.chaoscrystal";
 	public static final String ID_ITEM_FOCUS = "chaoscrystal.focus";
 	public static final String ID_ITEM_CRYSTALGLASSES = "chaoscrystal.crystalglasses";
+	public static final String ID_ITEM_MANUAL = "chaoscrystal.manual";
 	
 	public static final String ID_BLOCK_BASE = "chaoscrystal.base";
 	public static final String ID_BLOCK_BASE_CRYSTALLINE = "chaoscrystal.base.crystalline";

@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -53,61 +54,74 @@ public class OverlayAspectSelector extends Gui {
 	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onMouseWheel(MouseEvent event) {
-		if(!Minecraft.getMinecraft().thePlayer.isSneaking()) {
-			return;
-		}
-		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
-		if(currentItem == null || currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
-			return;
-		}
-		if(currentItem.getItemDamage() != 2) {
-			return;
-		}
+		
+
 		if(event.dwheel == 0) {
 			return;
 		}
-		event.setCanceled(true);
-		int aspectIndex;
-		NBTTagCompound tags = currentItem.getTagCompound();
-		if(tags != null) {
-			String selectedAspect = tags.getString("aspect");
-			aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
-			if(aspectIndex == -1) {
+		
+		if(!Minecraft.getMinecraft().thePlayer.isSneaking()) {
+			return;
+		}
+
+		
+		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
+		if(currentItem == null) {
+			return;
+		}
+		
+		if(currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
+			event.setCanceled(true);
+			int aspectIndex;
+			NBTTagCompound tags = currentItem.getTagCompound();
+			if(tags != null) {
+				String selectedAspect = tags.getString("aspect");
+				aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
+				if(aspectIndex == -1) {
+					aspectIndex = 0;
+				}
+			} else {
+				tags = new NBTTagCompound();
 				aspectIndex = 0;
 			}
-		} else {
-			tags = new NBTTagCompound();
-			aspectIndex = 0;
+			if(event.dwheel > 0 &&  aspectIndex < Aspects.ASPECTS.length - 1) {
+				aspectIndex++;
+	        }
+			if(event.dwheel < 0 &&  aspectIndex > 0) {
+				aspectIndex--;
+	        }
+			tags.setString("aspect", Aspects.ASPECTS[aspectIndex]);
+			currentItem.setTagCompound(tags);
+			
+			try {
+	    		ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
+	    		DataOutputStream dos = new DataOutputStream(bos);
+
+	    		dos.writeInt(2);
+	    		dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
+	    		dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
+	    		dos.writeUTF(Aspects.ASPECTS[aspectIndex]);
+	    		
+	    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+	    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
+	    		degradationPacket.data = bos.toByteArray();
+	    		degradationPacket.length = bos.size();
+
+	    		dos.close();
+	    		
+	    		PacketDispatcher.sendPacketToServer(degradationPacket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else if(currentItem.itemID == ChaosCrystalMain.itemManual.itemID) {
+			event.setCanceled(true);
+			if(event.dwheel > 0) {
+				RenderItemManual.page++;
+			} else {
+				RenderItemManual.page--;
+			}
 		}
-		if(event.dwheel > 0 &&  aspectIndex < Aspects.ASPECTS.length - 1) {
-			aspectIndex++;
-        }
-		if(event.dwheel < 0 &&  aspectIndex > 0) {
-			aspectIndex--;
-        }
-		tags.setString("aspect", Aspects.ASPECTS[aspectIndex]);
-		currentItem.setTagCompound(tags);
 		
-		try {
-    		ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
-    		DataOutputStream dos = new DataOutputStream(bos);
-
-    		dos.writeInt(2);
-    		dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
-    		dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
-    		dos.writeUTF(Aspects.ASPECTS[aspectIndex]);
-    		
-    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
-    		degradationPacket.data = bos.toByteArray();
-    		degradationPacket.length = bos.size();
-
-    		dos.close();
-    		
-    		PacketDispatcher.sendPacketToServer(degradationPacket);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 	
 	/*
@@ -216,7 +230,10 @@ public class OverlayAspectSelector extends Gui {
 		
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
 		
-		boolean specialSkip = ChaosCrystalMain.cfg_sneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
+		
+		boolean specialSkip = (currentItem != null && currentItem.getItem() instanceof ItemMap) || ChaosCrystalMain.cfg_sneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		
 		
 		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID && !specialSkip) {
 			MovingObjectPosition mop = getMouseOver(0);
@@ -464,8 +481,6 @@ public class OverlayAspectSelector extends Gui {
 				}
 			}
 		}
-		
-		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 		
 		
 		if(currentItem != null && currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
