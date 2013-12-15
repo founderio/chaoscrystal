@@ -69,7 +69,7 @@ public class ChaosCrystalMain {
 	public static int cfg_maxAspectStorage = 1000000;
 	public static boolean cfg_forceBiome = false;
 	public static boolean cfg_debugOutput = false;
-	public static boolean cfg_nonDestructive = false;
+	public static boolean cfg_nonDestructive = true;
 	public static boolean cfg_sneakToShowAspects = false;
 	
 	private int getItemId(String id, int defaultId) {

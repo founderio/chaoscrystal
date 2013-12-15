@@ -486,7 +486,7 @@ public class OverlayAspectSelector extends Gui {
 			}
 			
 			int center = event.resolution.getScaledWidth()/2;
-			int bottom = event.resolution.getScaledHeight() - 60;
+			int bottom = event.resolution.getScaledHeight() - 80;
 			
 			
 			GL11.glPushMatrix();
@@ -498,7 +498,7 @@ public class OverlayAspectSelector extends Gui {
 	        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
 	        this.drawTexturedModalRectScaled(center - 8, bottom, 0, 0, 16, 16, 256, 256);
 			
-	        GL11.glColor4f(0.08F, 0.08F, 0.08F, 0.10003F);
+	        GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
 	        
 	        if(aspectIndex > 0) {
 	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
@@ -512,7 +512,7 @@ public class OverlayAspectSelector extends Gui {
 	    		
 	        }
 	        
-	        GL11.glColor4f(0.08F, 0.08F, 0.08F, 0.1000F);
+	        GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.2F);
 	        
 	        if(aspectIndex > 1) {
 	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
