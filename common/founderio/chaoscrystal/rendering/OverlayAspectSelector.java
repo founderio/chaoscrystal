@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -15,14 +14,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
 
@@ -255,9 +252,6 @@ public class OverlayAspectSelector extends Gui {
 					        GL11.glEnable(GL11.GL_BLEND);
 					        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					        
-//					        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
-//							this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
-							//TODO: Render Block icon?
 							for(int i = 0; i < degradation.aspects.length; i++) {
 								String aspect = degradation.aspects[i];
 								int asp = degradation.amounts[i];
@@ -276,11 +270,6 @@ public class OverlayAspectSelector extends Gui {
 								}
 							}
 							
-
-							
-					
-					        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-							GL11.glDisable(GL11.GL_BLEND);
 							GL11.glPopMatrix();
 			        	}
 			        	
@@ -289,16 +278,33 @@ public class OverlayAspectSelector extends Gui {
 								Minecraft.getMinecraft().objectMouseOver.blockZ);
 			        	if(te != null) {
 			        		if(te instanceof TileEntityApparatus) {
-			        			doRenderMiniBlock = true;
+			        			//doRenderMiniBlock = true;
 			        			ItemStack its = ((TileEntityApparatus) te).getStackInSlot(0);
 			        			if(its != null && its.itemID != 0) {
 			        				ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-				        					its, centerW - 16 - 5, centerH + 16, true);
+				        					its, centerW - 16 - 5, centerH, true);
 			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-			        						its, centerW - 16 - 5, centerH + 16);
+			        						its, centerW - 16 - 5, centerH);
 			        			}
 			        			
 			        		}
+//			        		else if(te instanceof TileEntityFurnace) {
+//			        			ItemStack its1 = ((TileEntityFurnace) te).getStackInSlot(0);
+//			        			ItemStack its2 = ((TileEntityFurnace) te).getStackInSlot(1);
+//			        			if(its1 != null && its1.itemID != 0) {
+//				        			ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+//				        					its1, centerW - 16 - 5, centerH + 16, true);
+//			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+//			        						its1, centerW - 16 - 5, centerH + 16);
+//			        			}
+//
+//			        			if(its2 != null && its2.itemID != 0) {
+//				        			ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+//				        					its2, centerW - 16 - 5, centerH + 32, true);
+//			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
+//			        						its2, centerW - 16 - 5, centerH + 32);
+//			        			}
+//			        		}
 //			        		else if(te instanceof TileEntityChest) {
 //			        			doRenderMiniBlock = true;
 //			        			int offset = 0;
