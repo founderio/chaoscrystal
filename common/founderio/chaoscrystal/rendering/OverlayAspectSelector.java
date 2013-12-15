@@ -173,41 +173,38 @@ public class OverlayAspectSelector extends Gui {
                 {
                     Entity entity = (Entity)list.get(i);
 
-//                    if (entity.canBeCollidedWith())
-//                    {
-                        float f2 = entity.getCollisionBorderSize();
-                        AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
-                        MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+                    float f2 = entity.getCollisionBorderSize();
+                    AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
+                    MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
 
-                        if (axisalignedbb.isVecInside(vec3))
+                    if (axisalignedbb.isVecInside(vec3))
+                    {
+                        if (0.0D < d2 || d2 == 0.0D)
                         {
-                            if (0.0D < d2 || d2 == 0.0D)
-                            {
-                                pointedEntity = entity;
-                                d2 = 0.0D;
-                            }
+                            pointedEntity = entity;
+                            d2 = 0.0D;
                         }
-                        else if (movingobjectposition != null)
-                        {
-                            double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+                    }
+                    else if (movingobjectposition != null)
+                    {
+                        double d3 = vec3.distanceTo(movingobjectposition.hitVec);
 
-                            if (d3 < d2 || d2 == 0.0D)
+                        if (d3 < d2 || d2 == 0.0D)
+                        {
+                            if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
                             {
-                                if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
-                                {
-                                    if (d2 == 0.0D)
-                                    {
-                                        pointedEntity = entity;
-                                    }
-                                }
-                                else
+                                if (d2 == 0.0D)
                                 {
                                     pointedEntity = entity;
-                                    d2 = d3;
                                 }
                             }
+                            else
+                            {
+                                pointedEntity = entity;
+                                d2 = d3;
+                            }
                         }
-//                    }
+                    }
                 }
 
                 if (pointedEntity != null && (d2 < d1 || mop == null))

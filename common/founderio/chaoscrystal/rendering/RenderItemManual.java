@@ -1,24 +1,15 @@
 package founderio.chaoscrystal.rendering;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.entity.RenderPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
@@ -43,6 +34,7 @@ public class RenderItemManual implements IItemRenderer {
 	}
 	
 	public static int page = 1;
+	public static final int maxPage = 6;
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
@@ -83,7 +75,7 @@ public class RenderItemManual implements IItemRenderer {
 		        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
 		        int strWidth;
 		        if(page <= 0) {
-		        	page = 2;
+		        	page = maxPage;
 		        }
 		        switch(page) {
 		        default:
@@ -100,12 +92,51 @@ public class RenderItemManual implements IItemRenderer {
 			        GL11.glEnable(GL11.GL_ALPHA_TEST);
 		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemChaosCrystal), b1, b2);
 			        GL11.glDisable(GL11.GL_ALPHA_TEST);
-		        	
+			        fr.drawSplitString("This is a chaos crystal.\n\n" +
+			        		"It can store aspects and transform blocks and items by adding or extracting such aspects.\n\n" +
+			        		"Right click to place it in the world. Hit it to pick it back up.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 3:
+			        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemChaosCrystal), b1, b2);
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        fr.drawSplitString("This is a chaos crystal.\n\n" +
+			        		"When placed in the world it will randomly start extracting aspects from nearby blocks.\n\n" +
+			        		"If you hold shift while placing the crystal it will add aspects to nearby blocks instead of extracting them.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 4:
+			        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemFocus, 1, 0), b1, b2);
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        fr.drawSplitString("This is a transfer focus.\n\n" +
+			        		"Place it in the world to balance the aspect levels in two or more chaos crystals and transfer aspects from chaos crystals to any magic apparatus capable of using aspects.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 5:
+			        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemFocus, 1, 1), b1, b2);
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        fr.drawSplitString("This is a border focus.\n\n" +
+			        		"Place it in the world to further limit the range of nearby chaos crystals. Any chaos crystal will chose the largest cube possible without stepping over any border.\n" +
+			        		"The border focus will also face the chaos crystal closest to it if it can find any.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 6:
+			        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemFocus, 1, 2), b1, b2);
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        fr.drawSplitString("This is a filter focus.\n\n" +
+			        		"Place it close to a chaos crystal to filter the aspects it can extract or add. You can add multiple filter foci to allow more than one aspect type.\n" +
+			        		"You can change the aspect for the filter with shift + mouse wheel when holding it in your hand.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
 		        }
 		       
-		        strWidth = fr.getStringWidth("Page " + page + "/2");
-		        fr.drawString("Page " + page + "/2", b1 + w - strWidth, b2 + w - fr.FONT_HEIGHT, 0xFFFFFF);
-		        //fr.drawStringWithShadow("The mysterious chaos crystals are one of the greatest mysteries.", b1, b2 + fr.FONT_HEIGHT * 2, 0xFFFFFF);
+		        strWidth = fr.getStringWidth("Page " + page + "/" + maxPage);
+		        fr.drawString("Page " + page + "/" + maxPage, b1 + w - strWidth, b2 + w - fr.FONT_HEIGHT, 0xFFFFFF);
+		        
 			}
 	       
 	        
