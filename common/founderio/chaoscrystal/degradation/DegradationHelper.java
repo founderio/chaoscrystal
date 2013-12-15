@@ -66,22 +66,12 @@ public class DegradationHelper {
 		        		Degradation degradation = degradationInverses.get(rand.nextInt(degradationInverses.size()));
 		        		
 		        		
-		        		boolean capable = true;
 		        		
 		        		if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
 		        			continue;
 		        		}
 		        		
-		        		
-		        		for (int i = 0; i < degradation.aspects.length; i++) {
-		            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
-		            		if(aspectAmount < degradation.amounts[i]) {
-		            			capable = false;
-		            			break;
-		            		}
-						}
-		        		
-		        		if(capable) {
+		        		if(canSupportAspects(degradation.aspects, degradation.amounts, entity)) {
 		        			hit++;
 		        			
 		        			for (int i = 0; i < degradation.aspects.length; i++) {
@@ -106,6 +96,79 @@ public class DegradationHelper {
 		    	}
 	    	}
 		} while(hit < hitsPerDegrade && tries < maxTries);
+		
+		if(hit == 0) {
+			List<EntityItem> items = new ArrayList<EntityItem>();
+    		
+    		for(Object obj : world.loadedEntityList) {
+    			if(obj instanceof EntityItem) {
+    				double distX = ((EntityItem) obj).posX - posX;
+    				double distY = ((EntityItem) obj).posY - posY;
+    				double distZ = ((EntityItem) obj).posZ - posZ;
+    				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
+    				if(tmp_dist < range*range*range) {
+    					items.add((EntityItem)obj);
+    				}
+    			}
+    		}
+    		
+    		if(items.size() != 0) {
+    		
+	    		EntityItem it = items.get(rand.nextInt(items.size()));
+	    		ItemStack is = it.getEntityItem();
+	    		if(is != null) {
+	    			List<Degradation> degradationInverses = ChaosCrystalMain.degradationStore.getDegradationInverses(is.itemID, is.getItemDamage());
+	    			if(degradationInverses != null && !degradationInverses.isEmpty()) {
+	    				Degradation degradation = degradationInverses.get(rand.nextInt(degradationInverses.size()));
+		        		
+	    				if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
+		        			//continue;
+		        		} else {
+		    	    		ItemStack degradationStack = new ItemStack(degradation.source.itemID, 0, degradation.source.getItemDamage());
+		        		
+			        		while(canSupportAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0) {
+			        			hit++;
+				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
+			        			is.stackSize--;
+			        			degradationStack.stackSize++;
+			        			
+				        		for (int i = 0; i < degradation.aspects.length; i++) {
+				            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
+				            		aspectAmount -= degradation.amounts[i];
+				            		entity.setAspect(degradation.aspects[i], aspectAmount);
+								}
+				        		ChaosCrystalNetworkHandler.spawnParticleEffects(entity, it, 0);
+				        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
+				        		
+			        		}
+			        		
+			        		if(degradationStack.stackSize > 0) {
+			        			EntityItem item = new EntityItem(world, it.posX, it.posY, it.posZ, degradationStack);
+			        			item.motionX = it.motionX;
+			        			item.motionY = it.motionY;
+			        			item.motionZ = it.motionZ;
+			        			item.delayBeforeCanPickup = it.delayBeforeCanPickup;
+			        			
+			        			world.spawnEntityInWorld(item);
+			        		}
+			        		
+			        		if(is.stackSize == 0) {
+			        			it.setDead();
+			        		} else {
+			        			it.setEntityItemStack(is);
+			        		}
+		        		}
+		        		
+		        	} else {
+		        		System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
+		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
+		        			it.setDead();
+		        		}
+		        	}
+	    		}
+    		}
+		}
+		
 		if(hit > 0) {
 			entity.playSound("mob.enderdragon.hit", 0.1f, 0.1f);
 		}
@@ -247,6 +310,15 @@ public class DegradationHelper {
 	public static boolean canFitAspects(String[] aspects, int[] amounts, EntityChaosCrystal crystal) {
 		for(int a = 0; a < aspects.length; a++) {
 			if(crystal.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfg_maxAspectStorage) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	public static boolean canSupportAspects(String[] aspects, int[] amounts, EntityChaosCrystal crystal) {
+		for(int a = 0; a < aspects.length; a++) {
+			if(crystal.getAspect(aspects[a]) < amounts[a]) {
 				return false;
 			}
 		}

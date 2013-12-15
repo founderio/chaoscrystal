@@ -3,6 +3,7 @@ package founderio.chaoscrystal.rendering;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -10,12 +11,17 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumMovingObjectType;
+import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -104,6 +110,102 @@ public class OverlayAspectSelector extends Gui {
 		}
 	}
 	
+	/*
+	 * Copy & modify from Minecraft.getMinecraft().entityRenderer.getMouseOver()
+	 */
+	public MovingObjectPosition getMouseOver(float par1)
+    {
+		Entity pointedEntity = null;
+		Minecraft mc = Minecraft.getMinecraft();
+		
+        if (mc.renderViewEntity != null)
+        {
+            if (mc.theWorld != null)
+            {
+            	//mc.pointedEntityLiving = null;
+                double d0 = (double)mc.playerController.getBlockReachDistance();
+                MovingObjectPosition mop = mc.renderViewEntity.rayTrace(d0, par1);
+                double d1 = d0;
+                Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
+
+                if (mc.playerController.extendedReach())
+                {
+                    d0 = 6.0D;
+                    d1 = 6.0D;
+                }
+                else
+                {
+                    if (d0 > 3.0D)
+                    {
+                        d1 = 3.0D;
+                    }
+
+                    d0 = d1;
+                }
+
+                if (mop != null)
+                {
+                    d1 = mop.hitVec.distanceTo(vec3);
+                }
+
+                Vec3 vec31 = mc.renderViewEntity.getLook(par1);
+                Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
+                pointedEntity = null;
+                float f1 = 1.0F;
+                List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
+                double d2 = d1;
+
+                for (int i = 0; i < list.size(); ++i)
+                {
+                    Entity entity = (Entity)list.get(i);
+
+//                    if (entity.canBeCollidedWith())
+//                    {
+                        float f2 = entity.getCollisionBorderSize();
+                        AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
+                        MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+
+                        if (axisalignedbb.isVecInside(vec3))
+                        {
+                            if (0.0D < d2 || d2 == 0.0D)
+                            {
+                                pointedEntity = entity;
+                                d2 = 0.0D;
+                            }
+                        }
+                        else if (movingobjectposition != null)
+                        {
+                            double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+
+                            if (d3 < d2 || d2 == 0.0D)
+                            {
+                                if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
+                                {
+                                    if (d2 == 0.0D)
+                                    {
+                                        pointedEntity = entity;
+                                    }
+                                }
+                                else
+                                {
+                                    pointedEntity = entity;
+                                    d2 = d3;
+                                }
+                            }
+                        }
+//                    }
+                }
+
+                if (pointedEntity != null && (d2 < d1 || mop == null))
+                {
+                    mop = new MovingObjectPosition(pointedEntity);
+                }
+                return mop;
+            }
+        }
+        return null;
+    }
+	
 	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onRenderHud(RenderGameOverlayEvent event) {
@@ -115,9 +217,10 @@ public class OverlayAspectSelector extends Gui {
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
 		
 		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID) {
-			Minecraft.getMinecraft().entityRenderer.getMouseOver(0);
-			if(Minecraft.getMinecraft().objectMouseOver != null) {
-				Entity lookingAt = Minecraft.getMinecraft().objectMouseOver.entityHit;
+			MovingObjectPosition mop = getMouseOver(0);
+			
+			if(mop != null) {
+				Entity lookingAt = mop.entityHit;
 				
 				if(lookingAt != null) {
 					if(lookingAt instanceof EntityChaosCrystal) {
@@ -218,22 +321,77 @@ public class OverlayAspectSelector extends Gui {
 				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 						GL11.glDisable(GL11.GL_BLEND);
 						GL11.glPopMatrix();
+					} else if(lookingAt instanceof EntityItem) {
+						int centerW = event.resolution.getScaledWidth()/2;
+						int centerH = event.resolution.getScaledHeight()/2;
+						
+						GL11.glPushMatrix();
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				        GL11.glEnable(GL11.GL_BLEND);
+				        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				        
+				        ItemStack is = ((EntityItem)lookingAt).getEntityItem();
+				        
+				        Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(is.itemID, is.getItemDamage());
+			        	if(degradation == null) {
+			        		
+			        	} else {
+							int offset = 0;
+							int colOffset = 0;
+							final int colWidth = 64;
+							
+							GL11.glPushMatrix();
+					        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+					        GL11.glEnable(GL11.GL_BLEND);
+					        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					        
+							for(int i = 0; i < degradation.aspects.length; i++) {
+								String aspect = degradation.aspects[i];
+								int asp = degradation.amounts[i];
+
+								Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+								this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
+
+								Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
+								
+								
+								if(offset >= 30) {
+									offset = 0;
+									colOffset += colWidth;
+								} else {
+									offset += 10;
+								}
+							}
+							
+							GL11.glPopMatrix();
+			        	}
+			        	
+				        ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, centerW - 16 - 5, centerH);
+				        
+				        ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, centerW - 16 - 5, centerH);
+				        
+				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+				        
+				        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+				        GL11.glDisable(GL11.GL_LIGHTING);
+						GL11.glDisable(GL11.GL_BLEND);
+						GL11.glPopMatrix();
 					}
 				}
 				
-				if(Minecraft.getMinecraft().objectMouseOver.typeOfHit == EnumMovingObjectType.TILE) {
+				if(mop.typeOfHit == EnumMovingObjectType.TILE) {
 					World w = Minecraft.getMinecraft().thePlayer.worldObj;
 					int id = w.getBlockId(
-							Minecraft.getMinecraft().objectMouseOver.blockX,
-							Minecraft.getMinecraft().objectMouseOver.blockY,
-							Minecraft.getMinecraft().objectMouseOver.blockZ);
+							mop.blockX,
+							mop.blockY,
+							mop.blockZ);
 			    	
 			    	if(id != 0) {// We can't extract air...
 			    		
 			    		int meta = w.getBlockMetadata(
-			    				Minecraft.getMinecraft().objectMouseOver.blockX,
-								Minecraft.getMinecraft().objectMouseOver.blockY,
-								Minecraft.getMinecraft().objectMouseOver.blockZ);
+			    				mop.blockX,
+								mop.blockY,
+								mop.blockZ);
 			        	
 			    		int centerW = event.resolution.getScaledWidth()/2;
 						int centerH = event.resolution.getScaledHeight()/2;
@@ -273,9 +431,9 @@ public class OverlayAspectSelector extends Gui {
 							GL11.glPopMatrix();
 			        	}
 			        	
-			        	TileEntity te = w.getBlockTileEntity(Minecraft.getMinecraft().objectMouseOver.blockX,
-								Minecraft.getMinecraft().objectMouseOver.blockY,
-								Minecraft.getMinecraft().objectMouseOver.blockZ);
+			        	TileEntity te = w.getBlockTileEntity(mop.blockX,
+								mop.blockY,
+								mop.blockZ);
 			        	if(te != null) {
 			        		if(te instanceof TileEntityApparatus) {
 			        			//doRenderMiniBlock = true;
@@ -288,52 +446,12 @@ public class OverlayAspectSelector extends Gui {
 			        			}
 			        			
 			        		}
-//			        		else if(te instanceof TileEntityFurnace) {
-//			        			ItemStack its1 = ((TileEntityFurnace) te).getStackInSlot(0);
-//			        			ItemStack its2 = ((TileEntityFurnace) te).getStackInSlot(1);
-//			        			if(its1 != null && its1.itemID != 0) {
-//				        			ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-//				        					its1, centerW - 16 - 5, centerH + 16, true);
-//			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-//			        						its1, centerW - 16 - 5, centerH + 16);
-//			        			}
-//
-//			        			if(its2 != null && its2.itemID != 0) {
-//				        			ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-//				        					its2, centerW - 16 - 5, centerH + 32, true);
-//			        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-//			        						its2, centerW - 16 - 5, centerH + 32);
-//			        			}
-//			        		}
-//			        		else if(te instanceof TileEntityChest) {
-//			        			doRenderMiniBlock = true;
-//			        			int offset = 0;
-//			        			int colOffset = 0;
-//			        			int stacks = ((TileEntityChest) te).getSizeInventory();
-//			        			
-//			        			for(int i = 0; i < stacks; i++) {
-//			        				ItemStack its = ((TileEntityChest) te).getStackInSlot(i);
-//			        				if(its != null && its.itemID != 0) {
-//				        				ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-//					        					its, centerW - 16 - 5 - colOffset, centerH + 16 + offset, true);
-//				        				ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine,
-//				        						its, centerW - 16 - 5 - colOffset, centerH + 16 + offset);
-//				        			
-//				        				offset += 16;
-//				        				if(offset >= 16*3) {
-//											offset = 0;
-//											colOffset += 16;
-//										} else {
-//											offset += 16;
-//										}
-//			        				}
-//			        				
-//			        			}
-//			        		}
 			        	}
 			        	
 			        	if(doRenderMiniBlock) {
-			        		ri.renderItemIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, new ItemStack(id, 1, meta), centerW - 16 - 5, centerH, true);
+			        		ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, new ItemStack(id, 1, meta), centerW - 16 - 5, centerH);
+				        	
+			        		ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, new ItemStack(id, 1, meta), centerW - 16 - 5, centerH);
 			        	}
 			        	
 			        	Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
