@@ -25,12 +25,15 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
+import founderio.chaoscrystal.blocks.TileEntityCreator;
+import founderio.chaoscrystal.blocks.TileEntityReenactor;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
+import founderio.chaoscrystal.items.ItemBlockApparatus;
 import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemCrystalGlasses;
@@ -124,9 +127,9 @@ public class ChaosCrystalMain {
 		blockBase.setResistance(0);
 		blockBase.setStepSound(Block.soundGlassFootstep);
 		
-		blockApparatus = new BlockApparatus(getBlockId(Constants.ID_BLOCK_REENACTOR, 231), Material.rock);
-		blockApparatus.setUnlocalizedName(Constants.ID_BLOCK_REENACTOR);
-		
+		blockApparatus = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS, 231), Material.rock);
+		blockApparatus.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS);
+		blockApparatus.setCreativeTab(CreativeTabs.tabBlock);
 		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
@@ -135,9 +138,10 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
-		GameRegistry.registerBlock(blockApparatus, Constants.ID_BLOCK_REENACTOR);
+		GameRegistry.registerBlock(blockApparatus, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS, Constants.MOD_ID);
 		
-		GameRegistry.registerTileEntity(TileEntityApparatus.class, Constants.ID_TILEENTITY_REENACTOR);
+		GameRegistry.registerTileEntity(TileEntityReenactor.class, Constants.ID_TILEENTITY_REENACTOR);
+		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
 		
 		if(cfg_forceBiome) {
 			//Just a test: remove all other biomes...

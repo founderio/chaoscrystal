@@ -1,6 +1,5 @@
 package founderio.chaoscrystal.blocks;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -11,12 +10,11 @@ import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet;
 import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
-import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.degradation.Repair;
+import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 
-public class TileEntityApparatus extends TileEntity implements IInventory, ISidedInventory {
+public abstract class TileEntityApparatus extends TileEntity implements IInventory, ISidedInventory {
 
 	public final int stepsPerTick = 5;
 	
@@ -91,7 +89,7 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 
 	@Override
 	public void onInventoryChanged() {
-		//
+		updateState();
 	}
 
 	@Override
@@ -110,82 +108,15 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-		if(itemstack == null) {
-			return false;
-		}
-		return itemstack.isItemStackDamageable() && !itemstack.isStackable() && itemstack.isItemDamaged();
-	}
-
-	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		//TODO: block top side!
 		return new int[] {1};
 	}
 
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		ItemStack is = getStackInSlot(i);
-		if(is != null && is.itemID != 0) {
-			return false;
-		} else {
-			return j == 1 && isItemValidForSlot(i, itemstack);
-		}
-	}
-
-	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return itemstack.getItemDamage() == 0;
-	}
 	
-	public boolean processAspects(EntityChaosCrystal crystal) {
-		ItemStack is = getStackInSlot(0);
-		
-		if(is == null || is.itemID == 0) {
-			return false;
-		} else {
-			int maxDmg = is.getMaxDamage();
-			int curDmg = is.getItemDamage();
-
-			if(curDmg == 0) {
-				return false;
-			}
-			
-			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.itemID);
-			
-			if(rep == null) {
-				return false;
-			}
-			boolean didRepair = false;
-			
-			for(int step = 0; step < stepsPerTick && curDmg > 0; step++) {
-				boolean capable = true;
-				for(int a = 0; a < rep.aspects.length; a++) {
-					if(crystal.getAspect(rep.aspects[a]) < rep.amounts[a]) {
-						capable = false;
-					}
-				}
-				if(!capable) {
-					break;
-				}
-				didRepair = true;
-				
-				for(int a = 0; a < rep.aspects.length; a++) {
-					crystal.setAspect(rep.aspects[a], crystal.getAspect(rep.aspects[a]) - rep.amounts[a]);
-				}
-				
-				curDmg--;
-				is.setItemDamage(curDmg);
-			}
-			
-			if(didRepair) {
-				updateState();
-			}
-			
-			return didRepair;
-			
-		}
-	}
+	
+	public abstract boolean processAspects(EntityChaosCrystal crystal);
+	public abstract boolean onBlockActivated(EntityPlayer player);
 	
 	public void updateState() {
 		PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 128, worldObj.provider.dimensionId, getDescriptionPacket());
@@ -215,7 +146,7 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 		writePropertiesToNBT(par1nbtTagCompound);
 	}
 	
-	private void writePropertiesToNBT(NBTTagCompound par1nbtTagCompound) {
+	protected void writePropertiesToNBT(NBTTagCompound par1nbtTagCompound) {
 		NBTTagList items = new NBTTagList();
 		for(int i = 0; i < inventory.length; i++) {
 			ItemStack is = inventory[i];
@@ -236,7 +167,7 @@ public class TileEntityApparatus extends TileEntity implements IInventory, ISide
 		readPropertiesFromNBT(par1nbtTagCompound);
 	}
 	
-	private void readPropertiesFromNBT(NBTTagCompound par1nbtTagCompound) {
+	protected void readPropertiesFromNBT(NBTTagCompound par1nbtTagCompound) {
 		NBTTagList items = par1nbtTagCompound.getTagList("inventory");
 		if(items != null) {
 			for(int i = 0; i < items.tagCount(); i++) {

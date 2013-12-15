@@ -53,7 +53,7 @@ public class DegradationHelper {
 	    	int offX = (int)(rand.nextInt((int)(range*2))-range);
 	    	int offY = (int)(rand.nextInt((int)(range*2))-range);
 	    	int offZ = (int)(rand.nextInt((int)(range*2))-range);
-	    	if(offX*offX + offY*offY + offZ*offZ < range*range*range) {
+	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < Math.sqrt(range*range*range)) {
 		    	int id = world.getBlockId(posX + offX, posY + offY, posZ + offZ);
 		    	
 		    	if(id != 0) {// We can't extract air...
@@ -184,7 +184,7 @@ public class DegradationHelper {
 	    	int offY = (int)(rand.nextInt((int)(range*2))-range);
 	    	int offZ = (int)(rand.nextInt((int)(range*2))-range);
     	
-	    	if(offX*offX + offY*offY + offZ*offZ < range*range*range) {
+	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < Math.sqrt(range*range*range)) {
 		    	
 		    	int id = world.getBlockId(posX + offX, posY + offY, posZ + offZ);
 		    	

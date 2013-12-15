@@ -18,6 +18,18 @@ public class DegradationStore {
 		degradationsInverse = new HashMap<Integer, Degradation[]>();
 		repairs = new HashMap<Integer, Repair>();
 	}
+
+	public List<Degradation> getCreations() {
+		List<Degradation> creations = new ArrayList<Degradation>();
+		for(Degradation[] geds : degradations.values()) {
+			for (int i = 0; i < geds.length; i++) {
+				if(geds[i].degraded.itemID == 0) {
+					creations.add(geds[i]);
+				}
+			}
+		}
+		return creations;
+	}
 	
 	public Repair getRepair(int id) {
 		return repairs.get(id);
