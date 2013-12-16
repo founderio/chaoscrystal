@@ -122,6 +122,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 	}
 	
 	private Random rand = new Random();
+	public static final int sentryRange = 32;
 	
 	@Override
 	public void updateEntity() {
@@ -140,6 +141,12 @@ public class TileEntitySentry extends TileEntityApparatus {
 			
 			for(Object obj : this.worldObj.loadedEntityList) {
     			if(obj instanceof EntityLivingBase) {
+    				if(obj instanceof EntityPlayer) {
+    					if(((EntityPlayer)obj).username.equals(getOwner())) {
+    						continue;
+    					}
+    				}
+    				
     				EntityLivingBase eCheck = (EntityLivingBase) obj;
     				double distX = eCheck.posX - ((float)xCoord + 0.5f);
     				double distY = eCheck.posY + eCheck.getEyeHeight() - ((float)yCoord + 1.5f);
@@ -149,7 +156,7 @@ public class TileEntitySentry extends TileEntityApparatus {
     				
     				
     				
-    				if(tmp_dist < dist) {
+    				if(tmp_dist < dist && tmp_dist < sentryRange) {
     					
     					Vec3 vec3 = Vec3.createVectorHelper(((float)xCoord + 0.5f), (float)yCoord + 1.5f, (float)zCoord + 0.5f);
         				Vec3 vec32 = Vec3.createVectorHelper(eCheck.posX, eCheck.posY + eCheck.getEyeHeight(), eCheck.posZ);

@@ -20,6 +20,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 	public short animation;
 	
 	private ItemStack[] inventory;
+	private String owner;
 	
 	public TileEntityApparatus(int inventorySize) {
 		inventory = new ItemStack[inventorySize];
@@ -163,6 +164,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 		}
 		par1nbtTagCompound.setTag("inventory", items);
 		par1nbtTagCompound.setShort("animation", animation);
+		par1nbtTagCompound.setString("owner", owner);
 	}
 	
 	@Override
@@ -181,5 +183,14 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 			}
 		}
 		animation = par1nbtTagCompound.getShort("animation");
+		owner = par1nbtTagCompound.getString("owner");
+	}
+
+	public void setOwner(String username) {
+		this.owner = username;
+	}
+	
+	public String getOwner() {
+		return this.owner;
 	}
 }
