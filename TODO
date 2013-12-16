@@ -1,3 +1,5 @@
+(*) == idea, no decision yet
+
 Feature
 
 * Aspects for Items (not only blocks)
@@ -13,6 +15,13 @@ Feature
 	* learning actually needs to destroy item
 * crystal weapon (bow? pistol?) that uses aspects/crystals to shoot
 	* sentry gun
+(*) crystal speed lower/higher depending on amount of aspects inside
+* crystal armor that protects from crystal effects
+	* low blast resistance, high melee resistance? possible?
+(*) destroy items in players inventory unless he wears crystal armor
+	* balancing: warn the player before simply starting? idle ticker for players?
+	* definitely: do that for what zombies & others carry
+(*) move crystals by holding right click/using leash
 
 Improvement
 
@@ -20,13 +29,15 @@ Improvement
 * Check for Blocks that need to be uncovered (grass, mycelium, ...)
 * Meta handling (degrade from all meta types, inverse degrade only to specific ones)
 * smooth animation for filter selection hud
-* crafting recipes for aspects where possible
+* base aspects on crafting recipes where possible
 * effect for transfer foci: lightning
-* pull objects towards crystal before destroying it (EntityFallingSand!!)
+(*) pull objects towards crystal before destroying it (EntityFallingSand!!)
 	* effect for chaos crystals: swirling particles
 	* particles/lightning/something repeatedly hitting object until destruction
 	* let object fall when no further processing is possible
 * show all aspects of subsequent degradations in hud
+* wait for effects to complete before commencing action
+* ignore list for items (flowing water, flowing lava, ...)
 
 Bug
 
