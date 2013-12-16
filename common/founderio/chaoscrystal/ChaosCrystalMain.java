@@ -27,6 +27,7 @@ import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
+import founderio.chaoscrystal.blocks.TileEntitySentry;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -67,6 +68,7 @@ public class ChaosCrystalMain {
 	public static BlockBase blockBase;
 	public static BlockApparatus blockReconstructor;
 	public static BlockApparatus blockCreator;
+	public static BlockApparatus blockSentry;
 	
 	public static BiomeGenCrystal biomeCrystal;
 	
@@ -137,7 +139,7 @@ public class ChaosCrystalMain {
 		blockReconstructor.setResistance(6f);
 		blockReconstructor.setStepSound(Block.soundStoneFootstep);
 		MinecraftForge.setBlockHarvestLevel(blockReconstructor, "pickaxe", 0);
-
+		
 		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), Material.rock, 1);
 		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
 		blockCreator.setCreativeTab(CreativeTabs.tabBlock);
@@ -146,6 +148,15 @@ public class ChaosCrystalMain {
 		blockCreator.setResistance(6f);
 		blockCreator.setStepSound(Block.soundStoneFootstep);
 		MinecraftForge.setBlockHarvestLevel(blockCreator, "pickaxe", 0);
+		
+		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 233), Material.rock, 2);
+		blockSentry.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_SENTRY);
+		blockSentry.setCreativeTab(CreativeTabs.tabBlock);
+		blockSentry.setHardness(2);
+		blockSentry.setLightValue(0.2f);
+		blockSentry.setResistance(6f);
+		blockSentry.setStepSound(Block.soundStoneFootstep);
+		MinecraftForge.setBlockHarvestLevel(blockSentry, "pickaxe", 0);
 		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
@@ -156,9 +167,11 @@ public class ChaosCrystalMain {
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR, Constants.MOD_ID);
+		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY, Constants.MOD_ID);
 		
-		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_REENACTOR);
+		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_RECONSTRUCTOR);
 		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
+		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 		
 		if(cfg_forceBiome) {
 			//Just a test: remove all other biomes...
@@ -224,6 +237,7 @@ public class ChaosCrystalMain {
 		degradationStore.registerRepair(Item.swordWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 		
 		degradationStore.registerRepair(itemCrystalGlasses.itemID, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
+		degradationStore.registerRepair(Item.bow.itemID, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
 		
 		ItemStack nullStack = new ItemStack(0, 0, 0);
 		
@@ -540,6 +554,13 @@ public class ChaosCrystalMain {
 				new int[]{5},
 				new ItemStack(0, 0, 0));
 		
+
+		degradationStore.registerDegradation(
+				new ItemStack(Item.arrow),
+				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WOOD, Aspects.ASPECT_LIVING},
+				new int[]{2, 2, 2},
+				new ItemStack(0, 0, 0));
+		
 		
 		
 	}
@@ -565,6 +586,7 @@ public class ChaosCrystalMain {
 		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
 		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
 		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
+		//degradationStore.autoRegisterDegradation(new ItemStack(Item.arrow));
 		
 		if(cfg_debugOutput) {
 			degradationStore.debugOutput();

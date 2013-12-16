@@ -20,12 +20,15 @@ import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
+import founderio.chaoscrystal.blocks.TileEntitySentry;
 
 public class RenderApparatus extends TileEntitySpecialRenderer implements IItemRenderer {
 	public final TechneModel modelReconstructor;
 	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
 	public final ResourceLocation resourceCreator;
+	public final TechneModel modelSentry;
+	public final ResourceLocation resourceSentry;
 	private RenderItem ri;
 	private EntityItem ei;
 	
@@ -36,6 +39,9 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		String creator = "/assets/" + Constants.MOD_ID + "/models/creator.tcn";
 		modelCreator = new TechneModel(creator, RenderApparatus.class.getResource(creator));
 		resourceCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
+		String sentry = "/assets/" + Constants.MOD_ID + "/models/sentry.tcn";
+		modelSentry = new TechneModel(sentry, RenderApparatus.class.getResource(sentry));
+		resourceSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
 		ri = new RenderItem() {
 			@Override
 			public boolean shouldBob() {
@@ -46,7 +52,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		ri.setRenderManager(RenderManager.instance);
 	}
 	
-	private int rot = 0;
+	private float rot = 0;
 	
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
@@ -93,6 +99,31 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 				
 				GL11.glPopMatrix();
 			}
+		} else if(tileentity instanceof TileEntitySentry) {
+			renderModelAt(modelSentry, resourceSentry, d0, d1, d2);
+			
+			for(int i = 0; i < 4; i++) {
+				ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(i);
+				if(is == null) {
+					ei.setEntityItemStack(new ItemStack(0,0,0));
+				} else {
+					ei.setEntityItemStack(is);
+					float offX = (i == 0 || i == 1) ? 0.125f : 0.825f;
+					float offZ = (i == 0 || i == 2) ? 0.125f : 0.825f;
+					GL11.glPushMatrix();
+					GL11.glTranslatef((float)d0 + offX, (float)d1 + 0.45f, (float)d2 + offZ);
+					GL11.glRotatef(rot, 0, 1, 0);
+					GL11.glScalef(1/3f, 1/3f, 1/3f);
+					
+					ei.setPosition(d0, d1+1, d2);
+
+					RenderItem.renderInFrame = true;
+					ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
+					
+					GL11.glPopMatrix();
+				}
+			}
+			
 		} else {
 			
 		}
@@ -105,10 +136,9 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public void renderModelAt(TechneModel model, ResourceLocation texture, double d0, double d1, double d2) {
 		GL11.glPushMatrix();
 		
-		rot++;
-		if(rot >= 360) {
-			rot = 0;
-		}
+		rot = (Minecraft.getSystemTime() / 10f) % 360f;
+		
+		
 		
 		
 		GL11.glTranslatef((float)d0 + 0.5f, (float)d1 + 0.04f, (float)d2 + 0.5f);
@@ -129,8 +159,39 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 			modelReconstructor.renderPart("Arm2");
 			modelReconstructor.renderPart("Arm3");
 			modelReconstructor.renderPart("Arm4");
+		} else if(model == modelSentry) {
+			
+			
+			modelSentry.renderPart("Base");
+			
+			modelSentry.renderPart("Crystal");
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot-90) * 1f), 0);
+			
+			
+			modelSentry.renderPart("Staff1");
+			modelSentry.renderPart("Staff2");
+			modelSentry.renderPart("Staff3");
+			modelSentry.renderPart("Staff4");
+			
+			modelSentry.renderPart("Corner1");
+			modelSentry.renderPart("Corner2");
+			modelSentry.renderPart("Corner3");
+			modelSentry.renderPart("Corner4");
+			
+
+			GL11.glPopMatrix();
+
+			
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot) * 1f), 0);
+			
+			GL11.glRotatef(rot, 0, 1, 0);
+
+			modelSentry.renderPart("Crystal2");
+			GL11.glPopMatrix();
 		} else {
-			modelCreator.renderAll();
+			model.renderAll();
 		}
 		
 
@@ -164,7 +225,11 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 			model = modelCreator;
 			resource = resourceCreator;
 			break;
-			default: return;
+		case 2:
+			model = modelSentry;
+			resource = resourceSentry;
+			break;
+		default: return;
 		}
 		
 		switch(type) {

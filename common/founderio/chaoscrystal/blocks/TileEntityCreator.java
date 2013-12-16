@@ -8,12 +8,15 @@ import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.degradation.Degradation;
 import founderio.chaoscrystal.degradation.DegradationHelper;
-import founderio.chaoscrystal.degradation.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntityCreator extends TileEntityApparatus {
 
 	Random rand = new Random();
+	
+	public TileEntityCreator() {
+		super(1);
+	}
 	
 	@Override
 	public boolean processAspects(EntityChaosCrystal crystal) {
@@ -94,7 +97,7 @@ public class TileEntityCreator extends TileEntityApparatus {
 
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return itemstack.getItemDamage() == 0;
+		return true;
 	}
 	
 }

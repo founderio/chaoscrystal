@@ -2,9 +2,6 @@ package founderio.chaoscrystal.blocks;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
@@ -13,15 +10,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.world.World;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
 
 public class BlockApparatus extends BlockContainer {
 
 	public static final String[] metaList = new String[] {
 		Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR,
-		Constants.ID_BLOCK_APPARATUS_CREATOR
+		Constants.ID_BLOCK_APPARATUS_CREATOR,
+		Constants.ID_BLOCK_APPARATUS_SENTRY
 	};
 	
 	public final int metaListIndex;
@@ -43,6 +42,8 @@ public class BlockApparatus extends BlockContainer {
 			return new TileEntityReconstructor();
 		case 1:
 			return new TileEntityCreator();
+		case 2:
+			return new TileEntitySentry();
 		default: return null;
 		}
 		
@@ -69,6 +70,9 @@ public class BlockApparatus extends BlockContainer {
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4,
 			int par5, int par6) {
+		if(par1World.isRemote) {
+			return;
+		}
 		TileEntityApparatus te = (TileEntityApparatus)par1World.getBlockTileEntity(par2, par3, par4);
 
 		if(te != null) {

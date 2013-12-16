@@ -8,6 +8,10 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntityReconstructor extends TileEntityApparatus {
 
+	public TileEntityReconstructor() {
+		super(1);
+	}
+	
 	@Override
 	public boolean processAspects(EntityChaosCrystal crystal) {
 		ItemStack is = getStackInSlot(0);

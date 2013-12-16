@@ -17,11 +17,12 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 public abstract class TileEntityApparatus extends TileEntity implements IInventory, ISidedInventory {
 
 	public final int stepsPerTick = 5;
+	public short animation;
 	
 	private ItemStack[] inventory;
 	
-	public TileEntityApparatus() {
-		inventory = new ItemStack[1];
+	public TileEntityApparatus(int inventorySize) {
+		inventory = new ItemStack[inventorySize];
 	}
 	
 	@Override
@@ -74,7 +75,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 
 	@Override
 	public String getInvName() {
-		return "inv";//TODO: Localization
+		return "inv";//No GUI, so no name...
 	}
 
 	@Override
@@ -119,6 +120,9 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 	public abstract boolean onBlockActivated(EntityPlayer player);
 	
 	public void updateState() {
+		if(worldObj.isRemote) {
+			return;
+		}
 		PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 128, worldObj.provider.dimensionId, getDescriptionPacket());
 	}
 	
@@ -158,6 +162,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 			items.appendTag(stackTag);
 		}
 		par1nbtTagCompound.setTag("inventory", items);
+		par1nbtTagCompound.setShort("animation", animation);
 	}
 	
 	@Override
@@ -175,5 +180,6 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(stackTag));
 			}
 		}
+		animation = par1nbtTagCompound.getShort("animation");
 	}
 }

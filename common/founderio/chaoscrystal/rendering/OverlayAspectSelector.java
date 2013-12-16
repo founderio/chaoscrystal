@@ -134,7 +134,7 @@ public class OverlayAspectSelector extends Gui {
 	/*
 	 * Copy & modify from Minecraft.getMinecraft().entityRenderer.getMouseOver()
 	 */
-	public MovingObjectPosition getMouseOver(float par1)
+	public static MovingObjectPosition getMouseOver(float par1)
     {
 		Entity pointedEntity = null;
 		Minecraft mc = Minecraft.getMinecraft();
@@ -415,11 +415,15 @@ public class OverlayAspectSelector extends Gui {
 								mop.blockZ);
 			        	if(te != null) {
 			        		if(te instanceof TileEntityApparatus) {
+			        			TileEntityApparatus apparatus = (TileEntityApparatus)te;
 			        			//doRenderMiniBlock = true;
-			        			ItemStack its = ((TileEntityApparatus) te).getStackInSlot(0);
-			        			if(its != null && its.itemID != 0) {
-			        				renderItem(its, centerW - 16 - 5, centerH);
+			        			for(int i = 0; i < apparatus.getSizeInventory(); i++) {
+			        				ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
+				        			if(its != null && its.itemID != 0) {
+				        				renderItem(its, centerW - 16 - 5 - 16*i, centerH);
+				        			}
 			        			}
+			        			
 			        			
 			        		}
 			        	}

@@ -21,9 +21,11 @@ public class Constants {
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
 	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
 	public static final String ID_BLOCK_APPARATUS_CREATOR = "chaoscrystal.apparatus.creator";
+	public static final String ID_BLOCK_APPARATUS_SENTRY = "chaoscrystal.apparatus.sentry";
 	
-	public static final String ID_TILEENTITY_REENACTOR = "chaoscrystal.reenactor";
+	public static final String ID_TILEENTITY_RECONSTRUCTOR = "chaoscrystal.reconstructor";
 	public static final String ID_TILEENTITY_CREATOR = "chaoscrystal.creator";
+	public static final String ID_TILEENTITY_SENTRY = "chaoscrystal.sentry";
 	
 	public static final String NAME_ENTITY_CHAOSCRYSTAL = "chaoscrystal.chaoscrystal";
 	public static final String NAME_ENTITY_FOCUS_TRANSFER = "chaoscrystal.focus.transfer";
