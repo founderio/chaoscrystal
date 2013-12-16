@@ -3,7 +3,7 @@ package founderio.chaoscrystal;
 public class Constants {
 	public static final String MOD_ID = "chaoscrystal";
 	public static final String MOD_NAME = "Chaos Crystal";
-	public static final String MOD_VERSION = "0.1";
+	public static final String MOD_VERSION = "0.2";
 	public static final String CHANNEL_NAME_PARTICLES = "ChCrParticles";
 	public static final String CHANNEL_NAME_OTHER_VISUAL = "ChCrVisual";
 	
