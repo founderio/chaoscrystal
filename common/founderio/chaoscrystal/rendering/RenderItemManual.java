@@ -143,8 +143,8 @@ public class RenderItemManual implements IItemRenderer {
 			        GL11.glDisable(GL11.GL_DEPTH_TEST);
 			        GL11.glDisable(GL11.GL_LIGHTING);
 			        GL11.glColor4f(1, 1, 1, 1);
-			        fr.drawSplitString("This is the reenactor.\n\n" +
-			        		"Place it near an active transfer focus. When you put a damaged tool or weapon in the apparatus by right clicking it the reenactor wil slowly repair it using the aspects transferred from nearby chaos crystals.",
+			        fr.drawSplitString("This is the reconstructor.\n\n" +
+			        		"Place it near an active transfer focus. When you put a damaged tool or weapon in the apparatus by right clicking it the reconstructor will slowly repair it using the aspects transferred from nearby chaos crystals.",
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
 		        }
