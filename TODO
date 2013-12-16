@@ -1,0 +1,19 @@
+Feature
+
+* Aspects for Items (not only blocks)
+* Aspects for Enchantments
+* Filter for extraction/expulsion targets (Block, EntityItemStack & Similar, EntityLiving, maybe other?)
+* Item Enchanter/Unenchanter
+
+Improvement
+
+* Aspect definitions in some kind of config-file
+* Check for Blocks that need to be uncovered (grass, mycelium, ...)
+* Meta handling (degrade from all meta types, inverse degrade only to specific ones)
+* smooth animation for filter selection hud
+* crafting recipes for aspects where possible
+
+Bug
+
+* lighting missing for block renders in hud
+* tileentity model rotation based off fps
