@@ -9,7 +9,10 @@ Feature
 	* too many blue crystals in the area stop a crystal fully
 	* blue crystals can only be destroyed by the crystal when an external event happens (explosion, e.g.)
 * learn blocks/items before allowing to craft/inverse-degrade them
-	* knowledge bound to blocks/crystals, transferred over foci-network, retained in item
+	* knowledge bound to blocks/crystals, not player, transferred over foci-network, retained in item
+	* learning actually needs to destroy item
+* crystal weapon (bow? pistol?) that uses aspects/crystals to shoot
+	* sentry gun
 
 Improvement
 
