@@ -106,9 +106,9 @@ public class DegradationHelper {
 			for(Object obj : world.loadedEntityList) {
     			if(obj instanceof EntityItem) {
     				double el = ((EntityItem) obj).boundingBox.getAverageEdgeLength();
-    				double distX = ((EntityItem) obj).posX - posX + el;
+    				double distX = ((EntityItem) obj).posX - posX;
     				double distY = ((EntityItem) obj).posY - posY + el;
-    				double distZ = ((EntityItem) obj).posZ - posZ + el;
+    				double distZ = ((EntityItem) obj).posZ - posZ;
     				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
     				if(Math.sqrt(tmp_dist) < range) {
     					items.add((EntityItem)obj);
@@ -252,9 +252,9 @@ public class DegradationHelper {
     		for(Object obj : world.loadedEntityList) {
     			if(obj instanceof EntityItem) {
     				double el = ((EntityItem) obj).boundingBox.getAverageEdgeLength();
-    				double distX = ((EntityItem) obj).posX - posX + el;
+    				double distX = ((EntityItem) obj).posX - posX;
     				double distY = ((EntityItem) obj).posY - posY + el;
-    				double distZ = ((EntityItem) obj).posZ - posZ + el;
+    				double distZ = ((EntityItem) obj).posZ - posZ;
     				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
     				if(Math.sqrt(tmp_dist) < range) {
     					items.add((EntityItem)obj);
