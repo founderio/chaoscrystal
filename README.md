@@ -10,4 +10,5 @@ If you are unsure how to do that, just watch Pahimar's Let's Mod Series.
 
 Play instructions:
 * Grab a pair of crystal glasses, putthem on and read the manual!
+* On items that have changeable properties you can use shift+scroll wheel.
 * NEI or creative mode are suggested, as the manual currently can't really display crafting recipes without too much code bloat.
