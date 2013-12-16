@@ -30,6 +30,7 @@ Feature
 
 Improvement
 
+* Localization for ItemManual
 * Aspect definitions in some kind of config-file
 * Check for Blocks that need to be uncovered (grass, mycelium, ...)
 * Meta handling (degrade from all meta types, inverse degrade only to specific ones)

@@ -5,6 +5,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -35,7 +36,7 @@ public class RenderItemManual implements IItemRenderer {
 	}
 	
 	public static int page = 1;
-	public static final int maxPage = 7;
+	public static final int maxPage = 11;
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
@@ -105,13 +106,119 @@ public class RenderItemManual implements IItemRenderer {
 			        break;
 		        case 4:
 			        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/craftinggrid.png"));
+				    
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 9) + f), (double)((float)(b2 + 59) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 59) - f), (double)((float)(b2 + 59) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 59) - f), (double)((float)(b2 + 9) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 9) + f), (double)((float)(b2 + 9) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        
+			        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/craftingarrow.png"));
+				    
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 60) + f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 80) - f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 80) - f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 60) + f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+
+			        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/craftingoutput.png"));
+				    
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 88) + f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 108) - f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 108) - f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 88) + f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        //GL11.glEnable(GL11.GL_DEPTH_TEST);
+			       // GL11.glPushMatrix();
+
+			        //GL11.glScalef(10,  10,  10);
+			        //GL11.glRotatef(-90f, 0, 1f, 0f);
+			        //GL11.glRotatef(45f, 0, 1f, 1f);
+			        
+			       // ClientProxy.render.renderModelAt(ClientProxy.render.modelSentry, ClientProxy.render.resourceSentry, b1+2.2f, b1+3, 0.4f);
+			        
+			        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/block_red.png"));
+				    
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+			        
+			        tessellator.startDrawingQuads();
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
+			        tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			        tessellator.draw();
+
+//			        GL11.glPopMatrix();
+//			        GL11.glDisable(GL11.GL_DEPTH_TEST);
+//			        GL11.glDisable(GL11.GL_LIGHTING);
+//			        GL11.glColor4f(1, 1, 1, 1);
+
+
+			        
+			        ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
+			        		new ItemStack(ChaosCrystalMain.itemChaosCrystal),
+			        		b1+90, b2+28);
+			        
+			        ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
+			        		new ItemStack(Item.diamond, 1),
+			        		b1+26, b2+10);
+
+			        ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
+			        		new ItemStack(Item.enderPearl, 1),
+			        		b1+26, b2+26);
+
+			        ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
+			        		new ItemStack(Item.diamond, 1),
+			        		b1+26, b2+42);
+			        
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        break;
+		        case 5:
+			        GL11.glEnable(GL11.GL_ALPHA_TEST);
 		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemFocus, 1, 0), b1, b2);
 			        GL11.glDisable(GL11.GL_ALPHA_TEST);
 			        fr.drawSplitString("This is a transfer focus.\n\n" +
 			        		"Place it in the world to balance the aspect levels in two or more chaos crystals and transfer aspects from chaos crystals to any magic apparatus capable of using aspects.",
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
-		        case 5:
+		        case 6:
 			        GL11.glEnable(GL11.GL_ALPHA_TEST);
 		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemFocus, 1, 1), b1, b2);
 			        GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -120,7 +227,7 @@ public class RenderItemManual implements IItemRenderer {
 			        		"The border focus will also face the chaos crystal closest to it if it can find any.",
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
-		        case 6:
+		        case 7:
 			        GL11.glEnable(GL11.GL_ALPHA_TEST);
 		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemFocus, 1, 2), b1, b2);
 			        GL11.glDisable(GL11.GL_ALPHA_TEST);
@@ -129,7 +236,15 @@ public class RenderItemManual implements IItemRenderer {
 			        		"You can change the aspect for the filter with shift + mouse wheel when holding it in your hand.",
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
-		        case 7:
+		        case 8:
+			        GL11.glEnable(GL11.GL_ALPHA_TEST);
+		        	ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine, new ItemStack(ChaosCrystalMain.itemCrystalGlasses, 1, 0), b1, b2);
+			        GL11.glDisable(GL11.GL_ALPHA_TEST);
+			        fr.drawSplitString("These are the crystal glasses.\n\n" +
+			        		"When wearing them they allow you to see aspects in the world, the content of chaos machines and information about items sitting in the world.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 9:
 			        GL11.glEnable(GL11.GL_DEPTH_TEST);
 			        GL11.glPushMatrix();
 
@@ -145,6 +260,44 @@ public class RenderItemManual implements IItemRenderer {
 			        GL11.glColor4f(1, 1, 1, 1);
 			        fr.drawSplitString("This is the reconstructor.\n\n" +
 			        		"Place it near an active transfer focus. When you put a damaged tool or weapon in the apparatus by right clicking it the reconstructor will slowly repair it using the aspects transferred from nearby chaos crystals.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 10:
+			        GL11.glEnable(GL11.GL_DEPTH_TEST);
+			        GL11.glPushMatrix();
+
+			        GL11.glScalef(10,  10,  10);
+			        GL11.glRotatef(-90f, 1f, 0, 0);
+			        GL11.glRotatef(45f, 0, 1f, 0);
+			        
+			        ClientProxy.render.renderModelAt(ClientProxy.render.modelCreator, ClientProxy.render.resourceCreator, b1+2.2f, b1+3, 0.4f);
+			        
+			        GL11.glPopMatrix();
+			        GL11.glDisable(GL11.GL_DEPTH_TEST);
+			        GL11.glDisable(GL11.GL_LIGHTING);
+			        GL11.glColor4f(1, 1, 1, 1);
+			        fr.drawSplitString("This is the creator.\n\n" +
+			        		"Place it near an active transfer focus. It will use aspects from the crystal network to create blocks and items.",
+			        		b1 + 16, b2, w - 16, 0xFFFFFF);
+			        break;
+		        case 11:
+			        GL11.glEnable(GL11.GL_DEPTH_TEST);
+			        GL11.glPushMatrix();
+
+			        GL11.glScalef(10,  10,  10);
+			        GL11.glRotatef(-90f, 1f, 0, 0);
+			        GL11.glRotatef(45f, 0, 1f, 0);
+			        
+			        ClientProxy.render.renderModelAt(ClientProxy.render.modelSentry, ClientProxy.render.resourceSentry, b1+2.2f, b1+3, 0.4f);
+			        
+			        GL11.glPopMatrix();
+			        GL11.glDisable(GL11.GL_DEPTH_TEST);
+			        GL11.glDisable(GL11.GL_LIGHTING);
+			        GL11.glColor4f(1, 1, 1, 1);
+			        fr.drawSplitString("This is the sentry.\n\n" +
+			        		"It will shoot any living beings aside from the one that placed it.\n" +
+			        		"Currently it does only need arrows. You can put them in the sentry by right clicking them or piping them in.\n\n" +
+			        		"It does quite a good job on bats!",
 			        		b1 + 16, b2, w - 16, 0xFFFFFF);
 			        break;
 		        }
