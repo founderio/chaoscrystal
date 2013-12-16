@@ -4,6 +4,7 @@ Feature
 * Aspects for Enchantments
 * Filter for extraction/expulsion targets (Block, EntityItemStack & Similar, EntityLiving, maybe other?)
 * Item Enchanter/Unenchanter
+* with glasses on, show aspects as tooltip
 
 Improvement
 
@@ -12,6 +13,12 @@ Improvement
 * Meta handling (degrade from all meta types, inverse degrade only to specific ones)
 * smooth animation for filter selection hud
 * crafting recipes for aspects where possible
+* effect for transfer foci: lightning
+* pull objects towards crystal before destroying it (EntityFallingSand!!)
+	* effect for chaos crystals: swirling particles
+	* particles/lightning/something repeatedly hitting object until destruction
+	* let object fall when no further processing is possible
+* show all aspects of subsequent degradations in hud
 
 Bug
 
