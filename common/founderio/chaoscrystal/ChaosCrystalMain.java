@@ -520,6 +520,8 @@ public class ChaosCrystalMain {
 				new int[]{15, 5, 5, 20},
 				new ItemStack(Block.glass, 0, 0));
 		
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
+		
 		if(cfg_debugOutput) {
 			degradationStore.debugOutput();
 		}

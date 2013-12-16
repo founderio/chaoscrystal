@@ -6,6 +6,9 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.CraftingManager;
+import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.ShapedRecipes;
 
 public class DegradationStore {
 	
@@ -18,13 +21,15 @@ public class DegradationStore {
 		degradationsInverse = new HashMap<Integer, Degradation[]>();
 		repairs = new HashMap<Integer, Repair>();
 	}
-
+//TODO: make degradations that degrade to air have zero length degraded array
 	public List<Degradation> getCreations() {
 		List<Degradation> creations = new ArrayList<Degradation>();
 		for(Degradation[] geds : degradations.values()) {
 			for (int i = 0; i < geds.length; i++) {
-				if(geds[i].degraded.itemID == 0) {
-					creations.add(geds[i]);
+				if(geds[i].degraded.length == 1) {
+					if(geds[i].degraded[0].getItemDamage() == 0) {
+						creations.add(geds[i]);
+					}
 				}
 			}
 		}
@@ -39,6 +44,65 @@ public class DegradationStore {
 		repairs.put(itemId, new Repair(itemId, aspects, amounts));
 	}
 	
+	public void autoRegisterDegradation(ItemStack is) {
+		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
+		List<IRecipe> matching = new ArrayList<IRecipe>();
+		for(IRecipe r: recipes) {
+			ItemStack output = r.getRecipeOutput();
+			if(output != null && output.isItemEqual(is)) {
+				matching.add(r);
+			}
+		}
+		if(matching.isEmpty()) {
+			System.out.println("Registering Item " + is + " failed. No crafting recipes.");
+			return;
+		}
+		if(matching.size() > 1) {
+			System.out.println("Registering Item " + is + " failed. Multiple crafting recipes.");
+			return;
+		}
+		IRecipe r = matching.get(0);
+		if(r instanceof ShapedRecipes) {
+			int[] amounts = new int[Aspects.ASPECTS.length];
+			List<ItemStack> degraded = new ArrayList<ItemStack>();
+			for(ItemStack crafting : ((ShapedRecipes) r).recipeItems) {
+				if(crafting.stackSize <= 0) {
+					System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
+					return;
+				}
+				Degradation deg = getDegradation(crafting);
+				if(deg == null) {
+					autoRegisterDegradation(crafting);
+				}
+				deg = getDegradation(crafting);
+				if(deg == null) {
+					System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
+					return;
+				}
+				for(int a = 0; a < deg.aspects.length; a++) {
+					String aspect = deg.aspects[a];
+					amounts[Aspects.getAspectDisplayId(aspect)] += deg.amounts[a] / crafting.stackSize;
+				}
+				boolean added = false;
+				for(ItemStack dis : degraded) {
+					if(dis.isItemEqual(crafting)) {
+						dis.stackSize += crafting.stackSize;
+						added = true;
+						break;
+					}
+				}
+				if(!added) {
+					degraded.add(crafting.copy());
+				}
+			}
+			registerDegradation(is, Aspects.ASPECTS.clone(), amounts, degraded.toArray(new ItemStack[degraded.size()]));
+		}
+	}
+	
+	public Degradation getDegradation(ItemStack is) {
+		return getDegradation(is.itemID, is.getItemDamage());
+	}
+	
 	public Degradation getDegradation(int id, int meta) {
 		Degradation[] geds = degradations.get(id);
 		if(geds == null) {
@@ -46,7 +110,7 @@ public class DegradationStore {
 		}
 		
 		for (int i = 0; i < geds.length; i++) {
-			if(geds[i].source.getItemDamage() == meta) {
+			if(geds[i].source.getItemDamage() == 32767 || meta == 32767 || geds[i].source.getItemDamage() == meta) {
 				return geds[i];
 			}
 		}
@@ -63,16 +127,20 @@ public class DegradationStore {
 		}
 		
 		for (int i = 0; i < geds.length; i++) {
-			if(geds[i].degraded.getItemDamage() == meta) {
-				inverses .add(geds[i]);
+			if(geds[i].degraded.length == 1) {
+				if(geds[i].degraded[0].getItemDamage() == meta) {
+					inverses.add(geds[i]);
+				}
 			}
+			
 		}
 		
 		return inverses;
 	}
 	
+	
 	public void registerDegradation(ItemStack source, String[] aspects, int[] amounts,
-			ItemStack degraded) {
+			ItemStack... degraded) {
 		Degradation object = new Degradation(source, aspects, amounts, degraded);
 		
 		Degradation[] geds = degradations.get(source.itemID);
@@ -87,16 +155,19 @@ public class DegradationStore {
 		degradations.put(source.itemID, geds);
 		
 		//Inverse
-		geds = degradationsInverse.get(degraded.itemID);
-		if(geds == null) {
-			geds = new Degradation[1];
-		} else {
-			Degradation[] geds2 = new Degradation[geds.length+1];
-			System.arraycopy(geds, 0, geds2, 0, geds.length);
-			geds = geds2;
+		for(int i = 0; i < degraded.length; i++) {
+			geds = degradationsInverse.get(degraded[i].itemID);
+			if(geds == null) {
+				geds = new Degradation[1];
+			} else {
+				Degradation[] geds2 = new Degradation[geds.length+1];
+				System.arraycopy(geds, 0, geds2, 0, geds.length);
+				geds = geds2;
+			}
+			geds[geds.length - 1] = object;
+			degradationsInverse.put(degraded[i].itemID, geds);
 		}
-		geds[geds.length - 1] = object;
-		degradationsInverse.put(degraded.itemID, geds);
+		
 	}
 
 	public void debugOutput() {
@@ -105,10 +176,12 @@ public class DegradationStore {
 			Degradation[] degradationList = degradations.get(key);
 			System.out.println(Block.blocksList[key].getLocalizedName() + " Transforms to:");
 			for (int i = 0; i < degradationList.length; i++) {
-				if(degradationList[i].degraded.itemID == 0) {
-					System.out.println("Air");
-				} else {
-					System.out.println(Block.blocksList[degradationList[i].degraded.itemID].getLocalizedName() + " - " + degradationList[i].degraded.getItemDamage());
+				for(int d = 0; d < degradationList[i].degraded.length; d++) {
+					if(degradationList[i].degraded[d].itemID == 0) {
+						System.out.println("Air");
+					} else {
+						System.out.println(Block.blocksList[degradationList[i].degraded[d].itemID].getLocalizedName() + " - " + degradationList[i].degraded[d].getItemDamage());
+					}
 				}
 			}
 		}

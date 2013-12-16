@@ -8,10 +8,10 @@ public class Degradation {
 	public final ItemStack source;
 	public final String[] aspects;
 	public final int[] amounts;
-	public final ItemStack degraded;
+	public final ItemStack[] degraded;
 
 	public Degradation(ItemStack source, String[] aspects, int[] amounts,
-			ItemStack degraded) {
+			ItemStack... degraded) {
 		this.source = source;
 		this.aspects = aspects;
 		this.amounts = amounts;
@@ -27,8 +27,7 @@ public class Degradation {
 		int result = 1;
 		result = prime * result + Arrays.hashCode(amounts);
 		result = prime * result + Arrays.hashCode(aspects);
-		result = prime * result
-				+ ((degraded == null) ? 0 : degraded.hashCode());
+		result = prime * result + Arrays.hashCode(degraded);
 		result = prime * result + ((source == null) ? 0 : source.hashCode());
 		return result;
 	}
@@ -46,10 +45,7 @@ public class Degradation {
 			return false;
 		if (!Arrays.equals(aspects, other.aspects))
 			return false;
-		if (degraded == null) {
-			if (other.degraded != null)
-				return false;
-		} else if (!degraded.equals(other.degraded))
+		if (!Arrays.equals(degraded, other.degraded))
 			return false;
 		if (source == null) {
 			if (other.source != null)
@@ -63,7 +59,9 @@ public class Degradation {
 	public String toString() {
 		return "Degradation [source=" + source + ", aspects="
 				+ Arrays.toString(aspects) + ", amounts="
-				+ Arrays.toString(amounts) + ", degraded=" + degraded + "]";
+				+ Arrays.toString(amounts) + ", degraded="
+				+ Arrays.toString(degraded) + "]";
 	}
+
 
 }

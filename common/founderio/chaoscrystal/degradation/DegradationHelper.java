@@ -210,7 +210,7 @@ public class DegradationHelper {
 		        	
 		        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
 		        	if(degradation != null) {
-		        		if(degradation.degraded.itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
 		        			continue;
 		        		}
 		        		
@@ -220,7 +220,8 @@ public class DegradationHelper {
 		        		
 		        		if(canFitAspects(degradation.aspects, degradation.amounts, entity)) {
 		        			hit++;
-			        		world.setBlock(absX, absY, absZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
+			        		world.setBlock(absX, absY, absZ, degradation.degraded[0].itemID, degradation.degraded[0].getItemDamage(), 1 + 2);
+			        		//TODO: respect count
 			        		
 			        		for (int i = 0; i < degradation.aspects.length; i++) {
 			            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
@@ -269,12 +270,12 @@ public class DegradationHelper {
 	    		if(is != null) {
 		    		Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(is.itemID, is.getItemDamage());
 		    		if(degradation != null) {
-		        		if(degradation.degraded.itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
 		        			//continue;
 		        		} else if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
 		        			//continue;
 		        		} else {
-		    	    		ItemStack degradationStack = new ItemStack(degradation.degraded.itemID, 0, degradation.degraded.getItemDamage());
+		    	    		ItemStack degradationStack = new ItemStack(degradation.degraded[0].itemID, 0, degradation.degraded[0].getItemDamage());
 		        		
 			        		while(canFitAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < hitsPerDegrade) {
 			        			hit++;
