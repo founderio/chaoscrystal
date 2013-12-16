@@ -44,21 +44,24 @@ public class DegradationHelper {
 		return !hasAspects;
 	}
 	
-	public static void releaseAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, double range) {
+	public static void releaseAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, float range) {
 		//System.out.println(entity.entityId + " " + range);
 		int hit = 0;
 		int tries = 0;
 		do {
 			tries++;
-	    	int offX = (int)(rand.nextInt((int)(range*2))-range);
-	    	int offY = (int)(rand.nextInt((int)(range*2))-range);
-	    	int offZ = (int)(rand.nextInt((int)(range*2))-range);
-	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < Math.sqrt(range*range*range)) {
-		    	int id = world.getBlockId(posX + offX, posY + offY, posZ + offZ);
+	    	float offX = rand.nextInt((int)(range*2))-range + 0.5f;
+	    	float offY = rand.nextInt((int)(range*2))-range + 0.5f;
+	    	float offZ = rand.nextInt((int)(range*2))-range + 0.5f;
+	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < range) {
+	    		int absX = (int)(posX + offX);
+	    		int absY = (int)(posY + offY);
+	    		int absZ = (int)(posZ + offZ);
+		    	int id = world.getBlockId(absX, absY, absZ);
 		    	
 		    	if(id != 0) {// We can't extract air...
 		    		
-		    		int meta = world.getBlockMetadata(posX + offX, posY + offY, posZ + offZ);
+		    		int meta = world.getBlockMetadata(absX, absY, absZ);
 		        	
 		        	List<Degradation> degradationInverses = ChaosCrystalMain.degradationStore.getDegradationInverses(id, meta);
 		        	
@@ -79,7 +82,7 @@ public class DegradationHelper {
 		                		aspectAmount -= degradation.amounts[i];
 		                		entity.setAspect(degradation.aspects[i], aspectAmount);
 		    				}
-		            		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.source.itemID, degradation.source.getItemDamage(), 1 + 2);
+		            		world.setBlock(absX, absY, absZ, degradation.source.itemID, degradation.source.getItemDamage(), 1 + 2);
 		            		
 		            		ChaosCrystalNetworkHandler.spawnParticleEffects(world.provider.dimensionId, 0,
 			        				posX+offX, posY+offY, posZ+offZ,
@@ -97,16 +100,17 @@ public class DegradationHelper {
 	    	}
 		} while(hit < hitsPerDegrade && tries < maxTries);
 		
-		if(hit == 0) {
+		if(hit < hitsPerDegrade) {
 			List<EntityItem> items = new ArrayList<EntityItem>();
     		
-    		for(Object obj : world.loadedEntityList) {
+			for(Object obj : world.loadedEntityList) {
     			if(obj instanceof EntityItem) {
-    				double distX = ((EntityItem) obj).posX - posX;
-    				double distY = ((EntityItem) obj).posY - posY;
-    				double distZ = ((EntityItem) obj).posZ - posZ;
+    				double el = ((EntityItem) obj).boundingBox.getAverageEdgeLength();
+    				double distX = ((EntityItem) obj).posX - posX + el;
+    				double distY = ((EntityItem) obj).posY - posY + el;
+    				double distZ = ((EntityItem) obj).posZ - posZ + el;
     				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
-    				if(tmp_dist < range*range*range) {
+    				if(Math.sqrt(tmp_dist) < range) {
     					items.add((EntityItem)obj);
     				}
     			}
@@ -126,7 +130,7 @@ public class DegradationHelper {
 		        		} else {
 		    	    		ItemStack degradationStack = new ItemStack(degradation.source.itemID, 0, degradation.source.getItemDamage());
 		        		
-			        		while(canSupportAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0) {
+			        		while(canSupportAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < hitsPerDegrade) {
 			        			hit++;
 				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        			is.stackSize--;
@@ -137,16 +141,25 @@ public class DegradationHelper {
 				            		aspectAmount -= degradation.amounts[i];
 				            		entity.setAspect(degradation.aspects[i], aspectAmount);
 								}
-				        		ChaosCrystalNetworkHandler.spawnParticleEffects(entity, it, 0);
-				        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
 				        		
 			        		}
+			        		
+			        		ChaosCrystalNetworkHandler.spawnParticleEffects(entity, it, 0);
+			        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
+			        		
 			        		
 			        		if(degradationStack.stackSize > 0) {
 			        			EntityItem item = new EntityItem(world, it.posX, it.posY, it.posZ, degradationStack);
 			        			item.motionX = it.motionX;
 			        			item.motionY = it.motionY;
 			        			item.motionZ = it.motionZ;
+			        			item.prevPosX = it.prevPosX;
+			        			item.prevPosY = it.prevPosY;
+			        			item.prevPosZ = it.prevPosZ;
+			        			item.yOffset = it.yOffset;
+			        			item.hoverStart = it.hoverStart;
+			        			item.age = it.age;
+			        			item.lifespan = it.lifespan;
 			        			item.delayBeforeCanPickup = it.delayBeforeCanPickup;
 			        			
 			        			world.spawnEntityInWorld(item);
@@ -174,23 +187,26 @@ public class DegradationHelper {
 		}
 	}
 	
-	public static void suckAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, double range) {
+	public static void suckAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, float range) {
 		
 		int hit = 0;
 		int tries = 0;
 		do {
 			tries++;
-			int offX = (int)(rand.nextInt((int)(range*2))-range);
-	    	int offY = (int)(rand.nextInt((int)(range*2))-range);
-	    	int offZ = (int)(rand.nextInt((int)(range*2))-range);
+			float offX = rand.nextInt((int)(range*2))-range + 0.5f;
+	    	float offY = rand.nextInt((int)(range*2))-range + 0.5f;
+	    	float offZ = rand.nextInt((int)(range*2))-range + 0.5f;
     	
-	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < Math.sqrt(range*range*range)) {
+	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < range) {
+	    		int absX = (int)(posX + offX);
+	    		int absY = (int)(posY + offY);
+	    		int absZ = (int)(posZ + offZ);
 		    	
-		    	int id = world.getBlockId(posX + offX, posY + offY, posZ + offZ);
+		    	int id = world.getBlockId(absX, absY, absZ);
 		    	
 		    	if(id != 0) {// We can't extract air...
 		    		
-		    		int meta = world.getBlockMetadata(posX + offX, posY + offY, posZ + offZ);
+		    		int meta = world.getBlockMetadata(absX, absY, absZ);
 		        	
 		        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
 		        	if(degradation != null) {
@@ -204,7 +220,7 @@ public class DegradationHelper {
 		        		
 		        		if(canFitAspects(degradation.aspects, degradation.amounts, entity)) {
 		        			hit++;
-			        		world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
+			        		world.setBlock(absX, absY, absZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        		
 			        		for (int i = 0; i < degradation.aspects.length; i++) {
 			            		int aspectAmount = entity.getAspect(degradation.aspects[i]);
@@ -222,24 +238,25 @@ public class DegradationHelper {
 		        	} else {
 		        		System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
 		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
-			        		world.setBlock(posX + offX, posY + offY, posZ + offZ, 0, 0, 1 + 2);
-			        		world.createExplosion(entity, posX + offX, posY + offY, posZ + offZ, 1, false);
+			        		world.setBlock(absX, absY, absZ, 0, 0, 1 + 2);
+			        		world.createExplosion(entity, absX, absY, absZ, 1, false);
 		        		}
 		        	}
 		    	}
 	    	}
 		} while(hit < hitsPerDegrade && tries < maxTries);
 		
-		if(hit == 0) {
+		if(hit < hitsPerDegrade) {
 			List<EntityItem> items = new ArrayList<EntityItem>();
     		
     		for(Object obj : world.loadedEntityList) {
     			if(obj instanceof EntityItem) {
-    				double distX = ((EntityItem) obj).posX - posX;
-    				double distY = ((EntityItem) obj).posY - posY;
-    				double distZ = ((EntityItem) obj).posZ - posZ;
+    				double el = ((EntityItem) obj).boundingBox.getAverageEdgeLength();
+    				double distX = ((EntityItem) obj).posX - posX + el;
+    				double distY = ((EntityItem) obj).posY - posY + el;
+    				double distZ = ((EntityItem) obj).posZ - posZ + el;
     				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
-    				if(tmp_dist < range*range*range) {
+    				if(Math.sqrt(tmp_dist) < range) {
     					items.add((EntityItem)obj);
     				}
     			}
@@ -259,7 +276,7 @@ public class DegradationHelper {
 		        		} else {
 		    	    		ItemStack degradationStack = new ItemStack(degradation.degraded.itemID, 0, degradation.degraded.getItemDamage());
 		        		
-			        		while(canFitAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0) {
+			        		while(canFitAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < hitsPerDegrade) {
 			        			hit++;
 				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        			is.stackSize--;
@@ -270,16 +287,25 @@ public class DegradationHelper {
 				            		aspectAmount += degradation.amounts[i];
 				            		entity.setAspect(degradation.aspects[i], aspectAmount);
 								}
-				        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, entity, 0);
-				        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
 				        		
 			        		}
 			        		
-			        		if(degradationStack.stackSize > 0) {
+			        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, entity, 0);
+			        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
+			        		
+			        		
+			        		if(degradationStack.stackSize > 0 && degradationStack.itemID != 0) {
 			        			EntityItem item = new EntityItem(world, it.posX, it.posY, it.posZ, degradationStack);
 			        			item.motionX = it.motionX;
 			        			item.motionY = it.motionY;
 			        			item.motionZ = it.motionZ;
+			        			item.prevPosX = it.prevPosX;
+			        			item.prevPosY = it.prevPosY;
+			        			item.prevPosZ = it.prevPosZ;
+			        			item.yOffset = it.yOffset;
+			        			item.hoverStart = it.hoverStart;
+			        			item.age = it.age;
+			        			item.lifespan = it.lifespan;
 			        			item.delayBeforeCanPickup = it.delayBeforeCanPickup;
 			        			
 			        			world.spawnEntityInWorld(item);

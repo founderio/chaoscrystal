@@ -27,6 +27,7 @@ public class ItemFocus extends Item {
 		super(par1);
 		this.setHasSubtypes(true);
 		this.setCreativeTab(CreativeTabs.tabTools);
+		this.setMaxStackSize(16);
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -52,13 +53,13 @@ public class ItemFocus extends Item {
 			EntityPlayer par3EntityPlayer) {
 		if(!par2World.isRemote) {
 			if(par1ItemStack.getItemDamage() == 0) {
-				EntityFocusTransfer entity = new EntityFocusTransfer(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				EntityFocusTransfer entity = new EntityFocusTransfer(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 3, par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
 				par2World.spawnEntityInWorld(entity);
 			} else if(par1ItemStack.getItemDamage() == 1) {
-				EntityFocusBorder entity = new EntityFocusBorder(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				EntityFocusBorder entity = new EntityFocusBorder(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 3, par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
 				par2World.spawnEntityInWorld(entity);
 			} else if(par1ItemStack.getItemDamage() == 2) {
-				EntityFocusFilter entity = new EntityFocusFilter(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 3, (int)par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
+				EntityFocusFilter entity = new EntityFocusFilter(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 3, par3EntityPlayer.posZ, 180f - par3EntityPlayer.rotationYaw, par3EntityPlayer.rotationPitch);
 				NBTTagCompound tags = par1ItemStack.getTagCompound();
 				if(tags != null) {
 					String aspect = tags.getString("aspect");

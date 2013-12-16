@@ -87,7 +87,7 @@ public class EntityFocusBorder extends Entity {
     				double distX = ((EntityChaosCrystal) obj).posX - posX;
     				double distY = ((EntityChaosCrystal) obj).posY - posY;
     				double distZ = ((EntityChaosCrystal) obj).posZ - posZ;
-    				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
+    				double tmp_dist = Math.sqrt(distX*distX + distY*distY + distZ*distZ);
     				if(tmp_dist < dist) {
     					crystal1 = (EntityChaosCrystal)obj;
     					dist = tmp_dist;

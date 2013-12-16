@@ -15,7 +15,7 @@ public class ItemManual extends ItemMap {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		par1IconRegister.registerIcon(Constants.MOD_ID + ":manual");
+		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID + ":manual");
 	}
 
 }

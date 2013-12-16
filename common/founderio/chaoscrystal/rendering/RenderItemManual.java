@@ -137,7 +137,7 @@ public class RenderItemManual implements IItemRenderer {
 			        GL11.glRotatef(-90f, 1f, 0, 0);
 			        GL11.glRotatef(45f, 0, 1f, 0);
 			        
-			        ClientProxy.render.renderModelAt(ClientProxy.render.modelReenactor, ClientProxy.render.resourceReenactor, b1+2.2f, b1+3, 0.4f);
+			        ClientProxy.render.renderModelAt(ClientProxy.render.modelReconstructor, ClientProxy.render.resourceReconstructor, b1+2.2f, b1+3, 0.4f);
 			        
 			        GL11.glPopMatrix();
 			        GL11.glDisable(GL11.GL_DEPTH_TEST);

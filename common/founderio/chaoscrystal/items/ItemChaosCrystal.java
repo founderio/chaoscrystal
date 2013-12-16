@@ -22,6 +22,7 @@ public class ItemChaosCrystal extends Item {
 	public ItemChaosCrystal(int par1) {
 		super(par1);
 		this.setCreativeTab(CreativeTabs.tabTools);
+		this.setMaxStackSize(16);
 	}
 	
 	@Override
@@ -37,7 +38,7 @@ public class ItemChaosCrystal extends Item {
 			return new ItemStack(0, 0, 0);
 		}
 		
-		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, (int)par3EntityPlayer.posX, (int)par3EntityPlayer.posY + 2, (int)par3EntityPlayer.posZ);
+		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 2, par3EntityPlayer.posZ);
 		if(par1ItemStack.getTagCompound() != null) {
 			NBTTagCompound aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
 			if (aspectStore != null) {

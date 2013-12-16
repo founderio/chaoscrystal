@@ -9,13 +9,13 @@ import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.rendering.RenderChaosCrystal;
 import founderio.chaoscrystal.rendering.RenderFocus;
 import founderio.chaoscrystal.rendering.RenderItemManual;
-import founderio.chaoscrystal.rendering.TileEntityRenderer;
+import founderio.chaoscrystal.rendering.RenderApparatus;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 
 public class ClientProxy extends CommonProxy {
 	
-	public static TileEntityRenderer render;
+	public static RenderApparatus render;
 	
 	@Override
 	public void registerRenderStuff() {
@@ -24,10 +24,11 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, new RenderFocus());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, new RenderFocus());
 		
-		render = new TileEntityRenderer();
+		render = new RenderApparatus();
 		
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, render);
-		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockApparatus.blockID, render);
+		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockReconstructor.blockID, render);
+		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockCreator.blockID, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.itemManual.itemID, new RenderItemManual());
 	}
 }

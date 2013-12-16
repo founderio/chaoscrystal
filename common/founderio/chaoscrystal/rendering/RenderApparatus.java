@@ -1,5 +1,6 @@
 package founderio.chaoscrystal.rendering;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -15,24 +16,25 @@ import net.minecraftforge.client.model.techne.TechneModel;
 import org.lwjgl.opengl.GL11;
 
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
-import founderio.chaoscrystal.blocks.TileEntityReenactor;
+import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 
-public class TileEntityRenderer extends TileEntitySpecialRenderer implements IItemRenderer {
-	public final TechneModel modelReenactor;
-	public final ResourceLocation resourceReenactor;
+public class RenderApparatus extends TileEntitySpecialRenderer implements IItemRenderer {
+	public final TechneModel modelReconstructor;
+	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
 	public final ResourceLocation resourceCreator;
 	private RenderItem ri;
 	private EntityItem ei;
 	
-	public TileEntityRenderer() {
-		String reenactor = "/assets/" + Constants.MOD_ID + "/models/reenactor.tcn";
-		modelReenactor = new TechneModel(reenactor, TileEntityRenderer.class.getResource(reenactor));
-		resourceReenactor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reenactor.png");
+	public RenderApparatus() {
+		String reconstructor = "/assets/" + Constants.MOD_ID + "/models/reconstructor.tcn";
+		modelReconstructor = new TechneModel(reconstructor, RenderApparatus.class.getResource(reconstructor));
+		resourceReconstructor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reconstructor.png");
 		String creator = "/assets/" + Constants.MOD_ID + "/models/creator.tcn";
-		modelCreator = new TechneModel(creator, TileEntityRenderer.class.getResource(creator));
+		modelCreator = new TechneModel(creator, RenderApparatus.class.getResource(creator));
 		resourceCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
 		ri = new RenderItem() {
 			@Override
@@ -51,8 +53,8 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer implements IIt
 			double d2, float f) {
 		
 		
-		if(tileentity instanceof TileEntityReenactor) {
-			renderModelAt(modelReenactor, resourceReenactor, d0, d1, d2);
+		if(tileentity instanceof TileEntityReconstructor) {
+			renderModelAt(modelReconstructor, resourceReconstructor, d0, d1, d2);
 			
 			ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(0);
 			if(is == null) {
@@ -116,17 +118,17 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer implements IIt
 		
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
 		
-		if(model == modelReenactor) {
-			modelReenactor.renderPart("Base");
-			modelReenactor.renderPart("Socket");
+		if(model == modelReconstructor) {
+			modelReconstructor.renderPart("Base");
+			modelReconstructor.renderPart("Socket");
 
 			
 			GL11.glRotatef(rot, 0, 1, 0);
 
-			modelReenactor.renderPart("Arm1");
-			modelReenactor.renderPart("Arm2");
-			modelReenactor.renderPart("Arm3");
-			modelReenactor.renderPart("Arm4");
+			modelReconstructor.renderPart("Arm1");
+			modelReconstructor.renderPart("Arm2");
+			modelReconstructor.renderPart("Arm3");
+			modelReconstructor.renderPart("Arm4");
 		} else {
 			modelCreator.renderAll();
 		}
@@ -137,7 +139,7 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer implements IIt
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return true;
+		return Block.blocksList[item.itemID] instanceof BlockApparatus;
 	}
 
 	@Override
@@ -151,10 +153,12 @@ public class TileEntityRenderer extends TileEntitySpecialRenderer implements IIt
 		TechneModel model;
 		ResourceLocation resource;
 		
-		switch(item.getItemDamage()) {
+		BlockApparatus block = (BlockApparatus)Block.blocksList[item.itemID];
+		
+		switch(block.metaListIndex) {
 		case 0:
-			model = modelReenactor;
-			resource = resourceReenactor;
+			model = modelReconstructor;
+			resource = resourceReconstructor;
 			break;
 		case 1:
 			model = modelCreator;

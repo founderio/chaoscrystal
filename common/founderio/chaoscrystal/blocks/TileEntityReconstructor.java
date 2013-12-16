@@ -6,7 +6,7 @@ import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.degradation.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
-public class TileEntityReenactor extends TileEntityApparatus {
+public class TileEntityReconstructor extends TileEntityApparatus {
 
 	@Override
 	public boolean processAspects(EntityChaosCrystal crystal) {

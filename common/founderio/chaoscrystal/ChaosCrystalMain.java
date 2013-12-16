@@ -24,9 +24,8 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
-import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
-import founderio.chaoscrystal.blocks.TileEntityReenactor;
+import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -65,7 +64,8 @@ public class ChaosCrystalMain {
 	public static Item itemManual;
 	
 	public static BlockBase blockBase;
-	public static BlockApparatus blockApparatus;
+	public static BlockApparatus blockReconstructor;
+	public static BlockApparatus blockCreator;
 	
 	public static BiomeGenCrystal biomeCrystal;
 	
@@ -124,12 +124,17 @@ public class ChaosCrystalMain {
 		blockBase.setCreativeTab(CreativeTabs.tabBlock);
 		blockBase.setHardness(4);
 		blockBase.setLightValue(0.2f);
-		blockBase.setResistance(0);
+		blockBase.setResistance(1.5f);
 		blockBase.setStepSound(Block.soundGlassFootstep);
 		
-		blockApparatus = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS, 231), Material.rock);
-		blockApparatus.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS);
-		blockApparatus.setCreativeTab(CreativeTabs.tabBlock);
+		
+		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 231), Material.rock, 0);
+		blockReconstructor.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
+		blockReconstructor.setCreativeTab(CreativeTabs.tabBlock);
+
+		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), Material.rock, 1);
+		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
+		blockCreator.setCreativeTab(CreativeTabs.tabBlock);
 		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
@@ -138,9 +143,10 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
-		GameRegistry.registerBlock(blockApparatus, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS, Constants.MOD_ID);
+		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, Constants.MOD_ID);
+		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR, Constants.MOD_ID);
 		
-		GameRegistry.registerTileEntity(TileEntityReenactor.class, Constants.ID_TILEENTITY_REENACTOR);
+		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_REENACTOR);
 		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
 		
 		if(cfg_forceBiome) {

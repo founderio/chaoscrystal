@@ -76,8 +76,8 @@ public class EntityChaosCrystal extends Entity {
         				double distX = ((EntityFocusFilter) obj).posX - posX;
         				double distY = ((EntityFocusFilter) obj).posY - posY;
         				double distZ = ((EntityFocusFilter) obj).posZ - posZ;
-        				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
-        				if(tmp_dist < EntityFocusFilter.focusRange*EntityFocusFilter.focusRange*EntityFocusFilter.focusRange) {
+        				double tmp_dist = Math.sqrt(distX*distX + distY*distY + distZ*distZ);
+        				if(tmp_dist < EntityFocusFilter.focusRange) {
         					String asp = ((EntityFocusFilter)obj).getAspect();
         					if(!filterAspects.contains(asp)) {
         						filterAspects.add(asp);
@@ -86,14 +86,14 @@ public class EntityChaosCrystal extends Entity {
         			}
         		}
         		
-        		double range = DegradationHelper.degradeRange * DegradationHelper.degradeRange * DegradationHelper.degradeRange;
+        		double range = DegradationHelper.degradeRange;
         		
         		for(Object obj : this.worldObj.loadedEntityList) {
         			if(obj instanceof EntityFocusBorder) {
         				double distX = ((EntityFocusBorder) obj).posX - posX;
         				double distY = ((EntityFocusBorder) obj).posY - posY;
         				double distZ = ((EntityFocusBorder) obj).posZ - posZ;
-        				double tmp_dist = distX*distX + distY*distY + distZ*distZ;
+        				double tmp_dist = Math.sqrt(distX*distX + distY*distY + distZ*distZ);
         				if(tmp_dist < range) {
         					range = tmp_dist;
         				}
@@ -102,9 +102,9 @@ public class EntityChaosCrystal extends Entity {
         		
         		lastDegrade = age;
         		if(isInSuckMode()) {
-        			DegradationHelper.suckAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
+        			DegradationHelper.suckAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, (float)range);
         		} else {
-        			DegradationHelper.releaseAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, Math.sqrt(range));
+        			DegradationHelper.releaseAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, (float)range);
         		}
         		
             }

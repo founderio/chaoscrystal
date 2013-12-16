@@ -19,7 +19,7 @@ public class Constants {
 	public static final String ID_BLOCK_BASE_CRYSTAL = "chaoscrystal.base.crystal";
 	public static final String ID_BLOCK_BASE_CRYSTALLINE_LIGHT = "chaoscrystal.base.crystalline_light";
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
-	public static final String ID_BLOCK_APPARATUS_REENACTOR = "chaoscrystal.apparatus.reenactor";
+	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
 	public static final String ID_BLOCK_APPARATUS_CREATOR = "chaoscrystal.apparatus.creator";
 	
 	public static final String ID_TILEENTITY_REENACTOR = "chaoscrystal.reenactor";

@@ -100,7 +100,7 @@ public class EntityFocusTransfer extends Entity {
         				double distX = ((EntityChaosCrystal) obj).posX - posX;
         				double distY = ((EntityChaosCrystal) obj).posY - posY;
         				double distZ = ((EntityChaosCrystal) obj).posZ - posZ;
-        				if(distX*distX + distY*distY + distZ*distZ < transferRange*transferRange) {
+        				if(Math.sqrt(distX*distX + distY*distY + distZ*distZ) < transferRange) {
         					ents.add((EntityChaosCrystal)obj);
         				}
         			}
