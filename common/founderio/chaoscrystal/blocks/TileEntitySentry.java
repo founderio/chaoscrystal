@@ -123,19 +123,33 @@ public class TileEntitySentry extends TileEntityApparatus {
 	
 	private Random rand = new Random();
 	public static final int sentryRange = 32;
+	public boolean isActive = true;
 	
 	@Override
 	public void updateEntity() {
-//		if(worldObj.isRemote) {
-//			return;
-//		}
-//		if (flag || par3EntityPlayer.inventory.hasItem(Item.arrow.itemID))
-//        {
+		isActive = !worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		
 		this.animation++;
 		if(animation >= 20) {
 			animation = 0;
+			
+			if(!isActive) {
+				return;
+			}
+			
+			int arrowSlot = -1;
 		
+			for(int i = 0; i < getSizeInventory(); i++) {
+				ItemStack is = getStackInSlot(i);
+				if(is != null && is.itemID == Item.arrow.itemID && is.stackSize > 0) {
+					arrowSlot = i;
+					break;
+				}
+			}
+			if(arrowSlot == -1) {
+				return;
+			}
+			
 			double dist = Double.MAX_VALUE;
 			EntityLivingBase target = null;
 			
@@ -156,7 +170,7 @@ public class TileEntitySentry extends TileEntityApparatus {
     				
     				
     				
-    				if(tmp_dist < dist && tmp_dist < sentryRange) {
+    				if(tmp_dist < dist && tmp_dist < sentryRange && eCheck.isEntityAlive()) {
     					
     					Vec3 vec3 = Vec3.createVectorHelper(((float)xCoord + 0.5f), (float)yCoord + 1.5f, (float)zCoord + 0.5f);
         				Vec3 vec32 = Vec3.createVectorHelper(eCheck.posX, eCheck.posY + eCheck.getEyeHeight(), eCheck.posZ);
@@ -204,50 +218,17 @@ public class TileEntitySentry extends TileEntityApparatus {
             		target.posY + target.getEyeHeight() - ((float)yCoord + 1.5f),
             		target.posZ - ((float)zCoord + 0.5f),
             		5, 0);
+            entityarrow.canBePickedUp = 1;
 
-//            if (f == 1.0F)
-//            {
-//                entityarrow.setIsCritical(true);
-//            }
-//
-//            int k = EnchantmentHelper.getEnchantmentLevel(Enchantment.power.effectId, par1ItemStack);
-//
-//            if (k > 0)
-//            {
-//                entityarrow.setDamage(entityarrow.getDamage() + (double)k * 0.5D + 0.5D);
-//            }
-//
-//            int l = EnchantmentHelper.getEnchantmentLevel(Enchantment.punch.effectId, par1ItemStack);
-//
-//            if (l > 0)
-//            {
-//                entityarrow.setKnockbackStrength(l);
-//            }
-//
-//            if (EnchantmentHelper.getEnchantmentLevel(Enchantment.flame.effectId, par1ItemStack) > 0)
-//            {
-//                entityarrow.setFire(100);
-//            }
+            decrStackSize(arrowSlot, 1);
 
-           // par1ItemStack.damageItem(1, par3EntityPlayer);
             worldObj.playSound(xCoord + 10.5d, yCoord + 2d, zCoord + 10.5d, "random.bow", 2.0F, 1.0F / (this.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F, true);
 
-           // worldObj.spawnEntityInWorld(entityarrow);
-            
-//            if (flag)
-//            {
-//            	entityarrow.canBePickedUp = 2;
-//            }
-//            else
-//            {
-//            	par3EntityPlayer.inventory.consumeInventoryItem(Item.arrow.itemID);
-//            }
-//
+
             if (!worldObj.isRemote)
             {
             	worldObj.spawnEntityInWorld(entityarrow);
             }
-//        }
 		}
 	}
 

@@ -23,4 +23,5 @@ chaoscrystal.aspect.wood=Wood
 chaoscrystal.aspect.metal=Metal
 chaoscrystal.aspect.value=Value
 chaoscrystal.aspect.crystal=Crystal
-biome.chaoscrystal.crystal=Crystal Beach
+biome.chaoscrystal.crystal.name=Crystal Beach
+itemGroup.chaoscrystal=Chaos Crystal

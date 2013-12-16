@@ -27,8 +27,10 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
 	public final ResourceLocation resourceCreator;
+	public final ResourceLocation resourceCreatorOff;
 	public final TechneModel modelSentry;
 	public final ResourceLocation resourceSentry;
+	public final ResourceLocation resourceSentryOff;
 	private RenderItem ri;
 	private EntityItem ei;
 	
@@ -39,9 +41,11 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		String creator = "/assets/" + Constants.MOD_ID + "/models/creator.tcn";
 		modelCreator = new TechneModel(creator, RenderApparatus.class.getResource(creator));
 		resourceCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
+		resourceCreatorOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator_off.png");
 		String sentry = "/assets/" + Constants.MOD_ID + "/models/sentry.tcn";
 		modelSentry = new TechneModel(sentry, RenderApparatus.class.getResource(sentry));
 		resourceSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
+		resourceSentryOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry_off.png");
 		ri = new RenderItem() {
 			@Override
 			public boolean shouldBob() {
@@ -81,7 +85,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 				GL11.glPopMatrix();
 			}
 		} else if(tileentity instanceof TileEntityCreator) {
-			renderModelAt(modelCreator, resourceCreator, d0, d1, d2);
+			renderModelAt(modelCreator, ((TileEntityCreator)tileentity).isActive ? resourceCreator : resourceCreatorOff, d0, d1, d2);
 			
 			ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(0);
 			if(is == null) {
@@ -101,7 +105,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 				GL11.glPopMatrix();
 			}
 		} else if(tileentity instanceof TileEntitySentry) {
-			renderModelAt(modelSentry, resourceSentry, d0, d1, d2);
+			renderModelAt(modelSentry, ((TileEntitySentry)tileentity).isActive ? resourceSentry : resourceSentryOff, d0, d1, d2);
 			
 			GL11.glPushMatrix();
 //

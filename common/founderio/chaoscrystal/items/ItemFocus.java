@@ -26,7 +26,6 @@ public class ItemFocus extends Item {
 	public ItemFocus(int par1) {
 		super(par1);
 		this.setHasSubtypes(true);
-		this.setCreativeTab(CreativeTabs.tabTools);
 		this.setMaxStackSize(16);
 	}
 	

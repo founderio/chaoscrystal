@@ -24,7 +24,7 @@ public class GenCrystalPillars implements IWorldGenerator {
 		int count = 1;
 		
 		for(int i = 0; i < count; i++) {
-			int meta = random.nextInt(2);
+			int meta = random.nextInt(3);
 			int x = random.nextInt(16);
 			int z = random.nextInt(16);
 			int xAbsolute = chunkX * 16 + x;
@@ -32,7 +32,7 @@ public class GenCrystalPillars implements IWorldGenerator {
 			if(allowedBiomes.contains(world.getBiomeGenForCoords(xAbsolute, zAbsolute).biomeName)) {
 				int yBase = world.getTopSolidOrLiquidBlock(xAbsolute, zAbsolute);
 				int height = 5 + random.nextInt(15);
-				int width = 3 + random.nextInt(8);
+				int width = 3 + random.nextInt(2);
 				if(yBase + height > world.getActualHeight() - 10) {
 					height = world.getActualHeight() - 10 - yBase;
 					if(height <= 0)

@@ -21,8 +21,6 @@ public class ItemChaosCrystal extends Item {
 
 	public ItemChaosCrystal(int par1) {
 		super(par1);
-		this.setCreativeTab(CreativeTabs.tabTools);
-		this.setMaxStackSize(16);
 	}
 	
 	@Override

@@ -23,6 +23,8 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
@@ -72,6 +74,8 @@ public class ChaosCrystalMain {
 	
 	public static BiomeGenCrystal biomeCrystal;
 	
+	public static CreativeTabs creativeTab;
+	
 	private Configuration config;
 	
 	public static int cfg_maxAspectStorage = 1000000;
@@ -108,23 +112,37 @@ public class ChaosCrystalMain {
 		cfg_sneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(false);
 		//TODO: Get cfgs for ranges etc. of foci, crystals
 		
+		final int idChaosCrystal = getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200);
 		
-		itemChaosCrystal = new ItemChaosCrystal(getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200));
+		creativeTab = new CreativeTabs(Constants.MOD_ID) {
+			@Override
+			@SideOnly(Side.CLIENT)
+			public Item getTabIconItem() {
+				return itemChaosCrystal;
+			}
+		};
+		
+		itemChaosCrystal = new ItemChaosCrystal(idChaosCrystal);
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
 		itemChaosCrystal.setMaxStackSize(1);
+		itemChaosCrystal.setCreativeTab(creativeTab);
 		
 		itemFocus = new ItemFocus(getItemId(Constants.ID_ITEM_FOCUS, 18201));
 		itemFocus.setUnlocalizedName(Constants.ID_ITEM_FOCUS);
+		itemFocus.setCreativeTab(creativeTab);
 		
 		itemCrystalGlasses = new ItemCrystalGlasses(getItemId(Constants.ID_ITEM_CRYSTALGLASSES, 18202));
 		itemCrystalGlasses.setUnlocalizedName(Constants.ID_ITEM_CRYSTALGLASSES);
+		itemCrystalGlasses.setCreativeTab(creativeTab);
 		
 		itemManual = new ItemManual(getItemId(Constants.ID_ITEM_MANUAL, 18203));
 		itemManual.setUnlocalizedName(Constants.ID_ITEM_MANUAL);
+		itemManual.setMaxStackSize(1);
+		itemManual.setCreativeTab(creativeTab);
 		
 		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.glass);
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
-		blockBase.setCreativeTab(CreativeTabs.tabBlock);
+		blockBase.setCreativeTab(creativeTab);
 		blockBase.setHardness(4);
 		blockBase.setLightValue(0.2f);
 		blockBase.setResistance(1.5f);
@@ -133,7 +151,7 @@ public class ChaosCrystalMain {
 		
 		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 231), Material.rock, 0);
 		blockReconstructor.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
-		blockReconstructor.setCreativeTab(CreativeTabs.tabBlock);
+		blockReconstructor.setCreativeTab(creativeTab);
 		blockReconstructor.setHardness(2);
 		blockReconstructor.setLightValue(0.2f);
 		blockReconstructor.setResistance(6f);
@@ -142,7 +160,7 @@ public class ChaosCrystalMain {
 		
 		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), Material.rock, 1);
 		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
-		blockCreator.setCreativeTab(CreativeTabs.tabBlock);
+		blockCreator.setCreativeTab(creativeTab);
 		blockCreator.setHardness(2);
 		blockCreator.setLightValue(0.2f);
 		blockCreator.setResistance(6f);
@@ -151,7 +169,7 @@ public class ChaosCrystalMain {
 		
 		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 233), Material.rock, 2);
 		blockSentry.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_SENTRY);
-		blockSentry.setCreativeTab(CreativeTabs.tabBlock);
+		blockSentry.setCreativeTab(creativeTab);
 		blockSentry.setHardness(2);
 		blockSentry.setLightValue(0.2f);
 		blockSentry.setResistance(6f);
@@ -172,6 +190,8 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_RECONSTRUCTOR);
 		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
+		
+		
 		
 		if(cfg_forceBiome) {
 			//Just a test: remove all other biomes...
@@ -196,13 +216,19 @@ public class ChaosCrystalMain {
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
 		
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
-		GameRegistry.registerWorldGenerator(new GenCrystalFloats());
+		//GameRegistry.registerWorldGenerator(new GenCrystalFloats());
 		
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), "RDR", "RER", "RDR", 'D', Item.diamond, 'R', new ItemStack(blockBase, 1, 1), 'E', Item.enderPearl);
 		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 0), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 4));
 		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 1), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 10));
 		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 2), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 5));
-		GameRegistry.addRecipe(new ItemStack(itemCrystalGlasses, 1, 0), "BBB", "BGB", " B ", 'B', new ItemStack(blockBase, 1, 0), 'G', Block.thinGlass);
+		GameRegistry.addRecipe(new ItemStack(itemCrystalGlasses, 1, 0), "B B", "GBG", 'B', new ItemStack(blockBase, 1, 0), 'G', Block.thinGlass);
+		
+		GameRegistry.addRecipe(new ItemStack(blockReconstructor, 1), "gBg", "OOO", 'g', new ItemStack(Item.dyePowder, 1, 8), 'B', new ItemStack(blockBase, 1, 0), 'O', Block.obsidian);
+		GameRegistry.addRecipe(new ItemStack(blockCreator, 1), "gYg", "OOO", 'g', new ItemStack(Item.dyePowder, 1, 8), 'Y', new ItemStack(blockBase, 1, 2), 'O', Block.obsidian);
+		GameRegistry.addRecipe(new ItemStack(blockSentry, 1), "OBO", "gYg", "OOO", 'g', new ItemStack(Item.dyePowder, 1, 8), 'B', new ItemStack(blockBase, 1, 0), 'Y', new ItemStack(blockBase, 1, 2), 'O', Block.obsidian);
+		
+		GameRegistry.addShapelessRecipe(new ItemStack(itemManual), new ItemStack(blockBase, 1, 32767), Item.emptyMap);
 		
 		degradationStore = new DegradationStore();
 		

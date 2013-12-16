@@ -22,7 +22,8 @@ Feature
 	* definitely: do that for what zombies & others carry
 (*) move crystals by holding right click/using leash
 * Sentry:
-	* Arrow usage
+	* when discovering a target, let ring & crystal hover higher
+	* Settings (players, NPCs, Mobs, All)
 	* Arrow hovering with ring (postponed, moved arrows down to base.)
 * Redstone
 * Connected Texture

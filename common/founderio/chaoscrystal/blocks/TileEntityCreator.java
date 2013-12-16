@@ -13,6 +13,7 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 public class TileEntityCreator extends TileEntityApparatus {
 
 	Random rand = new Random();
+	public boolean isActive = true;
 	
 	public TileEntityCreator() {
 		super(1);
@@ -20,9 +21,15 @@ public class TileEntityCreator extends TileEntityApparatus {
 	
 	@Override
 	public boolean processAspects(EntityChaosCrystal crystal) {
+		
+		if(!isActive) {
+			return false;
+		}
+		
 		ItemStack is = getStackInSlot(0);
 		
 		if(is == null || is.itemID == 0) {
+			
 			
 			List<Degradation> degs = ChaosCrystalMain.degradationStore.getCreations();
 			
@@ -55,6 +62,11 @@ public class TileEntityCreator extends TileEntityApparatus {
 		} else {
 			return false;
 		}
+	}
+	
+	@Override
+	public void updateEntity() {
+		isActive = !worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 	}
 	
 	@Override

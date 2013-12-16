@@ -1,21 +1,19 @@
 package founderio.chaoscrystal.items;
 
-import founderio.chaoscrystal.Constants;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import founderio.chaoscrystal.Constants;
 
 public class ItemCrystalGlasses extends ItemArmor {
 
 	public ItemCrystalGlasses(int par1) {
 		super(par1, EnumArmorMaterial.DIAMOND, 0, 0);
 		this.setHasSubtypes(false);
-		this.setCreativeTab(CreativeTabs.tabTools);
 	}
 
 	
