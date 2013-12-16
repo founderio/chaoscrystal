@@ -5,6 +5,11 @@ Feature
 * Filter for extraction/expulsion targets (Block, EntityItemStack & Similar, EntityLiving, maybe other?)
 * Item Enchanter/Unenchanter
 * with glasses on, show aspects as tooltip
+* crystalline energy: since it can control the red crystal, let it slow down the crystal
+	* too many blue crystals in the area stop a crystal fully
+	* blue crystals can only be destroyed by the crystal when an external event happens (explosion, e.g.)
+* learn blocks/items before allowing to craft/inverse-degrade them
+	* knowledge bound to blocks/crystals, transferred over foci-network, retained in item
 
 Improvement
 
