@@ -67,4 +67,5 @@ public class BlockBase extends Block {
 	public int damageDropped(int par1) {
 		return MathHelper.clamp_int(par1, 0, iconList.length - 1);
 	}
+	
 }

@@ -14,7 +14,12 @@ public class ItemBlockBase extends ItemBlockWithMetadata {
 	
 	@Override
 	public String getUnlocalizedName(ItemStack par1ItemStack) {
-		int idx = MathHelper.clamp_int(par1ItemStack.itemID, 0, BlockBase.metaList.length - 1);
+		int idx = MathHelper.clamp_int(par1ItemStack.getItemDamage(), 0, BlockBase.metaList.length - 1);
 		return "tile." + BlockBase.metaList[idx];
+	}
+	
+	@Override
+	public int getMetadata(int par1) {
+		return par1;
 	}
 }

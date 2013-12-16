@@ -250,6 +250,12 @@ public class TileEntitySentry extends TileEntityApparatus {
 //        }
 		}
 	}
+
+	@Override
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		//TODO: block top side!
+		return new int[] {0, 1, 2, 3};
+	}
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

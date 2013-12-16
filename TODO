@@ -14,7 +14,6 @@ Feature
 	* knowledge bound to blocks/crystals, not player, transferred over foci-network, retained in item
 	* learning actually needs to destroy item
 * crystal weapon (bow? pistol?) that uses aspects/crystals to shoot
-	* sentry gun
 (*) crystal speed lower/higher depending on amount of aspects inside
 * crystal armor that protects from crystal effects
 	* low blast resistance, high melee resistance? possible?
@@ -22,6 +21,11 @@ Feature
 	* balancing: warn the player before simply starting? idle ticker for players?
 	* definitely: do that for what zombies & others carry
 (*) move crystals by holding right click/using leash
+* Sentry:
+	* Arrow usage
+	* Arrow hovering with ring (postponed, moved arrows down to base.)
+* Redstone
+* Connected Texture
 
 Improvement
 
@@ -35,10 +39,11 @@ Improvement
 	* effect for chaos crystals: swirling particles
 	* particles/lightning/something repeatedly hitting object until destruction
 	* let object fall when no further processing is possible
-* show all aspects of subsequent degradations in hud
+* show all aspects of subsequent degradations in hud (In Progress...)
+	* TODO: Make degrade/spit out respect that by only extracting the difference
 * wait for effects to complete before commencing action
+* base: rename to blocks?
 
 Bug
 
 * lighting missing for block renders in hud
-* tileentity model rotation based off fps

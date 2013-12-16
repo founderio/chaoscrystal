@@ -58,6 +58,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
 			double d2, float f) {
 		
+		rot = (Minecraft.getSystemTime() / 10f) % 360f;
 		
 		if(tileentity instanceof TileEntityReconstructor) {
 			renderModelAt(modelReconstructor, resourceReconstructor, d0, d1, d2);
@@ -102,16 +103,19 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		} else if(tileentity instanceof TileEntitySentry) {
 			renderModelAt(modelSentry, resourceSentry, d0, d1, d2);
 			
+			GL11.glPushMatrix();
+//
+//			GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot))*0.1f, 0);
 			for(int i = 0; i < 4; i++) {
 				ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(i);
 				if(is == null) {
 					ei.setEntityItemStack(new ItemStack(0,0,0));
 				} else {
 					ei.setEntityItemStack(is);
-					float offX = (i == 0 || i == 1) ? 0.125f : 0.825f;
-					float offZ = (i == 0 || i == 2) ? 0.125f : 0.825f;
+					float offX = (i == 0 || i == 1) ? 0.325f : 0.625f;
+					float offZ = (i == 0 || i == 2) ? 0.325f : 0.625f;
 					GL11.glPushMatrix();
-					GL11.glTranslatef((float)d0 + offX, (float)d1 + 0.45f, (float)d2 + offZ);
+					GL11.glTranslatef((float)d0 + offX, (float)d1 + 0.15f, (float)d2 + offZ);
 					GL11.glRotatef(rot, 0, 1, 0);
 					GL11.glScalef(1/3f, 1/3f, 1/3f);
 					
@@ -123,6 +127,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 					GL11.glPopMatrix();
 				}
 			}
+			GL11.glPopMatrix();
 			
 		} else {
 			
@@ -137,8 +142,6 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		GL11.glPushMatrix();
 		
 		rot = (Minecraft.getSystemTime() / 10f) % 360f;
-		
-		
 		
 		
 		GL11.glTranslatef((float)d0 + 0.5f, (float)d1 + 0.04f, (float)d2 + 0.5f);
@@ -159,6 +162,20 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 			modelReconstructor.renderPart("Arm2");
 			modelReconstructor.renderPart("Arm3");
 			modelReconstructor.renderPart("Arm4");
+		} else if(model == modelCreator) {
+			modelCreator.renderPart("Base");
+			modelCreator.renderPart("Crystal");
+
+			GL11.glPushMatrix();
+			GL11.glTranslatef(0, -6f + (float)Math.sin(Math.toRadians(rot-90) * 2f)*5f, 0);
+			
+
+			modelCreator.renderPart("Ring1");
+			modelCreator.renderPart("Ring2");
+			modelCreator.renderPart("Ring3");
+			modelCreator.renderPart("Ring4");
+
+			GL11.glPopMatrix();
 		} else if(model == modelSentry) {
 			
 			

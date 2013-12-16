@@ -117,9 +117,9 @@ public class OverlayAspectSelector extends Gui {
 		} else if(currentItem.itemID == ChaosCrystalMain.itemManual.itemID) {
 			event.setCanceled(true);
 			if(event.dwheel > 0) {
-				RenderItemManual.page++;
-			} else {
 				RenderItemManual.page--;
+			} else {
+				RenderItemManual.page++;
 			}
 		}
 		

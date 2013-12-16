@@ -20,7 +20,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 	public short animation;
 	
 	private ItemStack[] inventory;
-	private String owner;
+	private String owner = "";
 	
 	public TileEntityApparatus(int inventorySize) {
 		inventory = new ItemStack[inventorySize];
@@ -91,6 +91,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 
 	@Override
 	public void onInventoryChanged() {
+		super.onInventoryChanged();
 		updateState();
 	}
 
@@ -112,7 +113,7 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		//TODO: block top side!
-		return new int[] {1};
+		return new int[] {0};
 	}
 
 	
@@ -188,6 +189,10 @@ public abstract class TileEntityApparatus extends TileEntity implements IInvento
 
 	public void setOwner(String username) {
 		this.owner = username;
+		if(this.owner == null) {
+			this.owner = "";
+		}
+		updateState();
 	}
 	
 	public String getOwner() {
