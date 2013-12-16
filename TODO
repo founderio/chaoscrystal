@@ -29,7 +29,7 @@ Improvement
 * Check for Blocks that need to be uncovered (grass, mycelium, ...)
 * Meta handling (degrade from all meta types, inverse degrade only to specific ones)
 * smooth animation for filter selection hud
-* base aspects on crafting recipes where possible
+* base aspects on crafting recipes where possible (in progress, experimental.)
 * effect for transfer foci: lightning
 (*) pull objects towards crystal before destroying it (EntityFallingSand!!)
 	* effect for chaos crystals: swirling particles
@@ -37,7 +37,6 @@ Improvement
 	* let object fall when no further processing is possible
 * show all aspects of subsequent degradations in hud
 * wait for effects to complete before commencing action
-* ignore list for items (flowing water, flowing lava, ...)
 
 Bug
 
