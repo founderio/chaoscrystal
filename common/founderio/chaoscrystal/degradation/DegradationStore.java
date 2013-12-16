@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import founderio.chaoscrystal.ChaosCrystalMain;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
@@ -55,11 +57,15 @@ public class DegradationStore {
 			}
 		}
 		if(matching.isEmpty()) {
-			System.out.println("Registering Item " + is + " failed. No crafting recipes.");
+			if(ChaosCrystalMain.cfg_debugOutput) {
+    			System.out.println("Registering Item " + is + " failed. No crafting recipes.");
+			}
 			return;
 		}
 		if(matching.size() > 1) {
-			System.out.println("Registering Item " + is + " failed. Multiple crafting recipes.");
+			if(ChaosCrystalMain.cfg_debugOutput) {
+    			System.out.println("Registering Item " + is + " failed. Multiple crafting recipes.");
+			}
 			return;
 		}
 		IRecipe r = matching.get(0);
@@ -78,7 +84,9 @@ public class DegradationStore {
 			}
 			autoRegisterWithItemStacks(is, recipeItems);
 		} else {
-			System.out.println("Registering Item " + is + " failed. No supported crafting recipes.");
+			if(ChaosCrystalMain.cfg_debugOutput) {
+    			System.out.println("Registering Item " + is + " failed. No supported crafting recipes.");
+			}
 		}
 		//TODO: Add smelting recipes
 	}
@@ -88,7 +96,9 @@ public class DegradationStore {
 		List<ItemStack> degraded = new ArrayList<ItemStack>();
 		for(ItemStack crafting : recipeItems) {
 			if(crafting == null || crafting.stackSize <= 0) {
-				System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
+				if(ChaosCrystalMain.cfg_debugOutput) {
+        			System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
+				}
 				return;
 			}
 			Degradation deg = getDegradation(crafting);
@@ -96,7 +106,9 @@ public class DegradationStore {
 				autoRegisterDegradation(crafting);
 				deg = getDegradation(crafting);
 				if(deg == null) {
-					System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
+					if(ChaosCrystalMain.cfg_debugOutput) {
+	        			System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
+					}
 					return;
 				}
 			}

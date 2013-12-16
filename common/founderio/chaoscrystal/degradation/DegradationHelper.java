@@ -91,7 +91,9 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		//System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
+		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        			System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
+		        		}
 		        		//TODO: Can't do anything with those yet... Explode? ignore?
 		//        		world.setBlock(posX + offX, posY + offY, posZ + offZ, 0, 0, 1 + 2);
 		//        		world.createExplosion(entity, posX + offX, posY + offY, posZ + offZ, 1, false);
@@ -173,7 +175,9 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
+		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        			System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
+		        		}
 		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
 		        			it.setDead();
 		        		}
@@ -237,7 +241,9 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
+		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        			System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
+		        		}
 		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
 			        		world.setBlock(absX, absY, absZ, 0, 0, 1 + 2);
 			        		world.createExplosion(entity, absX, absY, absZ, 1, false);
@@ -320,7 +326,9 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
+		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        			System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
+		        		}
 		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
 		        			it.setDead();
 		        		}
