@@ -278,25 +278,23 @@ public class ChaosCrystalMain {
 				new String[]{Aspects.ASPECT_CRAFTING},
 				new int[]{5},
 				new ItemStack(Block.planks, 0, 0));
-		for(int meta = 0; meta < 16; meta++) {//meh, just catch them all.
-			degradationStore.registerDegradation(
-					new ItemStack(Block.waterStill, 0, meta),
-					new String[]{Aspects.ASPECT_WATER},
-					new int[]{5},
-					nullStack);
-			degradationStore.registerDegradation(
-					new ItemStack(Block.waterMoving, 0, meta),
-					new String[]{},
-					new int[]{},
-					nullStack);
-		}
+		
+		degradationStore.registerDegradation(
+				new ItemStack(Block.waterStill, 0, 32767),
+				new String[]{Aspects.ASPECT_WATER},
+				new int[]{5},
+				nullStack);
+		degradationStore.registerDegradation(
+				new ItemStack(Block.waterMoving, 0, 32767),
+				new String[]{},
+				new int[]{},
+				new ItemStack[0]);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.glass),
 				new String[]{Aspects.ASPECT_HEAT, Aspects.ASPECT_STRUCTURE},
 				new int[]{5, 2},
 				new ItemStack(Block.sand, 0, 0));
 		
-		//TODO: All-Meta Match
 		//TODO: Ore Dict Match
 		
 		/*
@@ -362,9 +360,24 @@ public class ChaosCrystalMain {
 				new int[]{2, 5},
 				nullStack);
 		degradationStore.registerDegradation(
+				new ItemStack(Block.deadBush),
+				new String[]{Aspects.ASPECT_STRUCTURE},
+				new int[]{5},
+				nullStack);
+		degradationStore.registerDegradation(
 				new ItemStack(Block.mushroomCapRed),
 				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE},
 				new int[]{2, 5},
+				nullStack);
+		degradationStore.registerDegradation(
+				new ItemStack(Block.mushroomBrown),
+				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
+				new int[]{2, 5, 5},
+				nullStack);
+		degradationStore.registerDegradation(
+				new ItemStack(Block.mushroomRed),
+				new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
+				new int[]{2, 5, 5},
 				nullStack);
 		degradationStore.registerDegradation(
 				new ItemStack(Block.reed),
@@ -520,7 +533,31 @@ public class ChaosCrystalMain {
 				new int[]{15, 5, 5, 20},
 				new ItemStack(Block.glass, 0, 0));
 		
+		degradationStore.registerDegradation(
+				new ItemStack(Block.web),
+				new String[]{Aspects.ASPECT_STRUCTURE},
+				new int[]{5},
+				new ItemStack(0, 0, 0));
+		
 		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 2));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.dispenser, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.music, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.rail, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.railDetector, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.railPowered, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.railActivator, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonBase, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonStickyBase, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.furnaceIdle, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneButton, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.woodenButton, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Block.ladder, 1, 32767));
+		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
+		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
+		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
 		
 		if(cfg_debugOutput) {
 			degradationStore.debugOutput();

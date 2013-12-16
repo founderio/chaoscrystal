@@ -210,7 +210,7 @@ public class DegradationHelper {
 		        	
 		        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
 		        	if(degradation != null) {
-		        		if(degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(degradation.degraded.length == 0 || degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
 		        			continue;
 		        		}
 		        		
@@ -270,7 +270,7 @@ public class DegradationHelper {
 	    		if(is != null) {
 		    		Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(is.itemID, is.getItemDamage());
 		    		if(degradation != null) {
-		        		if(degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(degradation.degraded.length == 0 || degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
 		        			//continue;
 		        		} else if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
 		        			//continue;

@@ -346,8 +346,11 @@ public class OverlayAspectSelector extends Gui {
 									offset += 10;
 								}
 							}
+							
 							for(int s = 0; s < degradation.degraded.length; s++) {
-								renderItem(degradation.degraded[s], centerW + 5 + s*16, centerH - 16);
+								if(degradation.degraded[s].itemID != 0) {
+						            renderItem(degradation.degraded[s], centerW + 5 + s*16, centerH - 16);
+								}
 							}
 							
 			        	}
@@ -400,7 +403,9 @@ public class OverlayAspectSelector extends Gui {
 							}
 
 							for(int s = 0; s < degradation.degraded.length; s++) {
-					            renderItem(degradation.degraded[s], centerW + 5 + s*16, centerH - 16);
+								if(degradation.degraded[s].itemID != 0) {
+						            renderItem(degradation.degraded[s], centerW + 5 + s*16, centerH - 16);
+								}
 							}
 							
 			        	}

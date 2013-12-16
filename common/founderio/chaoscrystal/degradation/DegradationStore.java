@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 public class DegradationStore {
 	
@@ -49,7 +50,7 @@ public class DegradationStore {
 		List<IRecipe> matching = new ArrayList<IRecipe>();
 		for(IRecipe r: recipes) {
 			ItemStack output = r.getRecipeOutput();
-			if(output != null && output.isItemEqual(is)) {
+			if(output != null && output.itemID == is.itemID && (is.getItemDamage() == 32767 || output.getItemDamage() == is.getItemDamage())) {
 				matching.add(r);
 			}
 		}
@@ -63,40 +64,61 @@ public class DegradationStore {
 		}
 		IRecipe r = matching.get(0);
 		if(r instanceof ShapedRecipes) {
-			int[] amounts = new int[Aspects.ASPECTS.length];
-			List<ItemStack> degraded = new ArrayList<ItemStack>();
-			for(ItemStack crafting : ((ShapedRecipes) r).recipeItems) {
-				if(crafting.stackSize <= 0) {
-					System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
-					return;
+			autoRegisterWithItemStacks(is, ((ShapedRecipes) r).recipeItems);
+		} else if(r instanceof ShapedOreRecipe) {
+			Object[] input = ((ShapedOreRecipe) r).getInput();
+			
+			ItemStack[] recipeItems = new ItemStack[input.length];
+			for(int i = 0; i < input.length; i++) {
+				if(input[i] instanceof ItemStack) {
+					recipeItems[i] = (ItemStack)input[i];
+				} else if(input[i] instanceof ArrayList) {
+					recipeItems[i] = (ItemStack)((ArrayList)input[i]).get(0);
 				}
-				Degradation deg = getDegradation(crafting);
-				if(deg == null) {
-					autoRegisterDegradation(crafting);
-				}
+			}
+			autoRegisterWithItemStacks(is, recipeItems);
+		} else {
+			System.out.println("Registering Item " + is + " failed. No supported crafting recipes.");
+		}
+		//TODO: Add smelting recipes
+	}
+	
+	private void autoRegisterWithItemStacks(ItemStack is, ItemStack[] recipeItems) {
+		int[] amounts = new int[Aspects.ASPECTS.length];
+		List<ItemStack> degraded = new ArrayList<ItemStack>();
+		for(ItemStack crafting : recipeItems) {
+			if(crafting == null || crafting.stackSize <= 0) {
+				System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
+				return;
+			}
+			Degradation deg = getDegradation(crafting);
+			if(deg == null) {
+				autoRegisterDegradation(crafting);
 				deg = getDegradation(crafting);
 				if(deg == null) {
 					System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
 					return;
 				}
-				for(int a = 0; a < deg.aspects.length; a++) {
-					String aspect = deg.aspects[a];
-					amounts[Aspects.getAspectDisplayId(aspect)] += deg.amounts[a] / crafting.stackSize;
-				}
-				boolean added = false;
-				for(ItemStack dis : degraded) {
-					if(dis.isItemEqual(crafting)) {
-						dis.stackSize += crafting.stackSize;
-						added = true;
-						break;
-					}
-				}
-				if(!added) {
-					degraded.add(crafting.copy());
+			}
+			
+			for(int a = 0; a < deg.aspects.length; a++) {
+				String aspect = deg.aspects[a];
+				amounts[Aspects.getAspectDisplayId(aspect)] += deg.amounts[a] / crafting.stackSize;
+			}
+			boolean added = false;
+			for(ItemStack dis : degraded) {
+				if(dis.isItemEqual(crafting)) {
+					dis.stackSize += crafting.stackSize;
+					added = true;
+					break;
 				}
 			}
-			registerDegradation(is, Aspects.ASPECTS.clone(), amounts, degraded.toArray(new ItemStack[degraded.size()]));
+			if(!added) {
+				degraded.add(crafting.copy());
+			}
 		}
+		amounts[Aspects.getAspectDisplayId(Aspects.ASPECT_CRAFTING)] += 5;
+		registerDegradation(is, Aspects.ASPECTS.clone(), amounts, degraded.toArray(new ItemStack[degraded.size()]));
 	}
 	
 	public Degradation getDegradation(ItemStack is) {
@@ -141,7 +163,7 @@ public class DegradationStore {
 	
 	public void registerDegradation(ItemStack source, String[] aspects, int[] amounts,
 			ItemStack... degraded) {
-		Degradation object = new Degradation(source, aspects, amounts, degraded);
+		Degradation object = new Degradation(source.copy(), aspects.clone(), amounts.clone(), degraded.clone());
 		
 		Degradation[] geds = degradations.get(source.itemID);
 		if(geds == null) {
@@ -174,7 +196,7 @@ public class DegradationStore {
 		System.out.println("Degradation List:");
 		for(Integer key : degradations.keySet()) {
 			Degradation[] degradationList = degradations.get(key);
-			System.out.println(Block.blocksList[key].getLocalizedName() + " Transforms to:");
+			System.out.println(Block.blocksList[key].getLocalizedName() + " (" + key + ") Transforms to:");
 			for (int i = 0; i < degradationList.length; i++) {
 				for(int d = 0; d < degradationList[i].degraded.length; d++) {
 					if(degradationList[i].degraded[d].itemID == 0) {
