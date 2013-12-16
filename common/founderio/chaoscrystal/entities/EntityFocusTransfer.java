@@ -35,11 +35,10 @@ public class EntityFocusTransfer extends Entity {
 	 * 1 = border
 	 */
 	public int age = 0;
-	public int lastTransfer = 0;
 	public boolean didTransferToEntity = false;
 	
-	public final int transferRange = 20;
-	public final int transferInterval = 60;
+	public static final int transferRange = 20;
+	public static final int transferInterval = 60;
 	public final float deltaRotation = 15f;
 	
 	public float lookX;
@@ -91,9 +90,8 @@ public class EntityFocusTransfer extends Entity {
         this.worldObj.theProfiler.startSection("entityBaseTick");
         this.age++;
         if(!this.worldObj.isRemote) {
-
-    		if(age-lastTransfer > transferInterval) {
-        		lastTransfer = age;
+    		if(age > transferInterval) {
+    			age = 0;
         		List<EntityChaosCrystal> ents = new ArrayList<EntityChaosCrystal>();
         		for(Object obj : this.worldObj.loadedEntityList) {
         			if(obj instanceof EntityChaosCrystal) {
@@ -106,8 +104,55 @@ public class EntityFocusTransfer extends Entity {
         			}
         		}
         		
-        		if(!didTransferToEntity) {
-        			if(ents.size() >= 2) {
+        		List<TileEntityApparatus> tEnts = new ArrayList<TileEntityApparatus>();
+        		for(Object obj : this.worldObj.loadedTileEntityList) {
+        			if(obj instanceof TileEntityApparatus) {
+        				double distX = ((TileEntityApparatus) obj).xCoord - posX;
+        				double distY = ((TileEntityApparatus) obj).yCoord - posY;
+        				double distZ = ((TileEntityApparatus) obj).zCoord - posZ;
+        				if(distX*distX + distY*distY + distZ*distZ < transferRange*transferRange) {
+        					tEnts.add((TileEntityApparatus)obj);
+        				}
+        			}
+        		}
+        		
+        		if(ents.isEmpty()) {
+        			lookX = (float)posX + (this.rand.nextFloat() - 0.5f) * 10;
+                	lookY = (float)posY;
+                	lookZ = (float)posZ + (this.rand.nextFloat() - 0.5f) * 10;
+
+    	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
+    	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
+    	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
+        		} else if(didTransferToEntity && !tEnts.isEmpty()) {
+    				TileEntityApparatus te = tEnts.get(rand.nextInt(tEnts.size()));
+    				EntityChaosCrystal crystal = ents.get(this.rand.nextInt(ents.size()));
+    				
+    				lookX = (float)te.xCoord;
+            		lookY = (float)(te.yCoord + 0.5f);
+            		lookZ = (float)te.zCoord;
+
+    	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
+    	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
+    	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
+
+    	    		if(te.processAspects(crystal)) {
+    	    			ChaosCrystalNetworkHandler.spawnParticleEffects(crystal, this, 1);
+        	    		ChaosCrystalNetworkHandler.spawnParticleEffects(this, te, 1);
+    	    		}
+        			didTransferToEntity = false;
+        		} else {
+        			if(ents.size() == 1) {
+        				EntityChaosCrystal crystal1 = (EntityChaosCrystal) ents.get(0);
+            			
+        				lookX = (float)crystal1.posX;
+                		lookY = (float)(crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0f;
+                		lookZ = (float)crystal1.posZ;
+
+        	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
+        	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
+        	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
+        			} else {
         				int idx = this.rand.nextInt(ents.size());
             			EntityChaosCrystal crystal1 = (EntityChaosCrystal) ents.get(idx);
             			ents.remove(idx);
@@ -118,9 +163,9 @@ public class EntityFocusTransfer extends Entity {
                 		lookY = (float)(crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0f;
                 		lookZ = (float)crystal1.posZ;
 
-        	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
-        	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
-        	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
+        	    		this.dataWatcher.updateObject(10, lookX);
+        	    		this.dataWatcher.updateObject(11, lookY);
+        	    		this.dataWatcher.updateObject(12, lookZ);
                 		
         	    		ChaosCrystalNetworkHandler.spawnParticleEffects(this, crystal2, 1);
         	    		ChaosCrystalNetworkHandler.spawnParticleEffects(crystal1, this, 1);
@@ -134,44 +179,8 @@ public class EntityFocusTransfer extends Entity {
                 			crystal1.setAspect(aspect, asp1);
                 			crystal2.setAspect(aspect, asp2);
                 		}
-                		
-            		}
-        			didTransferToEntity = true;
-        		} else {
-        			
-        			List<TileEntityApparatus> tEnts = new ArrayList<TileEntityApparatus>();
-            		for(Object obj : this.worldObj.loadedTileEntityList) {
-            			if(obj instanceof TileEntityApparatus) {
-            				double distX = ((TileEntityApparatus) obj).xCoord - posX;
-            				double distY = ((TileEntityApparatus) obj).yCoord - posY;
-            				double distZ = ((TileEntityApparatus) obj).zCoord - posZ;
-            				if(distX*distX + distY*distY + distZ*distZ < transferRange*transferRange) {
-            					tEnts.add((TileEntityApparatus)obj);
-            				}
-            			}
-            		}
-            		
-        			if(tEnts.size() > 0 && ents.size() > 0) {
-        				TileEntityApparatus te = tEnts.get(rand.nextInt(tEnts.size()));
-        				EntityChaosCrystal crystal = ents.get(this.rand.nextInt(ents.size()));
-        				
-        				lookX = (float)te.xCoord;
-                		lookY = (float)(te.yCoord + 0.5f);
-                		lookZ = (float)te.zCoord;
-
-        	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
-        	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
-        	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
-
-        	    		if(te.processAspects(crystal)) {
-        	    			ChaosCrystalNetworkHandler.spawnParticleEffects(crystal, this, 1);
-            	    		ChaosCrystalNetworkHandler.spawnParticleEffects(this, te, 1);
-        	    		}
-        	    		
-        	    		
-        	    		
         			}
-        			didTransferToEntity = false;
+        			didTransferToEntity = true;
         		}
         		
         		
@@ -212,7 +221,6 @@ public class EntityFocusTransfer extends Entity {
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		age = nbttagcompound.getInteger("age");
-		lastTransfer = nbttagcompound.getInteger("lastTransfer");
 		lookX = nbttagcompound.getFloat("lookX");
 		lookY = nbttagcompound.getFloat("lookY");
 		lookZ = nbttagcompound.getFloat("lookZ");
@@ -221,7 +229,6 @@ public class EntityFocusTransfer extends Entity {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setInteger("age", age);
-		nbttagcompound.setInteger("lastTransfer", lastTransfer);
 		nbttagcompound.setFloat("lookX", lookX);
 		nbttagcompound.setFloat("lookY", lookY);
 		nbttagcompound.setFloat("lookZ", lookZ);

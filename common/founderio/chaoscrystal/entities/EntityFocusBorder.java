@@ -79,6 +79,9 @@ public class EntityFocusBorder extends Entity {
         this.worldObj.theProfiler.startSection("entityBaseTick");
         this.age++;
         if(!this.worldObj.isRemote) {
+        	if(age > EntityFocusTransfer.transferInterval) {
+        		age = 0;
+        	}
         	EntityChaosCrystal crystal1 = null;
     		double dist = Double.MAX_VALUE;
             
@@ -99,13 +102,18 @@ public class EntityFocusBorder extends Entity {
             	lookX = (float)crystal1.posX;
 	    		lookY = (float)(crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0F;
 	    		lookZ = (float)crystal1.posZ;
+	    		
 	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
 	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
 	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
-            } else if(age % 20 == 0) {
+            } else if(age == 0) {
             	lookX = (float)posX + (this.rand.nextFloat() - 0.5f) * 10;
             	lookY = (float)posY;
             	lookZ = (float)posZ + (this.rand.nextFloat() - 0.5f) * 10;
+
+	    		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
+	    		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
+	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
             }
         }
 
@@ -142,7 +150,7 @@ public class EntityFocusBorder extends Entity {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-//		age = nbttagcompound.getInteger("age");
+		age = nbttagcompound.getInteger("age");
 		lookX = nbttagcompound.getFloat("lookX");
 		lookY = nbttagcompound.getFloat("lookY");
 		lookZ = nbttagcompound.getFloat("lookZ");
@@ -150,7 +158,7 @@ public class EntityFocusBorder extends Entity {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-//		nbttagcompound.setInteger("age", age);
+		nbttagcompound.setInteger("age", age);
 		nbttagcompound.setFloat("lookX", lookX);
 		nbttagcompound.setFloat("lookY", lookY);
 		nbttagcompound.setFloat("lookZ", lookZ);
