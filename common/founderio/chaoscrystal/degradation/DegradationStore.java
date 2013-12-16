@@ -22,7 +22,7 @@ public class DegradationStore {
 		degradationsInverse = new HashMap<Integer, Degradation[]>();
 		repairs = new HashMap<Integer, Repair>();
 	}
-//TODO: make degradations that degrade to air have zero length degraded array
+	
 	public List<Degradation> getCreations() {
 		List<Degradation> creations = new ArrayList<Degradation>();
 		for(Degradation[] geds : degradations.values()) {
