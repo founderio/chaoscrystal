@@ -126,15 +126,25 @@ public class ChaosCrystalMain {
 		blockBase.setLightValue(0.2f);
 		blockBase.setResistance(1.5f);
 		blockBase.setStepSound(Block.soundGlassFootstep);
-		
+		MinecraftForge.setBlockHarvestLevel(blockBase, "pickaxe", 1);
 		
 		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 231), Material.rock, 0);
 		blockReconstructor.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		blockReconstructor.setCreativeTab(CreativeTabs.tabBlock);
+		blockReconstructor.setHardness(2);
+		blockReconstructor.setLightValue(0.2f);
+		blockReconstructor.setResistance(6f);
+		blockReconstructor.setStepSound(Block.soundStoneFootstep);
+		MinecraftForge.setBlockHarvestLevel(blockReconstructor, "pickaxe", 0);
 
 		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), Material.rock, 1);
 		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
 		blockCreator.setCreativeTab(CreativeTabs.tabBlock);
+		blockCreator.setHardness(2);
+		blockCreator.setLightValue(0.2f);
+		blockCreator.setResistance(6f);
+		blockCreator.setStepSound(Block.soundStoneFootstep);
+		MinecraftForge.setBlockHarvestLevel(blockCreator, "pickaxe", 0);
 		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
 		
