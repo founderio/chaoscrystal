@@ -25,8 +25,9 @@ Feature
 	* when discovering a target, let ring & crystal hover higher
 	* Settings (players, NPCs, Mobs, All)
 	* Arrow hovering with ring (postponed, moved arrows down to base.)
-* Redstone
 * Connected Texture
+* machinery: redstone signals when finishing stuff
+* machinery: customizable redstone behaviour
 
 Improvement
 

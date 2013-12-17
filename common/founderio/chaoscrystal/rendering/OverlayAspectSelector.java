@@ -30,6 +30,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import org.lwjgl.opengl.GL11;
 
@@ -223,7 +224,6 @@ public class OverlayAspectSelector extends Gui {
         }
         return null;
     }
-	
 	
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onRenderHud(RenderGameOverlayEvent event) {
