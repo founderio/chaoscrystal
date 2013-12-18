@@ -65,7 +65,7 @@ public class BlockBase extends Block {
 
 	@Override
 	public int damageDropped(int par1) {
-		return MathHelper.clamp_int(par1, 0, iconList.length - 1);
+		return MathHelper.clamp_int(par1, 0, metaList.length - 1);
 	}
 	
 }
