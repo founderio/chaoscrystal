@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.ChaosCrystalNetworkHandler;
+import founderio.chaoscrystal.CommonProxy;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
 
@@ -137,8 +137,8 @@ public class EntityFocusTransfer extends Entity {
     	    		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
 
     	    		if(te.processAspects(crystal)) {
-    	    			ChaosCrystalNetworkHandler.spawnParticleEffects(crystal, this, 1);
-        	    		ChaosCrystalNetworkHandler.spawnParticleEffects(this, te, 1);
+    	    			CommonProxy.spawnParticleEffects(crystal, this, 1);
+        	    		CommonProxy.spawnParticleEffects(this, te, 1);
     	    		}
         			didTransferToEntity = false;
         		} else {
@@ -167,8 +167,8 @@ public class EntityFocusTransfer extends Entity {
         	    		this.dataWatcher.updateObject(11, lookY);
         	    		this.dataWatcher.updateObject(12, lookZ);
                 		
-        	    		ChaosCrystalNetworkHandler.spawnParticleEffects(this, crystal2, 1);
-        	    		ChaosCrystalNetworkHandler.spawnParticleEffects(crystal1, this, 1);
+        	    		CommonProxy.spawnParticleEffects(this, crystal2, 1);
+        	    		CommonProxy.spawnParticleEffects(crystal1, this, 1);
         	    		
         	    		
                 		

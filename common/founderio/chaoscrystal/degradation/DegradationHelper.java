@@ -12,7 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.Configuration;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.ChaosCrystalNetworkHandler;
+import founderio.chaoscrystal.CommonProxy;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 
@@ -84,7 +84,7 @@ public class DegradationHelper {
 		    				}
 		            		world.setBlock(absX, absY, absZ, degradation.source.itemID, degradation.source.getItemDamage(), 1 + 2);
 		            		
-		            		ChaosCrystalNetworkHandler.spawnParticleEffects(world.provider.dimensionId, 0,
+		            		CommonProxy.spawnParticleEffects(world.provider.dimensionId, 0,
 			        				posX+offX, posY+offY, posZ+offZ,
 			        				-offX, -offY, -offZ);
 		            		
@@ -146,8 +146,8 @@ public class DegradationHelper {
 				        		
 			        		}
 			        		
-			        		ChaosCrystalNetworkHandler.spawnParticleEffects(entity, it, 0);
-			        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
+			        		CommonProxy.spawnParticleEffects(entity, it, 0);
+			        		CommonProxy.spawnParticleEffects(it, 2);
 			        		
 			        		
 			        		if(degradationStack.stackSize > 0) {
@@ -233,10 +233,10 @@ public class DegradationHelper {
 			            		entity.setAspect(degradation.aspects[i], aspectAmount);
 							}
 			        		
-			        		ChaosCrystalNetworkHandler.spawnParticleEffects(world.provider.dimensionId, 0,
+			        		CommonProxy.spawnParticleEffects(world.provider.dimensionId, 0,
 			        				posX, posY, posZ,
 			        				offX, offY, offZ);
-			        		ChaosCrystalNetworkHandler.spawnParticleEffects(world.provider.dimensionId, 2,
+			        		CommonProxy.spawnParticleEffects(world.provider.dimensionId, 2,
 			        				posX + offX, posY + offY, posZ + offZ);
 		        		}
 		        		
@@ -297,8 +297,8 @@ public class DegradationHelper {
 				        		
 			        		}
 			        		
-			        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, entity, 0);
-			        		ChaosCrystalNetworkHandler.spawnParticleEffects(it, 2);
+			        		CommonProxy.spawnParticleEffects(it, entity, 0);
+			        		CommonProxy.spawnParticleEffects(it, 2);
 			        		
 			        		
 			        		if(degradationStack.stackSize > 0 && degradationStack.itemID != 0) {

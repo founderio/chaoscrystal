@@ -6,7 +6,7 @@ import java.util.Random;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.ChaosCrystalNetworkHandler;
+import founderio.chaoscrystal.CommonProxy;
 import founderio.chaoscrystal.degradation.Degradation;
 import founderio.chaoscrystal.degradation.DegradationHelper;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -52,7 +52,7 @@ public class TileEntityCreator extends TileEntityApparatus {
 						crystal.getAspect(creation.aspects[a]) - creation.amounts[a]);
 			}
 			
-			ChaosCrystalNetworkHandler.spawnParticleEffects(worldObj.provider.dimensionId, 2,
+			CommonProxy.spawnParticleEffects(worldObj.provider.dimensionId, 2,
 					(float)xCoord + 0.5f, (float)yCoord + 0.5f, (float)zCoord + 0.5f,
 					0, 0, 0, 0.7f);
 			is = creation.source.copy();
