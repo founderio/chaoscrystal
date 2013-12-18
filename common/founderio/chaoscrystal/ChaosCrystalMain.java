@@ -53,7 +53,7 @@ import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION)
 @NetworkMod(clientSideRequired = true, serverSideRequired = false,
 clientPacketHandlerSpec = @SidedPacketHandler( channels = { Constants.CHANNEL_NAME_PARTICLES, Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandlerClient.class),
-serverPacketHandlerSpec = @SidedPacketHandler( channels = { Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandler.class))
+serverPacketHandlerSpec = @SidedPacketHandler( channels = { Constants.CHANNEL_NAME_PARTICLES, Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandler.class))
 public class ChaosCrystalMain {
 	@Instance(Constants.MOD_ID)
 	public static ChaosCrystalMain instance;
