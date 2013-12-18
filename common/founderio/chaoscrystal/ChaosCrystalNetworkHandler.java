@@ -5,11 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Random;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityAuraFX;
-import net.minecraft.client.particle.EntityReddustFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,17 +18,12 @@ import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import founderio.chaoscrystal.entities.DegradationParticles;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
 
 	public ChaosCrystalNetworkHandler() {
 		
 	}
-	
-	private Random rnd = new Random();
 	
 	public static void spawnParticleEffects(int dimension, int effect,
 			float sourceX, float sourceY, float sourceZ,
@@ -96,56 +87,9 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 	}
 	
 	@Override
-	@SideOnly(Side.CLIENT)
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
-		if(packet.channel.equals(Constants.CHANNEL_NAME_PARTICLES)) {
-			DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
-			
-			try {
-				int type = dis.readInt();
-				int dimension = dis.readInt();
-				float posX = dis.readFloat();
-				float posY = dis.readFloat();
-				float posZ = dis.readFloat();
-				float offX = dis.readFloat();
-				float offY = dis.readFloat();
-				float offZ = dis.readFloat();
-				float variation = dis.readFloat();
-
-				World w = DimensionManager.getWorld(dimension);
-				if(w != null) {
-					float varHalf = variation/2;
-					if(type == 2) {
-						for(int i = 0; i < 5 + rnd.nextInt(20); i++) {
-							Minecraft.getMinecraft().effectRenderer.addEffect(
-									new EntityAuraFX(
-											w,
-									posX + rnd.nextDouble()*variation-varHalf,
-									posY + rnd.nextDouble()*variation-varHalf,
-									posZ + rnd.nextDouble()*variation-varHalf, 1, 1, 1));
-						}
-					} else {
-						for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
-							Minecraft.getMinecraft().effectRenderer.addEffect(
-									new DegradationParticles(
-											w,
-									posX + rnd.nextDouble()*variation-varHalf,
-									posY + rnd.nextDouble()*variation-varHalf,
-									posZ + rnd.nextDouble()*variation-varHalf,
-									offX + rnd.nextDouble()*variation-varHalf,
-									offY + rnd.nextDouble()*variation-varHalf,
-									offZ + rnd.nextDouble()*variation-varHalf,
-									type));
-						}
-					}
-				}
-				
-				
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if(packet.channel.equals(Constants.CHANNEL_NAME_OTHER_VISUAL)) {
+		if(packet.channel.equals(Constants.CHANNEL_NAME_OTHER_VISUAL)) {
 			DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
 			try {
 				int type = dis.readInt();

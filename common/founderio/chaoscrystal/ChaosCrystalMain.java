@@ -21,6 +21,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.NetworkMod;
+import cpw.mods.fml.common.network.NetworkMod.SidedPacketHandler;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -42,9 +43,7 @@ import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
 import founderio.chaoscrystal.items.ItemManual;
-import founderio.chaoscrystal.rendering.OverlayAspectSelector;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
-import founderio.chaoscrystal.worldgen.GenCrystalFloats;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
 /**
@@ -52,7 +51,9 @@ import founderio.chaoscrystal.worldgen.GenCrystalPillars;
  *
  */
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION)
-@NetworkMod(clientSideRequired = true, serverSideRequired = false, channels = { Constants.CHANNEL_NAME_PARTICLES, Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandler.class)
+@NetworkMod(clientSideRequired = true, serverSideRequired = false,
+clientPacketHandlerSpec = @SidedPacketHandler( channels = { Constants.CHANNEL_NAME_PARTICLES, Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandlerClient.class),
+serverPacketHandlerSpec = @SidedPacketHandler( channels = { Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandler.class))
 public class ChaosCrystalMain {
 	@Instance(Constants.MOD_ID)
 	public static ChaosCrystalMain instance;

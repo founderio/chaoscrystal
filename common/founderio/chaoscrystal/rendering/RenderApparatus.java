@@ -1,5 +1,7 @@
 package founderio.chaoscrystal.rendering;
 
+import java.util.EnumSet;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -15,6 +17,9 @@ import net.minecraftforge.client.model.techne.TechneModel;
 
 import org.lwjgl.opengl.GL11;
 
+import cpw.mods.fml.common.ITickHandler;
+import cpw.mods.fml.common.TickType;
+
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
@@ -22,7 +27,7 @@ import founderio.chaoscrystal.blocks.TileEntityCreator;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
 
-public class RenderApparatus extends TileEntitySpecialRenderer implements IItemRenderer {
+public class RenderApparatus extends TileEntitySpecialRenderer implements IItemRenderer, ITickHandler {
 	public final TechneModel modelReconstructor;
 	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
@@ -59,10 +64,32 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	private float rot = 0;
 	
 	@Override
+	public void tickStart(EnumSet<TickType> type, Object... tickData) {
+	}
+
+	@Override
+	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
+		if(Minecraft.getMinecraft().theWorld != null) {
+			rot = (Minecraft.getMinecraft().theWorld.getWorldTime() % 360f) * 4f;
+		}
+	}
+
+	@Override
+	public EnumSet<TickType> ticks() {
+		return EnumSet.of(TickType.CLIENT);
+
+	}
+
+	@Override
+	public String getLabel() {
+		return "Chaos Crystal TE Rendering Update";
+	}
+	
+	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
 			double d2, float f) {
 		
-		rot = (Minecraft.getSystemTime() / 10f) % 360f;
+		
 		
 		if(tileentity instanceof TileEntityReconstructor) {
 			renderModelAt(modelReconstructor, resourceReconstructor, d0, d1, d2);
@@ -145,7 +172,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public void renderModelAt(TechneModel model, ResourceLocation texture, double d0, double d1, double d2) {
 		GL11.glPushMatrix();
 		
-		rot = (Minecraft.getSystemTime() / 10f) % 360f;
+		//rot = (Minecraft.getMinecraft().theWorld.getWorldTime()) % 360f;
 		
 		
 		GL11.glTranslatef((float)d0 + 0.5f, (float)d1 + 0.04f, (float)d2 + 0.5f);
@@ -263,4 +290,8 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		default: renderModelAt(model, resource, -0.5, -0.5, -0.5); break;
 		}
 	}
+
+
 }
+
+	

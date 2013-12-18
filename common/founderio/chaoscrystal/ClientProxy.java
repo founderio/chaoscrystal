@@ -14,6 +14,8 @@ import founderio.chaoscrystal.rendering.RenderItemManual;
 import founderio.chaoscrystal.rendering.RenderApparatus;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.registry.TickRegistry;
+import cpw.mods.fml.relauncher.Side;
 
 public class ClientProxy extends CommonProxy {
 	
@@ -36,5 +38,8 @@ public class ClientProxy extends CommonProxy {
 		
 
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
+		
+
+		TickRegistry.registerTickHandler(render, Side.CLIENT);
 	}
 }
