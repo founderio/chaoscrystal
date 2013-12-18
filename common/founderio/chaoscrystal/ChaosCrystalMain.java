@@ -213,7 +213,6 @@ public class ChaosCrystalMain {
 		EntityRegistry.registerModEntity(EntityFocusFilter.class, Constants.NAME_ENTITY_FOCUS_FILTER, 3, this, 128, 1, false);
 		proxy.registerRenderStuff();
 		
-		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
 		
 		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
 		//GameRegistry.registerWorldGenerator(new GenCrystalFloats());

@@ -1,11 +1,13 @@
 package founderio.chaoscrystal;
 
 import net.minecraftforge.client.MinecraftForgeClient;
+import net.minecraftforge.common.MinecraftForge;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
+import founderio.chaoscrystal.rendering.OverlayAspectSelector;
 import founderio.chaoscrystal.rendering.RenderChaosCrystal;
 import founderio.chaoscrystal.rendering.RenderFocus;
 import founderio.chaoscrystal.rendering.RenderItemManual;
@@ -31,5 +33,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockCreator.blockID, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockSentry.blockID, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.itemManual.itemID, new RenderItemManual());
+		
+
+		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
 	}
 }

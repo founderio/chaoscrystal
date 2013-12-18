@@ -22,10 +22,16 @@ import net.minecraftforge.common.DimensionManager;
 import cpw.mods.fml.common.network.IPacketHandler;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.entities.DegradationParticles;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
 
+	public ChaosCrystalNetworkHandler() {
+		
+	}
+	
 	private Random rnd = new Random();
 	
 	public static void spawnParticleEffects(int dimension, int effect,
@@ -90,6 +96,7 @@ public class ChaosCrystalNetworkHandler implements IPacketHandler {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
 		if(packet.channel.equals(Constants.CHANNEL_NAME_PARTICLES)) {
