@@ -50,7 +50,6 @@ public class CommonProxy {
 			DataOutputStream dos = new DataOutputStream(bos);
 	
 			dos.writeInt(effect);
-			dos.writeInt(dimension);
 			dos.writeFloat(sourceX);
 			dos.writeFloat(sourceY);
 			dos.writeFloat(sourceZ);

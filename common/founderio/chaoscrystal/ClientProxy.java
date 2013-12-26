@@ -68,7 +68,6 @@ public class ClientProxy extends CommonProxy {
 			
 			try {
 				int type = dis.readInt();
-				int dimension = dis.readInt();
 				float posX = dis.readFloat();
 				float posY = dis.readFloat();
 				float posZ = dis.readFloat();
