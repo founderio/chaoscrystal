@@ -175,7 +175,7 @@ public class ChaosCrystalMain {
 		blockSentry.setStepSound(Block.soundStoneFootstep);
 		MinecraftForge.setBlockHarvestLevel(blockSentry, "pickaxe", 0);
 		
-		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.ID_BIOME_CRYSTAL, 68));
+		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 		
 		config.save();
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);

@@ -29,7 +29,7 @@ public class BiomeGenCrystal extends BiomeGenBase {
         this.theBiomeDecorator.deadBushPerChunk = 0;
         this.theBiomeDecorator.reedsPerChunk = 0;
         this.theBiomeDecorator.cactiPerChunk = 0;
-        this.biomeName = Constants.ID_BIOME_CRYSTAL;
+        this.biomeName = Constants.NAME_BIOME_CRYSTAL;
 	}
 	
 	@Override

@@ -3,11 +3,9 @@ package founderio.chaoscrystal;
 public class Constants {
 	public static final String MOD_ID = "chaoscrystal";
 	public static final String MOD_NAME = "Chaos Crystal";
-	public static final String MOD_VERSION = "0.3.2";
+	public static final String MOD_VERSION = "0.3.3";
 	public static final String CHANNEL_NAME_PARTICLES = "ChCrParticles";
 	public static final String CHANNEL_NAME_OTHER_VISUAL = "ChCrVisual";
-	
-	public static final String ID_BIOME_CRYSTAL = "biome.chaoscrystal.crystal";
 	
 	public static final String ID_ITEM_CHAOSCRYSTAL = "chaoscrystal.chaoscrystal";
 	public static final String ID_ITEM_FOCUS = "chaoscrystal.focus";
@@ -31,4 +29,6 @@ public class Constants {
 	public static final String NAME_ENTITY_FOCUS_TRANSFER = "chaoscrystal.focus.transfer";
 	public static final String NAME_ENTITY_FOCUS_BORDER = "chaoscrystal.focus.border";
 	public static final String NAME_ENTITY_FOCUS_FILTER = "chaoscrystal.focus.filter";
+
+	public static final String NAME_BIOME_CRYSTAL = "Crystal Beach";
 }

@@ -15,7 +15,7 @@ public class GenCrystalPillars implements IWorldGenerator {
 	public static final ArrayList<String> allowedBiomes = new ArrayList<String>();
 	
 	static{
-		allowedBiomes.add(Constants.ID_BIOME_CRYSTAL);
+		allowedBiomes.add(Constants.NAME_BIOME_CRYSTAL);
 	}
 	
 	@Override
