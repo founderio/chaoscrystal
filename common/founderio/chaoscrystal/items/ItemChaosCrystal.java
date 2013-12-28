@@ -3,7 +3,6 @@ package founderio.chaoscrystal.items;
 import java.util.List;
 
 import net.minecraft.client.renderer.texture.IconRegister;
-import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,21 +21,23 @@ public class ItemChaosCrystal extends Item {
 	public ItemChaosCrystal(int par1) {
 		super(par1);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID + ":chaoscrystal");
 	}
-	
+
 	@Override
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		if(par2World.isRemote) {
 			return new ItemStack(0, 0, 0);
 		}
-		
-		EntityChaosCrystal entity = new EntityChaosCrystal(par2World, par3EntityPlayer.posX, par3EntityPlayer.posY + 2, par3EntityPlayer.posZ);
+
+		EntityChaosCrystal entity = new EntityChaosCrystal(par2World,
+				par3EntityPlayer.posX, par3EntityPlayer.posY + 2, par3EntityPlayer.posZ,
+				0f, 0f);
 		if(par1ItemStack.getTagCompound() != null) {
 			NBTTagCompound aspectStore = par1ItemStack.getTagCompound().getCompoundTag("aspectStore");
 			if (aspectStore != null) {
@@ -46,13 +47,13 @@ public class ItemChaosCrystal extends Item {
 			}
 		}
 		entity.setSuckMode(!par3EntityPlayer.isSneaking());
-		
+
 		par2World.spawnEntityInWorld(entity);
 		entity.playSpawnSound();
-		
+
 		return new ItemStack(ChaosCrystalMain.itemChaosCrystal, 0);
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -73,14 +74,14 @@ public class ItemChaosCrystal extends Item {
 			int asp = aspectStore.getInteger(aspect);
 			if(asp > 0) {
 				hasAspects = true;
-				
+
 				par3List.add(String.format("%s: %d", StatCollector.translateToLocal(Constants.MOD_ID + ".aspect." + aspect), asp));
 			}
 		}
 		if(!hasAspects) {
 			par3List.add("This ChaosCrystal has no aspects stored.");
 		}
-		
+
 	}
-	
+
 }

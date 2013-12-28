@@ -57,13 +57,13 @@ public class DegradationStore {
 			}
 		}
 		if(matching.isEmpty()) {
-			if(ChaosCrystalMain.cfg_debugOutput) {
+			if(ChaosCrystalMain.cfgDebugOutput) {
     			System.out.println("Registering Item " + is + " failed. No crafting recipes.");
 			}
 			return;
 		}
 		if(matching.size() > 1) {
-			if(ChaosCrystalMain.cfg_debugOutput) {
+			if(ChaosCrystalMain.cfgDebugOutput) {
     			System.out.println("Registering Item " + is + " failed. Multiple crafting recipes.");
 			}
 			return;
@@ -84,7 +84,7 @@ public class DegradationStore {
 			}
 			autoRegisterWithItemStacks(is, recipeItems);
 		} else {
-			if(ChaosCrystalMain.cfg_debugOutput) {
+			if(ChaosCrystalMain.cfgDebugOutput) {
     			System.out.println("Registering Item " + is + " failed. No supported crafting recipes.");
 			}
 		}
@@ -96,7 +96,7 @@ public class DegradationStore {
 		List<ItemStack> degraded = new ArrayList<ItemStack>();
 		for(ItemStack crafting : recipeItems) {
 			if(crafting == null || crafting.stackSize <= 0) {
-				if(ChaosCrystalMain.cfg_debugOutput) {
+				if(ChaosCrystalMain.cfgDebugOutput) {
         			System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
 				}
 				return;
@@ -106,7 +106,7 @@ public class DegradationStore {
 				autoRegisterDegradation(crafting);
 				deg = getDegradation(crafting);
 				if(deg == null) {
-					if(ChaosCrystalMain.cfg_debugOutput) {
+					if(ChaosCrystalMain.cfgDebugOutput) {
 	        			System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
 					}
 					return;

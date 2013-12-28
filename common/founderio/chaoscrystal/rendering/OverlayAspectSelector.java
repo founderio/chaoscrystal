@@ -236,7 +236,7 @@ public class OverlayAspectSelector extends Gui {
 		
 		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 		
-		boolean specialSkip = (currentItem != null && currentItem.getItem() instanceof ItemMap) || ChaosCrystalMain.cfg_sneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		boolean specialSkip = (currentItem != null && currentItem.getItem() instanceof ItemMap) || ChaosCrystalMain.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
 
 		int centerW = event.resolution.getScaledWidth()/2;
 		int centerH = event.resolution.getScaledHeight()/2;

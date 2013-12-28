@@ -3,6 +3,8 @@
  */
 package founderio.chaoscrystal;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -61,6 +63,8 @@ public class ChaosCrystalMain {
 	
 	public static DegradationStore degradationStore;
 	
+	public static final Random rand = new Random();
+	
 	public static Item itemChaosCrystal;
 	public static Item itemFocus;
 	public static Item itemCrystalGlasses;
@@ -76,12 +80,22 @@ public class ChaosCrystalMain {
 	public static CreativeTabs creativeTab;
 	
 	private Configuration config;
+
+
+
+
+	public static int cfgHitsPerTick = 1;
+	public static int cfgMaxTriesPerTick = 80;
+	public static int cfgCrystalRange = 10;
+	public static int cfgCrystalTickInterval = 1;
+	public static int cfgFocusRange = 20;
+	public static int cfgFocusTickInterval = 60;
 	
-	public static int cfg_maxAspectStorage = 1000000;
-	public static boolean cfg_forceBiome = false;
-	public static boolean cfg_debugOutput = false;
-	public static boolean cfg_nonDestructive = true;
-	public static boolean cfg_sneakToShowAspects = false;
+	public static int cfgMaxAspectStorage = 1000000;
+	public static boolean cfgForceBiome = false;
+	public static boolean cfgDebugOutput = false;
+	public static boolean cfgNonDestructive = true;
+	public static boolean cfgSneakToShowAspects = false;
 	
 	private int getItemId(String id, int defaultId) {
 		return config.get("Items", id, defaultId).getInt();
@@ -100,15 +114,27 @@ public class ChaosCrystalMain {
 		config = new Configuration(event.getSuggestedConfigurationFile());
 		config.load();
 		
-		cfg_forceBiome = config.get("Settings", "force_biomes", cfg_forceBiome).getBoolean(cfg_forceBiome);
-		cfg_debugOutput = config.get("Settings", "degradation_debug_output", cfg_debugOutput).getBoolean(cfg_debugOutput);
-		cfg_maxAspectStorage = config.get("Settings", "max_aspect_storage", cfg_maxAspectStorage).getInt(cfg_maxAspectStorage);
-		if(cfg_maxAspectStorage < 10) {
-			cfg_maxAspectStorage = 10;
-			config.get("Settings", "max_spect_storage", cfg_maxAspectStorage).set(cfg_maxAspectStorage);
+		cfgForceBiome = config.get("Settings", "force_biomes", cfgForceBiome).getBoolean(cfgForceBiome);
+		cfgDebugOutput = config.get("Settings", "degradation_debug_output", cfgDebugOutput).getBoolean(cfgDebugOutput);
+		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(false);
+		
+		cfgMaxAspectStorage = config.get("Settings", "max_aspect_storage", cfgMaxAspectStorage).getInt(cfgMaxAspectStorage);
+		
+		if(cfgMaxAspectStorage < 10) {
+			cfgMaxAspectStorage = 10;
+			config.get("Settings", "max_spect_storage", cfgMaxAspectStorage).set(cfgMaxAspectStorage);
 		}
-		cfg_nonDestructive = config.get("Settings", "non_destructive", cfg_nonDestructive).getBoolean(cfg_nonDestructive);
-		cfg_sneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(false);
+		
+		cfgHitsPerTick = config.get("Settings", "crystal_hits_per_tick", cfgHitsPerTick).getInt(cfgHitsPerTick);
+		cfgMaxTriesPerTick = config.get("Settings", "crystal_max_tries_per_tick", cfgMaxTriesPerTick).getInt(cfgMaxTriesPerTick);
+		cfgCrystalRange = config.get("Settings", "crystal_range", cfgCrystalRange).getInt(cfgCrystalRange);
+		cfgCrystalTickInterval = config.get("Settings", "crystal_tick_interval", cfgCrystalTickInterval).getInt(cfgCrystalTickInterval);
+		
+		cfgFocusRange = config.get("Settings", "focus_range", cfgFocusRange).getInt(cfgFocusRange);
+		cfgFocusTickInterval = config.get("Settings", "focus_tick_interval", cfgFocusTickInterval).getInt(cfgFocusTickInterval);
+		
+		
+		cfgNonDestructive = config.get("Settings", "non_destructive", cfgNonDestructive).getBoolean(cfgNonDestructive);
 		//TODO: Get cfgs for ranges etc. of foci, crystals
 		
 		final int idChaosCrystal = getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200);
@@ -192,7 +218,7 @@ public class ChaosCrystalMain {
 		
 		
 		
-		if(cfg_forceBiome) {
+		if(cfgForceBiome) {
 			//Just a test: remove all other biomes...
 			for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
 				GameRegistry.removeBiome(biome);
@@ -612,7 +638,7 @@ public class ChaosCrystalMain {
 		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
 		//degradationStore.autoRegisterDegradation(new ItemStack(Item.arrow));
 		
-		if(cfg_debugOutput) {
+		if(cfgDebugOutput) {
 			degradationStore.debugOutput();
 		}
 	}

@@ -3,32 +3,17 @@ package founderio.chaoscrystal.degradation;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.common.Configuration;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
-import founderio.chaoscrystal.entities.EntityFocusFilter;
 
 public class DegradationHelper {
-	private static final Random rand = new Random();
-	
-	public static void loadConfig(Configuration config) {
-		degradeRange = config.get("Settings", "degradeRange", degradeRange).getInt();
-		degradeRange = config.get("Settings", "maxTries", maxTries).getInt();
-		degradeRange = config.get("Settings", "hitsPerDegrade", hitsPerDegrade).getInt();
-	}
-	
-	public static int degradeRange = 10;
-	public static int maxTries = 80;
-	public static int hitsPerDegrade = 1;
-	
 	public static boolean isAspectStoreEmpty(NBTTagCompound aspectStore) {
 		if(aspectStore == null) {
 			return true;
@@ -44,15 +29,15 @@ public class DegradationHelper {
 		return !hasAspects;
 	}
 	
-	public static void releaseAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, float range) {
+	public static void releaseAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, double range) {
 		//System.out.println(entity.entityId + " " + range);
 		int hit = 0;
 		int tries = 0;
 		do {
 			tries++;
-	    	float offX = rand.nextInt((int)(range*2))-range + 0.5f;
-	    	float offY = rand.nextInt((int)(range*2))-range + 0.5f;
-	    	float offZ = rand.nextInt((int)(range*2))-range + 0.5f;
+	    	float offX = ChaosCrystalMain.rand.nextInt((int)(range*2))-(float)range + 0.5f;
+	    	float offY = ChaosCrystalMain.rand.nextInt((int)(range*2))-(float)range + 0.5f;
+	    	float offZ = ChaosCrystalMain.rand.nextInt((int)(range*2))-(float)range + 0.5f;
 	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < range) {
 	    		int absX = (int)(posX + offX);
 	    		int absY = (int)(posY + offY);
@@ -66,7 +51,7 @@ public class DegradationHelper {
 		        	List<Degradation> degradationInverses = ChaosCrystalMain.degradationStore.getDegradationInverses(id, meta);
 		        	
 		        	if(degradationInverses != null && !degradationInverses.isEmpty()) {
-		        		Degradation degradation = degradationInverses.get(rand.nextInt(degradationInverses.size()));
+		        		Degradation degradation = degradationInverses.get(ChaosCrystalMain.rand.nextInt(degradationInverses.size()));
 		        		
 		        		
 		        		
@@ -91,7 +76,7 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        		if(ChaosCrystalMain.cfgDebugOutput) {
 		        			System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
 		        		}
 		        		//TODO: Can't do anything with those yet... Explode? ignore?
@@ -100,9 +85,9 @@ public class DegradationHelper {
 		        	}
 		    	}
 	    	}
-		} while(hit < hitsPerDegrade && tries < maxTries);
+		} while(hit < ChaosCrystalMain.cfgHitsPerTick && tries < ChaosCrystalMain.cfgMaxTriesPerTick);
 		
-		if(hit < hitsPerDegrade) {
+		if(hit < ChaosCrystalMain.cfgHitsPerTick) {
 			List<EntityItem> items = new ArrayList<EntityItem>();
     		
 			for(Object obj : world.loadedEntityList) {
@@ -120,19 +105,19 @@ public class DegradationHelper {
     		
     		if(items.size() != 0) {
     		
-	    		EntityItem it = items.get(rand.nextInt(items.size()));
+	    		EntityItem it = items.get(ChaosCrystalMain.rand.nextInt(items.size()));
 	    		ItemStack is = it.getEntityItem();
 	    		if(is != null) {
 	    			List<Degradation> degradationInverses = ChaosCrystalMain.degradationStore.getDegradationInverses(is.itemID, is.getItemDamage());
 	    			if(degradationInverses != null && !degradationInverses.isEmpty()) {
-	    				Degradation degradation = degradationInverses.get(rand.nextInt(degradationInverses.size()));
+	    				Degradation degradation = degradationInverses.get(ChaosCrystalMain.rand.nextInt(degradationInverses.size()));
 		        		
 	    				if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
 		        			//continue;
 		        		} else {
 		    	    		ItemStack degradationStack = new ItemStack(degradation.source.itemID, 0, degradation.source.getItemDamage());
 		        		
-			        		while(canSupportAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < hitsPerDegrade) {
+			        		while(canSupportAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < ChaosCrystalMain.cfgHitsPerTick) {
 			        			hit++;
 				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        			is.stackSize--;
@@ -175,10 +160,10 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        		if(ChaosCrystalMain.cfgDebugOutput) {
 		        			System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
 		        		}
-		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(!ChaosCrystalMain.cfgNonDestructive) {
 		        			it.setDead();
 		        		}
 		        	}
@@ -191,15 +176,15 @@ public class DegradationHelper {
 		}
 	}
 	
-	public static void suckAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, float range) {
+	public static void suckAspect(EntityChaosCrystal entity, World world, int posX, int posY, int posZ, List<String> filter, double range) {
 		
 		int hit = 0;
 		int tries = 0;
 		do {
 			tries++;
-			float offX = rand.nextInt((int)(range*2))-range + 0.5f;
-	    	float offY = rand.nextInt((int)(range*2))-range + 0.5f;
-	    	float offZ = rand.nextInt((int)(range*2))-range + 0.5f;
+			float offX = ChaosCrystalMain.rand.nextInt((int)(range*2))-(float)range + 0.5f;
+	    	float offY = ChaosCrystalMain.rand.nextInt((int)(range*2))-(float)range + 0.5f;
+	    	float offZ = ChaosCrystalMain.rand.nextInt((int)(range*2))-(float)range + 0.5f;
     	
 	    	if(Math.sqrt(offX*offX + offY*offY + offZ*offZ) < range) {
 	    		int absX = (int)(posX + offX);
@@ -214,7 +199,7 @@ public class DegradationHelper {
 		        	
 		        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
 		        	if(degradation != null) {
-		        		if(degradation.degraded.length == 0 || degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(degradation.degraded.length == 0 || degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfgNonDestructive) {
 		        			continue;
 		        		}
 		        		
@@ -241,19 +226,19 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        		if(ChaosCrystalMain.cfgDebugOutput) {
 		        			System.out.println(Block.blocksList[id].getLocalizedName() + " - " + id + "/" + meta);
 		        		}
-		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(!ChaosCrystalMain.cfgNonDestructive) {
 			        		world.setBlock(absX, absY, absZ, 0, 0, 1 + 2);
 			        		world.createExplosion(entity, absX, absY, absZ, 1, false);
 		        		}
 		        	}
 		    	}
 	    	}
-		} while(hit < hitsPerDegrade && tries < maxTries);
+		} while(hit < ChaosCrystalMain.cfgHitsPerTick && tries < ChaosCrystalMain.cfgMaxTriesPerTick);
 		
-		if(hit < hitsPerDegrade) {
+		if(hit < ChaosCrystalMain.cfgHitsPerTick) {
 			List<EntityItem> items = new ArrayList<EntityItem>();
     		
     		for(Object obj : world.loadedEntityList) {
@@ -271,19 +256,19 @@ public class DegradationHelper {
     		
     		if(items.size() != 0) {
     		
-	    		EntityItem it = items.get(rand.nextInt(items.size()));
+	    		EntityItem it = items.get(ChaosCrystalMain.rand.nextInt(items.size()));
 	    		ItemStack is = it.getEntityItem();
 	    		if(is != null) {
 		    		Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(is.itemID, is.getItemDamage());
 		    		if(degradation != null) {
-		        		if(degradation.degraded.length == 0 || degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(degradation.degraded.length == 0 || degradation.degraded[0].itemID == 0 && ChaosCrystalMain.cfgNonDestructive) {
 		        			//continue;
 		        		} else if(!filter.isEmpty() && !filter.containsAll(Arrays.asList(degradation.aspects))) {
 		        			//continue;
 		        		} else {
 		    	    		ItemStack degradationStack = new ItemStack(degradation.degraded[0].itemID, 0, degradation.degraded[0].getItemDamage());
 		        		
-			        		while(canFitAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < hitsPerDegrade) {
+			        		while(canFitAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < ChaosCrystalMain.cfgHitsPerTick) {
 			        			hit++;
 				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        			is.stackSize--;
@@ -326,10 +311,10 @@ public class DegradationHelper {
 		        		}
 		        		
 		        	} else {
-		        		if(ChaosCrystalMain.cfg_debugOutput) {
+		        		if(ChaosCrystalMain.cfgDebugOutput) {
 		        			System.out.println(is.getDisplayName() + " - " + is.itemID + "/" + is.getItemDamage());
 		        		}
-		        		if(!ChaosCrystalMain.cfg_nonDestructive) {
+		        		if(!ChaosCrystalMain.cfgNonDestructive) {
 		        			it.setDead();
 		        		}
 		        	}
@@ -344,7 +329,7 @@ public class DegradationHelper {
 	
 	public static boolean canFitAspects(String[] aspects, int[] amounts, EntityChaosCrystal crystal) {
 		for(int a = 0; a < aspects.length; a++) {
-			if(crystal.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfg_maxAspectStorage) {
+			if(crystal.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfgMaxAspectStorage) {
 				return false;
 			}
 		}

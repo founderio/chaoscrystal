@@ -70,7 +70,7 @@ public class CommonProxy {
 			e.printStackTrace();
 		}
 	}
-
+//TODO: Change to double!!
 	public static void spawnParticleEffects(int dimension, int effect,
 			float sourceX, float sourceY, float sourceZ,
 			float offX, float offY, float offZ) {
