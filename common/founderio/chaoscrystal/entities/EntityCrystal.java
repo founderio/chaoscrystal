@@ -69,8 +69,10 @@ public abstract class EntityCrystal extends Entity {
 
 		age++;
 		if(worldObj.isRemote) {
+			//Render Tick
 			age %= 360;
 		} else {
+			//Logic Tick
 			if(age > tickInterval) {
 				age -= tickInterval;
 				logicUpdate();

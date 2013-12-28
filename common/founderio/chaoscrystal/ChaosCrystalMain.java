@@ -91,7 +91,7 @@ public class ChaosCrystalMain {
 	public static int cfgFocusRange = 20;
 	public static int cfgFocusTickInterval = 60;
 	
-	public static int cfgMaxAspectStorage = 1000000;
+	public static int cfgCrystalAspectStorage = 1000000;
 	public static boolean cfgForceBiome = false;
 	public static boolean cfgDebugOutput = false;
 	public static boolean cfgNonDestructive = true;
@@ -118,11 +118,11 @@ public class ChaosCrystalMain {
 		cfgDebugOutput = config.get("Settings", "degradation_debug_output", cfgDebugOutput).getBoolean(cfgDebugOutput);
 		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(false);
 		
-		cfgMaxAspectStorage = config.get("Settings", "max_aspect_storage", cfgMaxAspectStorage).getInt(cfgMaxAspectStorage);
+		cfgCrystalAspectStorage = config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).getInt(cfgCrystalAspectStorage);
 		
-		if(cfgMaxAspectStorage < 10) {
-			cfgMaxAspectStorage = 10;
-			config.get("Settings", "max_spect_storage", cfgMaxAspectStorage).set(cfgMaxAspectStorage);
+		if(cfgCrystalAspectStorage < 10) {
+			cfgCrystalAspectStorage = 10;
+			config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).set(cfgCrystalAspectStorage);
 		}
 		
 		cfgHitsPerTick = config.get("Settings", "crystal_hits_per_tick", cfgHitsPerTick).getInt(cfgHitsPerTick);

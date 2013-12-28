@@ -40,7 +40,7 @@ public class TileEntityCreator extends TileEntityApparatus {
 			
 			for(int i = degs.size() - 1; i >= 0; i--) {
 				Degradation creation = degs.get(i);
-				if(!DegradationHelper.canSupportAspects(creation.aspects, creation.amounts, crystal)) {
+				if(!DegradationHelper.canProvideAspects(creation.aspects, creation.amounts, crystal)) {
 					degs.remove(i);
 				}
 			}

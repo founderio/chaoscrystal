@@ -59,7 +59,7 @@ public class DegradationHelper {
 		        			continue;
 		        		}
 		        		
-		        		if(canSupportAspects(degradation.aspects, degradation.amounts, entity)) {
+		        		if(canProvideAspects(degradation.aspects, degradation.amounts, entity)) {
 		        			hit++;
 		        			
 		        			for (int i = 0; i < degradation.aspects.length; i++) {
@@ -117,7 +117,7 @@ public class DegradationHelper {
 		        		} else {
 		    	    		ItemStack degradationStack = new ItemStack(degradation.source.itemID, 0, degradation.source.getItemDamage());
 		        		
-			        		while(canSupportAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < ChaosCrystalMain.cfgHitsPerTick) {
+			        		while(canProvideAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < ChaosCrystalMain.cfgHitsPerTick) {
 			        			hit++;
 				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        			is.stackSize--;
@@ -207,7 +207,7 @@ public class DegradationHelper {
 		        			continue;
 		        		}
 		        		
-		        		if(canFitAspects(degradation.aspects, degradation.amounts, entity)) {
+		        		if(canAcceptAspects(degradation.aspects, degradation.amounts, entity)) {
 		        			hit++;
 			        		world.setBlock(absX, absY, absZ, degradation.degraded[0].itemID, degradation.degraded[0].getItemDamage(), 1 + 2);
 			        		//TODO: respect count
@@ -268,7 +268,7 @@ public class DegradationHelper {
 		        		} else {
 		    	    		ItemStack degradationStack = new ItemStack(degradation.degraded[0].itemID, 0, degradation.degraded[0].getItemDamage());
 		        		
-			        		while(canFitAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < ChaosCrystalMain.cfgHitsPerTick) {
+			        		while(canAcceptAspects(degradation.aspects, degradation.amounts, entity) && is.stackSize > 0 && hit < ChaosCrystalMain.cfgHitsPerTick) {
 			        			hit++;
 				        		//world.setBlock(posX + offX, posY + offY, posZ + offZ, degradation.degraded.itemID, degradation.degraded.getItemDamage(), 1 + 2);
 			        			is.stackSize--;
@@ -327,18 +327,18 @@ public class DegradationHelper {
 		}
 	}
 	
-	public static boolean canFitAspects(String[] aspects, int[] amounts, EntityChaosCrystal crystal) {
+	public static boolean canAcceptAspects(String[] aspects, int[] amounts, IAspectStore aspectStore) {
 		for(int a = 0; a < aspects.length; a++) {
-			if(crystal.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfgMaxAspectStorage) {
+			if(aspectStore.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfgCrystalAspectStorage) {
 				return false;
 			}
 		}
 		return true;
 	}
 	
-	public static boolean canSupportAspects(String[] aspects, int[] amounts, EntityChaosCrystal crystal) {
+	public static boolean canProvideAspects(String[] aspects, int[] amounts, IAspectStore aspectStore) {
 		for(int a = 0; a < aspects.length; a++) {
-			if(crystal.getAspect(aspects[a]) < amounts[a]) {
+			if(aspectStore.getAspect(aspects[a]) < amounts[a]) {
 				return false;
 			}
 		}

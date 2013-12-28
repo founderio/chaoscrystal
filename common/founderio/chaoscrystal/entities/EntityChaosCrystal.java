@@ -41,13 +41,20 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	public void setSuckMode(boolean value) {
 		this.dataWatcher.updateObject(9, Byte.valueOf((byte)(value ? 1 : 0)));
 	}
-	
+
+	@Override
 	public int getAspect(String aspect) {
 		return this.dataWatcher.getWatchableObjectInt(10 + Aspects.getAspectDisplayId(aspect));
 	}
-	
+
+	@Override
 	public void setAspect(String aspect, int value) {
 		this.dataWatcher.updateObject(10 + Aspects.getAspectDisplayId(aspect), Integer.valueOf(value));
+	}
+	
+	@Override
+	public int getSingleAspectCapacity() {
+		return ChaosCrystalMain.cfgCrystalAspectStorage;
 	}
 	
 	@Override

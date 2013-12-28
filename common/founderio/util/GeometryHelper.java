@@ -3,7 +3,7 @@ package founderio.util;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 
-public class GeometryHelper {
+public final class GeometryHelper {
 	
 	private GeometryHelper() {
 		// Util class
