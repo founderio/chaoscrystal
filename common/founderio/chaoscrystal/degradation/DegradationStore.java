@@ -115,7 +115,7 @@ public class DegradationStore {
 			
 			for(int a = 0; a < deg.aspects.length; a++) {
 				String aspect = deg.aspects[a];
-				amounts[Aspects.getAspectDisplayId(aspect)] += deg.amounts[a] / crafting.stackSize;
+				amounts[Aspects.getAspectIndex(aspect)] += deg.amounts[a] / crafting.stackSize;
 			}
 			boolean added = false;
 			for(ItemStack dis : degraded) {
@@ -129,7 +129,7 @@ public class DegradationStore {
 				degraded.add(crafting.copy());
 			}
 		}
-		amounts[Aspects.getAspectDisplayId(Aspects.ASPECT_CRAFTING)] += 5;
+		amounts[Aspects.getAspectIndex(Aspects.ASPECT_CRAFTING)] += 5;
 		registerDegradation(is, Aspects.ASPECTS.clone(), amounts, degraded.toArray(new ItemStack[degraded.size()]));
 	}
 	

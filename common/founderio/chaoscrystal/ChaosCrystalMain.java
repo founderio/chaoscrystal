@@ -294,21 +294,7 @@ public class ChaosCrystalMain {
 		/*
 		 * Grass, Dirt
 		 */
-		degradationStore.registerDegradation(
-				new ItemStack(Block.grass),
-				new String[]{Aspects.ASPECT_LIVING},
-				new int[]{5},
-				new ItemStack(Block.dirt));
-		degradationStore.registerDegradation(
-				new ItemStack(Block.mycelium),
-				new String[]{Aspects.ASPECT_LIVING},
-				new int[]{5},
-				new ItemStack(Block.dirt));
-		degradationStore.registerDegradation(
-				new ItemStack(Block.dirt, 0, 0),
-				new String[]{Aspects.ASPECT_GROWTH},
-				new int[]{5},
-				new ItemStack(Block.dirt, 0, 1));
+		
 		degradationStore.registerDegradation(
 				new ItemStack(Block.tilledField, 0, 0),
 				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
@@ -319,48 +305,7 @@ public class ChaosCrystalMain {
 				new String[]{Aspects.ASPECT_WATER},
 				new int[]{1},
 				new ItemStack(Block.tilledField, 0, 0));
-		degradationStore.registerDegradation(
-				new ItemStack(Block.dirt, 0, 1),
-				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIVING},
-				new int[]{5, 2},
-				new ItemStack(Block.sand));
-		
-		degradationStore.registerDegradation(
-				new ItemStack(Block.sand),
-				new String[]{Aspects.ASPECT_EARTH},
-				new int[]{5},
-				nullStack);
-		degradationStore.registerDegradation(
-				new ItemStack(Block.blockClay),
-				new String[]{Aspects.ASPECT_WATER, Aspects.ASPECT_STRUCTURE},
-				new int[]{5, 2},
-				new ItemStack(Block.sand));
-		/*
-		 * Misc/Structures
-		 */
-		degradationStore.registerDegradation(
-				new ItemStack(Block.workbench),
-				new String[]{Aspects.ASPECT_CRAFTING},
-				new int[]{5},
-				new ItemStack(Block.planks, 0, 0));
-		
-		degradationStore.registerDegradation(
-				new ItemStack(Block.waterStill, 0, 32767),
-				new String[]{Aspects.ASPECT_WATER},
-				new int[]{5},
-				nullStack);
-		degradationStore.registerDegradation(
-				new ItemStack(Block.waterMoving, 0, 32767),
-				new String[]{},
-				new int[]{},
-				new ItemStack[0]);
-		degradationStore.registerDegradation(
-				new ItemStack(Block.glass),
-				new String[]{Aspects.ASPECT_HEAT, Aspects.ASPECT_STRUCTURE},
-				new int[]{5, 2},
-				new ItemStack(Block.sand, 0, 0));
-		
-		//TODO: Ore Dict Match
+
 		
 		/*
 		 * Wood, Leaves
@@ -372,19 +317,9 @@ public class ChaosCrystalMain {
 					new int[]{1},
 					new ItemStack(Block.leaves, 0, meta&3));// cap, only need 0,1,2,3
 			degradationStore.registerDegradation(
-					new ItemStack(Block.wood, 0, meta),
-					new String[]{Aspects.ASPECT_WOOD, Aspects.ASPECT_GROWTH},
-					new int[]{4, 5},
-					new ItemStack(Block.planks, 0, meta&3));
-			degradationStore.registerDegradation(
 					new ItemStack(Block.leaves, 0, meta),
 					new String[]{Aspects.ASPECT_LIVING},
 					new int[]{5},
-					nullStack);
-			degradationStore.registerDegradation(
-					new ItemStack(Block.vine, 0, meta),
-					new String[]{Aspects.ASPECT_LIVING, Aspects.ASPECT_GROWTH},
-					new int[]{3, 3},
 					nullStack);
 		}
 		for(int meta = 0; meta < 4; meta++) {

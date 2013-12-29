@@ -78,7 +78,7 @@ public class OverlayAspectSelector extends Gui {
 			NBTTagCompound tags = currentItem.getTagCompound();
 			if(tags != null) {
 				String selectedAspect = tags.getString("aspect");
-				aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
+				aspectIndex = Aspects.getAspectIndex(selectedAspect);
 				if(aspectIndex == -1) {
 					aspectIndex = 0;
 				}
@@ -445,7 +445,7 @@ public class OverlayAspectSelector extends Gui {
 			NBTTagCompound tags = currentItem.getTagCompound();
 			if(tags != null) {
 				selectedAspect = tags.getString("aspect");
-				aspectIndex = Aspects.getAspectDisplayId(selectedAspect);
+				aspectIndex = Aspects.getAspectIndex(selectedAspect);
 				if(aspectIndex == -1) {
 					selectedAspect = Aspects.ASPECTS[0];
 					aspectIndex = 0;

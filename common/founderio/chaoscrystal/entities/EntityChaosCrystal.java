@@ -44,12 +44,12 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public int getAspect(String aspect) {
-		return this.dataWatcher.getWatchableObjectInt(10 + Aspects.getAspectDisplayId(aspect));
+		return this.dataWatcher.getWatchableObjectInt(10 + Aspects.getAspectIndex(aspect));
 	}
 
 	@Override
 	public void setAspect(String aspect, int value) {
-		this.dataWatcher.updateObject(10 + Aspects.getAspectDisplayId(aspect), Integer.valueOf(value));
+		this.dataWatcher.updateObject(10 + Aspects.getAspectIndex(aspect), Integer.valueOf(value));
 	}
 	
 	@Override
