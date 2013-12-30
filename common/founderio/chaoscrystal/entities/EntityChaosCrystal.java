@@ -58,6 +58,44 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	}
 	
 	@Override
+	public void addAspects(int[] aspectArray) {
+		for(int i = 0; i < Aspects.ASPECTS.length; i++) {
+			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i) + aspectArray[i];
+			this.dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
+		}
+	}
+
+	@Override
+	public void subtractAspects(int[] aspectArray) {
+		for(int i = 0; i < Aspects.ASPECTS.length; i++) {
+			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i) - aspectArray[i];
+			this.dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
+		}
+	}
+
+	@Override
+	public boolean canProvideAspects(int[] aspectArray) {
+		for(int i = 0; i < Aspects.ASPECTS.length; i++) {
+			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i);
+			if(aspectCount - aspectArray[i] < 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean canAcceptAspects(int[] aspectArray) {
+		for(int i = 0; i < Aspects.ASPECTS.length; i++) {
+			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i);
+			if(aspectCount + aspectArray[i] > getSingleAspectCapacity()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	@Override
 	protected void logicUpdate() {
 		List<String> filterAspects = new ArrayList<String>();
 		
@@ -84,11 +122,8 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 			}
 		}
 		
-		if(isInSuckMode()) {
-			DegradationHelper.suckAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, range);
-		} else {
-			DegradationHelper.releaseAspect(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, range);
-		}
+		DegradationHelper.crystalTick(this, worldObj, (int)posX, (int)posY, (int)posZ, filterAspects, range, !isInSuckMode());
+
 	}
 
 	@Override
@@ -138,5 +173,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 		nbttagcompound.setCompoundTag("aspectStore", getAspectStore());
 		nbttagcompound.setBoolean("suckMode", isInSuckMode());
 	}
+
+	
 
 }

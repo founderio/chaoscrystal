@@ -12,7 +12,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
@@ -30,16 +29,16 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.event.EventPriority;
 import net.minecraftforge.event.ForgeSubscribe;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.aspects.Node;
+import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
-import founderio.chaoscrystal.degradation.Degradation;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -174,7 +173,8 @@ public class OverlayAspectSelector extends Gui {
                 Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
                 pointedEntity = null;
                 float f1 = 1.0F;
-                List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
+                @SuppressWarnings("rawtypes")
+				List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
                 double d2 = d1;
 
                 for (int i = 0; i < list.size(); ++i)
@@ -320,36 +320,41 @@ public class OverlayAspectSelector extends Gui {
 				        
 				        ItemStack is = ((EntityItem)lookingAt).getEntityItem();
 				        
-				        Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(is.itemID, is.getItemDamage());
-			        	if(degradation == null) {
+				        List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(is);
+			        	if(degradations.size() == 0) {
 			        		
 			        	} else {
+			        		Node node = degradations.get(0);
 							int offset = 0;
 							int colOffset = 0;
 							final int colWidth = 64;
 							
+							int[] aspects = node.getAspects();
 					        
-							for(int i = 0; i < degradation.aspects.length; i++) {
-								String aspect = degradation.aspects[i];
-								int asp = degradation.amounts[i];
+							for(int i = 0; i < aspects.length; i++) {
+								String aspect = Aspects.ASPECTS[i];
+								int asp = aspects[i];
 
-								Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-								this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
+								if(asp == 0) {
+									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+									this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
 
-								Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
-								
-								
-								if(offset >= 30) {
-									offset = 0;
-									colOffset += colWidth;
-								} else {
-									offset += 10;
+									Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
+
+									if(offset >= 30) {
+										offset = 0;
+										colOffset += colWidth;
+									} else {
+										offset += 10;
+									}
 								}
+								
 							}
+							Node[] parents = node.getParents();
 							
-							for(int s = 0; s < degradation.degraded.length; s++) {
-								if(degradation.degraded[s].itemID != 0) {
-						            renderItem(degradation.degraded[s], centerW + 5 + s*16, centerH - 16);
+							for(int s = 0; s < parents.length; s++) {
+								if(parents[s] != ModuleVanillaWorldgen.AIR) {
+						            renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
 								}
 							}
 							
@@ -374,37 +379,43 @@ public class OverlayAspectSelector extends Gui {
 								mop.blockZ);
 			        	
 			    		boolean doRenderMiniBlock = false;
-			        	Degradation degradation = ChaosCrystalMain.degradationStore.getDegradation(id, meta);
-			        	if(degradation == null) {
-			        		
-			        	} else {
+			        	 List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(id, 1, meta));
+				        	if(degradations.size() == 0) {
+				        		
+				        	} else {
+				        		Node node = degradations.get(0);
 			        		doRenderMiniBlock = true;
 							int offset = 0;
 							int colOffset = 0;
 							final int colWidth = 64;
 							
 					        
-							for(int i = 0; i < degradation.aspects.length; i++) {
-								String aspect = degradation.aspects[i];
-								int asp = degradation.amounts[i];
+							int[] aspects = node.getAspects();
+					        
+							for(int i = 0; i < aspects.length; i++) {
+								String aspect = Aspects.ASPECTS[i];
+								int asp = aspects[i];
 
-								Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-								this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
+								if(asp == 0) {
+									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+									this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
 
-								Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
-								
-								
-								if(offset >= 30) {
-									offset = 0;
-									colOffset += colWidth;
-								} else {
-									offset += 10;
+									Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
+
+									if(offset >= 30) {
+										offset = 0;
+										colOffset += colWidth;
+									} else {
+										offset += 10;
+									}
 								}
+								
 							}
-
-							for(int s = 0; s < degradation.degraded.length; s++) {
-								if(degradation.degraded[s].itemID != 0) {
-						            renderItem(degradation.degraded[s], centerW + 5 + s*16, centerH - 16);
+							Node[] parents = node.getParents();
+							
+							for(int s = 0; s < parents.length; s++) {
+								if(parents[s] != ModuleVanillaWorldgen.AIR) {
+						            renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
 								}
 							}
 							

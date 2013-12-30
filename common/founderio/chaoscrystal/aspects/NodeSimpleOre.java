@@ -6,10 +6,18 @@ import founderio.util.ItemUtil;
 
 public class NodeSimpleOre extends Node {
 
+	private static int[] aspectDifference;
+	
 	private int[] aspects;
 	private Node ingotBase;
 	private Node rockBase;
 	private ItemStack target;
+	
+	static {
+		AspectBuilder ab = new AspectBuilder();
+		ab.addAspect(Aspects.ASPECT_STRUCTURE, 5);
+		aspectDifference = ab.toAspectArray();
+	}
 	
 	public NodeSimpleOre(Node ingotBase, Node rockBase, int count, ItemStack target) {
 		this.target = target;
@@ -25,6 +33,7 @@ public class NodeSimpleOre extends Node {
 		for(int a = 0; a < Aspects.ASPECTS.length; a++) {
 			ab.addAspect(Aspects.ASPECTS[a], ia[a] * count);
 		}
+		ab.addAspect(Aspects.ASPECT_STRUCTURE, 5);
 		
 		aspects = ab.toAspectArray();
 	}
@@ -32,6 +41,11 @@ public class NodeSimpleOre extends Node {
 	@Override
 	public int[] getAspects() {
 		return aspects.clone();
+	}
+	
+	@Override
+	public int[] getAspectDifference() {
+		return aspectDifference.clone();
 	}
 
 	@Override
@@ -42,6 +56,11 @@ public class NodeSimpleOre extends Node {
 	@Override
 	public boolean matchesItemStack(ItemStack is) {
 		return ItemUtil.itemsMatch(target, is);
+	}
+
+	@Override
+	public ItemStack getDispayItemStack() {
+		return target;
 	}
 
 }

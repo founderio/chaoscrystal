@@ -295,61 +295,61 @@ public class ChaosCrystalMain {
 		 * Grass, Dirt
 		 */
 		
-		degradationStore.registerDegradation(
-				new ItemStack(Block.tilledField, 0, 0),
-				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
-				new int[]{2, 1},
-				new ItemStack(Block.dirt, 0, 0));
-		degradationStore.registerDegradation(
-				new ItemStack(Block.tilledField, 0, 1),
-				new String[]{Aspects.ASPECT_WATER},
-				new int[]{1},
-				new ItemStack(Block.tilledField, 0, 0));
+//		degradationStore.registerDegradation(
+//				new ItemStack(Block.tilledField, 0, 0),
+//				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
+//				new int[]{2, 1},
+//				new ItemStack(Block.dirt, 0, 0));
+//		degradationStore.registerDegradation(
+//				new ItemStack(Block.tilledField, 0, 1),
+//				new String[]{Aspects.ASPECT_WATER},
+//				new int[]{1},
+//				new ItemStack(Block.tilledField, 0, 0));
 
 		
 		/*
 		 * Wood, Leaves
 		 */
-		for(int meta = 0; meta < 16; meta++) {//meh, just catch them all.
-			degradationStore.registerDegradation(
-					new ItemStack(Block.planks, 0, meta),
-					new String[]{Aspects.ASPECT_WOOD},
-					new int[]{1},
-					new ItemStack(Block.leaves, 0, meta&3));// cap, only need 0,1,2,3
-			degradationStore.registerDegradation(
-					new ItemStack(Block.leaves, 0, meta),
-					new String[]{Aspects.ASPECT_LIVING},
-					new int[]{5},
-					nullStack);
-		}
+//		for(int meta = 0; meta < 16; meta++) {//meh, just catch them all.
+//			degradationStore.registerDegradation(
+//					new ItemStack(Block.planks, 0, meta),
+//					new String[]{Aspects.ASPECT_WOOD},
+//					new int[]{1},
+//					new ItemStack(Block.leaves, 0, meta&3));// cap, only need 0,1,2,3
+//			degradationStore.registerDegradation(
+//					new ItemStack(Block.leaves, 0, meta),
+//					new String[]{Aspects.ASPECT_LIVING},
+//					new int[]{5},
+//					nullStack);
+//		}
 		
 		/*
 		 * Ores/Metals
 		 */
 
-		degradationStore.registerDegradation(
-				new ItemStack(ChaosCrystalMain.blockBase, 0, 0),
-				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_HEAT},
-				new int[]{5, 2, 4},
-				new ItemStack(ChaosCrystalMain.blockBase, 0, 1));
-		degradationStore.registerDegradation(
-				new ItemStack(ChaosCrystalMain.blockBase, 0, 1),
-				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
-				new int[]{15, 5, 5},
-				new ItemStack(Block.glass, 0, 0));
-		degradationStore.registerDegradation(
-				new ItemStack(ChaosCrystalMain.blockBase, 0, 2),
-				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIGHT},
-				new int[]{15, 5, 5, 150},
-				new ItemStack(Block.glass, 0, 0));
-		
-		
-
-		degradationStore.registerDegradation(
-				new ItemStack(Item.arrow),
-				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WOOD, Aspects.ASPECT_LIVING},
-				new int[]{2, 2, 2},
-				new ItemStack(0, 0, 0));
+//		degradationStore.registerDegradation(
+//				new ItemStack(ChaosCrystalMain.blockBase, 0, 0),
+//				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_HEAT},
+//				new int[]{5, 2, 4},
+//				new ItemStack(ChaosCrystalMain.blockBase, 0, 1));
+//		degradationStore.registerDegradation(
+//				new ItemStack(ChaosCrystalMain.blockBase, 0, 1),
+//				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
+//				new int[]{15, 5, 5},
+//				new ItemStack(Block.glass, 0, 0));
+//		degradationStore.registerDegradation(
+//				new ItemStack(ChaosCrystalMain.blockBase, 0, 2),
+//				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIGHT},
+//				new int[]{15, 5, 5, 150},
+//				new ItemStack(Block.glass, 0, 0));
+//		
+//		
+//
+//		degradationStore.registerDegradation(
+//				new ItemStack(Item.arrow),
+//				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WOOD, Aspects.ASPECT_LIVING},
+//				new int[]{2, 2, 2},
+//				new ItemStack(0, 0, 0));
 		
 		
 		

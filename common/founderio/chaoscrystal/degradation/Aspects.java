@@ -1,5 +1,7 @@
 package founderio.chaoscrystal.degradation;
 
+import java.util.Arrays;
+
 public final class Aspects {
 
 	public static final String ASPECT_CRAFTING = "crafting";
@@ -50,6 +52,17 @@ public final class Aspects {
 			aspectsR[a] = aspectsA[a] + aspectsB[a];
 		}
 		return aspectsR;
+	}
+	
+	public static String[] getAspectNames(int[] aspectArray) {
+		String[] aspectNames = new String[ASPECTS.length];
+		int idx = 0;
+		for(int a = 0; a < ASPECTS.length; a++) {
+			if(aspectArray[a] > 0) {
+				aspectNames[idx] = ASPECTS[a];
+			}
+		}
+		return Arrays.copyOfRange(aspectNames, 0, idx);
 	}
 
 	private Aspects() {

@@ -7,8 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
-import founderio.chaoscrystal.degradation.Degradation;
-import founderio.chaoscrystal.degradation.DegradationHelper;
+import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntityCreator extends TileEntityApparatus {
@@ -32,31 +31,27 @@ public class TileEntityCreator extends TileEntityApparatus {
 		if(is == null || is.itemID == 0) {
 			
 			
-			List<Degradation> degs = ChaosCrystalMain.degradationStore.getCreations();
+			List<Node> degs = ChaosCrystalMain.degradationStore.getCreations();
 			
 			if(degs.size() == 0) {
 				return false;
 			}
 			
 			for(int i = degs.size() - 1; i >= 0; i--) {
-				Degradation creation = degs.get(i);
-				if(!DegradationHelper.canProvideAspects(creation.aspects, creation.amounts, crystal)) {
+				Node creation = degs.get(i);
+				if(!crystal.canProvideAspects(creation.getAspects())) {
 					degs.remove(i);
 				}
 			}
 			
-			Degradation creation = degs.get(rand.nextInt(degs.size()));
+			Node creation = degs.get(rand.nextInt(degs.size()));
 			
-			for(int a = 0; a < creation.aspects.length; a++) {
-				crystal.setAspect(creation.aspects[a],
-						crystal.getAspect(creation.aspects[a]) - creation.amounts[a]);
-			}
+			crystal.subtractAspects(creation.getAspects());
 			
 			CommonProxy.spawnParticleEffects(worldObj.provider.dimensionId, 2,
 					(float)xCoord + 0.5f, (float)yCoord + 0.5f, (float)zCoord + 0.5f,
 					0, 0, 0, 0.7f);
-			is = creation.source.copy();
-			is.stackSize = 1;
+			is = creation.getDispayItemStack().copy();
 			setInventorySlotContents(0, is);
 			
 			updateState();

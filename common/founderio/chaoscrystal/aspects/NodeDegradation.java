@@ -24,6 +24,11 @@ public class NodeDegradation extends Node {
 	public int[] getAspects() {
 		return Aspects.addAspects(aspects, parent.getAspects());
 	}
+	
+	@Override
+	public int[] getAspectDifference() {
+		return aspects.clone();
+	}
 
 	@Override
 	public Node[] getParents() {
@@ -33,6 +38,11 @@ public class NodeDegradation extends Node {
 	@Override
 	public boolean matchesItemStack(ItemStack is) {
 		return ItemUtil.itemsMatch(target, is);
+	}
+
+	@Override
+	public ItemStack getDispayItemStack() {
+		return target;
 	}
 
 }
