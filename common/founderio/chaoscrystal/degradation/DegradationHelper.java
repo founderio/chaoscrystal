@@ -57,6 +57,7 @@ public class DegradationHelper {
 			}
 			ItemStack spawnStack = p.getDispayItemStack().copy();
 			spawnStack.stackSize = count % maxStackSize;
+			ItemUtil.spawnItemStack(spawnStack, world, reference);
 		}
 	}
 	
@@ -71,6 +72,7 @@ public class DegradationHelper {
 			}
 			ItemStack spawnStack = p.getDispayItemStack().copy();
 			spawnStack.stackSize = count % maxStackSize;
+			ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5, posY + 0.5, posZ + 0.5);
 		}
 	}
 	
