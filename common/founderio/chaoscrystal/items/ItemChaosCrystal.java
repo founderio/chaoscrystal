@@ -24,6 +24,12 @@ public class ItemChaosCrystal extends Item {
 
 	@Override
 	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack par1ItemStack, int pass) {
+		return pass == 0;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID + ":chaoscrystal");
 	}
