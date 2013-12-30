@@ -67,6 +67,11 @@ public class ModuleVanillaWorldgen extends AspectModule {
 	public static Node MELON;
 	public static Node PUMPKIN;
 	
+
+	public static Node LEATHER;
+	public static Node ROTTEN_FLESH;
+	public static Node FIRE;
+	
 	@Override
 	protected void registerNodes() {
 		AspectBuilder ab = new AspectBuilder();
@@ -238,6 +243,16 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		
 		nodes.add(PUMPKIN = new NodeDegradation(AIR, ab.toAspectArray(), new ItemStack(Block.pumpkin), false, false));
 		
+		ab.clear();
+		
+		ab.setAspect(Aspects.ASPECT_STRUCTURE, 3).setAspect(Aspects.ASPECT_GROWTH, 3);
+		nodes.add(ROTTEN_FLESH = new NodeDegradation(AIR, ab.toAspectArray(), new ItemStack(Item.rottenFlesh), false, false));
+		ab.setAspect(Aspects.ASPECT_STRUCTURE, 5).setAspect(Aspects.ASPECT_GROWTH, 5).setAspect(Aspects.ASPECT_LIVING, 5).setAspect(Aspects.ASPECT_VALUE, 2);
+		nodes.add(LEATHER = new NodeDegradation(ROTTEN_FLESH, ab.toAspectArray(), new ItemStack(Item.leather), false, false));
+		ab.clear();
+		
+		ab.setAspect(Aspects.ASPECT_HEAT, 1);
+		nodes.add(FIRE = new NodeDegradation(AIR, ab.toAspectArray(), new ItemStack(Block.fire), false, false));
 		ab.clear();
 		
 	}
