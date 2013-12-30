@@ -48,6 +48,7 @@ public class DegradationStore {
 	}
 	
 	public void autoRegisterDegradation(ItemStack is) {
+		@SuppressWarnings("unchecked")
 		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
 		List<IRecipe> matching = new ArrayList<IRecipe>();
 		for(IRecipe r: recipes) {

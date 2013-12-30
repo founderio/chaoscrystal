@@ -1,6 +1,7 @@
 package founderio.chaoscrystal.aspects;
 
 import founderio.chaoscrystal.degradation.Aspects;
+import founderio.util.ItemUtil;
 import net.minecraft.item.ItemStack;
 
 public class NodeDegradation extends Node {
@@ -27,6 +28,11 @@ public class NodeDegradation extends Node {
 	@Override
 	public Node[] getParents() {
 		return new Node[] { parent };
+	}
+
+	@Override
+	public boolean matchesItemStack(ItemStack is) {
+		return ItemUtil.itemsMatch(target, is);
 	}
 
 }
