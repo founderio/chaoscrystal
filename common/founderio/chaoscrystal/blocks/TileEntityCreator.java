@@ -33,15 +33,16 @@ public class TileEntityCreator extends TileEntityApparatus {
 			
 			List<Node> degs = ChaosCrystalMain.degradationStore.getCreations();
 			
-			if(degs.size() == 0) {
-				return false;
-			}
+			
 			
 			for(int i = degs.size() - 1; i >= 0; i--) {
 				Node creation = degs.get(i);
 				if(!crystal.canProvideAspects(creation.getAspects())) {
 					degs.remove(i);
 				}
+			}
+			if(degs.size() == 0) {
+				return false;
 			}
 			
 			Node creation = degs.get(rand.nextInt(degs.size()));

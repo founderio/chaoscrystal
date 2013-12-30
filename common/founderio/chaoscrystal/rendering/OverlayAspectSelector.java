@@ -335,7 +335,7 @@ public class OverlayAspectSelector extends Gui {
 								String aspect = Aspects.ASPECTS[i];
 								int asp = aspects[i];
 
-								if(asp == 0) {
+								if(asp > 0) {
 									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
 									this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
 
@@ -396,7 +396,7 @@ public class OverlayAspectSelector extends Gui {
 								String aspect = Aspects.ASPECTS[i];
 								int asp = aspects[i];
 
-								if(asp == 0) {
+								if(asp > 0) {
 									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
 									this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
 

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.aspects.AspectBuilder;
 import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.Node;
+import founderio.chaoscrystal.aspects.NodeAir;
 import founderio.chaoscrystal.aspects.NodeDegradation;
 import founderio.chaoscrystal.aspects.NodeSimpleOre;
 import founderio.chaoscrystal.degradation.Aspects;
@@ -74,9 +75,9 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		 * "Ignore"-Blocks
 		 */
 		//TODO: In NonDestructive Mode, use Lifeless Block once added
-		nodes.add(AIR = new NodeDegradation(null, ab.toAspectArray(), new ItemStack(0, 1, 0), false, false));
-		
-		nodes.add(WATER_MOVING = new NodeDegradation(null, ab.toAspectArray(), new ItemStack(Block.waterMoving, 1, 32767), false, false));
+		nodes.add(AIR = new NodeAir());
+		//TODO: IgnoreList
+		//nodes.add(WATER_MOVING = new NodeDegradation(null, ab.toAspectArray(), new ItemStack(Block.waterMoving, 1, 32767), false, false));
 		
 		/*
 		 * Worldgen-Blocks
@@ -121,7 +122,7 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		
 		ab.setAspect(Aspects.ASPECT_STRUCTURE, 5);
 		nodes.add(GRAVEL = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Block.gravel), false, false));
-		nodes.add(COBBLESTONE = new NodeDegradation(STONE, ab.toAspectArray(), new ItemStack(Block.cobblestone), false, false));
+		nodes.add(COBBLESTONE = new NodeDegradation(GRAVEL, ab.toAspectArray(), new ItemStack(Block.cobblestone), false, false));
 		nodes.add(STONE = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Block.stone), false, false));
 		//TODO: Crafting rec?
 		nodes.add(STONE_BRICK = new NodeDegradation(STONE, ab.toAspectArray(), new ItemStack(Block.stoneBrick), false, false));

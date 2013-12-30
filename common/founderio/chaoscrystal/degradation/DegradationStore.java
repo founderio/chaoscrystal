@@ -24,6 +24,7 @@ public class DegradationStore {
 	
 	public DegradationStore() {
 		repairs = new HashMap<Integer, Repair>();
+		nodes = new ArrayList<Node>();
 		
 		addAspectModule(new ModuleVanillaWorldgen());
 	}
@@ -56,6 +57,12 @@ public class DegradationStore {
 		List<Node> infusions = new ArrayList<Node>();
 		for(Node node : nodes) {
 			Node[] parents = node.getParents();
+			if(parents == null) {
+				return null;
+			}
+			if(parents.length == 1 && parents[0] == null) {
+				return null;
+			}
 			if(parents.length == 1 && parents[0].matchesItemStack(is)) {
 				infusions.add(node);
 			}

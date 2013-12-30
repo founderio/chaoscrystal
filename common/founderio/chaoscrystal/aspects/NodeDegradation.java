@@ -6,13 +6,16 @@ import net.minecraft.item.ItemStack;
 
 public class NodeDegradation extends Node {
 
-	private int[] aspects;
-	private Node parent;
-	private ItemStack target;
-	private boolean requiresSunlight;
-	private boolean requiresAirAbove;
+	private final int[] aspects;
+	private final Node parent;
+	private final ItemStack target;
+	private final boolean requiresSunlight;
+	private final boolean requiresAirAbove;
 	
 	public NodeDegradation(Node parent, int[] aspects, ItemStack target, boolean requiresSunlight, boolean requiresAirAbove) {
+		if(parent == null) {
+			throw new RuntimeException("BUGBUGBUG!");
+		}
 		this.parent = parent;
 		this.aspects = aspects;
 		this.target = target;
@@ -22,7 +25,11 @@ public class NodeDegradation extends Node {
 
 	@Override
 	public int[] getAspects() {
-		return Aspects.addAspects(aspects, parent.getAspects());
+		if(parent == null) {
+			return aspects.clone();
+		} else {
+			return Aspects.addAspects(aspects, parent.getAspects());
+		}
 	}
 	
 	@Override

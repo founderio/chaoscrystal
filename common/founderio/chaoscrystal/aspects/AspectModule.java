@@ -8,6 +8,7 @@ public abstract class AspectModule {
 	
 	public AspectModule() {
 		this.nodes = new ArrayList<Node>();
+		registerNodes();
 	}
 	
 	protected abstract void registerNodes();
