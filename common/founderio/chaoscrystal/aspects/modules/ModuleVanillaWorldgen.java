@@ -135,9 +135,9 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		
 		ab.setAspect(Aspects.ASPECT_LIVING, 15);
 		nodes.add(COBBLESTONE_MOSSY = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Block.cobblestoneMossy), false, false));
-		nodes.add(SILVERFISH_STONE = new NodeDegradation(STONE, ab.toAspectArray(), new ItemStack(Block.silverfish, 0, 0), false, false));
-		nodes.add(SILVERFISH_COBBLE = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Block.silverfish, 0, 1), false, false));
-		nodes.add(SILVERFISH_BRICK = new NodeDegradation(STONE_BRICK, ab.toAspectArray(), new ItemStack(Block.silverfish, 0, 2), false, false));
+		nodes.add(SILVERFISH_STONE = new NodeDegradation(STONE, ab.toAspectArray(), new ItemStack(Block.silverfish, 1, 0), false, false));
+		nodes.add(SILVERFISH_COBBLE = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Block.silverfish, 1, 1), false, false));
+		nodes.add(SILVERFISH_BRICK = new NodeDegradation(STONE_BRICK, ab.toAspectArray(), new ItemStack(Block.silverfish, 1, 2), false, false));
 		ab.clear();
 		
 		

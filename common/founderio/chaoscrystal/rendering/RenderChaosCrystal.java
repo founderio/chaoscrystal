@@ -41,7 +41,6 @@ public class RenderChaosCrystal extends Render {
         float f5 = ((Icon)par2Icon).getMaxU();
         float f6 = ((Icon)par2Icon).getMinV();
         float f7 = ((Icon)par2Icon).getMaxV();
-        float f8 = 1.0F;
         float f9 = 0.5F;
         float f10 = 0.25F;
         float f11;
@@ -56,7 +55,7 @@ public class RenderChaosCrystal extends Render {
         }
         else
         {
-            GL11.glRotatef(((float)ecc.age / 20.0F) * (180F / (float)Math.PI), 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(ecc.age * 3f, 0.0F, 1.0F, 0.0F);
         }
 
         float f12 = 0.0625F;

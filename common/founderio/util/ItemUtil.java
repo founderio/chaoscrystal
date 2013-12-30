@@ -12,7 +12,7 @@ public final class ItemUtil {
 
 	
 	public static boolean itemsMatch(ItemStack reference, ItemStack compare) {
-		return compare != null && compare.itemID == reference.itemID && (reference.getItemDamage() == 32767 || reference.getItemDamage() == reference.getItemDamage());
+		return compare != null && compare.itemID == reference.itemID && (reference.getItemDamage() == 32767 || reference.getItemDamage() == compare.getItemDamage());
 	}
 	
 	public static void spawnItemStack(ItemStack is, World world, EntityItem reference) {

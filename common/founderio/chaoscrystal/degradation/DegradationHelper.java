@@ -42,6 +42,9 @@ public class DegradationHelper {
 					1 + 2);
 			
 		} else {
+			world.setBlock(posX, posY, posZ,
+					0, 0,
+					1 + 2);
 			spawnMultiplesOfNodes(replacement, 1, world, posX, posY, posZ);
 		}
 	}
@@ -49,6 +52,9 @@ public class DegradationHelper {
 	public static void spawnMultiplesOfNodes(Node[] nodes, int count, World world, EntityItem reference) {
 		for(int i = 0; i < nodes.length; i++) {
 			Node p = nodes[i];
+			if(p == ModuleVanillaWorldgen.AIR) {
+				continue;
+			}
 			int maxStackSize = p.getDispayItemStack().getMaxStackSize();
 			for(int ists = 0; ists < Math.floor(count / maxStackSize); ists++) {
 				ItemStack spawnStack = p.getDispayItemStack().copy();
@@ -64,15 +70,18 @@ public class DegradationHelper {
 	public static void spawnMultiplesOfNodes(Node[] nodes, int count, World world, int posX, int posY, int posZ) {
 		for(int i = 0; i < nodes.length; i++) {
 			Node p = nodes[i];
+			if(p == ModuleVanillaWorldgen.AIR) {
+				continue;
+			}
 			int maxStackSize = p.getDispayItemStack().getMaxStackSize();
 			for(int ists = 0; ists < Math.floor(count / maxStackSize); ists++) {
 				ItemStack spawnStack = p.getDispayItemStack().copy();
 				spawnStack.stackSize = maxStackSize;
-				ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5, posY + 0.5, posZ + 0.5);
+				ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5, posY + 0.1, posZ + 0.5);
 			}
 			ItemStack spawnStack = p.getDispayItemStack().copy();
 			spawnStack.stackSize = count % maxStackSize;
-			ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5, posY + 0.5, posZ + 0.5);
+			ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5, posY + 0.1, posZ + 0.5);
 		}
 	}
 	
@@ -114,7 +123,7 @@ public class DegradationHelper {
 		        		} else {
 		        			parents = new Node[] { degradation };
 		        		}
-		        		if(parents.length == 0 || parents[0] == ModuleVanillaWorldgen.AIR && ChaosCrystalMain.cfgNonDestructive) {
+		        		if(parents.length == 0) {
 		        			continue;
 		        		}
 		        		int[] aspects = degradation.getAspectDifference();
@@ -201,7 +210,7 @@ public class DegradationHelper {
 		        		} else {
 		        			parents = new Node[] { degradation };
 		        		}
-		        		if(parents.length == 0 || parents[0] == ModuleVanillaWorldgen.AIR && ChaosCrystalMain.cfgNonDestructive) {
+		        		if(parents.length == 0) {
 		        			//continue;
 		        		} else {
 		        			
@@ -233,6 +242,7 @@ public class DegradationHelper {
 				        				}
 				        			}
 				        		}
+			    	    		hit += count;
 			    	    		if(count > 0) {
 			    	    			is.stackSize -= count;
 			    	    			
