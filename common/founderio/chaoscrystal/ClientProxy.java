@@ -34,38 +34,38 @@ import founderio.chaoscrystal.rendering.RenderFocus;
 import founderio.chaoscrystal.rendering.RenderItemManual;
 
 public class ClientProxy extends CommonProxy {
-	
+
 	public static RenderApparatus render;
 	private Random rnd = new Random();
-	
+
 	@Override
 	public void registerRenderStuff() {
 		RenderingRegistry.registerEntityRenderingHandler(EntityChaosCrystal.class, new RenderChaosCrystal());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusTransfer.class, new RenderFocus());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, new RenderFocus());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, new RenderFocus());
-		
+
 		render = new RenderApparatus();
-		
+
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockReconstructor.blockID, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockCreator.blockID, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockSentry.blockID, render);
 		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.itemManual.itemID, new RenderItemManual());
-		
+
 
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
-		
+
 
 		TickRegistry.registerTickHandler(render, Side.CLIENT);
 	}
-	
+
 	@Override
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
 		if(packet.channel.equals(Constants.CHANNEL_NAME_PARTICLES)) {
 			DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
-			
+
 			try {
 				int type = dis.readInt();
 				float posX = dis.readFloat();
@@ -84,27 +84,27 @@ public class ClientProxy extends CommonProxy {
 							Minecraft.getMinecraft().effectRenderer.addEffect(
 									new EntityAuraFX(
 											w,
-									posX + rnd.nextDouble()*variation-varHalf,
-									posY + rnd.nextDouble()*variation-varHalf,
-									posZ + rnd.nextDouble()*variation-varHalf, 1, 1, 1));
+											posX + rnd.nextDouble()*variation-varHalf,
+											posY + rnd.nextDouble()*variation-varHalf,
+											posZ + rnd.nextDouble()*variation-varHalf, 1, 1, 1));
 						}
 					} else {
 						for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
 							Minecraft.getMinecraft().effectRenderer.addEffect(
 									new DegradationParticles(
 											w,
-									posX + rnd.nextDouble()*variation-varHalf,
-									posY + rnd.nextDouble()*variation-varHalf,
-									posZ + rnd.nextDouble()*variation-varHalf,
-									offX + rnd.nextDouble()*variation-varHalf,
-									offY + rnd.nextDouble()*variation-varHalf,
-									offZ + rnd.nextDouble()*variation-varHalf,
-									type));
+											posX + rnd.nextDouble()*variation-varHalf,
+											posY + rnd.nextDouble()*variation-varHalf,
+											posZ + rnd.nextDouble()*variation-varHalf,
+											offX + rnd.nextDouble()*variation-varHalf,
+											offY + rnd.nextDouble()*variation-varHalf,
+											offZ + rnd.nextDouble()*variation-varHalf,
+											type));
 						}
 					}
 				}
-				
-				
+
+
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -112,7 +112,7 @@ public class ClientProxy extends CommonProxy {
 			DataInputStream dis = new DataInputStream(new ByteArrayInputStream(packet.data));
 			try {
 				int type = dis.readInt();
-				
+
 				if(type==1) {
 					//Unused
 				} else if(type==2) {
@@ -122,7 +122,7 @@ public class ClientProxy extends CommonProxy {
 					String aspect = dis.readUTF();
 
 					World w = DimensionManager.getWorld(dimension);
-					
+
 					if(w != null) {
 						EntityPlayer e = w.getPlayerEntityByName(playerName);
 						if(e != null) {

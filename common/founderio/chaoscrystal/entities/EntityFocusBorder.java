@@ -3,54 +3,52 @@ package founderio.chaoscrystal.entities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.util.GeometryHelper;
 
 public class EntityFocusBorder extends EntityFocus {
 
 	public EntityFocusBorder(World world) {
 		super(world);
 	}
-	
-	public EntityFocusBorder(World world, double x, double y,
-			double z, float yaw, float pitch) {
+
+	public EntityFocusBorder(World world, double x, double y, double z,
+			float yaw, float pitch) {
 		super(world, x, y, z, yaw, pitch);
 	}
-	
+
 	public ItemStack buildItemStack() {
 		ItemStack is = new ItemStack(ChaosCrystalMain.itemFocus, 1, 1);
 		return is;
 	}
-	
+
 	@Override
 	protected void logicUpdate() {
-    	if(age > ChaosCrystalMain.cfgFocusTickInterval) {
-    		age = 0;
-    	}
-    	EntityChaosCrystal crystal1 = null;
+		if (age > ChaosCrystalMain.cfgFocusTickInterval) {
+			age = 0;
+		}
+		EntityChaosCrystal crystal1 = null;
 		double dist = Double.MAX_VALUE;
-        
-        for(Object obj : this.worldObj.loadedEntityList) {
-			if(obj instanceof EntityChaosCrystal) {
-				double distX = ((EntityChaosCrystal) obj).posX - posX;
-				double distY = ((EntityChaosCrystal) obj).posY - posY;
-				double distZ = ((EntityChaosCrystal) obj).posZ - posZ;
-				double tmp_dist = Math.sqrt(distX*distX + distY*distY + distZ*distZ);
-				if(tmp_dist < dist) {
-					crystal1 = (EntityChaosCrystal)obj;
+
+		for (Object obj : this.worldObj.loadedEntityList) {
+			if (obj instanceof EntityChaosCrystal) {
+				double tmp_dist = GeometryHelper.entityDistance((EntityChaosCrystal) obj, this);
+				if (tmp_dist < dist) {
+					crystal1 = (EntityChaosCrystal) obj;
 					dist = tmp_dist;
 				}
 			}
 		}
-        
-        if(crystal1 != null) {
-        	lookX = (float)crystal1.posX;
-    		lookY = (float)(crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0F;
-    		lookZ = (float)crystal1.posZ;
-        	updateLook();
-        } else if(age == 0) {
-        	lookX = (float)posX + (this.rand.nextFloat() - 0.5f) * 10;
-        	lookY = (float)posY;
-        	lookZ = (float)posZ + (this.rand.nextFloat() - 0.5f) * 10;
-        	updateLook();
-        }
-    }
+
+		if (crystal1 != null) {
+			lookX = (float) crystal1.posX;
+			lookY = (float) (crystal1.boundingBox.minY + crystal1.boundingBox.maxY) / 2.0F;
+			lookZ = (float) crystal1.posZ;
+			updateLook();
+		} else if (age == 0) {
+			lookX = (float) posX + (this.rand.nextFloat() - 0.5f) * 10;
+			lookY = (float) posY;
+			lookZ = (float) posZ + (this.rand.nextFloat() - 0.5f) * 10;
+			updateLook();
+		}
+	}
 }

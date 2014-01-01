@@ -12,9 +12,9 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import cpw.mods.fml.common.network.Player;
 
 public class CommonProxy {
-	
+
 	public void registerRenderStuff() {
-		
+
 	}
 
 	public static void spawnParticleEffects(int dimension, int effect,
@@ -48,7 +48,7 @@ public class CommonProxy {
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream(Float.SIZE * 7 + Integer.SIZE * 2);
 			DataOutputStream dos = new DataOutputStream(bos);
-	
+
 			dos.writeInt(effect);
 			dos.writeFloat(sourceX);
 			dos.writeFloat(sourceY);
@@ -57,28 +57,28 @@ public class CommonProxy {
 			dos.writeFloat(offY);
 			dos.writeFloat(offZ);
 			dos.writeFloat(variation);
-			
+
 			Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
 			degradationPacket.channel = Constants.CHANNEL_NAME_PARTICLES;
 			degradationPacket.data = bos.toByteArray();
 			degradationPacket.length = bos.size();
-	
+
 			dos.close();
-			
+
 			PacketDispatcher.sendPacketToAllAround(sourceX, sourceY, sourceZ, 128, dimension, degradationPacket);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-//TODO: Change to double!!
+	//TODO: Change to double!!
 	public static void spawnParticleEffects(int dimension, int effect,
 			float sourceX, float sourceY, float sourceZ,
 			float offX, float offY, float offZ) {
 		CommonProxy.spawnParticleEffects(dimension, effect, sourceX, sourceY, sourceZ, offX, offY, offZ, 1);
 	}
-	
+
 	public void onPacketData(INetworkManager manager,
 			Packet250CustomPayload packet, Player player) {
-		
+
 	}
 }

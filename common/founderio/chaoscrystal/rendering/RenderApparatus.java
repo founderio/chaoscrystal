@@ -19,7 +19,6 @@ import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.ITickHandler;
 import cpw.mods.fml.common.TickType;
-
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
@@ -27,7 +26,8 @@ import founderio.chaoscrystal.blocks.TileEntityCreator;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
 
-public class RenderApparatus extends TileEntitySpecialRenderer implements IItemRenderer, ITickHandler {
+public class RenderApparatus extends TileEntitySpecialRenderer implements
+		IItemRenderer, ITickHandler {
 	public final TechneModel modelReconstructor;
 	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
@@ -38,19 +38,28 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public final ResourceLocation resourceSentryOff;
 	private RenderItem ri;
 	private EntityItem ei;
-	
+
 	public RenderApparatus() {
-		String reconstructor = "/assets/" + Constants.MOD_ID + "/models/reconstructor.tcn";
-		modelReconstructor = new TechneModel(reconstructor, RenderApparatus.class.getResource(reconstructor));
-		resourceReconstructor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reconstructor.png");
+		String reconstructor = "/assets/" + Constants.MOD_ID
+				+ "/models/reconstructor.tcn";
+		modelReconstructor = new TechneModel(reconstructor,
+				RenderApparatus.class.getResource(reconstructor));
+		resourceReconstructor = new ResourceLocation(Constants.MOD_ID
+				+ ":textures/models/reconstructor.png");
 		String creator = "/assets/" + Constants.MOD_ID + "/models/creator.tcn";
-		modelCreator = new TechneModel(creator, RenderApparatus.class.getResource(creator));
-		resourceCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
-		resourceCreatorOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator_off.png");
+		modelCreator = new TechneModel(creator,
+				RenderApparatus.class.getResource(creator));
+		resourceCreator = new ResourceLocation(Constants.MOD_ID
+				+ ":textures/models/creator.png");
+		resourceCreatorOff = new ResourceLocation(Constants.MOD_ID
+				+ ":textures/models/creator_off.png");
 		String sentry = "/assets/" + Constants.MOD_ID + "/models/sentry.tcn";
-		modelSentry = new TechneModel(sentry, RenderApparatus.class.getResource(sentry));
-		resourceSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
-		resourceSentryOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry_off.png");
+		modelSentry = new TechneModel(sentry,
+				RenderApparatus.class.getResource(sentry));
+		resourceSentry = new ResourceLocation(Constants.MOD_ID
+				+ ":textures/models/sentry.png");
+		resourceSentryOff = new ResourceLocation(Constants.MOD_ID
+				+ ":textures/models/sentry_off.png");
 		ri = new RenderItem() {
 			@Override
 			public boolean shouldBob() {
@@ -60,16 +69,16 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		ei = new EntityItem(null, 0, 0, 0, new ItemStack(Item.pickaxeDiamond));
 		ri.setRenderManager(RenderManager.instance);
 	}
-	
+
 	private float rot = 0;
-	
+
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
 	}
 
 	@Override
 	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if(Minecraft.getMinecraft().theWorld != null) {
+		if (Minecraft.getMinecraft().theWorld != null) {
 			rot = (Minecraft.getMinecraft().theWorld.getWorldTime() % 360f) * 4f;
 		}
 	}
@@ -84,122 +93,128 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public String getLabel() {
 		return "Chaos Crystal TE Rendering Update";
 	}
-	
+
 	@Override
 	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
 			double d2, float f) {
-		
-		
-		
-		if(tileentity instanceof TileEntityReconstructor) {
+
+		if (tileentity instanceof TileEntityReconstructor) {
 			renderModelAt(modelReconstructor, resourceReconstructor, d0, d1, d2);
-			
-			ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(0);
-			if(is == null) {
-				ei.setEntityItemStack(new ItemStack(0,0,0));
+
+			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);
+			if (is == null) {
+				ei.setEntityItemStack(new ItemStack(0, 0, 0));
 			} else {
 				ei.setEntityItemStack(is);
-				
+
 				GL11.glPushMatrix();
-				GL11.glTranslatef((float)d0 + 0.5f, (float)d1 + 0.15f, (float)d2 + 0.5f);
+				GL11.glTranslatef((float) d0 + 0.5f, (float) d1 + 0.15f,
+						(float) d2 + 0.5f);
 				GL11.glRotatef(rot, 0, 1, 0);
-				
-				ei.setPosition(d0, d1+1, d2);
+
+				ei.setPosition(d0, d1 + 1, d2);
 
 				RenderItem.renderInFrame = true;
 				ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
-				
+
 				GL11.glPopMatrix();
 			}
-		} else if(tileentity instanceof TileEntityCreator) {
-			renderModelAt(modelCreator, ((TileEntityCreator)tileentity).isActive ? resourceCreator : resourceCreatorOff, d0, d1, d2);
-			
-			ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(0);
-			if(is == null) {
-				ei.setEntityItemStack(new ItemStack(0,0,0));
+		} else if (tileentity instanceof TileEntityCreator) {
+			renderModelAt(modelCreator,
+					((TileEntityCreator) tileentity).isActive ? resourceCreator
+							: resourceCreatorOff, d0, d1, d2);
+
+			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);
+			if (is == null) {
+				ei.setEntityItemStack(new ItemStack(0, 0, 0));
 			} else {
 				ei.setEntityItemStack(is);
-				
+
 				GL11.glPushMatrix();
-				GL11.glTranslatef((float)d0 + 0.5f, (float)d1 + 0.15f, (float)d2 + 0.5f);
+				GL11.glTranslatef((float) d0 + 0.5f, (float) d1 + 0.15f,
+						(float) d2 + 0.5f);
 				GL11.glRotatef(rot, 0, 1, 0);
-				
-				ei.setPosition(d0, d1+1, d2);
+
+				ei.setPosition(d0, d1 + 1, d2);
 
 				RenderItem.renderInFrame = true;
 				ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
-				
+
 				GL11.glPopMatrix();
 			}
-		} else if(tileentity instanceof TileEntitySentry) {
-			renderModelAt(modelSentry, ((TileEntitySentry)tileentity).isActive ? resourceSentry : resourceSentryOff, d0, d1, d2);
-			
+		} else if (tileentity instanceof TileEntitySentry) {
+			renderModelAt(modelSentry,
+					((TileEntitySentry) tileentity).isActive ? resourceSentry
+							: resourceSentryOff, d0, d1, d2);
+
 			GL11.glPushMatrix();
-//
-//			GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot))*0.1f, 0);
-			for(int i = 0; i < 4; i++) {
-				ItemStack is = ((TileEntityApparatus)tileentity).getStackInSlot(i);
-				if(is == null) {
-					ei.setEntityItemStack(new ItemStack(0,0,0));
+			//
+			// GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot))*0.1f,
+			// 0);
+			for (int i = 0; i < 4; i++) {
+				ItemStack is = ((TileEntityApparatus) tileentity)
+						.getStackInSlot(i);
+				if (is == null) {
+					ei.setEntityItemStack(new ItemStack(0, 0, 0));
 				} else {
 					ei.setEntityItemStack(is);
 					float offX = (i == 0 || i == 1) ? 0.325f : 0.625f;
 					float offZ = (i == 0 || i == 2) ? 0.325f : 0.625f;
 					GL11.glPushMatrix();
-					GL11.glTranslatef((float)d0 + offX, (float)d1 + 0.15f, (float)d2 + offZ);
+					GL11.glTranslatef((float) d0 + offX, (float) d1 + 0.15f,
+							(float) d2 + offZ);
 					GL11.glRotatef(rot, 0, 1, 0);
-					GL11.glScalef(1/3f, 1/3f, 1/3f);
-					
-					ei.setPosition(d0, d1+1, d2);
+					GL11.glScalef(1 / 3f, 1 / 3f, 1 / 3f);
+
+					ei.setPosition(d0, d1 + 1, d2);
 
 					RenderItem.renderInFrame = true;
 					ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
-					
+
 					GL11.glPopMatrix();
 				}
 			}
 			GL11.glPopMatrix();
-			
+
 		} else {
-			
+
 		}
-		
-		
-		
-		
+
 	}
-	
-	public void renderModelAt(TechneModel model, ResourceLocation texture, double d0, double d1, double d2) {
+
+	public void renderModelAt(TechneModel model, ResourceLocation texture,
+			double d0, double d1, double d2) {
 		GL11.glPushMatrix();
-		
-		//rot = (Minecraft.getMinecraft().theWorld.getWorldTime()) % 360f;
-		
-		
-		GL11.glTranslatef((float)d0 + 0.5f, (float)d1 + 0.04f, (float)d2 + 0.5f);
-		
-		GL11.glScalef(0.0625f, 0.0625f, 0.0625f);//1/16th scale, as techne tends to be big..
+
+		// rot = (Minecraft.getMinecraft().theWorld.getWorldTime()) % 360f;
+
+		GL11.glTranslatef((float) d0 + 0.5f, (float) d1 + 0.04f,
+				(float) d2 + 0.5f);
+
+		GL11.glScalef(0.0625f, 0.0625f, 0.0625f);// 1/16th scale, as techne
+													// tends to be big..
 		GL11.glRotatef(180f, 1.0f, 0, 0);
-		
+
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-		
-		if(model == modelReconstructor) {
+
+		if (model == modelReconstructor) {
 			modelReconstructor.renderPart("Base");
 			modelReconstructor.renderPart("Socket");
 
-			
 			GL11.glRotatef(rot, 0, 1, 0);
 
 			modelReconstructor.renderPart("Arm1");
 			modelReconstructor.renderPart("Arm2");
 			modelReconstructor.renderPart("Arm3");
 			modelReconstructor.renderPart("Arm4");
-		} else if(model == modelCreator) {
+		} else if (model == modelCreator) {
 			modelCreator.renderPart("Base");
 			modelCreator.renderPart("Crystal");
 
 			GL11.glPushMatrix();
-			GL11.glTranslatef(0, -6f + (float)Math.sin(Math.toRadians(rot-90) * 2f)*5f, 0);
-			
+			GL11.glTranslatef(0,
+					-6f + (float) Math.sin(Math.toRadians(rot - 90) * 2f) * 5f,
+					0);
 
 			modelCreator.renderPart("Ring1");
 			modelCreator.renderPart("Ring2");
@@ -207,33 +222,30 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 			modelCreator.renderPart("Ring4");
 
 			GL11.glPopMatrix();
-		} else if(model == modelSentry) {
-			
-			
+		} else if (model == modelSentry) {
+
 			modelSentry.renderPart("Base");
-			
+
 			modelSentry.renderPart("Crystal");
 			GL11.glPushMatrix();
-			GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot-90) * 1f), 0);
-			
-			
+			GL11.glTranslatef(0,
+					(float) Math.sin(Math.toRadians(rot - 90) * 1f), 0);
+
 			modelSentry.renderPart("Staff1");
 			modelSentry.renderPart("Staff2");
 			modelSentry.renderPart("Staff3");
 			modelSentry.renderPart("Staff4");
-			
+
 			modelSentry.renderPart("Corner1");
 			modelSentry.renderPart("Corner2");
 			modelSentry.renderPart("Corner3");
 			modelSentry.renderPart("Corner4");
-			
 
 			GL11.glPopMatrix();
 
-			
 			GL11.glPushMatrix();
-			GL11.glTranslatef(0, (float)Math.sin(Math.toRadians(rot) * 1f), 0);
-			
+			GL11.glTranslatef(0, (float) Math.sin(Math.toRadians(rot) * 1f), 0);
+
 			GL11.glRotatef(rot, 0, 1, 0);
 
 			modelSentry.renderPart("Crystal2");
@@ -241,7 +253,6 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		} else {
 			model.renderAll();
 		}
-		
 
 		GL11.glPopMatrix();
 	}
@@ -261,10 +272,10 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
 		TechneModel model;
 		ResourceLocation resource;
-		
-		BlockApparatus block = (BlockApparatus)Block.blocksList[item.itemID];
-		
-		switch(block.metaListIndex) {
+
+		BlockApparatus block = (BlockApparatus) Block.blocksList[item.itemID];
+
+		switch (block.metaListIndex) {
 		case 0:
 			model = modelReconstructor;
 			resource = resourceReconstructor;
@@ -277,21 +288,28 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 			model = modelSentry;
 			resource = resourceSentry;
 			break;
-		default: return;
+		default:
+			return;
 		}
-		
-		switch(type) {
-		case ENTITY: renderModelAt(model, resource, -0.5, -0.5, -0.5); break;
+
+		switch (type) {
+		case ENTITY:
+			renderModelAt(model, resource, -0.5, -0.5, -0.5);
+			break;
 		case EQUIPPED:
 		case EQUIPPED_FIRST_PERSON:
-			renderModelAt(model, resource, 0, 0, 0); break;
-		case INVENTORY: renderModelAt(model, resource, 0.125, 0, 0.125); break;
-		case FIRST_PERSON_MAP: renderModelAt(model, resource, -0.5, -0.5, -0.5); break;
-		default: renderModelAt(model, resource, -0.5, -0.5, -0.5); break;
+			renderModelAt(model, resource, 0, 0, 0);
+			break;
+		case INVENTORY:
+			renderModelAt(model, resource, 0.125, 0, 0.125);
+			break;
+		case FIRST_PERSON_MAP:
+			renderModelAt(model, resource, -0.5, -0.5, -0.5);
+			break;
+		default:
+			renderModelAt(model, resource, -0.5, -0.5, -0.5);
+			break;
 		}
 	}
 
-
 }
-
-	

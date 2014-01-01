@@ -16,8 +16,8 @@ public abstract class EntityFocus extends EntityCrystal {
 		super(world);
 	}
 
-	public EntityFocus(World world, double x, double y,
-			double z, float yaw, float pitch) {
+	public EntityFocus(World world, double x, double y, double z, float yaw,
+			float pitch) {
 		super(world, x, y, z, yaw, pitch);
 	}
 
@@ -27,7 +27,7 @@ public abstract class EntityFocus extends EntityCrystal {
 		this.dataWatcher.addObject(11, Float.valueOf(lookY));
 		this.dataWatcher.addObject(12, Float.valueOf(lookZ));
 	}
-	
+
 	@Override
 	public void playSpawnSound() {
 		return;
@@ -43,22 +43,22 @@ public abstract class EntityFocus extends EntityCrystal {
 		double d1 = lookY - posY;
 		double d2 = lookZ - posZ;
 		float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
-		float targetYaw = (float)(Math.atan2(d0, d2) * 180.0D / Math.PI);
-		float targetPitch = (float)(Math.atan2(d1, (double)f3) * 180.0D / Math.PI);
+		float targetYaw = (float) (Math.atan2(d0, d2) * 180.0D / Math.PI);
+		float targetPitch = (float) (Math.atan2(d1, (double) f3) * 180.0D / Math.PI);
 
 		final float deltaRotation = 3f;
 		float offYaw = targetYaw - rotationYaw;
-		if(offYaw > deltaRotation) {
+		if (offYaw > deltaRotation) {
 			offYaw = deltaRotation;
 		}
-		if(offYaw < -deltaRotation) {
+		if (offYaw < -deltaRotation) {
 			offYaw = -deltaRotation;
 		}
 		float offPitch = targetPitch - rotationPitch;
-		if(offPitch > deltaRotation) {
+		if (offPitch > deltaRotation) {
 			offPitch = deltaRotation;
 		}
-		if(offPitch < -deltaRotation) {
+		if (offPitch < -deltaRotation) {
 			offPitch = -deltaRotation;
 		}
 		this.rotationPitch += offPitch;
@@ -70,7 +70,6 @@ public abstract class EntityFocus extends EntityCrystal {
 		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
 		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
 	}
-
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {

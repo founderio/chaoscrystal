@@ -6,12 +6,14 @@ public class Repair {
 	public final int itemId;
 	public final String[] aspects;
 	public final int[] amounts;
+
 	public Repair(int itemId, String[] aspects, int[] amounts) {
 		super();
 		this.itemId = itemId;
 		this.aspects = aspects;
 		this.amounts = amounts;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -21,6 +23,7 @@ public class Repair {
 		result = prime * result + itemId;
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -38,12 +41,12 @@ public class Repair {
 			return false;
 		return true;
 	}
+
 	@Override
 	public String toString() {
 		return "Repair [itemId=" + itemId + ", aspects="
 				+ Arrays.toString(aspects) + ", amounts="
 				+ Arrays.toString(amounts) + "]";
 	}
-	
-	
+
 }

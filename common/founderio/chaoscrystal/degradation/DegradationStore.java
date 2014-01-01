@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.IRecipe;
@@ -17,115 +16,119 @@ import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.util.ItemUtil;
 
 public class DegradationStore {
-	
+
 	private List<Node> nodes;
 	private HashMap<Integer, Repair> repairs;
-	
-	
+
 	public DegradationStore() {
 		repairs = new HashMap<Integer, Repair>();
 		nodes = new ArrayList<Node>();
-		
+
 		addAspectModule(new ModuleVanillaWorldgen());
 	}
-	
+
 	public void addAspectModule(AspectModule module) {
 		nodes.addAll(module.nodes);
 	}
-	
+
 	public List<Node> getCreations() {
-		//TODO: Buffer this!
+		// TODO: Buffer this!
 		List<Node> creations = new ArrayList<Node>();
-		for(Node node : nodes) {
+		for (Node node : nodes) {
 			Node[] parents = node.getParents();
-			if(parents.length == 1 && parents[0] == ModuleVanillaWorldgen.AIR) {
+			if (parents.length == 1 && parents[0] == ModuleVanillaWorldgen.AIR) {
 				creations.add(node);
 			}
 		}
 		return creations;
 	}
-	
+
 	public Repair getRepair(int id) {
 		return repairs.get(id);
 	}
-	
+
 	public void registerRepair(int itemId, String[] aspects, int[] amounts) {
 		repairs.put(itemId, new Repair(itemId, aspects, amounts));
 	}
-	
+
 	public List<Node> getInfusionsFrom(ItemStack is) {
 		List<Node> infusions = new ArrayList<Node>();
-		for(Node node : nodes) {
+		for (Node node : nodes) {
 			Node[] parents = node.getParents();
-			if(parents == null) {
+			if (parents == null) {
 				return null;
 			}
-			if(parents.length == 1 && parents[0] == null) {
+			if (parents.length == 1 && parents[0] == null) {
 				return null;
 			}
-			if(parents.length == 1 && parents[0].matchesItemStack(is)) {
+			if (parents.length == 1 && parents[0].matchesItemStack(is)) {
 				infusions.add(node);
 			}
 		}
 		return infusions;
 	}
-	
+
 	public List<Node> getExtractionsFrom(ItemStack is) {
 		List<Node> extractions = new ArrayList<Node>();
-		for(Node node : nodes) {
-			if(node.matchesItemStack(is)) {
+		for (Node node : nodes) {
+			if (node.matchesItemStack(is)) {
 				extractions.add(node);
 			}
 		}
 		return extractions;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
 	public void autoRegisterDegradation(ItemStack is) {
 		@SuppressWarnings("unchecked")
 		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
 		List<IRecipe> matching = new ArrayList<IRecipe>();
-		for(IRecipe r: recipes) {
+		for (IRecipe r : recipes) {
 			ItemStack output = r.getRecipeOutput();
-			if(output != null && output.itemID == is.itemID && (is.getItemDamage() == 32767 || output.getItemDamage() == is.getItemDamage())) {
+			if (ItemUtil.itemsMatch(is, output)) {
 				matching.add(r);
 			}
 		}
-		if(matching.isEmpty()) {
-			if(ChaosCrystalMain.cfgDebugOutput) {
-    			System.out.println("Registering Item " + is + " failed. No crafting recipes.");
+		if (matching.isEmpty()) {
+			if (ChaosCrystalMain.cfgDebugOutput) {
+				System.out.println("Registering Item " + is
+						+ " failed. No crafting recipes.");
 			}
 			return;
 		}
-		if(matching.size() > 1) {
-			if(ChaosCrystalMain.cfgDebugOutput) {
-    			System.out.println("Registering Item " + is + " failed. Multiple crafting recipes.");
+		if (matching.size() > 1) {
+			if (ChaosCrystalMain.cfgDebugOutput) {
+				System.out.println("Registering Item " + is
+						+ " failed. Multiple crafting recipes.");
 			}
 			return;
 		}
 		IRecipe r = matching.get(0);
-		if(r instanceof ShapedRecipes) {
+		if (r instanceof ShapedRecipes) {
 			autoRegisterWithItemStacks(is, ((ShapedRecipes) r).recipeItems);
-		} else if(r instanceof ShapedOreRecipe) {
+		} else if (r instanceof ShapedOreRecipe) {
 			Object[] input = ((ShapedOreRecipe) r).getInput();
-			
+
 			ItemStack[] recipeItems = new ItemStack[input.length];
-			for(int i = 0; i < input.length; i++) {
-				if(input[i] instanceof ItemStack) {
-					recipeItems[i] = (ItemStack)input[i];
-				} else if(input[i] instanceof ArrayList) {
-					recipeItems[i] = (ItemStack)((ArrayList)input[i]).get(0);
+			for (int i = 0; i < input.length; i++) {
+				if (input[i] instanceof ItemStack) {
+					recipeItems[i] = (ItemStack) input[i];
+				} else if (input[i] instanceof ArrayList) {
+					recipeItems[i] = (ItemStack) ((ArrayList) input[i]).get(0);
 				}
 			}
 			autoRegisterWithItemStacks(is, recipeItems);
 		} else {
-			if(ChaosCrystalMain.cfgDebugOutput) {
-    			System.out.println("Registering Item " + is + " failed. No supported crafting recipes.");
+			if (ChaosCrystalMain.cfgDebugOutput) {
+				System.out.println("Registering Item " + is
+						+ " failed. No supported crafting recipes.");
 			}
 		}
-		//TODO: Add smelting recipes
+		// TODO: Add smelting recipes
 	}
-	
-	private void autoRegisterWithItemStacks(ItemStack is, ItemStack[] recipeItems) {
+
+	private void autoRegisterWithItemStacks(ItemStack is,
+			ItemStack[] recipeItems) {
 //		int[] amounts = new int[Aspects.ASPECTS.length];
 //		List<ItemStack> degraded = new ArrayList<ItemStack>();
 //		for(ItemStack crafting : recipeItems) {
@@ -166,8 +169,6 @@ public class DegradationStore {
 //		amounts[Aspects.getAspectIndex(Aspects.ASPECT_CRAFTING)] += 5;
 //		registerDegradation(is, Aspects.ASPECTS.clone(), amounts, degraded.toArray(new ItemStack[degraded.size()]));
 	}
-	
-	
 
 	public void debugOutput() {
 //		System.out.println("Degradation List:");

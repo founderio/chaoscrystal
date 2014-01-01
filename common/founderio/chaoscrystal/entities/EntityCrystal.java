@@ -18,33 +18,36 @@ public abstract class EntityCrystal extends Entity {
 		this.isImmuneToFire = true;
 	}
 
-	public EntityCrystal(World world, double x, double y,
-			double z, float yaw, float pitch) {
+	public EntityCrystal(World world, double x, double y, double z, float yaw,
+			float pitch) {
 		this(world);
 		this.setPosition(x, y, z);
 		this.setRotation(yaw, pitch);
 	}
 
 	protected abstract void logicUpdate();
-	protected abstract void visualUpdate();
-	public abstract ItemStack buildItemStack();
-	public abstract void playSpawnSound();
 
+	protected abstract void visualUpdate();
+
+	public abstract ItemStack buildItemStack();
+
+	public abstract void playSpawnSound();
 
 	@Override
 	public boolean canBeCollidedWith() {
 		return true;
 	}
-	
+
 	@Override
 	public boolean hitByEntity(Entity par1Entity) {
-		if(this.worldObj.isRemote) {
+		if (this.worldObj.isRemote) {
 			return true;
 		}
 
 		this.playSound("mob.blaze.hit", 1, .2f);
 
-		EntityItem item = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, buildItemStack());
+		EntityItem item = new EntityItem(this.worldObj, this.posX, this.posY,
+				this.posZ, buildItemStack());
 		item.delayBeforeCanPickup = 0;
 
 		this.worldObj.spawnEntityInWorld(item);
@@ -56,7 +59,7 @@ public abstract class EntityCrystal extends Entity {
 
 	@Override
 	public void onStruckByLightning(EntityLightningBolt par1EntityLightningBolt) {
-		if(this.worldObj.isRemote) {
+		if (this.worldObj.isRemote) {
 			return;
 		}
 
@@ -68,12 +71,12 @@ public abstract class EntityCrystal extends Entity {
 		worldObj.theProfiler.startSection("entityBaseTick");
 
 		age++;
-		if(worldObj.isRemote) {
-			//Render Tick
+		if (worldObj.isRemote) {
+			// Render Tick
 			age %= 360;
 		} else {
-			//Logic Tick
-			if(age > tickInterval) {
+			// Logic Tick
+			if (age > tickInterval) {
 				age -= tickInterval;
 				logicUpdate();
 			}
@@ -83,6 +86,7 @@ public abstract class EntityCrystal extends Entity {
 
 		this.worldObj.theProfiler.endSection();
 	}
+
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		age = nbttagcompound.getInteger("age");

@@ -16,11 +16,11 @@ public class ItemCrystalGlasses extends ItemArmor {
 		this.setHasSubtypes(false);
 	}
 
-	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID + ":crystalglasses");
+		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID
+				+ ":crystalglasses");
 	}
 
 	@Override

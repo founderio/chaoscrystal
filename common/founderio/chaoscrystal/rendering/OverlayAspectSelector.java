@@ -45,32 +45,32 @@ import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class OverlayAspectSelector extends Gui {
-	
+
 	private RenderItem ri;
-	
+
 	public OverlayAspectSelector() {
 		ri = new RenderItem();
 		ri.setRenderManager(RenderManager.instance);
 	}
-	
+
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onMouseWheel(MouseEvent event) {
-		
+
 
 		if(event.dwheel == 0) {
 			return;
 		}
-		
+
 		if(!Minecraft.getMinecraft().thePlayer.isSneaking()) {
 			return;
 		}
 
-		
+
 		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 		if(currentItem == null) {
 			return;
 		}
-		
+
 		if(currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
 			event.setCanceled(true);
 			int aspectIndex;
@@ -87,30 +87,30 @@ public class OverlayAspectSelector extends Gui {
 			}
 			if(event.dwheel > 0 &&  aspectIndex < Aspects.ASPECTS.length - 1) {
 				aspectIndex++;
-	        }
+			}
 			if(event.dwheel < 0 &&  aspectIndex > 0) {
 				aspectIndex--;
-	        }
+			}
 			tags.setString("aspect", Aspects.ASPECTS[aspectIndex]);
 			currentItem.setTagCompound(tags);
-			
+
 			try {
-	    		ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
-	    		DataOutputStream dos = new DataOutputStream(bos);
+				ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
+				DataOutputStream dos = new DataOutputStream(bos);
 
-	    		dos.writeInt(2);
-	    		dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
-	    		dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
-	    		dos.writeUTF(Aspects.ASPECTS[aspectIndex]);
-	    		
-	    		Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-	    		degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
-	    		degradationPacket.data = bos.toByteArray();
-	    		degradationPacket.length = bos.size();
+				dos.writeInt(2);
+				dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
+				dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
+				dos.writeUTF(Aspects.ASPECTS[aspectIndex]);
 
-	    		dos.close();
-	    		
-	    		PacketDispatcher.sendPacketToServer(degradationPacket);
+				Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+				degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
+				degradationPacket.data = bos.toByteArray();
+				degradationPacket.length = bos.size();
+
+				dos.close();
+
+				PacketDispatcher.sendPacketToServer(degradationPacket);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -122,150 +122,150 @@ public class OverlayAspectSelector extends Gui {
 				RenderItemManual.page++;
 			}
 		}
-		
+
 	}
-	
+
 	public void renderItem(ItemStack is, int x, int y) {
 		RenderHelper.enableGUIStandardItemLighting();
-		 ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
-	     ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
+		ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
+		ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
 	}
-	
+
 	/*
 	 * Copy & modify from Minecraft.getMinecraft().entityRenderer.getMouseOver()
 	 */
 	public static MovingObjectPosition getMouseOver(float par1)
-    {
+	{
 		Entity pointedEntity = null;
 		Minecraft mc = Minecraft.getMinecraft();
-		
-        if (mc.renderViewEntity != null)
-        {
-            if (mc.theWorld != null)
-            {
-            	//mc.pointedEntityLiving = null;
-                double d0 = (double)mc.playerController.getBlockReachDistance();
-                MovingObjectPosition mop = mc.renderViewEntity.rayTrace(d0, par1);
-                double d1 = d0;
-                Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
 
-                if (mc.playerController.extendedReach())
-                {
-                    d0 = 6.0D;
-                    d1 = 6.0D;
-                }
-                else
-                {
-                    if (d0 > 3.0D)
-                    {
-                        d1 = 3.0D;
-                    }
+		if (mc.renderViewEntity != null)
+		{
+			if (mc.theWorld != null)
+			{
+				//mc.pointedEntityLiving = null;
+				double d0 = (double)mc.playerController.getBlockReachDistance();
+				MovingObjectPosition mop = mc.renderViewEntity.rayTrace(d0, par1);
+				double d1 = d0;
+				Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
 
-                    d0 = d1;
-                }
+				if (mc.playerController.extendedReach())
+				{
+					d0 = 6.0D;
+					d1 = 6.0D;
+				}
+				else
+				{
+					if (d0 > 3.0D)
+					{
+						d1 = 3.0D;
+					}
 
-                if (mop != null)
-                {
-                    d1 = mop.hitVec.distanceTo(vec3);
-                }
+					d0 = d1;
+				}
 
-                Vec3 vec31 = mc.renderViewEntity.getLook(par1);
-                Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
-                pointedEntity = null;
-                float f1 = 1.0F;
-                @SuppressWarnings("rawtypes")
+				if (mop != null)
+				{
+					d1 = mop.hitVec.distanceTo(vec3);
+				}
+
+				Vec3 vec31 = mc.renderViewEntity.getLook(par1);
+				Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
+				pointedEntity = null;
+				float f1 = 1.0F;
+				@SuppressWarnings("rawtypes")
 				List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
-                double d2 = d1;
+				double d2 = d1;
 
-                for (int i = 0; i < list.size(); ++i)
-                {
-                    Entity entity = (Entity)list.get(i);
+				for (int i = 0; i < list.size(); ++i)
+				{
+					Entity entity = (Entity)list.get(i);
 
-                    float f2 = entity.getCollisionBorderSize();
-                    AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
-                    MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+					float f2 = entity.getCollisionBorderSize();
+					AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
+					MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
 
-                    if (axisalignedbb.isVecInside(vec3))
-                    {
-                        if (0.0D < d2 || d2 == 0.0D)
-                        {
-                            pointedEntity = entity;
-                            d2 = 0.0D;
-                        }
-                    }
-                    else if (movingobjectposition != null)
-                    {
-                        double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+					if (axisalignedbb.isVecInside(vec3))
+					{
+						if (0.0D < d2 || d2 == 0.0D)
+						{
+							pointedEntity = entity;
+							d2 = 0.0D;
+						}
+					}
+					else if (movingobjectposition != null)
+					{
+						double d3 = vec3.distanceTo(movingobjectposition.hitVec);
 
-                        if (d3 < d2 || d2 == 0.0D)
-                        {
-                            if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
-                            {
-                                if (d2 == 0.0D)
-                                {
-                                    pointedEntity = entity;
-                                }
-                            }
-                            else
-                            {
-                                pointedEntity = entity;
-                                d2 = d3;
-                            }
-                        }
-                    }
-                }
+						if (d3 < d2 || d2 == 0.0D)
+						{
+							if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
+							{
+								if (d2 == 0.0D)
+								{
+									pointedEntity = entity;
+								}
+							}
+							else
+							{
+								pointedEntity = entity;
+								d2 = d3;
+							}
+						}
+					}
+				}
 
-                if (pointedEntity != null && (d2 < d1 || mop == null))
-                {
-                    mop = new MovingObjectPosition(pointedEntity);
-                }
-                return mop;
-            }
-        }
-        return null;
-    }
-	
+				if (pointedEntity != null && (d2 < d1 || mop == null))
+				{
+					mop = new MovingObjectPosition(pointedEntity);
+				}
+				return mop;
+			}
+		}
+		return null;
+	}
+
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onRenderHud(RenderGameOverlayEvent event) {
-		
+
 		if(event.type != ElementType.CROSSHAIRS) {
 			return;
 		}
-		
+
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
-		
+
 		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
-		
+
 		boolean specialSkip = (currentItem != null && currentItem.getItem() instanceof ItemMap) || ChaosCrystalMain.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
 
 		int centerW = event.resolution.getScaledWidth()/2;
 		int centerH = event.resolution.getScaledHeight()/2;
-		
+
 		GL11.glPushMatrix();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID && !specialSkip) {
 			MovingObjectPosition mop = getMouseOver(0);
-			
+
 			if(mop != null) {
 				Entity lookingAt = mop.entityHit;
-				
+
 				if(lookingAt != null) {
-			        
+
 					if(lookingAt instanceof EntityChaosCrystal) {
 						EntityChaosCrystal e = (EntityChaosCrystal)lookingAt;
-						
-						
+
+
 						int offset = 0;
 						int colOffset = 0;
 						final int colWidth = 64;
-						
-				        
-				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
+
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
 						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
-						
+
 						for(String aspect : Aspects.ASPECTS) {
 							int asp = e.getAspect(aspect);
 
@@ -273,8 +273,8 @@ public class OverlayAspectSelector extends Gui {
 							this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
 
 							Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
-							
-							
+
+
 							if(offset >= 30) {
 								offset = 0;
 								colOffset += colWidth;
@@ -282,55 +282,55 @@ public class OverlayAspectSelector extends Gui {
 								offset += 10;
 							}
 						}
-						
+
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
-				
+
 					} else if(lookingAt instanceof EntityFocusFilter) {
-						
-				        
-				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter.png"));
-						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
-						
-				        
-				        String aspect = ((EntityFocusFilter)lookingAt).getAspect();
-				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-						this.drawTexturedModalRectScaled(centerW + 5, centerH, 0, 0, 10, 10, 256, 256);
-						
-				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
-						
-					} else if(lookingAt instanceof EntityFocusBorder) {
-						
-				        
-				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_border.png"));
-						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
-					
-				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
-						
-					} else if(lookingAt instanceof EntityFocusTransfer) {
-						
-				        
-				        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_transfer.png"));
+
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter.png"));
 						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
 
-				        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
-				        
+
+						String aspect = ((EntityFocusFilter)lookingAt).getAspect();
+						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+						this.drawTexturedModalRectScaled(centerW + 5, centerH, 0, 0, 10, 10, 256, 256);
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+
+					} else if(lookingAt instanceof EntityFocusBorder) {
+
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_border.png"));
+						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+
+					} else if(lookingAt instanceof EntityFocusTransfer) {
+
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_transfer.png"));
+						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+
 					} else if(lookingAt instanceof EntityItem) {
-						
-				        
-				        ItemStack is = ((EntityItem)lookingAt).getEntityItem();
-				        
-				        List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(is);
-			        	if(degradations.size() == 0) {
-			        		
-			        	} else {
-			        		Node node = degradations.get(0);
+
+
+						ItemStack is = ((EntityItem)lookingAt).getEntityItem();
+
+						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(is);
+						if(degradations.size() == 0) {
+
+						} else {
+							Node node = degradations.get(0);
 							int offset = 0;
 							int colOffset = 0;
 							final int colWidth = 64;
-							
+
 							int[] aspects = node.getAspects();
-					        
+
 							for(int i = 0; i < aspects.length; i++) {
 								String aspect = Aspects.ASPECTS[i];
 								int asp = aspects[i];
@@ -348,50 +348,50 @@ public class OverlayAspectSelector extends Gui {
 										offset += 10;
 									}
 								}
-								
+
 							}
 							Node[] parents = node.getParents();
-							
+
 							for(int s = 0; s < parents.length; s++) {
 								if(parents[s] != ModuleVanillaWorldgen.AIR) {
-						            renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
+									renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
 								}
 							}
-							
-			        	}
-			        	
-			        	renderItem(is, centerW - 16 - 5, centerH);
+
+						}
+
+						renderItem(is, centerW - 16 - 5, centerH);
 					}
 				}
-				
+
 				if(mop.typeOfHit == EnumMovingObjectType.TILE) {
 					World w = Minecraft.getMinecraft().thePlayer.worldObj;
 					int id = w.getBlockId(
 							mop.blockX,
 							mop.blockY,
 							mop.blockZ);
-			    	
-			    	if(id != 0) {// We can't extract air...
-			    		
-			    		int meta = w.getBlockMetadata(
-			    				mop.blockX,
+
+					if(id != 0) {// We can't extract air...
+
+						int meta = w.getBlockMetadata(
+								mop.blockX,
 								mop.blockY,
 								mop.blockZ);
-			        	
-			    		boolean doRenderMiniBlock = false;
-			        	 List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(id, 1, meta));
-				        	if(degradations.size() == 0) {
-				        		
-				        	} else {
-				        		Node node = degradations.get(0);
-			        		doRenderMiniBlock = true;
+
+						boolean doRenderMiniBlock = false;
+						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(id, 1, meta));
+						if(degradations.size() == 0) {
+
+						} else {
+							Node node = degradations.get(0);
+							doRenderMiniBlock = true;
 							int offset = 0;
 							int colOffset = 0;
 							final int colWidth = 64;
-							
-					        
+
+
 							int[] aspects = node.getAspects();
-					        
+
 							for(int i = 0; i < aspects.length; i++) {
 								String aspect = Aspects.ASPECTS[i];
 								int asp = aspects[i];
@@ -409,48 +409,48 @@ public class OverlayAspectSelector extends Gui {
 										offset += 10;
 									}
 								}
-								
+
 							}
 							Node[] parents = node.getParents();
-							
+
 							for(int s = 0; s < parents.length; s++) {
 								if(parents[s] != ModuleVanillaWorldgen.AIR) {
-						            renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
+									renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
 								}
 							}
-							
-			        	}
-			        	
-			        	TileEntity te = w.getBlockTileEntity(mop.blockX,
+
+						}
+
+						TileEntity te = w.getBlockTileEntity(mop.blockX,
 								mop.blockY,
 								mop.blockZ);
-			        	if(te != null) {
-			        		if(te instanceof TileEntityApparatus) {
-			        			TileEntityApparatus apparatus = (TileEntityApparatus)te;
-			        			//doRenderMiniBlock = true;
-			        			for(int i = 0; i < apparatus.getSizeInventory(); i++) {
-			        				ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
-				        			if(its != null && its.itemID != 0) {
-				        				renderItem(its, centerW - 16 - 5 - 16*i, centerH);
-				        			}
-			        			}
-			        			
-			        			
-			        		}
-			        	}
-			        	
-			        	if(doRenderMiniBlock) {
-			        		renderItem(new ItemStack(id, 1, meta), centerW - 16 - 5, centerH);
-			        	}
-			        	
-			    	}
+						if(te != null) {
+							if(te instanceof TileEntityApparatus) {
+								TileEntityApparatus apparatus = (TileEntityApparatus)te;
+								//doRenderMiniBlock = true;
+								for(int i = 0; i < apparatus.getSizeInventory(); i++) {
+									ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
+									if(its != null && its.itemID != 0) {
+										renderItem(its, centerW - 16 - 5 - 16*i, centerH);
+									}
+								}
+
+
+							}
+						}
+
+						if(doRenderMiniBlock) {
+							renderItem(new ItemStack(id, 1, meta), centerW - 16 - 5, centerH);
+						}
+
+					}
 				}
 			}
 		}
-		
-		
+
+
 		if(currentItem != null && currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
-			
+
 			String selectedAspect;
 			int aspectIndex;
 			NBTTagCompound tags = currentItem.getTagCompound();
@@ -465,76 +465,76 @@ public class OverlayAspectSelector extends Gui {
 				selectedAspect = Aspects.ASPECTS[0];
 				aspectIndex = 0;
 			}
-			
+
 			int center = event.resolution.getScaledWidth()/2;
 			int bottom = event.resolution.getScaledHeight() - 80;
-			
-			
-	        
-	        Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
-	        this.drawTexturedModalRectScaled(center - 8, bottom, 0, 0, 16, 16, 256, 256);
-			
-	        GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
-	        
-	        if(aspectIndex > 0) {
-	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
-	            this.drawTexturedModalRectScaled(center - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
-	    		
-	        }
-	        
-	        if(aspectIndex < Aspects.ASPECTS.length - 1) {
-	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
-	            this.drawTexturedModalRectScaled(center - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
-	    		
-	        }
-	        
-	        GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.2F);
-	        
-	        if(aspectIndex > 1) {
-	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
-	            this.drawTexturedModalRectScaled(center - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
-	    		
-	        }
-	        
-	        if(aspectIndex < Aspects.ASPECTS.length - 2) {
-	        	Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
-	            this.drawTexturedModalRectScaled(center - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
-	    		
-	        }
-	        
+
+
+
+			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
+			this.drawTexturedModalRectScaled(center - 8, bottom, 0, 0, 16, 16, 256, 256);
+
+			GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
+
+			if(aspectIndex > 0) {
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
+				this.drawTexturedModalRectScaled(center - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+
+			}
+
+			if(aspectIndex < Aspects.ASPECTS.length - 1) {
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
+				this.drawTexturedModalRectScaled(center - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+
+			}
+
+			GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.2F);
+
+			if(aspectIndex > 1) {
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
+				this.drawTexturedModalRectScaled(center - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+
+			}
+
+			if(aspectIndex < Aspects.ASPECTS.length - 2) {
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
+				this.drawTexturedModalRectScaled(center - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+
+			}
+
 		}
 
 
 		GL11.glPopMatrix();
-        Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
-        
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glDisable(GL11.GL_LIGHTING);
+		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glDisable(GL11.GL_BLEND);
-		
+
 	}
-	
+
 	/**
-     * Draws a textured rectangle at the stored z-value. Args: x, y, u, v, width, height, textureWidth, textureHeight
-     * This uses a separate draw size, not the texture size.
-     */
-    public void drawTexturedModalRectScaled(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight)
-    {
-        float f = 0.00390625F;
-        float f1 = 0.00390625F;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV((double)(x + 0), (double)(y + height), (double)this.zLevel,
-        		(double)((float)(u + 0) * f), (double)((float)(v + texHeight) * f1));
-        
-        tessellator.addVertexWithUV((double)(x + width), (double)(y + height), (double)this.zLevel,
-        		(double)((float)(u + texWidth) * f), (double)((float)(v + texHeight) * f1));
-        
-        tessellator.addVertexWithUV((double)(x + width), (double)(y + 0), (double)this.zLevel,
-        		(double)((float)(u + texWidth) * f), (double)((float)(v + 0) * f1));
-        
-        tessellator.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel,
-        		(double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
-        tessellator.draw();
-    }
+	 * Draws a textured rectangle at the stored z-value. Args: x, y, u, v, width, height, textureWidth, textureHeight
+	 * This uses a separate draw size, not the texture size.
+	 */
+	public void drawTexturedModalRectScaled(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight)
+	{
+		float f = 0.00390625F;
+		float f1 = 0.00390625F;
+		Tessellator tessellator = Tessellator.instance;
+		tessellator.startDrawingQuads();
+		tessellator.addVertexWithUV((double)(x + 0), (double)(y + height), (double)this.zLevel,
+				(double)((float)(u + 0) * f), (double)((float)(v + texHeight) * f1));
+
+		tessellator.addVertexWithUV((double)(x + width), (double)(y + height), (double)this.zLevel,
+				(double)((float)(u + texWidth) * f), (double)((float)(v + texHeight) * f1));
+
+		tessellator.addVertexWithUV((double)(x + width), (double)(y + 0), (double)this.zLevel,
+				(double)((float)(u + texWidth) * f), (double)((float)(v + 0) * f1));
+
+		tessellator.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel,
+				(double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
+		tessellator.draw();
+	}
 }

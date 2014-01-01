@@ -1,8 +1,8 @@
 package founderio.chaoscrystal.aspects;
 
+import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.util.ItemUtil;
-import net.minecraft.item.ItemStack;
 
 public class NodeDegradation extends Node {
 
@@ -11,9 +11,10 @@ public class NodeDegradation extends Node {
 	private final ItemStack target;
 	private final boolean requiresSunlight;
 	private final boolean requiresAirAbove;
-	
-	public NodeDegradation(Node parent, int[] aspects, ItemStack target, boolean requiresSunlight, boolean requiresAirAbove) {
-		if(parent == null) {
+
+	public NodeDegradation(Node parent, int[] aspects, ItemStack target,
+			boolean requiresSunlight, boolean requiresAirAbove) {
+		if (parent == null) {
 			throw new RuntimeException("BUGBUGBUG!");
 		}
 		this.parent = parent;
@@ -25,13 +26,13 @@ public class NodeDegradation extends Node {
 
 	@Override
 	public int[] getAspects() {
-		if(parent == null) {
+		if (parent == null) {
 			return aspects.clone();
 		} else {
 			return Aspects.addAspects(aspects, parent.getAspects());
 		}
 	}
-	
+
 	@Override
 	public int[] getAspectDifference() {
 		return aspects.clone();

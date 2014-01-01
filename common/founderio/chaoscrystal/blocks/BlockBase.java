@@ -17,12 +17,11 @@ import founderio.chaoscrystal.Constants;
 public class BlockBase extends Block {
 
 	public static final String[] metaList = new String[] {
-		Constants.ID_BLOCK_BASE_CRYSTALLINE,
-		Constants.ID_BLOCK_BASE_CRYSTAL,
-		Constants.ID_BLOCK_BASE_CRYSTALLINE_LIGHT,
-	};
+			Constants.ID_BLOCK_BASE_CRYSTALLINE,
+			Constants.ID_BLOCK_BASE_CRYSTAL,
+			Constants.ID_BLOCK_BASE_CRYSTALLINE_LIGHT, };
 	public Icon[] iconList;
-	
+
 	public BlockBase(int id) {
 		super(id, Material.glass);
 		this.setHardness(4);
@@ -41,16 +40,19 @@ public class BlockBase extends Block {
 			par3List.add(new ItemStack(par1, 1, i));
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister) {
 		iconList = new Icon[metaList.length];
-		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystalline");
-		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystal");
-		iconList[2] = par1IconRegister.registerIcon(Constants.MOD_ID + ":" + "crystalline_light");
+		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
+				+ "crystalline");
+		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
+				+ "crystal");
+		iconList[2] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
+				+ "crystalline_light");
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Icon getIcon(int par1, int par2) {
@@ -73,5 +75,5 @@ public class BlockBase extends Block {
 	public int damageDropped(int par1) {
 		return MathHelper.clamp_int(par1, 0, metaList.length - 1);
 	}
-	
+
 }

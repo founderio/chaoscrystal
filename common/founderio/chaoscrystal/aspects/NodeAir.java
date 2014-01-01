@@ -1,8 +1,7 @@
 package founderio.chaoscrystal.aspects;
 
-import founderio.chaoscrystal.degradation.Aspects;
 import net.minecraft.item.ItemStack;
-
+import founderio.chaoscrystal.degradation.Aspects;
 
 public class NodeAir extends Node {
 

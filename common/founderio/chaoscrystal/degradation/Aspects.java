@@ -16,7 +16,7 @@ public final class Aspects {
 	public static final String ASPECT_VALUE = "value";
 	public static final String ASPECT_WATER = "water";
 	public static final String ASPECT_WOOD = "wood";
-	
+
 	public static final String[] ASPECTS = new String[] { ASPECT_EARTH,
 			ASPECT_WATER, ASPECT_WOOD, ASPECT_METAL, ASPECT_CRYSTAL,
 			ASPECT_GROWTH, ASPECT_LIVING, ASPECT_VALUE, ASPECT_LIGHT,
@@ -45,7 +45,7 @@ public final class Aspects {
 		}
 		return false;
 	}
-	
+
 	public static int[] addAspects(int[] aspectsA, int[] aspectsB) {
 		int[] aspectsR = new int[ASPECTS.length];
 		for (int a = 0; a < Aspects.ASPECTS.length; a++) {
@@ -53,12 +53,12 @@ public final class Aspects {
 		}
 		return aspectsR;
 	}
-	
+
 	public static String[] getAspectNames(int[] aspectArray) {
 		String[] aspectNames = new String[ASPECTS.length];
 		int idx = 0;
-		for(int a = 0; a < ASPECTS.length; a++) {
-			if(aspectArray[a] > 0) {
+		for (int a = 0; a < ASPECTS.length; a++) {
+			if (aspectArray[a] > 0) {
 				aspectNames[idx] = ASPECTS[a];
 			}
 		}
