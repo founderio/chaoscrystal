@@ -290,7 +290,6 @@ public class ChaosCrystalMain {
 		degradationStore.registerRepair(itemCrystalGlasses.itemID, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
 		degradationStore.registerRepair(Item.bow.itemID, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
 		
-		ItemStack nullStack = new ItemStack(0, 0, 0);
 		
 		/*
 		 * Grass, Dirt

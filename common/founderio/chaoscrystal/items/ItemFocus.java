@@ -14,7 +14,6 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
@@ -34,11 +33,11 @@ public class ItemFocus extends Item {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerIcons(IconRegister ri) {
 		iconList = new Icon[3];
-		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_transfer");
-		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_border");
-		iconList[2] = par1IconRegister.registerIcon(Constants.MOD_ID + ":focus_filter");
+		iconList[0] = ri.registerIcon(Constants.MOD_ID + ":focus_transfer");
+		iconList[1] = ri.registerIcon(Constants.MOD_ID + ":focus_border");
+		iconList[2] = ri.registerIcon(Constants.MOD_ID + ":focus_filter");
 	}
 	
 	@Override
@@ -74,8 +73,9 @@ public class ItemFocus extends Item {
 			}
 			//entity.playSpawnSound();
 		}
-		
-		return new ItemStack(ChaosCrystalMain.itemFocus, par1ItemStack.stackSize - 1, par1ItemStack.getItemDamage());
+		ItemStack retVal = par1ItemStack.copy();
+		retVal.stackSize--;
+		return retVal;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -101,7 +101,7 @@ public class ItemFocus extends Item {
 			par3List.add("Border");
 			break;
 		case 2:
-			par3List.add("Filter");
+			par3List.add("Aspect Filter");
 			String selectedAspect;
 			NBTTagCompound tags = par1ItemStack.getTagCompound();
 			if(tags != null) {
@@ -113,6 +113,9 @@ public class ItemFocus extends Item {
 				selectedAspect = Aspects.ASPECTS[0];
 			}
 			par3List.add("Aspect: " + StatCollector.translateToLocal(Constants.MOD_ID + ".aspect." + selectedAspect));
+			break;
+		case 3:
+			par3List.add("Target Filter");
 			break;
 		default:
 			par3List.add("Unknown");
