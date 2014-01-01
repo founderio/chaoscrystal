@@ -116,28 +116,25 @@ public class ChaosCrystalMain {
 		
 		cfgForceBiome = config.get("Settings", "force_biomes", cfgForceBiome).getBoolean(cfgForceBiome);
 		cfgDebugOutput = config.get("Settings", "degradation_debug_output", cfgDebugOutput).getBoolean(cfgDebugOutput);
-		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(false);
+		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(cfgSneakToShowAspects);
 		
-		cfgCrystalAspectStorage = config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).getInt(cfgCrystalAspectStorage);
+		cfgCrystalAspectStorage = config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).getInt();
 		
 		if(cfgCrystalAspectStorage < 10) {
 			cfgCrystalAspectStorage = 10;
 			config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).set(cfgCrystalAspectStorage);
 		}
 		
-		cfgHitsPerTick = config.get("Settings", "crystal_hits_per_tick", cfgHitsPerTick).getInt(cfgHitsPerTick);
-		cfgMaxTriesPerTick = config.get("Settings", "crystal_max_tries_per_tick", cfgMaxTriesPerTick).getInt(cfgMaxTriesPerTick);
-		cfgCrystalRange = config.get("Settings", "crystal_range", cfgCrystalRange).getInt(cfgCrystalRange);
-		cfgCrystalTickInterval = config.get("Settings", "crystal_tick_interval", cfgCrystalTickInterval).getInt(cfgCrystalTickInterval);
+		cfgHitsPerTick = config.get("Settings", "crystal_hits_per_tick", cfgHitsPerTick).getInt();
+		cfgMaxTriesPerTick = config.get("Settings", "crystal_max_tries_per_tick", cfgMaxTriesPerTick).getInt();
+		cfgCrystalRange = config.get("Settings", "crystal_range", cfgCrystalRange).getInt();
+		cfgCrystalTickInterval = config.get("Settings", "crystal_tick_interval", cfgCrystalTickInterval).getInt();
 		
-		cfgFocusRange = config.get("Settings", "focus_range", cfgFocusRange).getInt(cfgFocusRange);
-		cfgFocusTickInterval = config.get("Settings", "focus_tick_interval", cfgFocusTickInterval).getInt(cfgFocusTickInterval);
+		cfgFocusRange = config.get("Settings", "focus_range", cfgFocusRange).getInt();
+		cfgFocusTickInterval = config.get("Settings", "focus_tick_interval", cfgFocusTickInterval).getInt();
 		
 		
 		cfgNonDestructive = config.get("Settings", "non_destructive", cfgNonDestructive).getBoolean(cfgNonDestructive);
-		//TODO: Get cfgs for ranges etc. of foci, crystals
-		
-		final int idChaosCrystal = getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200);
 		
 		creativeTab = new CreativeTabs(Constants.MOD_ID) {
 			@Override
@@ -147,9 +144,8 @@ public class ChaosCrystalMain {
 			}
 		};
 		
-		itemChaosCrystal = new ItemChaosCrystal(idChaosCrystal);
+		itemChaosCrystal = new ItemChaosCrystal(getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200));
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
-		itemChaosCrystal.setMaxStackSize(1);
 		itemChaosCrystal.setCreativeTab(creativeTab);
 		
 		itemFocus = new ItemFocus(getItemId(Constants.ID_ITEM_FOCUS, 18201));
@@ -162,44 +158,23 @@ public class ChaosCrystalMain {
 		
 		itemManual = new ItemManual(getItemId(Constants.ID_ITEM_MANUAL, 18203));
 		itemManual.setUnlocalizedName(Constants.ID_ITEM_MANUAL);
-		itemManual.setMaxStackSize(1);
 		itemManual.setCreativeTab(creativeTab);
 		
-		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230), Material.glass);
+		blockBase = new BlockBase(getBlockId(Constants.ID_BLOCK_BASE, 230));
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
-		blockBase.setHardness(4);
-		blockBase.setLightValue(0.2f);
-		blockBase.setResistance(1.5f);
-		blockBase.setStepSound(Block.soundGlassFootstep);
-		MinecraftForge.setBlockHarvestLevel(blockBase, "pickaxe", 1);
 		
-		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 231), Material.rock, 0);
+		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 231), 0);
 		blockReconstructor.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		blockReconstructor.setCreativeTab(creativeTab);
-		blockReconstructor.setHardness(2);
-		blockReconstructor.setLightValue(0.2f);
-		blockReconstructor.setResistance(6f);
-		blockReconstructor.setStepSound(Block.soundStoneFootstep);
-		MinecraftForge.setBlockHarvestLevel(blockReconstructor, "pickaxe", 0);
 		
-		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), Material.rock, 1);
+		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), 1);
 		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
 		blockCreator.setCreativeTab(creativeTab);
-		blockCreator.setHardness(2);
-		blockCreator.setLightValue(0.2f);
-		blockCreator.setResistance(6f);
-		blockCreator.setStepSound(Block.soundStoneFootstep);
-		MinecraftForge.setBlockHarvestLevel(blockCreator, "pickaxe", 0);
 		
-		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 233), Material.rock, 2);
+		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 233), 2);
 		blockSentry.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
-		blockSentry.setHardness(2);
-		blockSentry.setLightValue(0.2f);
-		blockSentry.setResistance(6f);
-		blockSentry.setStepSound(Block.soundStoneFootstep);
-		MinecraftForge.setBlockHarvestLevel(blockSentry, "pickaxe", 0);
 		
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 		

@@ -9,6 +9,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
+import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
@@ -22,8 +23,13 @@ public class BlockBase extends Block {
 	};
 	public Icon[] iconList;
 	
-	public BlockBase(int par1, Material par2Material) {
-		super(par1, par2Material);
+	public BlockBase(int id) {
+		super(id, Material.glass);
+		this.setHardness(4);
+		this.setLightValue(0.2f);
+		this.setResistance(1.5f);
+		this.setStepSound(Block.soundGlassFootstep);
+		MinecraftForge.setBlockHarvestLevel(this, "pickaxe", 1);
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })

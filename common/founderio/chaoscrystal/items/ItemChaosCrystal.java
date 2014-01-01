@@ -20,6 +20,7 @@ public class ItemChaosCrystal extends Item {
 
 	public ItemChaosCrystal(int par1) {
 		super(par1);
+		this.setMaxStackSize(1);
 	}
 
 	@Override
