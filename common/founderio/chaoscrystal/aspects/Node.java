@@ -8,6 +8,8 @@ public abstract class Node {
 	public abstract int[] getAspects();
 
 	public abstract Node[] getParents();
+	
+	public abstract ItemStack[] getDegradedFrom(ItemStack is);
 
 	public abstract boolean matchesItemStack(ItemStack is);
 

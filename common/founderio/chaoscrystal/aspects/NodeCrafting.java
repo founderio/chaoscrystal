@@ -2,21 +2,33 @@ package founderio.chaoscrystal.aspects;
 
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.degradation.Aspects;
+import founderio.util.ItemUtil;
 
 public class NodeCrafting extends Node {
 
-	private static int[] aspectDifference;
+	private static final int[] aspectDifference;
+	
+	private final Node[] parents;
+	private final ItemStack reference;
+	private final ItemStack[] craftingIngredients;
+	private final int[] aspects;
 
 	static {
 		AspectBuilder ab = new AspectBuilder();
 		ab.addAspect(Aspects.ASPECT_CRAFTING, 5);
 		aspectDifference = ab.toAspectArray();
 	}
+	
+	public NodeCrafting(ItemStack reference, ItemStack[] craftingIngredients, Node[] parents, int[] aspects) {
+		this.parents = parents;
+		this.reference = reference;
+		this.craftingIngredients = craftingIngredients;
+		this.aspects = aspects;
+	}
 
 	@Override
 	public int[] getAspects() {
-		// TODO Auto-generated method stub
-		return null;
+		return Aspects.addAspects(aspects, aspectDifference);
 	}
 
 	@Override
@@ -26,20 +38,31 @@ public class NodeCrafting extends Node {
 
 	@Override
 	public Node[] getParents() {
-		// TODO Auto-generated method stub
-		return null;
+		return parents.clone();
 	}
 
 	@Override
 	public boolean matchesItemStack(ItemStack is) {
-		// TODO Auto-generated method stub
-		return false;
+		return ItemUtil.itemsMatch(reference, is);
 	}
 
 	@Override
 	public ItemStack getDispayItemStack() {
-		// TODO Auto-generated method stub
-		return null;
+		return reference.copy();
+	}
+
+	@Override
+	public ItemStack[] getDegradedFrom(ItemStack is) {
+		if(is.stackSize == 0) {
+			return new ItemStack[] { new ItemStack(0, 1, 0) };
+		}
+		float factor = (float)is.stackSize / (float)reference.stackSize;
+		ItemStack[] ingItemStacks = new ItemStack[craftingIngredients.length];
+		for(int i = 0; i < craftingIngredients.length; i++) {
+			ingItemStacks[i] = craftingIngredients[i].copy();
+			ingItemStacks[i].stackSize *= factor;
+		}
+		return ingItemStacks;
 	}
 
 }

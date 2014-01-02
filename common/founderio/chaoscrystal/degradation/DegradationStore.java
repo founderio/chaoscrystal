@@ -12,6 +12,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.Node;
+import founderio.chaoscrystal.aspects.NodeCrafting;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.util.ItemUtil;
 
@@ -127,47 +128,48 @@ public class DegradationStore {
 		// TODO: Add smelting recipes
 	}
 
-	private void autoRegisterWithItemStacks(ItemStack is,
+	private NodeCrafting autoRegisterWithItemStacks(ItemStack is,
 			ItemStack[] recipeItems) {
-//		int[] amounts = new int[Aspects.ASPECTS.length];
-//		List<ItemStack> degraded = new ArrayList<ItemStack>();
-//		for(ItemStack crafting : recipeItems) {
-//			if(crafting == null || crafting.stackSize <= 0) {
-//				if(ChaosCrystalMain.cfgDebugOutput) {
-//        			System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
-//				}
-//				return;
-//			}
-//			Degradation deg = getDegradation(crafting);
-//			if(deg == null) {
-//				autoRegisterDegradation(crafting);
-//				deg = getDegradation(crafting);
-//				if(deg == null) {
-//					if(ChaosCrystalMain.cfgDebugOutput) {
-//	        			System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
-//					}
-//					return;
-//				}
-//			}
-//			
-//			for(int a = 0; a < deg.aspects.length; a++) {
-//				String aspect = deg.aspects[a];
-//				amounts[Aspects.getAspectIndex(aspect)] += deg.amounts[a] / crafting.stackSize;
-//			}
-//			boolean added = false;
-//			for(ItemStack dis : degraded) {
-//				if(dis.isItemEqual(crafting)) {
-//					dis.stackSize += crafting.stackSize;
-//					added = true;
-//					break;
-//				}
-//			}
-//			if(!added) {
-//				degraded.add(crafting.copy());
-//			}
-//		}
-//		amounts[Aspects.getAspectIndex(Aspects.ASPECT_CRAFTING)] += 5;
-//		registerDegradation(is, Aspects.ASPECTS.clone(), amounts, degraded.toArray(new ItemStack[degraded.size()]));
+		int[] aspectArray = new int[Aspects.ASPECTS.length];
+		List<ItemStack> degraded = new ArrayList<ItemStack>();
+		List<Node> parentNodes = new ArrayList<Node>();
+		for(ItemStack crafting : recipeItems) {
+			if(crafting == null || crafting.stackSize <= 0) {
+				if(ChaosCrystalMain.cfgDebugOutput) {
+        			System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
+				}
+				return null;
+			}
+			List<Node> nodes = getExtractionsFrom(crafting);
+			if(nodes.isEmpty()) {
+				autoRegisterDegradation(crafting);
+				nodes = getExtractionsFrom(crafting);
+				if(nodes.isEmpty()) {
+					if(ChaosCrystalMain.cfgDebugOutput) {
+	        			System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
+					}
+					return null;
+				}
+			}
+			
+			for(int a = 0; a < Aspects.ASPECTS.length; a++) {
+				aspectArray[a] += nodes.get(0).getAspects()[a] / crafting.stackSize;
+			}
+			boolean added = false;
+			for(ItemStack dis : degraded) {
+				if(dis.isItemEqual(crafting)) {
+					dis.stackSize += crafting.stackSize;
+					added = true;
+					break;
+				}
+			}
+			if(!added) {
+				degraded.add(crafting.copy());
+				parentNodes.add(nodes.get(0));
+			}
+		}
+		
+		return new NodeCrafting(is.copy(), degraded.toArray(new ItemStack[degraded.size()]), parentNodes.toArray(new Node[parentNodes.size()]), aspectArray);
 	}
 
 	public void debugOutput() {

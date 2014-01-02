@@ -63,5 +63,14 @@ public class NodeSimpleOre extends Node {
 	public ItemStack getDispayItemStack() {
 		return target;
 	}
+	
+	@Override
+	public ItemStack[] getDegradedFrom(ItemStack is) {
+		ItemStack resultRock = rockBase.getDispayItemStack().copy();
+		resultRock.stackSize = is.stackSize;
+		ItemStack resultIngot = ingotBase.getDispayItemStack().copy();
+		resultIngot.stackSize = is.stackSize;
+		return new ItemStack[] { resultRock, resultIngot };
+	}
 
 }

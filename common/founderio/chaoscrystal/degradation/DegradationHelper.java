@@ -35,17 +35,17 @@ public class DegradationHelper {
 	}
 
 	public static void processReplacement(World world, int posX, int posY,
-			int posZ, Node[] replacement) {
+			int posZ, ItemStack[] replacement) {
 
 		if (replacement.length == 1
-				&& replacement[0].getDispayItemStack().getItem() instanceof ItemBlock) {
+				&& replacement[0].getItem() instanceof ItemBlock) {
 			world.setBlock(posX, posY, posZ, replacement[0]
-					.getDispayItemStack().itemID, replacement[0]
-					.getDispayItemStack().getItemDamage(), 1 + 2);
+					.itemID, replacement[0]
+					.getItemDamage(), 1 + 2);
 
 		} else {
 			world.setBlock(posX, posY, posZ, 0, 0, 1 + 2);
-			spawnMultiplesOfNodes(replacement, 1, world, posX, posY, posZ);
+			spawnMultiplesOfStacks(replacement, 1, world, posX, posY, posZ);
 		}
 	}
 
@@ -68,21 +68,21 @@ public class DegradationHelper {
 		}
 	}
 
-	public static void spawnMultiplesOfNodes(Node[] nodes, int count,
+	public static void spawnMultiplesOfStacks(ItemStack[] nodes, int count,
 			World world, int posX, int posY, int posZ) {
 		for (int i = 0; i < nodes.length; i++) {
-			Node p = nodes[i];
-			if (p == ModuleVanillaWorldgen.AIR) {
+			ItemStack p = nodes[i];
+			if (p.itemID == 0 || p.stackSize == 0) {
 				continue;
 			}
-			int maxStackSize = p.getDispayItemStack().getMaxStackSize();
+			int maxStackSize = p.getMaxStackSize();
 			for (int ists = 0; ists < Math.floor(count / maxStackSize); ists++) {
-				ItemStack spawnStack = p.getDispayItemStack().copy();
+				ItemStack spawnStack = p.copy();
 				spawnStack.stackSize = maxStackSize;
 				ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5,
 						posY + 0.1, posZ + 0.5);
 			}
-			ItemStack spawnStack = p.getDispayItemStack().copy();
+			ItemStack spawnStack = p.copy();
 			spawnStack.stackSize = count % maxStackSize;
 			ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5, posY + 0.1,
 					posZ + 0.5);
@@ -127,13 +127,13 @@ public class DegradationHelper {
 							ChaosCrystalMain.rand);
 
 					if (degradation != null) {
-						Node[] parents;
+						ItemStack[] results;
 						if (extract) {
-							parents = degradation.getParents();
+							results = degradation.getDegradedFrom(new ItemStack(id, 1, meta));
 						} else {
-							parents = new Node[] { degradation };
+							results = new ItemStack[] { degradation.getDispayItemStack() };
 						}
-						if (parents.length == 0) {
+						if (results.length == 0) {
 							continue;
 						}
 						int[] aspects = degradation.getAspectDifference();
@@ -150,7 +150,7 @@ public class DegradationHelper {
 
 								entity.addAspects(aspects);
 								processReplacement(world, absX, absY, absZ,
-										parents);
+										results);
 
 								CommonProxy.spawnParticleEffects(
 										world.provider.dimensionId, 0, posX,
@@ -166,7 +166,7 @@ public class DegradationHelper {
 
 								entity.subtractAspects(aspects);
 								processReplacement(world, absX, absY, absZ,
-										parents);
+										results);
 
 								CommonProxy.spawnParticleEffects(
 										world.provider.dimensionId, 0, posX

@@ -53,4 +53,11 @@ public class NodeDegradation extends Node {
 		return target;
 	}
 
+	@Override
+	public ItemStack[] getDegradedFrom(ItemStack is) {
+		ItemStack result = parent.getDispayItemStack().copy();
+		result.stackSize = is.stackSize;
+		return new ItemStack[] { result };
+	}
+
 }

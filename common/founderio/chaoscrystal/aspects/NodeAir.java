@@ -30,4 +30,9 @@ public class NodeAir extends Node {
 		return new ItemStack(0, 1, 0);
 	}
 
+	@Override
+	public ItemStack[] getDegradedFrom(ItemStack is) {
+		return new ItemStack[] { new ItemStack(0, 1, 0) };
+	}
+
 }
