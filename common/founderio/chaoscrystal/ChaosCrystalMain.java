@@ -93,27 +93,27 @@ public class ChaosCrystalMain {
 	public static boolean cfgSneakToShowAspects = false;
 
 	private int getItemId(String id, int defaultId) {
-		int defaultValue = defaultId;
-		if(config.hasKey("Items", id)) {
-			defaultValue = config.get("Items", id, defaultId).getInt();
+		if(config.hasKey("items", id)) {
+			int value = config.get("items", id, defaultId).getInt();
+			config.getItem(Configuration.CATEGORY_ITEM, id, defaultId, null).set(value);
 		}
-		return config.getItem(id, defaultValue).getInt();
+		return config.getItem(id, defaultId).getInt();
 	}
 
 	private int getBlockId(String id, int defaultId) {
-		int defaultValue = defaultId;
-		if(config.hasKey("Blocks", id)) {
-			defaultValue = config.get("Blocks", id, defaultId).getInt();
+		if(config.hasKey("blocks", id)) {
+			int value = config.get("blocks", id, defaultId).getInt();
+			config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").set(value);
 		}
-		return config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultValue, "").getInt();
+		return config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").getInt();
 	}
 
 	private int getTerrainBlockId(String id, int defaultId) {
-		int defaultValue = defaultId;
-		if(config.hasKey("Blocks", id)) {
-			defaultValue = config.get("Blocks", id, defaultId).getInt();
+		if(config.hasKey("blocks", id)) {
+			int value = config.get("blocks", id, defaultId).getInt();
+			config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").set(value);
 		}
-		return config.getTerrainBlock(Configuration.CATEGORY_BLOCK, id, defaultValue, "").getInt();
+		return config.getTerrainBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").getInt();
 	}
 
 	private int getBiomeId(String id, int defaultId) {
@@ -175,20 +175,20 @@ public class ChaosCrystalMain {
 		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
 
-		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 231), 0);
+		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 3400), 0);
 		blockReconstructor.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		blockReconstructor.setCreativeTab(creativeTab);
 
-		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 232), 1);
+		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 3401), 1);
 		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
 		blockCreator.setCreativeTab(creativeTab);
 
-		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 233), 2);
+		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 3402), 2);
 		blockSentry.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
 
-		config.removeCategory(config.getCategory("Items"));
-		config.removeCategory(config.getCategory("Blocks"));
+		config.removeCategory(config.getCategory("items"));
+		config.removeCategory(config.getCategory("blocks"));
 
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 
