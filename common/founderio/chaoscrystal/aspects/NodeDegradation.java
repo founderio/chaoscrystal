@@ -50,7 +50,9 @@ public class NodeDegradation extends Node {
 
 	@Override
 	public ItemStack getDispayItemStack() {
-		return target;
+		ItemStack is = target.copy();
+		is.stackSize = 1;
+		return is;
 	}
 
 	@Override

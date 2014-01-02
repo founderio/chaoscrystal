@@ -350,11 +350,11 @@ public class OverlayAspectSelector extends Gui {
 								}
 
 							}
-							Node[] parents = node.getParents();
+							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
 
 							for(int s = 0; s < parents.length; s++) {
-								if(parents[s] != ModuleVanillaWorldgen.AIR) {
-									renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
+								if(parents[s].itemID != 0) {
+									renderItem(parents[s], centerW + 5 + s*16, centerH - 16);
 								}
 							}
 
@@ -411,11 +411,11 @@ public class OverlayAspectSelector extends Gui {
 								}
 
 							}
-							Node[] parents = node.getParents();
+							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
 
 							for(int s = 0; s < parents.length; s++) {
-								if(parents[s] != ModuleVanillaWorldgen.AIR) {
-									renderItem(parents[s].getDispayItemStack(), centerW + 5 + s*16, centerH - 16);
+								if(parents[s].itemID != 0) {
+									renderItem(parents[s], centerW + 5 + s*16, centerH - 16);
 								}
 							}
 

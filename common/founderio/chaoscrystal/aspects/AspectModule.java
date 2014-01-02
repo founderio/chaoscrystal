@@ -1,15 +1,12 @@
 package founderio.chaoscrystal.aspects;
 
-import java.util.ArrayList;
-import java.util.List;
+import founderio.chaoscrystal.degradation.DegradationStore;
 
 public abstract class AspectModule {
-	public final List<Node> nodes;
 
-	public AspectModule() {
-		this.nodes = new ArrayList<Node>();
-		registerNodes();
+	public AspectModule(DegradationStore degradationStore) {
+		registerNodes(degradationStore);
 	}
 
-	protected abstract void registerNodes();
+	protected abstract void registerNodes(DegradationStore degradationStore);
 }

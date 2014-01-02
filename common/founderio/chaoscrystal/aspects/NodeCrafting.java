@@ -48,7 +48,9 @@ public class NodeCrafting extends Node {
 
 	@Override
 	public ItemStack getDispayItemStack() {
-		return reference.copy();
+		ItemStack is = reference.copy();
+		is.stackSize = 1;
+		return is;
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public final class ItemUtil {
 	public static boolean itemsMatch(ItemStack reference, ItemStack compare) {
 		return compare != null
 				&& compare.itemID == reference.itemID
-				&& (reference.getItemDamage() == 32767 || reference
+				&& (reference.getItemDamage() == 32767 || compare.getItemDamage() == 32767 || reference
 						.getItemDamage() == compare.getItemDamage());
 	}
 

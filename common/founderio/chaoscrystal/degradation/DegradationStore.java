@@ -10,7 +10,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.aspects.NodeCrafting;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
@@ -25,11 +24,11 @@ public class DegradationStore {
 		repairs = new HashMap<Integer, Repair>();
 		nodes = new ArrayList<Node>();
 
-		addAspectModule(new ModuleVanillaWorldgen());
+		new ModuleVanillaWorldgen(this);
 	}
-
-	public void addAspectModule(AspectModule module) {
-		nodes.addAll(module.nodes);
+	
+	public void addNode(Node node) {
+		nodes.add(node);
 	}
 
 	public List<Node> getCreations() {
@@ -80,7 +79,7 @@ public class DegradationStore {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void autoRegisterDegradation(ItemStack is) {
+	public NodeCrafting autoRegisterDegradation(ItemStack is) {
 		@SuppressWarnings("unchecked")
 		List<IRecipe> recipes = CraftingManager.getInstance().getRecipeList();
 		List<IRecipe> matching = new ArrayList<IRecipe>();
@@ -95,18 +94,18 @@ public class DegradationStore {
 				System.out.println("Registering Item " + is
 						+ " failed. No crafting recipes.");
 			}
-			return;
+			return null;
 		}
 		if (matching.size() > 1) {
 			if (ChaosCrystalMain.cfgDebugOutput) {
 				System.out.println("Registering Item " + is
 						+ " failed. Multiple crafting recipes.");
 			}
-			return;
+			return null;
 		}
 		IRecipe r = matching.get(0);
 		if (r instanceof ShapedRecipes) {
-			autoRegisterWithItemStacks(is, ((ShapedRecipes) r).recipeItems);
+			return autoRegisterWithItemStacks(r.getRecipeOutput(), ((ShapedRecipes) r).recipeItems);
 		} else if (r instanceof ShapedOreRecipe) {
 			Object[] input = ((ShapedOreRecipe) r).getInput();
 
@@ -118,12 +117,13 @@ public class DegradationStore {
 					recipeItems[i] = (ItemStack) ((ArrayList) input[i]).get(0);
 				}
 			}
-			autoRegisterWithItemStacks(is, recipeItems);
+			return autoRegisterWithItemStacks(r.getRecipeOutput(), recipeItems);
 		} else {
 			if (ChaosCrystalMain.cfgDebugOutput) {
 				System.out.println("Registering Item " + is
 						+ " failed. No supported crafting recipes.");
 			}
+			return null;
 		}
 		// TODO: Add smelting recipes
 	}
@@ -139,7 +139,7 @@ public class DegradationStore {
         			System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
 				}
 				return null;
-			}
+			}ItemUtil.itemsMatch(ModuleVanillaWorldgen.STONE.getDispayItemStack(), crafting);
 			List<Node> nodes = getExtractionsFrom(crafting);
 			if(nodes.isEmpty()) {
 				autoRegisterDegradation(crafting);
@@ -157,7 +157,7 @@ public class DegradationStore {
 			}
 			boolean added = false;
 			for(ItemStack dis : degraded) {
-				if(dis.isItemEqual(crafting)) {
+				if(ItemUtil.itemsMatch(dis, crafting)) {
 					dis.stackSize += crafting.stackSize;
 					added = true;
 					break;
@@ -168,7 +168,6 @@ public class DegradationStore {
 				parentNodes.add(nodes.get(0));
 			}
 		}
-		
 		return new NodeCrafting(is.copy(), degraded.toArray(new ItemStack[degraded.size()]), parentNodes.toArray(new Node[parentNodes.size()]), aspectArray);
 	}
 
