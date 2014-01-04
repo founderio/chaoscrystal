@@ -102,6 +102,8 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	@Override
 	protected void logicUpdate() {
 		List<String> filterAspects = new ArrayList<String>();
+		List<String> filterTargets = new ArrayList<String>();
+		double range = ChaosCrystalMain.cfgCrystalRange;
 
 		for (Object obj : this.worldObj.loadedEntityList) {
 			if (obj instanceof EntityFocusFilter) {
@@ -113,13 +115,16 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 						filterAspects.add(asp);
 					}
 				}
-			}
-		}
-
-		double range = ChaosCrystalMain.cfgCrystalRange;
-
-		for (Object obj : this.worldObj.loadedEntityList) {
-			if (obj instanceof EntityFocusBorder) {
+			} else if (obj instanceof EntityFocusFilterTarget) {
+				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
+						this);
+				if (tmp_dist < ChaosCrystalMain.cfgFocusRange) {
+					String target = ((EntityFocusFilterTarget) obj).getTarget();
+					if (!filterTargets.contains(target)) {
+						filterTargets.add(target);
+					}
+				}
+			} else if (obj instanceof EntityFocusBorder) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
 				if (tmp_dist < range) {
@@ -129,7 +134,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 		}
 
 		DegradationHelper.crystalTick(this, worldObj, (int) posX, (int) posY,
-				(int) posZ, filterAspects, range, isInSuckMode());
+				(int) posZ, filterAspects, filterTargets, range, isInSuckMode());
 
 	}
 

@@ -41,7 +41,7 @@ public class DegradationHelper {
 				&& replacement[0].getItem() instanceof ItemBlock) {
 			world.setBlock(posX, posY, posZ, replacement[0]
 					.itemID, replacement[0]
-					.getItemDamage(), 1 + 2);
+							.getItemDamage(), 1 + 2);
 
 		} else {
 			world.setBlock(posX, posY, posZ, 0, 0, 1 + 2);
@@ -90,220 +90,227 @@ public class DegradationHelper {
 	}
 
 	public static void crystalTick(EntityChaosCrystal entity, World world,
-			int posX, int posY, int posZ, List<String> filter, double range,
+			int posX, int posY, int posZ, List<String> filterAspects, List<String> filterTargets, double range,
 			boolean extract) {
+
+		boolean allowBlocks = filterTargets.isEmpty() || filterTargets.contains(Targets.TARGET_ALL) || filterTargets.contains(Targets.TARGET_BLOCKS);
+		boolean allowItems = filterTargets.isEmpty() || filterTargets.contains(Targets.TARGET_ALL) || filterTargets.contains(Targets.TARGET_ITEMS);
 
 		int hit = 0;
 		int tries = 0;
-		do {
-			tries++;
-			float offX = ChaosCrystalMain.rand.nextInt((int) (range * 2))
-					- (float) range + 0.5f;
-			float offY = ChaosCrystalMain.rand.nextInt((int) (range * 2))
-					- (float) range + 0.5f;
-			float offZ = ChaosCrystalMain.rand.nextInt((int) (range * 2))
-					- (float) range + 0.5f;
 
-			if (Math.sqrt(offX * offX + offY * offY + offZ * offZ) < range) {
-				int absX = (int) (posX + offX);
-				int absY = (int) (posY + offY);
-				int absZ = (int) (posZ + offZ);
+		if(allowBlocks) {
+			do {
+				tries++;
+				float offX = ChaosCrystalMain.rand.nextInt((int) (range * 2))
+						- (float) range + 0.5f;
+				float offY = ChaosCrystalMain.rand.nextInt((int) (range * 2))
+						- (float) range + 0.5f;
+				float offZ = ChaosCrystalMain.rand.nextInt((int) (range * 2))
+						- (float) range + 0.5f;
 
-				int id = world.getBlockId(absX, absY, absZ);
+				if (Math.sqrt(offX * offX + offY * offY + offZ * offZ) < range) {
+					int absX = (int) (posX + offX);
+					int absY = (int) (posY + offY);
+					int absZ = (int) (posZ + offZ);
 
-				if (id != 0) {// We can't extract air...
+					int id = world.getBlockId(absX, absY, absZ);
 
-					int meta = world.getBlockMetadata(absX, absY, absZ);
-					List<Node> nodes;
-					if (extract) {
-						nodes = ChaosCrystalMain.degradationStore
-								.getExtractionsFrom(new ItemStack(id, 1, meta));
-					} else {
-						nodes = ChaosCrystalMain.degradationStore
-								.getInfusionsFrom(new ItemStack(id, 1, meta));
-					}
+					if (id != 0) {// We can't extract air...
 
-					Node degradation = ListUtil.getRandomFromList(nodes,
-							ChaosCrystalMain.rand);
-
-					if (degradation != null) {
-						ItemStack[] results;
+						int meta = world.getBlockMetadata(absX, absY, absZ);
+						List<Node> nodes;
 						if (extract) {
-							results = degradation.getDegradedFrom(new ItemStack(id, 1, meta));
+							nodes = ChaosCrystalMain.degradationStore
+									.getExtractionsFrom(new ItemStack(id, 1, meta));
 						} else {
-							results = new ItemStack[] { degradation.getDispayItemStack() };
-						}
-						if (results.length == 0) {
-							continue;
-						}
-						int[] aspects = degradation.getAspectDifference();
-
-						if (!filter.isEmpty()
-								&& !filter.containsAll(Arrays.asList(Aspects
-										.getAspectNames(aspects)))) {
-							continue;
+							nodes = ChaosCrystalMain.degradationStore
+									.getInfusionsFrom(new ItemStack(id, 1, meta));
 						}
 
-						if (extract) {
-							if (entity.canAcceptAspects(aspects)) {
-								hit++;
+						Node degradation = ListUtil.getRandomFromList(nodes,
+								ChaosCrystalMain.rand);
 
-								entity.addAspects(aspects);
-								processReplacement(world, absX, absY, absZ,
-										results);
-
-								CommonProxy.spawnParticleEffects(
-										world.provider.dimensionId, 0, posX,
-										posY, posZ, offX, offY, offZ);
-								CommonProxy.spawnParticleEffects(
-										world.provider.dimensionId, 2, posX
-												+ offX, posY + offY, posZ
-												+ offZ);
+						if (degradation != null) {
+							ItemStack[] results;
+							if (extract) {
+								results = degradation.getDegradedFrom(new ItemStack(id, 1, meta));
+							} else {
+								results = new ItemStack[] { degradation.getDispayItemStack() };
 							}
-						} else {
-							if (entity.canProvideAspects(aspects)) {
-								hit++;
-
-								entity.subtractAspects(aspects);
-								processReplacement(world, absX, absY, absZ,
-										results);
-
-								CommonProxy.spawnParticleEffects(
-										world.provider.dimensionId, 0, posX
-												+ offX, posY + offY, posZ
-												+ offZ, -offX, -offY, -offZ);
+							if (results.length == 0) {
+								continue;
 							}
-						}
-
-					} else {
-						if (ChaosCrystalMain.cfgDebugOutput) {
-							System.out.println(Block.blocksList[id]
-									.getLocalizedName()
-									+ " - "
-									+ id
-									+ "/"
-									+ meta);
-						}
-						if (extract && !ChaosCrystalMain.cfgNonDestructive) {
-							world.setBlock(absX, absY, absZ, 0, 0, 1 + 2);
-							world.createExplosion(entity, absX, absY, absZ, 1,
-									false);
-						}
-					}
-				}
-			}
-		} while (hit < ChaosCrystalMain.cfgHitsPerTick
-				&& tries < ChaosCrystalMain.cfgMaxTriesPerTick);
-
-		if (hit < ChaosCrystalMain.cfgHitsPerTick) {
-			List<EntityItem> items = new ArrayList<EntityItem>();
-
-			for (Object obj : world.loadedEntityList) {
-				if (obj instanceof EntityItem) {
-					double el = ((EntityItem) obj).boundingBox
-							.getAverageEdgeLength();
-					double distX = ((EntityItem) obj).posX - posX;
-					double distY = ((EntityItem) obj).posY - posY + el;
-					double distZ = ((EntityItem) obj).posZ - posZ;
-					double tmp_dist = distX * distX + distY * distY + distZ
-							* distZ;
-					if (Math.sqrt(tmp_dist) < range) {
-						items.add((EntityItem) obj);
-					}
-				}
-			}
-
-			if (items.size() != 0) {
-
-				EntityItem it = items.get(ChaosCrystalMain.rand.nextInt(items
-						.size()));
-				ItemStack is = it.getEntityItem();
-				if (is != null) {
-					List<Node> nodes;
-					if (extract) {
-						nodes = ChaosCrystalMain.degradationStore
-								.getExtractionsFrom(is);
-					} else {
-						nodes = ChaosCrystalMain.degradationStore
-								.getInfusionsFrom(is);
-					}
-					Node degradation = ListUtil.getRandomFromList(nodes,
-							ChaosCrystalMain.rand);
-
-					if (degradation != null) {
-						Node[] parents;
-						if (extract) {
-							parents = degradation.getParents();
-						} else {
-							parents = new Node[] { degradation };
-						}
-						if (parents.length == 0) {
-							// continue;
-						} else {
-
 							int[] aspects = degradation.getAspectDifference();
 
-							if (!filter.isEmpty()
-									&& !filter.containsAll(Arrays
-											.asList(Aspects
-													.getAspectNames(aspects)))) {
-								// continue;
-							} else {
-								int count = 0;
+							if (!filterTargets.isEmpty()
+									&& !filterTargets.containsAll(Arrays.asList(Aspects
+											.getAspectNames(aspects)))) {
+								continue;
+							}
 
-								if (extract) {
-									for (int st = 0; st < is.stackSize; st++) {
-										if (!entity.canAcceptAspects(aspects)) {
-											break;
-										} else {
-											count++;
+							if (extract) {
+								if (entity.canAcceptAspects(aspects)) {
+									hit++;
 
-											entity.addAspects(aspects);
-										}
-									}
-								} else {
-									for (int st = 0; st < is.stackSize; st++) {
-										if (!entity.canProvideAspects(aspects)) {
-											break;
-										} else {
-											count++;
+									entity.addAspects(aspects);
+									processReplacement(world, absX, absY, absZ,
+											results);
 
-											entity.subtractAspects(aspects);
-										}
-									}
+									CommonProxy.spawnParticleEffects(
+											world.provider.dimensionId, 0, posX,
+											posY, posZ, offX, offY, offZ);
+									CommonProxy.spawnParticleEffects(
+											world.provider.dimensionId, 2, posX
+											+ offX, posY + offY, posZ
+											+ offZ);
 								}
-								hit += count;
-								if (count > 0) {
-									is.stackSize -= count;
+							} else {
+								if (entity.canProvideAspects(aspects)) {
+									hit++;
 
-									spawnMultiplesOfNodes(parents, count,
-											world, it);
+									entity.subtractAspects(aspects);
+									processReplacement(world, absX, absY, absZ,
+											results);
 
-									if (is.stackSize == 0) {
-										it.setDead();
-									} else {
-										it.setEntityItemStack(is);
-									}
-
-									CommonProxy.spawnParticleEffects(it,
-											entity, 0);
-									CommonProxy.spawnParticleEffects(it, 2);
+									CommonProxy.spawnParticleEffects(
+											world.provider.dimensionId, 0, posX
+											+ offX, posY + offY, posZ
+											+ offZ, -offX, -offY, -offZ);
 								}
 							}
+
+						} else {
+							if (ChaosCrystalMain.cfgDebugOutput) {
+								System.out.println(Block.blocksList[id]
+										.getLocalizedName()
+										+ " - "
+										+ id
+										+ "/"
+										+ meta);
+							}
+							if (extract && !ChaosCrystalMain.cfgNonDestructive) {
+								world.setBlock(absX, absY, absZ, 0, 0, 1 + 2);
+								world.createExplosion(entity, absX, absY, absZ, 1,
+										false);
+							}
 						}
-					} else {
-						if (ChaosCrystalMain.cfgDebugOutput) {
-							System.out.println(is.getDisplayName() + " - "
-									+ is.itemID + "/" + is.getItemDamage());
+					}
+				}
+			} while (hit < ChaosCrystalMain.cfgHitsPerTick
+					&& tries < ChaosCrystalMain.cfgMaxTriesPerTick);
+		}
+
+		if(allowItems) {
+			if (hit < ChaosCrystalMain.cfgHitsPerTick) {
+				List<EntityItem> items = new ArrayList<EntityItem>();
+
+				for (Object obj : world.loadedEntityList) {
+					if (obj instanceof EntityItem) {
+						double el = ((EntityItem) obj).boundingBox
+								.getAverageEdgeLength();
+						double distX = ((EntityItem) obj).posX - posX;
+						double distY = ((EntityItem) obj).posY - posY + el;
+						double distZ = ((EntityItem) obj).posZ - posZ;
+						double tmp_dist = distX * distX + distY * distY + distZ
+								* distZ;
+						if (Math.sqrt(tmp_dist) < range) {
+							items.add((EntityItem) obj);
 						}
-						if (!ChaosCrystalMain.cfgNonDestructive) {
-							it.setDead();
+					}
+				}
+
+				if (items.size() != 0) {
+
+					EntityItem it = items.get(ChaosCrystalMain.rand.nextInt(items
+							.size()));
+					ItemStack is = it.getEntityItem();
+					if (is != null) {
+						List<Node> nodes;
+						if (extract) {
+							nodes = ChaosCrystalMain.degradationStore
+									.getExtractionsFrom(is);
+						} else {
+							nodes = ChaosCrystalMain.degradationStore
+									.getInfusionsFrom(is);
+						}
+						Node degradation = ListUtil.getRandomFromList(nodes,
+								ChaosCrystalMain.rand);
+
+						if (degradation != null) {
+							Node[] parents;
+							if (extract) {
+								parents = degradation.getParents();
+							} else {
+								parents = new Node[] { degradation };
+							}
+							if (parents.length == 0) {
+								// continue;
+							} else {
+
+								int[] aspects = degradation.getAspectDifference();
+
+								if (!filterTargets.isEmpty()
+										&& !filterTargets.containsAll(Arrays
+												.asList(Aspects
+														.getAspectNames(aspects)))) {
+									// continue;
+								} else {
+									int count = 0;
+
+									if (extract) {
+										for (int st = 0; st < is.stackSize; st++) {
+											if (!entity.canAcceptAspects(aspects)) {
+												break;
+											} else {
+												count++;
+
+												entity.addAspects(aspects);
+											}
+										}
+									} else {
+										for (int st = 0; st < is.stackSize; st++) {
+											if (!entity.canProvideAspects(aspects)) {
+												break;
+											} else {
+												count++;
+
+												entity.subtractAspects(aspects);
+											}
+										}
+									}
+									hit += count;
+									if (count > 0) {
+										is.stackSize -= count;
+
+										spawnMultiplesOfNodes(parents, count,
+												world, it);
+
+										if (is.stackSize == 0) {
+											it.setDead();
+										} else {
+											it.setEntityItemStack(is);
+										}
+
+										CommonProxy.spawnParticleEffects(it,
+												entity, 0);
+										CommonProxy.spawnParticleEffects(it, 2);
+									}
+								}
+							}
+						} else {
+							if (ChaosCrystalMain.cfgDebugOutput) {
+								System.out.println(is.getDisplayName() + " - "
+										+ is.itemID + "/" + is.getItemDamage());
+							}
+							if (!ChaosCrystalMain.cfgNonDestructive) {
+								it.setDead();
+							}
 						}
 					}
 				}
 			}
 		}
-
 		if (hit > 0) {
 			entity.playSound("mob.enderdragon.growl", 0.1f, 0.1f);
 		}
