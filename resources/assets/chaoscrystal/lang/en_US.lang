@@ -37,4 +37,4 @@ entity.chaoscrystal.chaoscrystal.name=Chaos Crystal
 entity.chaoscrystal.focus.transfer.name=Transfer Focus
 entity.chaoscrystal.focus.border.name=Border Focus
 entity.chaoscrystal.focus.filter.name=Aspect Filter Focus
-entity.chaoscrystal.focus.targetfilter.name=Target Filter Focus
+entity.chaoscrystal.focus.filter.target.name=Target Filter Focus

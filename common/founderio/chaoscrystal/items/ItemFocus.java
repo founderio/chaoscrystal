@@ -10,18 +10,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.Icon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.IModeChangingItem;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.Targets;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
+import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
-public class ItemFocus extends Item {
+public class ItemFocus extends Item implements IModeChangingItem {
 
 	public ItemFocus(int par1) {
 		super(par1);
@@ -31,6 +34,74 @@ public class ItemFocus extends Item {
 
 	@SideOnly(Side.CLIENT)
 	Icon[] iconList;
+	
+	@Override
+	public int getSelectedModeForItemStack(ItemStack is) {
+		NBTTagCompound tags = is.getTagCompound();
+		int mode;
+		if(tags == null) {
+			tags = new NBTTagCompound();
+		}
+		switch(is.getItemDamage()) {
+		case 2:
+			String selectedAspect = tags.getString("aspect");
+			mode = Aspects.getAspectIndex(selectedAspect);
+			if(mode == -1) {
+				mode = 0;
+			}
+			return mode;
+		case 3:
+			String selectedTarget = tags.getString("target");
+			mode = Targets.getTargetIndex(selectedTarget);
+			if(mode == -1) {
+				mode = 0;
+			}
+			return mode;
+		default:
+			return 0;
+		}
+	}
+
+	@Override
+	public void setSelectedModeForItemStack(ItemStack is, int mode) {
+		NBTTagCompound tags = is.getTagCompound();
+		if(tags == null) {
+			tags = new NBTTagCompound();
+		}
+		switch(is.getItemDamage()) {
+		case 2:
+			tags.setString("aspect", Aspects.ASPECTS[mode]);
+			is.setTagCompound(tags);
+		case 3:
+			tags.setString("target", Targets.TARGETS[mode]);
+			is.setTagCompound(tags);
+		}
+	}
+
+	@Override
+	public int getModeCount(ItemStack is) {
+		switch(is.getItemDamage()) {
+		case 2:
+			return Aspects.ASPECTS.length;
+		case 3:
+			return Targets.TARGETS.length;
+		default:
+			return 0;
+		}
+	}
+
+	@Override
+	public ResourceLocation getIconForMode(ItemStack is, int mode) {
+		switch(is.getItemDamage()) {
+		case 2:
+			return Aspects.RESOURCE_LOCATIONS[mode];
+		case 3:
+			return Targets.RESOURCE_LOCATIONS[mode];
+		default:
+			return null;
+		}
+	}
+	
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -86,20 +157,20 @@ public class ItemFocus extends Item {
 				// entity.aspect);
 				par2World.spawnEntityInWorld(entity);
 			} else if (par1ItemStack.getItemDamage() == 3) {
-				EntityFocusFilter entity = new EntityFocusFilter(par2World,
+				EntityFocusFilterTarget entity = new EntityFocusFilterTarget(par2World,
 						par3EntityPlayer.posX, par3EntityPlayer.posY + 3,
 						par3EntityPlayer.posZ,
 						180f - par3EntityPlayer.rotationYaw,
 						par3EntityPlayer.rotationPitch);
 				NBTTagCompound tags = par1ItemStack.getTagCompound();
 				if (tags != null) {
-					String aspect = tags.getString("aspect");
-					if (!Aspects.isAspect(aspect)) {
-						aspect = Aspects.ASPECTS[0];
+					String target = tags.getString("target");
+					if (!Targets.isTarget(target)) {
+						target = Targets.TARGETS[0];
 					}
-					entity.setAspect(aspect);
+					entity.setTarget(target);
 				} else {
-					entity.setAspect(Aspects.ASPECTS[0]);
+					entity.setTarget(Targets.TARGETS[0]);
 				}
 				// System.out.println("Spawning Entity with aspect: " +
 				// entity.aspect);
@@ -156,7 +227,7 @@ public class ItemFocus extends Item {
 			String selectedTarget;
 			if (tags != null) {
 				selectedTarget = tags.getString("target");
-				if (!Aspects.isAspect(selectedTarget)) {
+				if (!Targets.isTarget(selectedTarget)) {
 					selectedTarget = Targets.TARGETS[0];
 				}
 			} else {
@@ -172,5 +243,7 @@ public class ItemFocus extends Item {
 		}
 
 	}
+
+	
 
 }

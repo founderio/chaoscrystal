@@ -1,5 +1,8 @@
 package founderio.chaoscrystal.degradation;
 
+import net.minecraft.util.ResourceLocation;
+import founderio.chaoscrystal.Constants;
+
 public final class Targets {
 
 	public static final String TARGET_ALL = "all";
@@ -15,6 +18,14 @@ public final class Targets {
 	public static final String[] TARGETS = new String[] { TARGET_ALL,
 			TARGET_ITEMS, TARGET_BLOCKS, TARGET_ENTITY, TARGET_ENTITY_MOBS, TARGET_ENTITY_HOSTILE,
 			TARGET_ENTITY_FRIENDLY, TARGET_ENTITY_PLAYERS, TARGET_GUARD_MODE };
+	
+	public static final ResourceLocation[] RESOURCE_LOCATIONS = new ResourceLocation[TARGETS.length];
+
+	static {
+		for (int a = 0; a < TARGETS.length; a++) {
+			RESOURCE_LOCATIONS[a] = new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/target_" + TARGETS[a] + ".png");
+		}
+	}
 
 	public static int getTargetIndex(String target) {
 		if (target == null) {

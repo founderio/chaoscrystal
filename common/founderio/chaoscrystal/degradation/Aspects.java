@@ -2,6 +2,10 @@ package founderio.chaoscrystal.degradation;
 
 import java.util.Arrays;
 
+import founderio.chaoscrystal.Constants;
+
+import net.minecraft.util.ResourceLocation;
+
 public final class Aspects {
 
 	public static final String ASPECT_CRAFTING = "crafting";
@@ -21,7 +25,15 @@ public final class Aspects {
 			ASPECT_WATER, ASPECT_WOOD, ASPECT_METAL, ASPECT_CRYSTAL,
 			ASPECT_GROWTH, ASPECT_LIVING, ASPECT_VALUE, ASPECT_LIGHT,
 			ASPECT_HEAT, ASPECT_CRAFTING, ASPECT_STRUCTURE };
+	
+	public static final ResourceLocation[] RESOURCE_LOCATIONS = new ResourceLocation[ASPECTS.length];
 
+	static {
+		for (int a = 0; a < ASPECTS.length; a++) {
+			RESOURCE_LOCATIONS[a] = new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + ASPECTS[a] + ".png");
+		}
+	}
+	
 	public static int getAspectIndex(String aspect) {
 		if (aspect == null) {
 			return -1;

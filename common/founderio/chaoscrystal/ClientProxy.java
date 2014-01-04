@@ -9,7 +9,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.world.World;
@@ -26,6 +25,7 @@ import founderio.chaoscrystal.entities.DegradationParticles;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
+import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.rendering.OverlayAspectSelector;
 import founderio.chaoscrystal.rendering.RenderApparatus;
@@ -40,10 +40,12 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerRenderStuff() {
+		RenderFocus rf = new RenderFocus();
 		RenderingRegistry.registerEntityRenderingHandler(EntityChaosCrystal.class, new RenderChaosCrystal());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusTransfer.class, new RenderFocus());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, new RenderFocus());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, new RenderFocus());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusTransfer.class, rf);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, rf);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, rf);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilterTarget.class, rf);
 
 		render = new RenderApparatus();
 
@@ -119,7 +121,7 @@ public class ClientProxy extends CommonProxy {
 					// Update player's selected stack
 					int dimension = dis.readInt();
 					String playerName = dis.readUTF();
-					String aspect = dis.readUTF();
+					int mode = dis.readInt();
 
 					World w = DimensionManager.getWorld(dimension);
 
@@ -127,18 +129,21 @@ public class ClientProxy extends CommonProxy {
 						EntityPlayer e = w.getPlayerEntityByName(playerName);
 						if(e != null) {
 							ItemStack currentItem = e.inventory.getCurrentItem();
-							if(currentItem == null || currentItem.itemID != ChaosCrystalMain.itemFocus.itemID) {
+							if(currentItem == null || !(currentItem.getItem() instanceof IModeChangingItem)) {
 								return;
 							}
-							if(currentItem.getItemDamage() != 2) {
+							IModeChangingItem mci = (IModeChangingItem)currentItem.getItem();
+							int modeCount = mci.getModeCount(currentItem);
+							if(modeCount == 0) {
 								return;
 							}
-							NBTTagCompound tags = currentItem.getTagCompound();
-							if(tags == null) {
-								tags = new NBTTagCompound();
+							if(mode < 0) {
+								mode = 0;
 							}
-							tags.setString("aspect", aspect);
-							currentItem.setTagCompound(tags);
+							if(mode >= modeCount) {
+								mode = modeCount;
+							}
+							mci.setSelectedModeForItemStack(currentItem, mode);
 						}
 					}
 				}

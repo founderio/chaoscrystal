@@ -15,6 +15,7 @@ import org.lwjgl.opengl.GL11;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
+import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class RenderFocus extends Render {
@@ -38,6 +39,9 @@ public class RenderFocus extends Render {
 		} else if (entity instanceof EntityFocusFilter) {
 			EntityFocusFilter ef = (EntityFocusFilter) entity;
 			itemstack = ef.buildItemStack();
+		} else if (entity instanceof EntityFocusFilterTarget) {
+			EntityFocusFilterTarget ef = (EntityFocusFilterTarget) entity;
+			itemstack = ef.buildItemStack();
 		} else {
 			return;
 		}
@@ -52,7 +56,6 @@ public class RenderFocus extends Render {
 		float f5 = ((Icon) par2Icon).getMaxU();
 		float f6 = ((Icon) par2Icon).getMinV();
 		float f7 = ((Icon) par2Icon).getMaxV();
-		float f8 = 1.0F;
 		float f9 = 0.5F;
 		float f10 = 0.25F;
 		float f11;

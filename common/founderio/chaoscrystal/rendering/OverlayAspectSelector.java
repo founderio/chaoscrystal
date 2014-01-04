@@ -13,9 +13,9 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -35,6 +35,7 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.chaoscrystal.IModeChangingItem;
 import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
@@ -42,6 +43,7 @@ import founderio.chaoscrystal.degradation.IAspectStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
+import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 
 public class OverlayAspectSelector extends Gui {
@@ -65,55 +67,60 @@ public class OverlayAspectSelector extends Gui {
 			return;
 		}
 
-		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
-		if(currentItem == null) {
+		ItemStack currentItemStack = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
+		if(currentItemStack == null) {
 			return;
 		}
-
-		if(currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
+		Item item = currentItemStack.getItem();
+		
+		if(item instanceof IModeChangingItem) {
+			IModeChangingItem mci = ((IModeChangingItem) item);
 			event.setCanceled(true);
-			int aspectIndex;
-			NBTTagCompound tags = currentItem.getTagCompound();
-			if(tags != null) {
-				String selectedAspect = tags.getString("aspect");
-				aspectIndex = Aspects.getAspectIndex(selectedAspect);
-				if(aspectIndex == -1) {
-					aspectIndex = 0;
+			
+			if(mci.getModeCount(currentItemStack) > 0) {
+				int modeIndex = mci.getSelectedModeForItemStack(currentItemStack);
+				
+				
+				if(event.dwheel > 0) {
+					modeIndex++;
+				} else if(event.dwheel < 0) {
+					modeIndex--;
 				}
-			} else {
-				tags = new NBTTagCompound();
-				aspectIndex = 0;
+				
+				if(modeIndex >= mci.getModeCount(currentItemStack)) {
+					modeIndex = mci.getModeCount(currentItemStack) - 1;
+				}
+				
+				if(modeIndex < 0) {
+					modeIndex = 0;
+				}
+				
+				mci.setSelectedModeForItemStack(currentItemStack, modeIndex);
+				
+
+				try {
+					ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
+					DataOutputStream dos = new DataOutputStream(bos);
+
+					dos.writeInt(2);
+					dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
+					dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
+					dos.writeInt(modeIndex);
+
+					Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
+					degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
+					degradationPacket.data = bos.toByteArray();
+					degradationPacket.length = bos.size();
+
+					dos.close();
+
+					PacketDispatcher.sendPacketToServer(degradationPacket);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-			if(event.dwheel > 0 &&  aspectIndex < Aspects.ASPECTS.length - 1) {
-				aspectIndex++;
-			}
-			if(event.dwheel < 0 &&  aspectIndex > 0) {
-				aspectIndex--;
-			}
-			tags.setString("aspect", Aspects.ASPECTS[aspectIndex]);
-			currentItem.setTagCompound(tags);
-
-			try {
-				ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
-				DataOutputStream dos = new DataOutputStream(bos);
-
-				dos.writeInt(2);
-				dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
-				dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
-				dos.writeUTF(Aspects.ASPECTS[aspectIndex]);
-
-				Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-				degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
-				degradationPacket.data = bos.toByteArray();
-				degradationPacket.length = bos.size();
-
-				dos.close();
-
-				PacketDispatcher.sendPacketToServer(degradationPacket);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		} else if(currentItem.itemID == ChaosCrystalMain.itemManual.itemID) {
+			
+		} else if(currentItemStack.itemID == ChaosCrystalMain.itemManual.itemID) {
 			event.setCanceled(true);
 			if(event.dwheel > 0) {
 				RenderItemManual.page--;
@@ -290,9 +297,9 @@ public class OverlayAspectSelector extends Gui {
 
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
 
-		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
+		ItemStack currentItemStack = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 
-		boolean specialSkip = (currentItem != null && currentItem.getItem() instanceof ItemMap) || ChaosCrystalMain.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		boolean specialSkip = (currentItemStack != null && currentItemStack.getItem() instanceof ItemMap) || ChaosCrystalMain.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
 
 		int centerW = event.resolution.getScaledWidth()/2;
 		int centerH = event.resolution.getScaledHeight()/2;
@@ -345,6 +352,21 @@ public class OverlayAspectSelector extends Gui {
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+						this.drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+
+
+					} else if(lookingAt instanceof EntityFocusFilterTarget) {
+
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter_type.png"));
+						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+
+
+						String target = ((EntityFocusFilterTarget)lookingAt).getTarget();
+
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/target_" + target + ".png"));
 						this.drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
@@ -446,60 +468,60 @@ public class OverlayAspectSelector extends Gui {
 			}
 		}
 
+		if(currentItemStack != null) {
+			
+			Item item = currentItemStack.getItem();
+			
+			if(item instanceof IModeChangingItem) {
+				IModeChangingItem mci = ((IModeChangingItem) item);
 
-		if(currentItem != null && currentItem.itemID == ChaosCrystalMain.itemFocus.itemID && currentItem.getItemDamage() == 2) {
 
-			String selectedAspect;
-			int aspectIndex;
-			NBTTagCompound tags = currentItem.getTagCompound();
-			if (tags == null) {
-				selectedAspect = Aspects.ASPECTS[0];
-				aspectIndex = 0;
-			} else {
-				selectedAspect = tags.getString("aspect");
-				aspectIndex = Aspects.getAspectIndex(selectedAspect);
-				if (aspectIndex == -1) {
-					selectedAspect = Aspects.ASPECTS[0];
-					aspectIndex = 0;
+				int modeCount = mci.getModeCount(currentItemStack);
+				if(modeCount > 0) {
+					int modeIndex = mci.getSelectedModeForItemStack(currentItemStack);
+					
+
+					int bottom = event.resolution.getScaledHeight() - 80;
+
+
+					Minecraft.getMinecraft().renderEngine.bindTexture(
+							mci.getIconForMode(currentItemStack, modeIndex));
+					this.drawTexturedModalRectScaled(centerW - 8, bottom, 0, 0, 16, 16, 256, 256);
+
+					GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
+
+					if(modeIndex > 0) {
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								mci.getIconForMode(currentItemStack, modeIndex - 1));
+						this.drawTexturedModalRectScaled(centerW - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+
+					}
+
+					if(modeIndex < modeCount - 1) {
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								mci.getIconForMode(currentItemStack, modeIndex + 1));
+						this.drawTexturedModalRectScaled(centerW - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+
+					}
+
+					GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.2F);
+
+					if(modeIndex > 1) {
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								mci.getIconForMode(currentItemStack, modeIndex - 2));
+						this.drawTexturedModalRectScaled(centerW - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+
+					}
+
+					if(modeIndex < modeCount - 2) {
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								mci.getIconForMode(currentItemStack, modeIndex + 2));
+						this.drawTexturedModalRectScaled(centerW - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+
+					}
 				}
 			}
-
-			int bottom = event.resolution.getScaledHeight() - 80;
-
-
-			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
-			this.drawTexturedModalRectScaled(centerW - 8, bottom, 0, 0, 16, 16, 256, 256);
-
-			GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
-
-			if(aspectIndex > 0) {
-				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
-				this.drawTexturedModalRectScaled(centerW - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
-
-			}
-
-			if(aspectIndex < Aspects.ASPECTS.length - 1) {
-				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
-				this.drawTexturedModalRectScaled(centerW - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
-
-			}
-
-			GL11.glColor4f(0.2F, 0.2F, 0.2F, 0.2F);
-
-			if(aspectIndex > 1) {
-				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
-				this.drawTexturedModalRectScaled(centerW - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
-
-			}
-
-			if(aspectIndex < Aspects.ASPECTS.length - 2) {
-				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
-				this.drawTexturedModalRectScaled(centerW - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
-
-			}
-
 		}
-
 
 		GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);

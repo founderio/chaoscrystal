@@ -38,7 +38,7 @@ public class EntityFocusFilterTarget extends EntityFocus {
 
 	@Override
 	public ItemStack buildItemStack() {
-		ItemStack is = new ItemStack(ChaosCrystalMain.itemFocus, 1, 2);
+		ItemStack is = new ItemStack(ChaosCrystalMain.itemFocus, 1, 3);
 		return is;
 	}
 
