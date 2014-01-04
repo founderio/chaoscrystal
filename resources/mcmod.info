@@ -3,7 +3,7 @@
 	"modid": "chaoscrystal",
 	"name": "Chaos Crystal",
 	"description": "Extract and infuse aspects from and into blocks or items. Those aspects can then be used to power magical-technical machines.",
-	"version": "0.3.5",
+	"version": "0.3.5.1",
 	"mcversion": "1.6.4",
 	"logoFile": "/assets/chaoscrystal/logo.png",
 	"url": "https://github.com/founderio/chaoscrystal",
