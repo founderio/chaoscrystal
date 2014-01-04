@@ -21,8 +21,6 @@ public class EntityFocusFilter extends EntityFocus {
 		super(world, x, y, z, yaw, pitch);
 	}
 
-	public static final int focusRange = 10;
-
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -54,7 +52,7 @@ public class EntityFocusFilter extends EntityFocus {
 			if (obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance(
 						(EntityChaosCrystal) obj, this);
-				if (tmp_dist < focusRange) {
+				if (tmp_dist < ChaosCrystalMain.cfgFocusRange) {
 					crystals.add((EntityChaosCrystal) obj);
 				}
 			}

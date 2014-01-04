@@ -107,7 +107,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 			if (obj instanceof EntityFocusFilter) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
-				if (tmp_dist < EntityFocusFilter.focusRange) {
+				if (tmp_dist < ChaosCrystalMain.cfgFocusRange) {
 					String asp = ((EntityFocusFilter) obj).getAspect();
 					if (!filterAspects.contains(asp)) {
 						filterAspects.add(asp);
