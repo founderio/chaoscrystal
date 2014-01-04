@@ -96,13 +96,13 @@ public class DegradationStore {
 			}
 			return null;
 		}
-		if (matching.size() > 1) {
-			if (ChaosCrystalMain.cfgDebugOutput) {
-				System.out.println("Registering Item " + is
-						+ " failed. Multiple crafting recipes.");
-			}
-			return null;
-		}
+//		if (matching.size() > 1) {
+//			if (ChaosCrystalMain.cfgDebugOutput) {
+//				System.out.println("Registering Item " + is
+//						+ " failed. Multiple crafting recipes.");
+//			}
+//			return null;
+//		}
 		IRecipe r = matching.get(0);
 		if (r instanceof ShapedRecipes) {
 			return autoRegisterWithItemStacks(r.getRecipeOutput(), ((ShapedRecipes) r).recipeItems);
