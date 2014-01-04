@@ -36,7 +36,6 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.aspects.Node;
-import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
 import founderio.chaoscrystal.degradation.IAspectStore;
@@ -65,7 +64,6 @@ public class OverlayAspectSelector extends Gui {
 		if(!Minecraft.getMinecraft().thePlayer.isSneaking()) {
 			return;
 		}
-
 
 		ItemStack currentItem = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 		if(currentItem == null) {
@@ -140,88 +138,85 @@ public class OverlayAspectSelector extends Gui {
 		Entity pointedEntity = null;
 		Minecraft mc = Minecraft.getMinecraft();
 
-		if (mc.renderViewEntity != null)
+		if (mc.renderViewEntity != null && mc.theWorld != null)
 		{
-			if (mc.theWorld != null)
+			//mc.pointedEntityLiving = null;
+			double d0 = (double)mc.playerController.getBlockReachDistance();
+			MovingObjectPosition mop = mc.renderViewEntity.rayTrace(d0, par1);
+			double d1 = d0;
+			Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
+
+			if (mc.playerController.extendedReach())
 			{
-				//mc.pointedEntityLiving = null;
-				double d0 = (double)mc.playerController.getBlockReachDistance();
-				MovingObjectPosition mop = mc.renderViewEntity.rayTrace(d0, par1);
-				double d1 = d0;
-				Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
-
-				if (mc.playerController.extendedReach())
+				d0 = 6.0D;
+				d1 = 6.0D;
+			}
+			else
+			{
+				if (d0 > 3.0D)
 				{
-					d0 = 6.0D;
-					d1 = 6.0D;
+					d1 = 3.0D;
 				}
-				else
+
+				d0 = d1;
+			}
+
+			if (mop != null)
+			{
+				d1 = mop.hitVec.distanceTo(vec3);
+			}
+
+			Vec3 vec31 = mc.renderViewEntity.getLook(par1);
+			Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
+			pointedEntity = null;
+			float f1 = 1.0F;
+			@SuppressWarnings("rawtypes")
+			List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
+			double d2 = d1;
+
+			for (int i = 0; i < list.size(); ++i)
+			{
+				Entity entity = (Entity)list.get(i);
+
+				float f2 = entity.getCollisionBorderSize();
+				AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
+				MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+
+				if (axisalignedbb.isVecInside(vec3))
 				{
-					if (d0 > 3.0D)
+					if (0.0D < d2 || d2 == 0.0D)
 					{
-						d1 = 3.0D;
+						pointedEntity = entity;
+						d2 = 0.0D;
 					}
-
-					d0 = d1;
 				}
-
-				if (mop != null)
+				else if (movingobjectposition != null)
 				{
-					d1 = mop.hitVec.distanceTo(vec3);
-				}
+					double d3 = vec3.distanceTo(movingobjectposition.hitVec);
 
-				Vec3 vec31 = mc.renderViewEntity.getLook(par1);
-				Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
-				pointedEntity = null;
-				float f1 = 1.0F;
-				@SuppressWarnings("rawtypes")
-				List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
-				double d2 = d1;
-
-				for (int i = 0; i < list.size(); ++i)
-				{
-					Entity entity = (Entity)list.get(i);
-
-					float f2 = entity.getCollisionBorderSize();
-					AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
-					MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
-
-					if (axisalignedbb.isVecInside(vec3))
+					if (d3 < d2 || d2 == 0.0D)
 					{
-						if (0.0D < d2 || d2 == 0.0D)
+						if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
 						{
-							pointedEntity = entity;
-							d2 = 0.0D;
-						}
-					}
-					else if (movingobjectposition != null)
-					{
-						double d3 = vec3.distanceTo(movingobjectposition.hitVec);
-
-						if (d3 < d2 || d2 == 0.0D)
-						{
-							if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
-							{
-								if (d2 == 0.0D)
-								{
-									pointedEntity = entity;
-								}
-							}
-							else
+							if (d2 == 0.0D)
 							{
 								pointedEntity = entity;
-								d2 = d3;
 							}
+						}
+						else
+						{
+							pointedEntity = entity;
+							d2 = d3;
 						}
 					}
 				}
-
-				if (pointedEntity != null && (d2 < d1 || mop == null))
-				{
-					mop = new MovingObjectPosition(pointedEntity);
-				}
-				return mop;
 			}
+
+			if (pointedEntity != null && (d2 < d1 || mop == null))
+			{
+				mop = new MovingObjectPosition(pointedEntity);
+			}
+			return mop;
 		}
 		return null;
 	}
@@ -334,7 +329,7 @@ public class OverlayAspectSelector extends Gui {
 									new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/mode_expel.png"));
 						}
 						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH - 16 - 5, 0, 0, 16, 16, 256, 256);
-						
+
 						renderAspectList(centerW, centerH, e);
 
 
@@ -469,24 +464,23 @@ public class OverlayAspectSelector extends Gui {
 				}
 			}
 
-			int center = event.resolution.getScaledWidth() / 2;
 			int bottom = event.resolution.getScaledHeight() - 80;
 
 
 			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));
-			this.drawTexturedModalRectScaled(center - 8, bottom, 0, 0, 16, 16, 256, 256);
+			this.drawTexturedModalRectScaled(centerW - 8, bottom, 0, 0, 16, 16, 256, 256);
 
 			GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
 
 			if(aspectIndex > 0) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 1] + ".png"));
-				this.drawTexturedModalRectScaled(center - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+				this.drawTexturedModalRectScaled(centerW - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
 
 			}
 
 			if(aspectIndex < Aspects.ASPECTS.length - 1) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 1] + ".png"));
-				this.drawTexturedModalRectScaled(center - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+				this.drawTexturedModalRectScaled(centerW - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
 
 			}
 
@@ -494,13 +488,13 @@ public class OverlayAspectSelector extends Gui {
 
 			if(aspectIndex > 1) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex - 2] + ".png"));
-				this.drawTexturedModalRectScaled(center - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+				this.drawTexturedModalRectScaled(centerW - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
 
 			}
 
 			if(aspectIndex < Aspects.ASPECTS.length - 2) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspects.ASPECTS[aspectIndex + 2] + ".png"));
-				this.drawTexturedModalRectScaled(center - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+				this.drawTexturedModalRectScaled(centerW - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
 
 			}
 
