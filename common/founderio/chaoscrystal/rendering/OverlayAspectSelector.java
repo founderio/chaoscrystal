@@ -39,6 +39,7 @@ import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.degradation.Aspects;
+import founderio.chaoscrystal.degradation.IAspectStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -225,6 +226,66 @@ public class OverlayAspectSelector extends Gui {
 		return null;
 	}
 
+	private void renderAspectList(int xPos, int yPos, IAspectStore store) {
+		int offset = 0;
+		int colOffset = 0;
+		final int colWidth = 64;
+
+		for(String aspect : Aspects.ASPECTS) {
+			int asp = store.getAspect(aspect);
+
+			Minecraft.getMinecraft().renderEngine.bindTexture(
+					new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+			this.drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5, 0, 0, 10, 10, 256, 256);
+
+			Minecraft.getMinecraft().fontRenderer.drawString(
+					Integer.toString(asp),
+					xPos + 16 + colOffset, yPos + 2 + offset + 5,
+					16777215);
+
+
+			if(offset >= 30) {
+				offset = 0;
+				colOffset += colWidth;
+			} else {
+				offset += 10;
+			}
+		}
+	}
+	private void renderAspectList(int xPos, int yPos, int[] aspectArray) {
+
+		int offset = 0;
+		int colOffset = 0;
+		final int colWidth = 64;
+
+
+		for(int i = 0; i < aspectArray.length; i++) {
+			String aspect = Aspects.ASPECTS[i];
+			int asp = aspectArray[i];
+
+			if(asp > 0) {
+				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+				this.drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5,
+						0, 0,
+						10, 10,
+						256, 256);
+
+				Minecraft.getMinecraft().fontRenderer.drawString(
+						Integer.toString(asp),
+						xPos + 16 + colOffset, yPos + 2 + offset + 5,
+						16777215);
+
+				if(offset >= 30) {
+					offset = 0;
+					colOffset += colWidth;
+				} else {
+					offset += 10;
+				}
+			}
+
+		}
+	}
+
 	@ForgeSubscribe(priority = EventPriority.NORMAL)
 	public void onRenderHud(RenderGameOverlayEvent event) {
 
@@ -244,6 +305,7 @@ public class OverlayAspectSelector extends Gui {
 		GL11.glPushMatrix();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
 		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID && !specialSkip) {
@@ -258,62 +320,54 @@ public class OverlayAspectSelector extends Gui {
 						EntityChaosCrystal e = (EntityChaosCrystal)lookingAt;
 
 
-						int offset = 0;
-						int colOffset = 0;
-						final int colWidth = 64;
 
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
-						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
+						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
-						for(String aspect : Aspects.ASPECTS) {
-							int asp = e.getAspect(aspect);
-
-							Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-							this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
-
-							Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
-
-
-							if(offset >= 30) {
-								offset = 0;
-								colOffset += colWidth;
-							} else {
-								offset += 10;
-							}
+						if(e.isInSuckMode()) {
+							Minecraft.getMinecraft().renderEngine.bindTexture(
+									new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/mode_suck.png"));
+						} else {
+							Minecraft.getMinecraft().renderEngine.bindTexture(
+									new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/mode_expel.png"));
 						}
+						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH - 16 - 5, 0, 0, 16, 16, 256, 256);
+						
+						renderAspectList(centerW, centerH, e);
 
-
-						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 
 					} else if(lookingAt instanceof EntityFocusFilter) {
 
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter.png"));
-						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter.png"));
+						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 						String aspect = ((EntityFocusFilter)lookingAt).getAspect();
-						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-						this.drawTexturedModalRectScaled(centerW + 5, centerH, 0, 0, 10, 10, 256, 256);
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+						this.drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+
 
 					} else if(lookingAt instanceof EntityFocusBorder) {
 
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_border.png"));
-						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_border.png"));
+						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 
 					} else if(lookingAt instanceof EntityFocusTransfer) {
 
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_transfer.png"));
-						this.drawTexturedModalRectScaled(centerW - 15, centerH, 0, 0, 10, 10, 256, 256);
+						Minecraft.getMinecraft().renderEngine.bindTexture(
+								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_transfer.png"));
+						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(Gui.icons);
 
 					} else if(lookingAt instanceof EntityItem) {
 
@@ -325,42 +379,20 @@ public class OverlayAspectSelector extends Gui {
 
 						} else {
 							Node node = degradations.get(0);
-							int offset = 0;
-							int colOffset = 0;
-							final int colWidth = 64;
 
-							int[] aspects = node.getAspects();
+							renderAspectList(centerW, centerH, node.getAspects());
 
-							for(int i = 0; i < aspects.length; i++) {
-								String aspect = Aspects.ASPECTS[i];
-								int asp = aspects[i];
-
-								if(asp > 0) {
-									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-									this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
-
-									Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
-
-									if(offset >= 30) {
-										offset = 0;
-										colOffset += colWidth;
-									} else {
-										offset += 10;
-									}
-								}
-
-							}
 							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
 
 							for(int s = 0; s < parents.length; s++) {
 								if(parents[s].itemID != 0) {
-									renderItem(parents[s], centerW + 5 + s*16, centerH - 16);
+									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
 								}
 							}
 
 						}
 
-						renderItem(is, centerW - 16 - 5, centerH);
+						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
 					}
 				}
 
@@ -380,42 +412,17 @@ public class OverlayAspectSelector extends Gui {
 
 						boolean doRenderMiniBlock = false;
 						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(id, 1, meta));
-						if(degradations.size() == 0) {
-
-						} else {
+						if(degradations.size() != 0) {
 							Node node = degradations.get(0);
 							doRenderMiniBlock = true;
-							int offset = 0;
-							int colOffset = 0;
-							final int colWidth = 64;
 
+							renderAspectList(centerW, centerH, node.getAspects());
 
-							int[] aspects = node.getAspects();
-
-							for(int i = 0; i < aspects.length; i++) {
-								String aspect = Aspects.ASPECTS[i];
-								int asp = aspects[i];
-
-								if(asp > 0) {
-									Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
-									this.drawTexturedModalRectScaled(centerW + 5 + colOffset, centerH + offset, 0, 0, 10, 10, 256, 256);
-
-									Minecraft.getMinecraft().fontRenderer.drawString(Integer.toString(asp), centerW + 16 + colOffset, centerH + 2 + offset, 16777215);
-
-									if(offset >= 30) {
-										offset = 0;
-										colOffset += colWidth;
-									} else {
-										offset += 10;
-									}
-								}
-
-							}
 							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
 
 							for(int s = 0; s < parents.length; s++) {
 								if(parents[s].itemID != 0) {
-									renderItem(parents[s], centerW + 5 + s*16, centerH - 16);
+									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
 								}
 							}
 
@@ -424,23 +431,19 @@ public class OverlayAspectSelector extends Gui {
 						TileEntity te = w.getBlockTileEntity(mop.blockX,
 								mop.blockY,
 								mop.blockZ);
-						if(te != null) {
-							if(te instanceof TileEntityApparatus) {
-								TileEntityApparatus apparatus = (TileEntityApparatus)te;
-								//doRenderMiniBlock = true;
-								for(int i = 0; i < apparatus.getSizeInventory(); i++) {
-									ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
-									if(its != null && its.itemID != 0) {
-										renderItem(its, centerW - 16 - 5 - 16*i, centerH);
-									}
+						if(te instanceof TileEntityApparatus) {
+							TileEntityApparatus apparatus = (TileEntityApparatus)te;
+							doRenderMiniBlock = true;
+							for(int i = 0; i < apparatus.getSizeInventory(); i++) {
+								ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
+								if(its != null && its.itemID != 0) {
+									renderItem(its, centerW - 16 - 5 - 16*i, centerH + 5);
 								}
-
-
 							}
 						}
 
 						if(doRenderMiniBlock) {
-							renderItem(new ItemStack(id, 1, meta), centerW - 16 - 5, centerH);
+							renderItem(new ItemStack(id, 1, meta), centerW - 16 - 5, centerH - 16 - 5);
 						}
 
 					}
@@ -454,21 +457,20 @@ public class OverlayAspectSelector extends Gui {
 			String selectedAspect;
 			int aspectIndex;
 			NBTTagCompound tags = currentItem.getTagCompound();
-			if(tags != null) {
+			if (tags == null) {
+				selectedAspect = Aspects.ASPECTS[0];
+				aspectIndex = 0;
+			} else {
 				selectedAspect = tags.getString("aspect");
 				aspectIndex = Aspects.getAspectIndex(selectedAspect);
-				if(aspectIndex == -1) {
+				if (aspectIndex == -1) {
 					selectedAspect = Aspects.ASPECTS[0];
 					aspectIndex = 0;
 				}
-			} else {
-				selectedAspect = Aspects.ASPECTS[0];
-				aspectIndex = 0;
 			}
 
-			int center = event.resolution.getScaledWidth()/2;
+			int center = event.resolution.getScaledWidth() / 2;
 			int bottom = event.resolution.getScaledHeight() - 80;
-
 
 
 			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + selectedAspect + ".png"));

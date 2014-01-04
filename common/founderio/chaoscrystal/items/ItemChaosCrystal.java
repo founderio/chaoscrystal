@@ -55,7 +55,7 @@ public class ItemChaosCrystal extends Item {
 				}
 			}
 		}
-		entity.setSuckMode(!par3EntityPlayer.isSneaking());
+		entity.setSuckMode(par3EntityPlayer.isSneaking());
 
 		par2World.spawnEntityInWorld(entity);
 		entity.playSpawnSound();
