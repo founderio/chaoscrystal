@@ -12,6 +12,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
+import founderio.chaoscrystal.machinery.IModule;
 
 public abstract class TileEntityApparatus extends TileEntity implements
 		IInventory, ISidedInventory {
@@ -19,13 +20,30 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	public final int stepsPerTick = 5;
 	public short animation;
 
-	private ItemStack[] inventory;
+	protected final ItemStack[] inventory;
+	protected final IModule[] modules;
 	private String owner = "";
 
-	public TileEntityApparatus(int inventorySize) {
+	public TileEntityApparatus(int inventorySize, int moduleCount) {
 		inventory = new ItemStack[inventorySize];
+		modules = new IModule[moduleCount];
 	}
 
+	public abstract boolean processAspects(EntityChaosCrystal crystal);
+
+
+	public void setOwner(String username) {
+		this.owner = username;
+		if (this.owner == null) {
+			this.owner = "";
+		}
+		updateState();
+	}
+
+	public String getOwner() {
+		return this.owner;
+	}
+	
 	@Override
 	public int getSizeInventory() {
 		return inventory.length;
@@ -76,6 +94,16 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	@Override
+	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
+		ItemStack is = getStackInSlot(i);
+		if (is == null || is.itemID == 0) {
+			return false;
+		} else {
+			return j == 1 && isItemValidForSlot(i, itemstack);
+		}
+	}
+
+	@Override
 	public String getInvName() {
 		return "inv";// No GUI, so no name...
 	}
@@ -103,25 +131,16 @@ public abstract class TileEntityApparatus extends TileEntity implements
 
 	@Override
 	public void openChest() {
-
+		// Nothing to do...
 	}
 
 	@Override
 	public void closeChest() {
-
+		// Nothing to do...
 	}
 
-	@Override
-	public int[] getAccessibleSlotsFromSide(int var1) {
-		// TODO: block top side!
-		return new int[] { 0 };
-	}
 
-	public abstract boolean processAspects(EntityChaosCrystal crystal);
-
-	public abstract boolean onBlockActivated(EntityPlayer player);
-
-	public void updateState() {
+	public final void updateState() {
 		if (worldObj.isRemote) {
 			return;
 		}
@@ -130,7 +149,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public final Packet getDescriptionPacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
 		writePropertiesToNBT(nbt);
 
@@ -141,14 +160,14 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	@Override
-	public void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
+	public final void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
 		NBTTagCompound nbt = pkt.data;
 
 		readPropertiesFromNBT(nbt);
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound par1nbtTagCompound) {
+	public final void writeToNBT(NBTTagCompound par1nbtTagCompound) {
 		super.writeToNBT(par1nbtTagCompound);
 
 		writePropertiesToNBT(par1nbtTagCompound);
@@ -171,7 +190,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound par1nbtTagCompound) {
+	public final void readFromNBT(NBTTagCompound par1nbtTagCompound) {
 		super.readFromNBT(par1nbtTagCompound);
 
 		readPropertiesFromNBT(par1nbtTagCompound);
@@ -189,16 +208,65 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		animation = par1nbtTagCompound.getShort("animation");
 		owner = par1nbtTagCompound.getString("owner");
 	}
+	
 
-	public void setOwner(String username) {
-		this.owner = username;
-		if (this.owner == null) {
-			this.owner = "";
+	public boolean onBlockActivated(EntityPlayer player) {
+		ItemStack currentEquip = player.getCurrentEquippedItem();
+
+		if((currentEquip == null || currentEquip.itemID == 0) && player.isSneaking()) {
+			if(getOwner().equals(player.username)) {
+				setOwner("");
+			} else if(getOwner().equals("")) {
+				setOwner(player.username);
+			}
+		} else {
+		
+			boolean itemValid = false;
+			
+			if (currentEquip != null) {
+				for (int i = 0; i < inventory.length; i++) {
+					if(isItemValidForSlot(i, currentEquip)) {
+						itemValid = true;
+						ItemStack is = this.getStackInSlot(i);
+						if (is == null || is.itemID == 0) {
+							setInventorySlotContents(i, currentEquip.copy());
+							player.inventory.mainInventory[player.inventory.currentItem] = null;
+							break;
+						}
+						if (is.isItemEqual(currentEquip)) {
+							if (is.stackSize + currentEquip.stackSize <= getInventoryStackLimit()) {
+								is.stackSize += currentEquip.stackSize;
+								player.inventory.mainInventory[player.inventory.currentItem] = null;
+								break;
+							} else {
+								currentEquip.stackSize -= getInventoryStackLimit()
+										- is.stackSize;
+								is.stackSize = getInventoryStackLimit();
+								if (currentEquip.stackSize == 0) {
+									player.inventory.mainInventory[player.inventory.currentItem] = null;
+									break;
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			if(!itemValid) {
+				for (int i = 0; i < 4; i++) {
+					ItemStack is = this.getStackInSlot(i);
+					if (is != null && is.itemID != 0 && is.stackSize > 0) {
+						if (player.inventory.addItemStackToInventory(is)) {
+							this.setInventorySlotContents(i, null);
+							break;
+						}
+					}
+				}
+			}
+	
+			onInventoryChanged();
 		}
-		updateState();
+		return true;
 	}
 
-	public String getOwner() {
-		return this.owner;
-	}
 }

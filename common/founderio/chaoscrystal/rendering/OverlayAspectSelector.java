@@ -457,6 +457,13 @@ public class OverlayAspectSelector extends Gui {
 									renderItem(its, centerW - 16 - 5 - 16*i, centerH + 5);
 								}
 							}
+							if(apparatus.getOwner().length() > 0) {
+								Minecraft.getMinecraft().fontRenderer.drawString(
+										"Owner: " + apparatus.getOwner(),
+										centerW + 10, centerH - 3,
+										16777215);
+							}
+							
 						}
 
 						if(doRenderMiniBlock) {

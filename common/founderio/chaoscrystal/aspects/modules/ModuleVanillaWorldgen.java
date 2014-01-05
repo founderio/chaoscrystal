@@ -6,17 +6,13 @@ import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.aspects.AspectBuilder;
 import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.Aspects;
-import founderio.chaoscrystal.aspects.DegradationStore;
+import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.aspects.NodeAir;
 import founderio.chaoscrystal.aspects.NodeDegradation;
 import founderio.chaoscrystal.aspects.NodeSimpleOre;
 
 public class ModuleVanillaWorldgen extends AspectModule {
-
-	public ModuleVanillaWorldgen(DegradationStore degradationStore) {
-		super(degradationStore);
-	}
 
 	/*
 	 * "Ignore"-Blocks
@@ -78,7 +74,7 @@ public class ModuleVanillaWorldgen extends AspectModule {
 	public static Node FIRE;
 
 	@Override
-	protected void registerNodes(DegradationStore degradationStore) {
+	public void registerNodes(ChaosRegistry degradationStore) {
 		AspectBuilder ab = new AspectBuilder();
 
 		/*

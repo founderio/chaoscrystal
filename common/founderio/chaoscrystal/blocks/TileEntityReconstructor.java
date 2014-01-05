@@ -1,6 +1,5 @@
 package founderio.chaoscrystal.blocks;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.aspects.Repair;
@@ -9,7 +8,7 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 public class TileEntityReconstructor extends TileEntityApparatus {
 
 	public TileEntityReconstructor() {
-		super(1);
+		super(1, 0);
 	}
 
 	@Override
@@ -19,7 +18,6 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 		if (is == null || is.itemID == 0) {
 			return false;
 		} else {
-			int maxDmg = is.getMaxDamage();
 			int curDmg = is.getItemDamage();
 
 			if (curDmg == 0) {
@@ -64,26 +62,6 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player) {
-		ItemStack is = getStackInSlot(0);
-		if (is == null || is.stackSize == 0) {
-			if (player.getCurrentEquippedItem() != null
-					&& isItemValidForSlot(0, player.getCurrentEquippedItem())) {
-				setInventorySlotContents(0, player.getCurrentEquippedItem());
-				player.inventory.mainInventory[player.inventory.currentItem] = null;
-			}
-		} else {
-			if (player.inventory.addItemStackToInventory(is)) {
-				setInventorySlotContents(0, null);
-			}
-		}
-
-		onInventoryChanged();
-
-		return true;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (itemstack == null) {
 			return false;
@@ -93,18 +71,13 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 	}
 
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		ItemStack is = getStackInSlot(i);
-		if (is != null && is.itemID != 0) {
-			return false;
-		} else {
-			return j == 1 && isItemValidForSlot(i, itemstack);
-		}
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return itemstack.getItemDamage() == 0;
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return itemstack.getItemDamage() == 0;
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		return new int[] { 0 };
 	}
 
 }

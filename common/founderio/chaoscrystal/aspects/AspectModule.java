@@ -3,9 +3,8 @@ package founderio.chaoscrystal.aspects;
 
 public abstract class AspectModule {
 
-	public AspectModule(DegradationStore degradationStore) {
-		registerNodes(degradationStore);
+	public AspectModule() {
 	}
 
-	protected abstract void registerNodes(DegradationStore degradationStore);
+	public abstract void registerNodes(ChaosRegistry degradationStore);
 }

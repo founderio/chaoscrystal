@@ -6,116 +6,27 @@ import java.util.Random;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
-import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.aspects.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntitySentry extends TileEntityApparatus {
 
 	public TileEntitySentry() {
-		super(4);
+		super(4, 4);
 	}
 
 	@Override
 	public boolean processAspects(EntityChaosCrystal crystal) {
-		ItemStack is = getStackInSlot(0);
 
-		if (is == null || is.itemID == 0) {
-			return false;
-		} else {
-			int maxDmg = is.getMaxDamage();
-			int curDmg = is.getItemDamage();
-
-			if (curDmg == 0) {
-				return false;
-			}
-
-			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.itemID);
-
-			if (rep == null) {
-				return false;
-			}
-			boolean didRepair = false;
-
-			for (int step = 0; step < stepsPerTick && curDmg > 0; step++) {
-				boolean capable = true;
-				for (int a = 0; a < rep.aspects.length; a++) {
-					if (crystal.getAspect(rep.aspects[a]) < rep.amounts[a]) {
-						capable = false;
-					}
-				}
-				if (!capable) {
-					break;
-				}
-				didRepair = true;
-
-				for (int a = 0; a < rep.aspects.length; a++) {
-					crystal.setAspect(rep.aspects[a],
-							crystal.getAspect(rep.aspects[a]) - rep.amounts[a]);
-				}
-
-				curDmg--;
-				is.setItemDamage(curDmg);
-			}
-
-			if (didRepair) {
-				updateState();
-			}
-
-			return didRepair;
-
-		}
+		//TODO: Charge Up!
+		return false;
 	}
 
-	@Override
-	public boolean onBlockActivated(EntityPlayer player) {
-		ItemStack currentEquip = player.getCurrentEquippedItem();
-
-		if (currentEquip != null && isItemValidForSlot(0, currentEquip)) {
-			for (int i = 0; i < 4; i++) {
-				ItemStack is = this.getStackInSlot(i);
-				if (is == null || is.itemID == 0) {
-					setInventorySlotContents(i, currentEquip.copy());
-					player.inventory.mainInventory[player.inventory.currentItem] = null;
-					break;
-				}
-				if (is.isItemEqual(currentEquip)) {
-					if (is.stackSize + currentEquip.stackSize <= getInventoryStackLimit()) {
-						is.stackSize += currentEquip.stackSize;
-						player.inventory.mainInventory[player.inventory.currentItem] = null;
-						break;
-					} else {
-						currentEquip.stackSize -= getInventoryStackLimit()
-								- is.stackSize;
-						is.stackSize = getInventoryStackLimit();
-						if (currentEquip.stackSize == 0) {
-							player.inventory.mainInventory[player.inventory.currentItem] = null;
-							break;
-						}
-					}
-				}
-			}
-		} else {
-			for (int i = 0; i < 4; i++) {
-				ItemStack is = this.getStackInSlot(i);
-				if (is != null && is.itemID != 0 && is.stackSize > 0) {
-					if (player.inventory.addItemStackToInventory(is)) {
-						this.setInventorySlotContents(i, null);
-						break;
-					}
-				}
-			}
-		}
-
-		onInventoryChanged();
-
-		return true;
-	}
 
 	private Random rand = new Random();
 	public static final int sentryRange = 32;
@@ -135,12 +46,13 @@ public class TileEntitySentry extends TileEntityApparatus {
 			}
 
 			int arrowSlot = -1;
+			ItemStack arrowItem = null;
 
 			for (int i = 0; i < getSizeInventory(); i++) {
 				ItemStack is = getStackInSlot(i);
-				if (is != null && is.itemID == Item.arrow.itemID
-						&& is.stackSize > 0) {
+				if (isItemValidForSlot(i, is) && is.stackSize > 0) {
 					arrowSlot = i;
+					arrowItem = is;
 					break;
 				}
 			}
@@ -182,6 +94,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 							dist = tmp_dist;
 							target = eCheck;
 						} else {
+							@SuppressWarnings("rawtypes")
 							List list = worldObj.getEntitiesWithinAABB(
 									EntityLivingBase.class, AxisAlignedBB
 											.getBoundingBox(
@@ -216,31 +129,47 @@ public class TileEntitySentry extends TileEntityApparatus {
 				f = 1.0F;
 			}
 
-			EntityArrow entityarrow = new EntityArrow(worldObj, xCoord + 0.5f,
-					yCoord + 2f, zCoord + 0.5f);
-			entityarrow.setThrowableHeading(target.posX
-					- ((float) xCoord + 0.5f),
-					target.posY + target.getEyeHeight()
-							- ((float) yCoord + 1.5f), target.posZ
-							- ((float) zCoord + 0.5f), 5, 0);
-			entityarrow.canBePickedUp = 1;
+			
+			if(arrowItem.itemID == Item.arrow.itemID) {
+				if (!worldObj.isRemote) {
+					EntityArrow entityarrow = new EntityArrow(worldObj, xCoord + 0.5f,
+							yCoord + 2f, zCoord + 0.5f);
+					entityarrow.setThrowableHeading(target.posX
+							- ((float) xCoord + 0.5f),
+							target.posY + target.getEyeHeight()
+									- ((float) yCoord + 1.5f), target.posZ
+									- ((float) zCoord + 0.5f), 5, 0);
+					entityarrow.canBePickedUp = 1;
+					
+					worldObj.spawnEntityInWorld(entityarrow);
+				}
+			} else if(arrowItem.itemID == Item.snowball.itemID) {
+				if (!worldObj.isRemote) {
+					EntitySnowball entitysnowball = new EntitySnowball(worldObj, xCoord + 0.5f,
+							yCoord + 2f, zCoord + 0.5f);
+					entitysnowball.setThrowableHeading(target.posX
+							- ((float) xCoord + 0.5f),
+							target.posY + target.getEyeHeight()
+									- ((float) yCoord + 1.5f), target.posZ
+									- ((float) zCoord + 0.5f), 5, 0);
+					
+					worldObj.spawnEntityInWorld(entitysnowball);
+				}
+			}
 
-			decrStackSize(arrowSlot, 1);
 
 			worldObj.playSound(xCoord + 10.5d, yCoord + 2d, zCoord + 10.5d,
 					"random.bow", 2.0F, 1.0F
 							/ (this.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F,
 					true);
+			
 
-			if (!worldObj.isRemote) {
-				worldObj.spawnEntityInWorld(entityarrow);
-			}
+			decrStackSize(arrowSlot, 1);
 		}
 	}
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
-		// TODO: block top side!
 		return new int[] { 0, 1, 2, 3 };
 	}
 
@@ -249,17 +178,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 		if (itemstack == null) {
 			return false;
 		}
-		return itemstack.itemID == Item.arrow.itemID;
-	}
-
-	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		ItemStack is = getStackInSlot(i);
-		if (is != null && is.itemID != 0) {
-			return false;
-		} else {
-			return j == 1 && isItemValidForSlot(i, itemstack);
-		}
+		return itemstack.itemID == Item.arrow.itemID || itemstack.itemID == Item.snowball.itemID;
 	}
 
 	@Override
