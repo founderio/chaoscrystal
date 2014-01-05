@@ -1,4 +1,4 @@
-package founderio.chaoscrystal.degradation;
+package founderio.chaoscrystal.aspects;
 
 public interface IAspectStore {
 	int getAspect(String aspect);

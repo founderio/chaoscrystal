@@ -36,10 +36,10 @@ import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
+import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.IAspectStore;
 import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
-import founderio.chaoscrystal.degradation.Aspects;
-import founderio.chaoscrystal.degradation.IAspectStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -457,6 +457,13 @@ public class OverlayAspectSelector extends Gui {
 									renderItem(its, centerW - 16 - 5 - 16*i, centerH + 5);
 								}
 							}
+							if(apparatus.getOwner().length() > 0) {
+								Minecraft.getMinecraft().fontRenderer.drawString(
+										"Owner: " + apparatus.getOwner(),
+										centerW + 10, centerH - 3,
+										16777215);
+							}
+							
 						}
 
 						if(doRenderMiniBlock) {

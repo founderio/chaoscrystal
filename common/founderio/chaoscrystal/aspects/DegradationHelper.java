@@ -1,4 +1,4 @@
-package founderio.chaoscrystal.degradation;
+package founderio.chaoscrystal.aspects;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +12,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
-import founderio.chaoscrystal.aspects.Node;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.util.ItemUtil;

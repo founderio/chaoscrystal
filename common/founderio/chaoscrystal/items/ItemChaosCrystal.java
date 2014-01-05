@@ -13,7 +13,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
-import founderio.chaoscrystal.degradation.Aspects;
+import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class ItemChaosCrystal extends Item {

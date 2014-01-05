@@ -9,8 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
+import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
-import founderio.chaoscrystal.degradation.Aspects;
 import founderio.util.GeometryHelper;
 
 public class EntityFocusTransfer extends EntityFocus {

@@ -16,7 +16,7 @@ public class TileEntityCreator extends TileEntityApparatus {
 	public boolean isActive = true;
 
 	public TileEntityCreator() {
-		super(1);
+		super(1, 4);
 	}
 
 	@Override
@@ -67,26 +67,6 @@ public class TileEntityCreator extends TileEntityApparatus {
 	}
 
 	@Override
-	public boolean onBlockActivated(EntityPlayer player) {
-		ItemStack is = getStackInSlot(0);
-		if (is == null || is.stackSize == 0) {
-			if (player.getCurrentEquippedItem() != null
-					&& isItemValidForSlot(0, player.getCurrentEquippedItem())) {
-				setInventorySlotContents(0, player.getCurrentEquippedItem());
-				player.inventory.mainInventory[player.inventory.currentItem] = null;
-			}
-		} else {
-			if (player.inventory.addItemStackToInventory(is)) {
-				setInventorySlotContents(0, null);
-			}
-		}
-
-		onInventoryChanged();
-
-		return true;
-	}
-
-	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		if (itemstack == null) {
 			return false;
@@ -95,18 +75,13 @@ public class TileEntityCreator extends TileEntityApparatus {
 	}
 
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		ItemStack is = getStackInSlot(i);
-		if (is != null && is.itemID != 0) {
-			return false;
-		} else {
-			return j == 1 && isItemValidForSlot(i, itemstack);
-		}
+	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
+		return true;
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
-		return true;
+	public int[] getAccessibleSlotsFromSide(int var1) {
+		return new int[] { 0 };
 	}
 
 }

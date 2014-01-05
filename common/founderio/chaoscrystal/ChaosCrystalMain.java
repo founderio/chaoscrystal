@@ -25,13 +25,13 @@ import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
-import founderio.chaoscrystal.degradation.Aspects;
-import founderio.chaoscrystal.degradation.DegradationStore;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -60,7 +60,7 @@ public class ChaosCrystalMain {
 	@SidedProxy(clientSide = "founderio.chaoscrystal.ClientProxy", serverSide = "founderio.chaoscrystal.CommonProxy")
 	public static CommonProxy proxy;
 
-	public static DegradationStore degradationStore;
+	public static ChaosRegistry degradationStore;
 
 	public static final Random rand = new Random();
 
@@ -246,7 +246,7 @@ public class ChaosCrystalMain {
 
 		GameRegistry.addShapelessRecipe(new ItemStack(itemManual), new ItemStack(blockBase, 1, 32767), Item.emptyMap);
 
-		degradationStore = new DegradationStore();
+		degradationStore = new ChaosRegistry();
 
 		degradationStore.registerRepair(Item.pickaxeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
 		degradationStore.registerRepair(Item.pickaxeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
@@ -348,25 +348,25 @@ public class ChaosCrystalMain {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 2));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.dispenser, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.music, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.rail, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.railDetector, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.railPowered, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.railActivator, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonBase, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonStickyBase, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.furnaceIdle, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneButton, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.woodenButton, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Block.ladder, 1, 32767));
-		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
-		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
-		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 2));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.dispenser, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.music, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.rail, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railDetector, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railPowered, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railActivator, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonBase, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonStickyBase, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.furnaceIdle, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneButton, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.woodenButton, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Block.ladder, 1, 32767));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
+//		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
 		//degradationStore.autoRegisterDegradation(new ItemStack(Item.arrow));
 
 		if(cfgDebugOutput) {

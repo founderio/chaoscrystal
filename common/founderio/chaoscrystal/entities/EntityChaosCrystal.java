@@ -8,9 +8,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.degradation.Aspects;
-import founderio.chaoscrystal.degradation.DegradationHelper;
-import founderio.chaoscrystal.degradation.IAspectStore;
+import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.DegradationHelper;
+import founderio.chaoscrystal.aspects.IAspectStore;
 import founderio.util.GeometryHelper;
 
 public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {

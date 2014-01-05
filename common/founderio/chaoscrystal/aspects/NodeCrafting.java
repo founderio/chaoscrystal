@@ -1,7 +1,6 @@
 package founderio.chaoscrystal.aspects;
 
 import net.minecraft.item.ItemStack;
-import founderio.chaoscrystal.degradation.Aspects;
 import founderio.util.ItemUtil;
 
 public class NodeCrafting extends Node {
