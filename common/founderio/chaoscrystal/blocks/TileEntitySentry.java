@@ -12,7 +12,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.degradation.Repair;
+import founderio.chaoscrystal.aspects.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntitySentry extends TileEntityApparatus {

@@ -3,7 +3,6 @@ package founderio.chaoscrystal.aspects;
 import java.util.HashMap;
 import java.util.Map;
 
-import founderio.chaoscrystal.degradation.Aspects;
 
 public class AspectBuilder {
 	private Map<String, Integer> aspects;

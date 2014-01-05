@@ -1,4 +1,4 @@
-package founderio.chaoscrystal.degradation;
+package founderio.chaoscrystal.aspects;
 
 import java.util.Arrays;
 

@@ -1,4 +1,4 @@
-package founderio.chaoscrystal.degradation;
+package founderio.chaoscrystal.aspects;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,8 +10,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.aspects.Node;
-import founderio.chaoscrystal.aspects.NodeCrafting;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.util.ItemUtil;
 

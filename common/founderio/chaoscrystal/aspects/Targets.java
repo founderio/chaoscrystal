@@ -1,4 +1,4 @@
-package founderio.chaoscrystal.degradation;
+package founderio.chaoscrystal.aspects;
 
 import net.minecraft.util.ResourceLocation;
 import founderio.chaoscrystal.Constants;

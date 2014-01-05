@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.degradation.Aspects;
-import founderio.chaoscrystal.degradation.Targets;
+import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Targets;
 import founderio.util.GeometryHelper;
 
 public class EntityFocusFilterTarget extends EntityFocus {

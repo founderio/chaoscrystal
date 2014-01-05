@@ -3,7 +3,7 @@ package founderio.chaoscrystal.blocks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.degradation.Repair;
+import founderio.chaoscrystal.aspects.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntityReconstructor extends TileEntityApparatus {

@@ -1,6 +1,5 @@
 package founderio.chaoscrystal.aspects;
 
-import founderio.chaoscrystal.degradation.DegradationStore;
 
 public abstract class AspectModule {
 
