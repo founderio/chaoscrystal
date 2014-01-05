@@ -1,7 +1,6 @@
 package founderio.chaoscrystal.blocks;
 
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
+import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntitySentry extends TileEntityApparatus {
@@ -28,7 +28,6 @@ public class TileEntitySentry extends TileEntityApparatus {
 	}
 
 
-	private Random rand = new Random();
 	public static final int sentryRange = 32;
 	public boolean isActive = true;
 
@@ -134,11 +133,11 @@ public class TileEntitySentry extends TileEntityApparatus {
 				if (!worldObj.isRemote) {
 					EntityArrow entityarrow = new EntityArrow(worldObj, xCoord + 0.5f,
 							yCoord + 2f, zCoord + 0.5f);
-					entityarrow.setThrowableHeading(target.posX
-							- ((float) xCoord + 0.5f),
-							target.posY + target.getEyeHeight()
-									- ((float) yCoord + 1.5f), target.posZ
-									- ((float) zCoord + 0.5f), 5, 0);
+					entityarrow.setThrowableHeading(
+							target.posX - ((float) xCoord + 0.5f),
+							target.posY + target.getEyeHeight() * 0.5f - ((float) yCoord + 2f),
+							target.posZ - ((float) zCoord + 0.5f),
+							1, 0);
 					entityarrow.canBePickedUp = 1;
 					
 					worldObj.spawnEntityInWorld(entityarrow);
@@ -147,11 +146,11 @@ public class TileEntitySentry extends TileEntityApparatus {
 				if (!worldObj.isRemote) {
 					EntitySnowball entitysnowball = new EntitySnowball(worldObj, xCoord + 0.5f,
 							yCoord + 2f, zCoord + 0.5f);
-					entitysnowball.setThrowableHeading(target.posX
-							- ((float) xCoord + 0.5f),
-							target.posY + target.getEyeHeight()
-									- ((float) yCoord + 1.5f), target.posZ
-									- ((float) zCoord + 0.5f), 5, 0);
+					entitysnowball.setThrowableHeading(
+							target.posX - ((float) xCoord + 0.5f),
+							target.posY + target.getEyeHeight() - ((float) yCoord + 2f) + dist * 0.03f,
+							target.posZ - ((float) zCoord + 0.5f),
+							0.5f, 0);
 					
 					worldObj.spawnEntityInWorld(entitysnowball);
 				}
@@ -160,7 +159,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 
 			worldObj.playSound(xCoord + 10.5d, yCoord + 2d, zCoord + 10.5d,
 					"random.bow", 2.0F, 1.0F
-							/ (this.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F,
+							/ (ChaosCrystalMain.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F,
 					true);
 			
 

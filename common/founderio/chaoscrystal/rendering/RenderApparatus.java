@@ -39,6 +39,8 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 	private RenderItem ri;
 	private EntityItem ei;
 
+	private float rot = 0;
+	
 	public RenderApparatus() {
 		String reconstructor = "/assets/" + Constants.MOD_ID
 				+ "/models/reconstructor.tcn";
@@ -70,7 +72,6 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 		ri.setRenderManager(RenderManager.instance);
 	}
 
-	private float rot = 0;
 
 	@Override
 	public void tickStart(EnumSet<TickType> type, Object... tickData) {
@@ -86,7 +87,6 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 	@Override
 	public EnumSet<TickType> ticks() {
 		return EnumSet.of(TickType.CLIENT);
-
 	}
 
 	@Override

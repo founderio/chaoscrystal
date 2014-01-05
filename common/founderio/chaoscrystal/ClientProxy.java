@@ -3,7 +3,6 @@ package founderio.chaoscrystal;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Random;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
@@ -36,7 +35,6 @@ import founderio.chaoscrystal.rendering.RenderItemManual;
 public class ClientProxy extends CommonProxy {
 
 	public static RenderApparatus render;
-	private Random rnd = new Random();
 
 	@Override
 	public void registerRenderStuff() {
@@ -82,25 +80,25 @@ public class ClientProxy extends CommonProxy {
 				if(w != null) {
 					float varHalf = variation/2;
 					if(type == 2) {
-						for(int i = 0; i < 5 + rnd.nextInt(20); i++) {
+						for(int i = 0; i < 5 + ChaosCrystalMain.rand.nextInt(20); i++) {
 							Minecraft.getMinecraft().effectRenderer.addEffect(
 									new EntityAuraFX(
 											w,
-											posX + rnd.nextDouble()*variation-varHalf,
-											posY + rnd.nextDouble()*variation-varHalf,
-											posZ + rnd.nextDouble()*variation-varHalf, 1, 1, 1));
+											posX + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											posY + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											posZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf, 1, 1, 1));
 						}
 					} else {
-						for(int i = 0; i < 5 + rnd.nextInt(5); i++) {
+						for(int i = 0; i < 5 + ChaosCrystalMain.rand.nextInt(5); i++) {
 							Minecraft.getMinecraft().effectRenderer.addEffect(
 									new DegradationParticles(
 											w,
-											posX + rnd.nextDouble()*variation-varHalf,
-											posY + rnd.nextDouble()*variation-varHalf,
-											posZ + rnd.nextDouble()*variation-varHalf,
-											offX + rnd.nextDouble()*variation-varHalf,
-											offY + rnd.nextDouble()*variation-varHalf,
-											offZ + rnd.nextDouble()*variation-varHalf,
+											posX + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											posY + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											posZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											offX + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											offY + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
+											offZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
 											type));
 						}
 					}

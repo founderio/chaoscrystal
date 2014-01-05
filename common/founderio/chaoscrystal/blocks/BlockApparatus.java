@@ -1,7 +1,5 @@
 package founderio.chaoscrystal.blocks;
 
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -16,6 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 
 public class BlockApparatus extends BlockContainer {
@@ -42,6 +41,7 @@ public class BlockApparatus extends BlockContainer {
 		return true;
 	}
 
+	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
 		switch (metaListIndex) {
 		case 0:
@@ -53,7 +53,6 @@ public class BlockApparatus extends BlockContainer {
 		default:
 			return null;
 		}
-
 	}
 
 	@Override
@@ -88,8 +87,6 @@ public class BlockApparatus extends BlockContainer {
 		return te.onBlockActivated(par5EntityPlayer);
 	}
 
-	private static Random random = new Random();
-
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4,
 			int par5, int par6) {
@@ -104,13 +101,13 @@ public class BlockApparatus extends BlockContainer {
 				ItemStack itemstack = te.getStackInSlot(j1);
 
 				if (itemstack != null) {
-					float f = random.nextFloat() * 0.8F + 0.1F;
-					float f1 = random.nextFloat() * 0.8F + 0.1F;
+					float f = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
+					float f1 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
 					EntityItem entityitem;
 
-					for (float f2 = random.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World
+					for (float f2 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World
 							.spawnEntityInWorld(entityitem)) {
-						int k1 = random.nextInt(21) + 10;
+						int k1 = ChaosCrystalMain.rand.nextInt(21) + 10;
 
 						if (k1 > itemstack.stackSize) {
 							k1 = itemstack.stackSize;
@@ -124,11 +121,11 @@ public class BlockApparatus extends BlockContainer {
 										itemstack.itemID, k1,
 										itemstack.getItemDamage()));
 						float f3 = 0.05F;
-						entityitem.motionX = (double) ((float) random
+						entityitem.motionX = (double) ((float) ChaosCrystalMain.rand
 								.nextGaussian() * f3);
-						entityitem.motionY = (double) ((float) random
+						entityitem.motionY = (double) ((float) ChaosCrystalMain.rand
 								.nextGaussian() * f3 + 0.2F);
-						entityitem.motionZ = (double) ((float) random
+						entityitem.motionZ = (double) ((float) ChaosCrystalMain.rand
 								.nextGaussian() * f3);
 
 						if (itemstack.hasTagCompound()) {
