@@ -2,13 +2,17 @@ package founderio.chaoscrystal.blocks;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import founderio.chaoscrystal.ChaosCrystalMain;
@@ -96,13 +100,13 @@ public class TileEntitySentry extends TileEntityApparatus {
 							@SuppressWarnings("rawtypes")
 							List list = worldObj.getEntitiesWithinAABB(
 									EntityLivingBase.class, AxisAlignedBB
-											.getBoundingBox(
-													mop.hitVec.xCoord - .5f,
-													mop.hitVec.yCoord - .5f,
-													mop.hitVec.zCoord - .5f,
-													mop.hitVec.xCoord + .5f,
-													mop.hitVec.yCoord + .5f,
-													mop.hitVec.zCoord + .5f));
+									.getBoundingBox(
+											mop.hitVec.xCoord - .5f,
+											mop.hitVec.yCoord - .5f,
+											mop.hitVec.zCoord - .5f,
+											mop.hitVec.xCoord + .5f,
+											mop.hitVec.yCoord + .5f,
+											mop.hitVec.zCoord + .5f));
 							if (!list.isEmpty()) {
 
 								dist = tmp_dist;
@@ -128,7 +132,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 				f = 1.0F;
 			}
 
-			
+
 			if(arrowItem.itemID == Item.arrow.itemID) {
 				if (!worldObj.isRemote) {
 					EntityArrow entityarrow = new EntityArrow(worldObj, xCoord + 0.5f,
@@ -137,21 +141,55 @@ public class TileEntitySentry extends TileEntityApparatus {
 							target.posX - ((float) xCoord + 0.5f),
 							target.posY + target.getEyeHeight() * 0.5f - ((float) yCoord + 2f),
 							target.posZ - ((float) zCoord + 0.5f),
-							1, 0);
+							5, 0);
 					entityarrow.canBePickedUp = 1;
-					
+
 					worldObj.spawnEntityInWorld(entityarrow);
 				}
 			} else if(arrowItem.itemID == Item.snowball.itemID) {
 				if (!worldObj.isRemote) {
 					EntitySnowball entitysnowball = new EntitySnowball(worldObj, xCoord + 0.5f,
-							yCoord + 2f, zCoord + 0.5f);
+							yCoord + 2f, zCoord + 0.5f) {
+						@Override
+						protected void onImpact(
+								MovingObjectPosition par1MovingObjectPosition) {
+							if (par1MovingObjectPosition.entityHit != null)
+							{
+								float b0 = 0.0000000000001f;
+
+								if (par1MovingObjectPosition.entityHit instanceof EntityBlaze)
+								{
+									b0 = 3;
+								}
+
+
+								DamageSource dmgSource = new DamageSourceSentrySnowball("thrown", this, this.getThrower());
+
+								par1MovingObjectPosition.entityHit.attackEntityFrom(dmgSource, b0);
+								float i = 0.1f;//knockback factor
+								
+								par1MovingObjectPosition.entityHit.addVelocity(this.motionX * i, this.motionY * i, this.motionZ * i);
+								
+								
+							}
+
+							for (int i = 0; i < 8; ++i)
+							{
+								this.worldObj.spawnParticle("snowballpoof", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+							}
+
+							if (!this.worldObj.isRemote)
+							{
+								this.setDead();
+							}
+						}
+					};
 					entitysnowball.setThrowableHeading(
 							target.posX - ((float) xCoord + 0.5f),
-							target.posY + target.getEyeHeight() - ((float) yCoord + 2f) + dist * 0.03f,
+							target.posY + target.getEyeHeight() - ((float) yCoord + 2f),
 							target.posZ - ((float) zCoord + 0.5f),
-							0.5f, 0);
-					
+							5f, 0);
+
 					worldObj.spawnEntityInWorld(entitysnowball);
 				}
 			}
@@ -159,9 +197,9 @@ public class TileEntitySentry extends TileEntityApparatus {
 
 			worldObj.playSound(xCoord + 10.5d, yCoord + 2d, zCoord + 10.5d,
 					"random.bow", 2.0F, 1.0F
-							/ (ChaosCrystalMain.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F,
+					/ (ChaosCrystalMain.rand.nextFloat() * 0.4F + 1.2F) + f * 0.5F,
 					true);
-			
+
 
 			decrStackSize(arrowSlot, 1);
 		}
