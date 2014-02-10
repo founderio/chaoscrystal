@@ -23,8 +23,11 @@ import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
+import founderio.chaoscrystal.machinery.IItemModule;
+import founderio.chaoscrystal.machinery.IModule;
+import founderio.chaoscrystal.machinery.modules.ModuleTargetFilter;
 
-public class ItemFocus extends Item implements IModeChangingItem {
+public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
 	public ItemFocus(int par1) {
 		super(par1);
@@ -242,6 +245,33 @@ public class ItemFocus extends Item implements IModeChangingItem {
 			break;
 		}
 
+	}
+
+	@Override
+	public IModule getModuleFromItemStack(ItemStack is) {
+		if(is == null || is.getItemDamage() != 3) {
+			return null;
+		} else {
+			ModuleTargetFilter mtf = new ModuleTargetFilter();
+			mtf.targets = is.getTagCompound().getString("target");
+			if (!Targets.isTarget(mtf.targets)) {
+				mtf.targets = Targets.TARGETS[0];
+			}
+			return mtf;
+		}
+	}
+
+	@Override
+	public ItemStack getItemStackFromModule(IModule module) {
+		if(module instanceof ModuleTargetFilter) {
+			ItemStack is = new ItemStack(this, 1, 3);
+			NBTTagCompound nbt = new NBTTagCompound();
+			nbt.setString("target", ((ModuleTargetFilter) module).targets);
+			is.setTagCompound(nbt);
+			return is;
+		} else {
+			return null;
+		}
 	}
 
 	

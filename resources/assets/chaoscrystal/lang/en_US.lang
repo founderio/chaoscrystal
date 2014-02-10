@@ -32,6 +32,7 @@ chaoscrystal.target.entity_hostile=Hostile Mobs
 chaoscrystal.target.entity_friendly=Friendly Mobs
 chaoscrystal.target.entity_players=Players
 chaoscrystal.target.guard_mode=Guard Mode
+chaoscrystal.target.guard_mode_l2=Guard Mode Level 2
 itemGroup.chaoscrystal=Chaos Crystal
 entity.chaoscrystal.chaoscrystal.name=Chaos Crystal
 entity.chaoscrystal.focus.transfer.name=Transfer Focus

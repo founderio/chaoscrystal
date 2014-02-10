@@ -12,6 +12,7 @@ import net.minecraft.network.packet.Packet132TileEntityData;
 import net.minecraft.tileentity.TileEntity;
 import cpw.mods.fml.common.network.PacketDispatcher;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
+import founderio.chaoscrystal.machinery.IItemModule;
 import founderio.chaoscrystal.machinery.IModule;
 
 public abstract class TileEntityApparatus extends TileEntity implements
@@ -21,11 +22,13 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	public short animation;
 
 	protected final ItemStack[] inventory;
+	protected final ItemStack[] moduleItems;
 	protected final IModule[] modules;
 	private String owner = "";
 
 	public TileEntityApparatus(int inventorySize, int moduleCount) {
 		inventory = new ItemStack[inventorySize];
+		moduleItems = new ItemStack[moduleCount];
 		modules = new IModule[moduleCount];
 	}
 
@@ -185,6 +188,17 @@ public abstract class TileEntityApparatus extends TileEntity implements
 			items.appendTag(stackTag);
 		}
 		par1nbtTagCompound.setTag("inventory", items);
+		NBTTagList moduleItemsNBT = new NBTTagList();
+		for (int i = 0; i < moduleItems.length; i++) {
+			ItemStack is = moduleItems[i];
+			if (is == null) {
+				is = new ItemStack(0, 0, 0);
+			}
+			NBTTagCompound stackTag = new NBTTagCompound();
+			is.writeToNBT(stackTag);
+			moduleItemsNBT.appendTag(stackTag);
+		}
+		par1nbtTagCompound.setTag("modules", items);
 		par1nbtTagCompound.setShort("animation", animation);
 		par1nbtTagCompound.setString("owner", owner);
 	}
@@ -201,8 +215,18 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		if (items != null) {
 			for (int i = 0; i < items.tagCount(); i++) {
 				NBTTagCompound stackTag = (NBTTagCompound) items.tagAt(i);
-				setInventorySlotContents(i,
-						ItemStack.loadItemStackFromNBT(stackTag));
+				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(stackTag));
+			}
+		}
+		NBTTagList modulesItemsNBT = par1nbtTagCompound.getTagList("modules");
+		if (items != null) {
+			for (int i = 0; i < items.tagCount(); i++) {
+				NBTTagCompound stackTag = (NBTTagCompound) modulesItemsNBT.tagAt(i);
+				ItemStack mi = ItemStack.loadItemStackFromNBT(stackTag);
+				if(mi != null && mi.getItem() instanceof IItemModule) {
+					moduleItems[i] = mi;
+					modules[i] = ((IItemModule)mi.getItem()).getModuleFromItemStack(mi);
+				}
 			}
 		}
 		animation = par1nbtTagCompound.getShort("animation");
@@ -250,6 +274,24 @@ public abstract class TileEntityApparatus extends TileEntity implements
 						}
 					}
 				}
+				
+				if(currentEquip.getItem() instanceof IItemModule) {
+					IItemModule iim = (IItemModule)currentEquip.getItem();
+					for(int i = 0; i < modules.length; i++) {
+						if(modules[i] == null) {
+							modules[i] = iim.getModuleFromItemStack(currentEquip);
+							if(modules[i] != null) {
+								moduleItems[i] = iim.getItemStackFromModule(modules[i]);
+								currentEquip.stackSize -= 1;
+								if (currentEquip.stackSize == 0) {
+									player.inventory.mainInventory[player.inventory.currentItem] = null;
+								}
+							}
+							break;
+						}
+					}
+				}
+				
 			}
 			
 			if(!itemValid) {

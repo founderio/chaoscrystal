@@ -2,22 +2,22 @@ package founderio.chaoscrystal.blocks;
 
 import java.util.List;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.EntityBlaze;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.aspects.HostilityLevel;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityPlayerAwareSnowball;
+import founderio.chaoscrystal.machinery.IModule;
+import founderio.chaoscrystal.machinery.IModuleTarget;
 
 public class TileEntitySentry extends TileEntityApparatus {
 
@@ -98,8 +98,9 @@ public class TileEntitySentry extends TileEntityApparatus {
 							dist = tmp_dist;
 							target = eCheck;
 						} else {
-							@SuppressWarnings("rawtypes")
-							List list = worldObj.getEntitiesWithinAABB(
+							
+							@SuppressWarnings("unchecked")
+							List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(
 									EntityLivingBase.class, AxisAlignedBB
 									.getBoundingBox(
 											mop.hitVec.xCoord - .5f,
@@ -109,9 +110,28 @@ public class TileEntitySentry extends TileEntityApparatus {
 											mop.hitVec.yCoord + .5f,
 											mop.hitVec.zCoord + .5f));
 							if (!list.isEmpty()) {
-
-								dist = tmp_dist;
-								target = eCheck;
+								//TODO: Safe Mode-Module?
+								EntityLivingBase ent = list.get(0);
+								
+								HostilityLevel hostilityLevel = HostilityLevel.Docile;
+								
+								if(ent instanceof EntityMob) {
+									hostilityLevel = HostilityLevel.Hostile;
+								}
+								
+								boolean valid = true;
+								
+								for(IModule module : modules) {
+									if(module instanceof IModuleTarget) {
+										if(!((IModuleTarget)module).isTargetValid(target, hostilityLevel));
+									}
+								}
+								
+								if(valid) {
+									dist = tmp_dist;
+									target = eCheck;
+								}
+								
 							}
 						}
 

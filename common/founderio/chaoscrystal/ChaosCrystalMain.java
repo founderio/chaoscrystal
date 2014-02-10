@@ -92,6 +92,7 @@ public class ChaosCrystalMain {
 	public static boolean cfgDebugOutput = false;
 	public static boolean cfgNonDestructive = true;
 	public static boolean cfgSneakToShowAspects = false;
+	
 
 	private int getItemId(String id, int defaultId) {
 		if(config.hasKey("items", id)) {
