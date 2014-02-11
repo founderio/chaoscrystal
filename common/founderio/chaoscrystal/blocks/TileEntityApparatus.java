@@ -34,6 +34,17 @@ public abstract class TileEntityApparatus extends TileEntity implements
 
 	public abstract boolean processAspects(EntityChaosCrystal crystal);
 
+	public int getSizeModules() {
+		return modules.length;
+	}
+	
+	public IModule getModule(int index) {
+		return modules[index];
+	}
+	
+	public ItemStack getModuleItemStack(int index) {
+		return moduleItems[index];
+	}
 
 	public void setOwner(String username) {
 		this.owner = username;
@@ -198,7 +209,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 			is.writeToNBT(stackTag);
 			moduleItemsNBT.appendTag(stackTag);
 		}
-		par1nbtTagCompound.setTag("modules", items);
+		par1nbtTagCompound.setTag("modules", moduleItemsNBT);
 		par1nbtTagCompound.setShort("animation", animation);
 		par1nbtTagCompound.setString("owner", owner);
 	}
@@ -218,10 +229,10 @@ public abstract class TileEntityApparatus extends TileEntity implements
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(stackTag));
 			}
 		}
-		NBTTagList modulesItemsNBT = par1nbtTagCompound.getTagList("modules");
+		NBTTagList moduleItemsNBT = par1nbtTagCompound.getTagList("modules");
 		if (items != null) {
 			for (int i = 0; i < items.tagCount(); i++) {
-				NBTTagCompound stackTag = (NBTTagCompound) modulesItemsNBT.tagAt(i);
+				NBTTagCompound stackTag = (NBTTagCompound) moduleItemsNBT.tagAt(i);
 				ItemStack mi = ItemStack.loadItemStackFromNBT(stackTag);
 				if(mi != null && mi.getItem() instanceof IItemModule) {
 					moduleItems[i] = mi;

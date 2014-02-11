@@ -179,6 +179,29 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 		} else {
 
 		}
+		if(tileentity instanceof TileEntityApparatus) {
+			TileEntityApparatus tea = ((TileEntityApparatus)tileentity);
+			for(int i = 0; i < tea.getSizeModules(); i++) {
+				ItemStack is = tea.getModuleItemStack(i);
+				if(is != null) {
+					ei.setEntityItemStack(is);
+					float offX = 0.15f;
+					float offZ = 0.125f + i * 0.0625f;
+					GL11.glPushMatrix();
+					GL11.glTranslatef((float) d0 + offX, (float) d1 - 0.175f,
+							(float) d2 + offZ);
+					//GL11.glRotatef(rot, 0, 1, 0);
+					GL11.glScalef(1 / 2f, 1 / 2f, 1 / 2f);
+
+					ei.setPosition(d0, d1 + 1, d2);
+
+					RenderItem.renderInFrame = true;
+					ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
+
+					GL11.glPopMatrix();
+				}
+			}
+		}
 
 	}
 

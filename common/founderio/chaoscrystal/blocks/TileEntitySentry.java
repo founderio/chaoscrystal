@@ -95,8 +95,13 @@ public class TileEntitySentry extends TileEntityApparatus {
 						MovingObjectPosition mop = this.worldObj.clip(vec3,
 								vec32);
 						if (mop == null || mop.hitVec == null) {
-							dist = tmp_dist;
-							target = eCheck;
+							
+							boolean valid = isValidTarget(eCheck);
+							
+							if(valid) {
+								dist = tmp_dist;
+								target = eCheck;
+							}
 						} else {
 							
 							@SuppressWarnings("unchecked")
@@ -113,19 +118,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 								//TODO: Safe Mode-Module?
 								EntityLivingBase ent = list.get(0);
 								
-								HostilityLevel hostilityLevel = HostilityLevel.Docile;
-								
-								if(ent instanceof EntityMob) {
-									hostilityLevel = HostilityLevel.Hostile;
-								}
-								
-								boolean valid = true;
-								
-								for(IModule module : modules) {
-									if(module instanceof IModuleTarget) {
-										if(!((IModuleTarget)module).isTargetValid(target, hostilityLevel));
-									}
-								}
+								boolean valid = isValidTarget(ent);
 								
 								if(valid) {
 									dist = tmp_dist;
@@ -192,6 +185,23 @@ public class TileEntitySentry extends TileEntityApparatus {
 		}
 	}
 
+	public boolean isValidTarget(EntityLivingBase ent) {
+		HostilityLevel hostilityLevel = HostilityLevel.Docile;
+		
+		if(ent instanceof EntityMob) {
+			hostilityLevel = HostilityLevel.Hostile;
+		}
+		
+		for(IModule module : modules) {
+			if(module instanceof IModuleTarget) {
+				if(!((IModuleTarget)module).isTargetValid(ent, hostilityLevel)) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return new int[] { 0, 1, 2, 3 };

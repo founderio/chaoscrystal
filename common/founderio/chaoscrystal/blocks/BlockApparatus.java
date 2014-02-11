@@ -5,17 +5,15 @@ import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
+import founderio.util.ItemUtil;
 
 public class BlockApparatus extends BlockContainer {
 
@@ -97,43 +95,18 @@ public class BlockApparatus extends BlockContainer {
 				.getBlockTileEntity(par2, par3, par4);
 
 		if (te != null) {
-			for (int j1 = 0; j1 < te.getSizeInventory(); ++j1) {
-				ItemStack itemstack = te.getStackInSlot(j1);
+			for (int index = 0; index < te.getSizeInventory(); index++) {
+				ItemStack itemstack = te.getStackInSlot(index);
 
 				if (itemstack != null) {
-					float f = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
-					float f1 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
-					EntityItem entityitem;
+					ItemUtil.spawnItemStackDropped(itemstack, par1World, par2, par3, par4);
+				}
+			}
+			for (int index = 0; index < te.getSizeModules(); index++) {
+				ItemStack itemstack = te.getModuleItemStack(index);
 
-					for (float f2 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; par1World
-							.spawnEntityInWorld(entityitem)) {
-						int k1 = ChaosCrystalMain.rand.nextInt(21) + 10;
-
-						if (k1 > itemstack.stackSize) {
-							k1 = itemstack.stackSize;
-						}
-
-						itemstack.stackSize -= k1;
-						entityitem = new EntityItem(par1World,
-								(double) ((float) par2 + f),
-								(double) ((float) par3 + f1),
-								(double) ((float) par4 + f2), new ItemStack(
-										itemstack.itemID, k1,
-										itemstack.getItemDamage()));
-						float f3 = 0.05F;
-						entityitem.motionX = (double) ((float) ChaosCrystalMain.rand
-								.nextGaussian() * f3);
-						entityitem.motionY = (double) ((float) ChaosCrystalMain.rand
-								.nextGaussian() * f3 + 0.2F);
-						entityitem.motionZ = (double) ((float) ChaosCrystalMain.rand
-								.nextGaussian() * f3);
-
-						if (itemstack.hasTagCompound()) {
-							entityitem.getEntityItem().setTagCompound(
-									(NBTTagCompound) itemstack.getTagCompound()
-											.copy());
-						}
-					}
+				if (itemstack != null) {
+					ItemUtil.spawnItemStackDropped(itemstack, par1World, par2, par3, par4);
 				}
 			}
 		}

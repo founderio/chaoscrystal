@@ -3,6 +3,9 @@ package founderio.chaoscrystal.machinery.modules;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityAmbientCreature;
+import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import founderio.chaoscrystal.aspects.HostilityLevel;
 import founderio.chaoscrystal.aspects.Targets;
@@ -19,12 +22,14 @@ public class ModuleTargetFilter implements IModule, IModuleTarget {
 			return true;
 		} else if(Targets.TARGET_ENTITY.equals(targets)) {
 			return true;
-		} else if(Targets.TARGET_ENTITY_FRIENDLY.equals(targets)) {
-			return hostilityLevel == HostilityLevel.Docile || hostilityLevel == HostilityLevel.DocileKnownAgressive;
-		} else if(Targets.TARGET_ENTITY_HOSTILE.equals(targets)) {
-			return hostilityLevel == HostilityLevel.Hostile || hostilityLevel == HostilityLevel.HostileKnownAgressive;
-		} else if(Targets.TARGET_ENTITY_MOBS.equals(targets)) {
+		} else if(Targets.TARGET_ENTITY_CREATURES.equals(targets)) {
 			return target instanceof EntityLiving;
+		} else if(Targets.TARGET_ENTITY_ANIMALS.equals(targets)) {
+			return target instanceof EntityAnimal;
+		} else if(Targets.TARGET_ENTITY_MOBS.equals(targets)) {
+			return target instanceof EntityMob;
+		} else if(Targets.TARGET_ENTITY_AMBIENT.equals(targets)) {
+			return target instanceof EntityAmbientCreature;
 		} else if(Targets.TARGET_ENTITY_PLAYERS.equals(targets)) {
 			return target instanceof EntityPlayer;
 		} else if(Targets.TARGET_GUARD_MODE.equals(targets)) {
@@ -36,5 +41,4 @@ public class ModuleTargetFilter implements IModule, IModuleTarget {
 		}
 		return false;
 	}
-	
 }

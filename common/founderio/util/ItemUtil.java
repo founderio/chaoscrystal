@@ -1,7 +1,9 @@
 package founderio.util;
 
+import founderio.chaoscrystal.ChaosCrystalMain;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public final class ItemUtil {
@@ -40,6 +42,37 @@ public final class ItemUtil {
 		EntityItem item = new EntityItem(world, posX, posY, posZ, is);
 
 		world.spawnEntityInWorld(item);
+	}
+	
+	public static void spawnItemStackDropped(ItemStack is, World world, int x, int y, int z) {
+		float f = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
+		float f1 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
+		EntityItem entityitem;
+
+		for (float f2 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F; is.stackSize > 0; world.spawnEntityInWorld(entityitem)) {
+			int k1 = ChaosCrystalMain.rand.nextInt(21) + 10;
+
+			if (k1 > is.stackSize) {
+				k1 = is.stackSize;
+			}
+
+			is.stackSize -= k1;
+			entityitem = new EntityItem(world, (double) ((float) x + f),
+					(double) ((float) y + f1), (double) ((float) z + f2),
+					new ItemStack(is.itemID, k1, is.getItemDamage()));
+			float f3 = 0.05F;
+			entityitem.motionX = (double) ((float) ChaosCrystalMain.rand
+					.nextGaussian() * f3);
+			entityitem.motionY = (double) ((float) ChaosCrystalMain.rand
+					.nextGaussian() * f3 + 0.2F);
+			entityitem.motionZ = (double) ((float) ChaosCrystalMain.rand
+					.nextGaussian() * f3);
+
+			if (is.hasTagCompound()) {
+				entityitem.getEntityItem().setTagCompound(
+						(NBTTagCompound) is.getTagCompound().copy());
+			}
+		}
 	}
 
 }

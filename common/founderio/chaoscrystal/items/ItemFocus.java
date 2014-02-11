@@ -244,7 +244,6 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 			par3List.add("Unknown");
 			break;
 		}
-
 	}
 
 	@Override
@@ -253,7 +252,9 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 			return null;
 		} else {
 			ModuleTargetFilter mtf = new ModuleTargetFilter();
-			mtf.targets = is.getTagCompound().getString("target");
+			if(is.getTagCompound() != null) {
+				mtf.targets = is.getTagCompound().getString("target");
+			}
 			if (!Targets.isTarget(mtf.targets)) {
 				mtf.targets = Targets.TARGETS[0];
 			}

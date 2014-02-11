@@ -9,16 +9,17 @@ public final class Targets {
 	public static final String TARGET_ITEMS = "items";
 	public static final String TARGET_BLOCKS = "blocks";
 	public static final String TARGET_ENTITY = "entity";
+	public static final String TARGET_ENTITY_CREATURES = "entity_creatures";
 	public static final String TARGET_ENTITY_MOBS = "entity_mobs";
-	public static final String TARGET_ENTITY_HOSTILE = "entity_hostile";
-	public static final String TARGET_ENTITY_FRIENDLY = "entity_friendly";
+	public static final String TARGET_ENTITY_ANIMALS = "entity_animals";
+	public static final String TARGET_ENTITY_AMBIENT = "entity_ambient";
 	public static final String TARGET_ENTITY_PLAYERS = "entity_players";
 	public static final String TARGET_GUARD_MODE = "guard_mode";
 	public static final String TARGET_GUARD_MODE_L2 = "guard_mode_l2";
 
 	public static final String[] TARGETS = new String[] { TARGET_ALL,
-			TARGET_ITEMS, TARGET_BLOCKS, TARGET_ENTITY, TARGET_ENTITY_MOBS, TARGET_ENTITY_HOSTILE,
-			TARGET_ENTITY_FRIENDLY, TARGET_ENTITY_PLAYERS, TARGET_GUARD_MODE, TARGET_GUARD_MODE_L2 };
+			TARGET_ITEMS, TARGET_BLOCKS, TARGET_ENTITY, TARGET_ENTITY_CREATURES, TARGET_ENTITY_MOBS,
+			TARGET_ENTITY_ANIMALS, TARGET_ENTITY_AMBIENT, TARGET_ENTITY_PLAYERS, TARGET_GUARD_MODE, TARGET_GUARD_MODE_L2 };
 	
 	public static final ResourceLocation[] RESOURCE_LOCATIONS = new ResourceLocation[TARGETS.length];
 
