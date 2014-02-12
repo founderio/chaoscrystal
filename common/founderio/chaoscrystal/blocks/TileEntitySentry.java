@@ -87,7 +87,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 							&& eCheck.isEntityAlive()) {
 
 						Vec3 vec3 = Vec3.createVectorHelper(
-								((float) xCoord + 0.5f), (float) yCoord + 1.5f,
+								((float) xCoord + 0.5f), (float) yCoord + 2f,
 								(float) zCoord + 0.5f);
 						Vec3 vec32 = Vec3.createVectorHelper(eCheck.posX,
 								eCheck.posY + eCheck.getEyeHeight(),
@@ -155,7 +155,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 							target.posX - ((float) xCoord + 0.5f),
 							target.posY + target.getEyeHeight() * 0.5f - ((float) yCoord + 2f),
 							target.posZ - ((float) zCoord + 0.5f),
-							5, 0);
+							8, 0);
 					entityarrow.canBePickedUp = 1;
 
 					worldObj.spawnEntityInWorld(entityarrow);
