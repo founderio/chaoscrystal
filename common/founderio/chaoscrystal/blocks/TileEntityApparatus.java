@@ -230,8 +230,8 @@ public abstract class TileEntityApparatus extends TileEntity implements
 			}
 		}
 		NBTTagList moduleItemsNBT = par1nbtTagCompound.getTagList("modules");
-		if (items != null) {
-			for (int i = 0; i < items.tagCount(); i++) {
+		if (moduleItemsNBT != null) {
+			for (int i = 0; i < moduleItemsNBT.tagCount(); i++) {
 				NBTTagCompound stackTag = (NBTTagCompound) moduleItemsNBT.tagAt(i);
 				ItemStack mi = ItemStack.loadItemStackFromNBT(stackTag);
 				if(mi != null && mi.getItem() instanceof IItemModule) {
