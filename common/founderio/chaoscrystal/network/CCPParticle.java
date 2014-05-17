@@ -44,18 +44,19 @@ public class CCPParticle extends CCAbstractPacket {
 		buffer.writeDouble(offX);
 		buffer.writeDouble(offY);
 		buffer.writeDouble(offZ);
+		buffer.writeFloat(variation);
 	}
 
 	@Override
 	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
 		type = buffer.readInt();
-		posX = buffer.readFloat();
-		posY = buffer.readFloat();
-		posZ = buffer.readFloat();
-		offX = buffer.readFloat();
-		offY = buffer.readFloat();
-		offZ = buffer.readFloat();
-		
+		posX = buffer.readDouble();
+		posY = buffer.readDouble();
+		posZ = buffer.readDouble();
+		offX = buffer.readDouble();
+		offY = buffer.readDouble();
+		offZ = buffer.readDouble();
+		variation = buffer.readFloat();
 	}
 
 	@Override

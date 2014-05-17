@@ -27,7 +27,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
@@ -51,7 +51,7 @@ public class OverlayAspectSelector extends Gui {
 		ri.setRenderManager(RenderManager.instance);
 	}
 
-	@EventHandler
+	@SubscribeEvent
 	public void onMouseWheel(MouseEvent event) {
 
 
@@ -265,7 +265,7 @@ public class OverlayAspectSelector extends Gui {
 		}
 	}
 
-	@EventHandler
+	@SubscribeEvent
 	public void onRenderHud(RenderGameOverlayEvent event) {
 
 		if(event.type != ElementType.CROSSHAIRS) {

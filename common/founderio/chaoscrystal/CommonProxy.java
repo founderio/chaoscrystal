@@ -27,13 +27,21 @@ public class CommonProxy {
 	public static void spawnParticleEffects(Entity from, TileEntity to, int effect) {
 		spawnParticleEffects(from.worldObj.provider.dimensionId, effect,
 				to.xCoord, to.yCoord, to.zCoord,
-				(double)(from.posX - to.xCoord), (double)(from.posY - to.yCoord), (double)(from.posZ - to.zCoord));
+				(double)(from.posX - to.xCoord), (double)(from.posY - to.yCoord), (double)(from.posZ - to.zCoord),
+				1);
 	}
 
 	public static void spawnParticleEffects(Entity from, Entity to, int effect) {
 		spawnParticleEffects(from.worldObj.provider.dimensionId, effect,
 				(double)to.posX, (double)to.posY, (double)to.posZ,
-				(double)(from.posX - to.posX), (double)(from.posY - to.posY), (double)(from.posZ - to.posZ));
+				(double)(from.posX - to.posX), (double)(from.posY - to.posY), (double)(from.posZ - to.posZ),
+				1);
+	}
+
+	public static void spawnParticleEffects(int dimension, int effect,
+			double sourceX, double sourceY, double sourceZ,
+			double offX, double offY, double offZ) {
+		spawnParticleEffects(dimension, effect, sourceX, sourceY, sourceZ, offX, offY, offZ, 1);
 	}
 
 	public static void spawnParticleEffects(int dimension, int effect,
@@ -42,11 +50,5 @@ public class CommonProxy {
 		ChaosCrystalMain.packetPipeline.sendToAllAround(new CCPParticle(effect, sourceX, sourceY, sourceZ, offX, offY, offZ, variation),
 				new TargetPoint(dimension, sourceX, sourceY, sourceZ, 32));
 		
-	}
-	//TODO: Change to double!!
-	public static void spawnParticleEffects(int dimension, int effect,
-			double sourceX, double sourceY, double sourceZ,
-			double offX, double offY, double offZ) {
-		CommonProxy.spawnParticleEffects(dimension, effect, sourceX, sourceY, sourceZ, offX, offY, offZ, 1);
 	}
 }

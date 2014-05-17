@@ -1,6 +1,5 @@
 package founderio.chaoscrystal.rendering;
 
-import javax.swing.Icon;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -82,8 +81,8 @@ public class RenderFocus extends Render {
 		}
 
 		ItemRenderer.renderItemIn2D(tessellator, f5, f6, f4, f7,
-				((Icon) par2Icon).getIconWidth(),
-				((Icon) par2Icon).getIconHeight(), f12);
+				((IIcon) par2Icon).getIconWidth(),
+				((IIcon) par2Icon).getIconHeight(), f12);
 
 		if (itemstack.hasEffect(0)) {
 			GL11.glDepthFunc(GL11.GL_EQUAL);

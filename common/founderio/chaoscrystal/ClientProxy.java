@@ -5,6 +5,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
@@ -40,7 +41,7 @@ public class ClientProxy extends CommonProxy {
 
 
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
-		MinecraftForge.EVENT_BUS.register(render);
+		FMLCommonHandler.instance().bus().register(render);
 
 	}
 }

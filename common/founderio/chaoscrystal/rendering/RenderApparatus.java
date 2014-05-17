@@ -16,8 +16,9 @@ import net.minecraftforge.client.model.techne.TechneModel;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import cpw.mods.fml.common.gameevent.TickEvent.Type;
 import cpw.mods.fml.relauncher.Side;
@@ -63,10 +64,9 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 		ri.setRenderManager(RenderManager.instance);
 	}
 
-	@EventHandler
-	@SideOnly(Side.CLIENT)
-	public void tick(TickEvent event) {
-		if(event.type == Type.CLIENT && event.phase == Phase.END) {
+	@SubscribeEvent
+	public void tick(ClientTickEvent event) {
+		if(event.phase == Phase.END) {
 			if (Minecraft.getMinecraft().theWorld != null) {
 				rot = (Minecraft.getMinecraft().theWorld.getWorldTime() % 360f) * 4f;
 			}

@@ -118,6 +118,7 @@ public class CCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, CCAb
         this.channels = NetworkRegistry.INSTANCE.newChannel(Constants.CHANNEL_NAME, this);
         
         registerPacket(CCPModeItemChanged.class);
+        registerPacket(CCPParticle.class);
     }
 
     // Method to call from FMLPostInitializationEvent

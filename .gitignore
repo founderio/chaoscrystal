@@ -6,3 +6,10 @@
 *.ear
 /bin
 /.pmd
+/config
+/crash-reports
+/logs
+/mods
+/resourcepacks
+/saves
+/options.txt
