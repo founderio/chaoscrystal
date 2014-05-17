@@ -13,7 +13,7 @@ public final class ItemUtil {
 
 	public static boolean itemsMatch(ItemStack reference, ItemStack compare) {
 		return compare != null
-				&& compare.itemID == reference.itemID
+				&& compare.getItem() == reference.getItem()
 				&& (reference.getItemDamage() == 32767 || compare.getItemDamage() == 32767 || reference
 						.getItemDamage() == compare.getItemDamage());
 	}
@@ -59,7 +59,7 @@ public final class ItemUtil {
 			is.stackSize -= k1;
 			entityitem = new EntityItem(world, (double) ((float) x + f),
 					(double) ((float) y + f1), (double) ((float) z + f2),
-					new ItemStack(is.itemID, k1, is.getItemDamage()));
+					new ItemStack(is.getItem(), k1, is.getItemDamage()));
 			float f3 = 0.05F;
 			entityitem.motionX = (double) ((float) ChaosCrystalMain.rand
 					.nextGaussian() * f3);

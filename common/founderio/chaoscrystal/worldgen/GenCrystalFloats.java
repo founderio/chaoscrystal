@@ -45,7 +45,7 @@ public class GenCrystalFloats implements IWorldGenerator {
 										* y < width) {
 									world.setBlock(xAbsolute + xscroll, y
 											+ yBase, zAbsolute + zscroll,
-											ChaosCrystalMain.blockBase.blockID,
+											ChaosCrystalMain.blockBase,
 											meta, 3);
 								}
 							}
@@ -70,7 +70,7 @@ public class GenCrystalFloats implements IWorldGenerator {
 				yBase += random.nextInt(world.getActualHeight() - yBase - 50);
 
 				world.setBlock(xAbsolute, yBase, zAbsolute,
-						ChaosCrystalMain.blockBase.blockID, meta, 3);
+						ChaosCrystalMain.blockBase, meta, 3);
 			}
 		}
 	}

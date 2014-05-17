@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -21,13 +22,13 @@ public class ChaosRegistry {
 
 	private List<Node> nodes;
 	private List<AspectModule> modules;
-	private HashMap<Integer, Repair> repairs;
+	private HashMap<Item, Repair> repairs;
 	
 	private List<Node> creations;
 	private boolean creationsDirty = true;
 
 	public ChaosRegistry() {
-		repairs = new HashMap<Integer, Repair>();
+		repairs = new HashMap<Item, Repair>();
 		nodes = new ArrayList<Node>();
 		modules = new ArrayList<AspectModule>();
 		creations = Collections.unmodifiableList(new ArrayList<Node>());
@@ -61,12 +62,12 @@ public class ChaosRegistry {
 		return new ArrayList<Node>(creations);
 	}
 
-	public Repair getRepair(int id) {
-		return repairs.get(id);
+	public Repair getRepair(Item item) {
+		return repairs.get(item);
 	}
 
-	public void registerRepair(int itemId, String[] aspects, int[] amounts) {
-		repairs.put(itemId, new Repair(itemId, aspects, amounts));
+	public void registerRepair(Item item, String[] aspects, int[] amounts) {
+		repairs.put(item, new Repair(item, aspects, amounts));
 	}
 
 	public List<Node> getInfusionsFrom(ItemStack is) {
@@ -147,19 +148,9 @@ public class ChaosRegistry {
 		
 		for (Entry<?, ?> kvp : smelting.entrySet()) {
 			ItemStack output = (ItemStack) kvp.getValue();
+			ItemStack input = (ItemStack) kvp.getKey();
 			if (ItemUtil.itemsMatch(is, output)) {
-				return autoRegisterWithItemStacks(output, new ItemStack[] { new ItemStack((Integer)kvp.getKey(), 1, 0) }, 1);
-			}
-		}
-		
-		Map<List<Integer>, ItemStack> metaSmelting = FurnaceRecipes.smelting().getMetaSmeltingList();
-		//Key: [ID, Meta], Value: Result
-		
-		for (Entry<List<Integer>, ItemStack> kvp : metaSmelting.entrySet()) {
-			ItemStack output = kvp.getValue();
-			if (ItemUtil.itemsMatch(is, output)) {
-				List<Integer> input = kvp.getKey();
-				return autoRegisterWithItemStacks(output, new ItemStack[] { new ItemStack(input.get(0), 1, input.get(1)) }, 1);
+				return autoRegisterWithItemStacks(output, new ItemStack[] { input }, 1);
 			}
 		}
 		

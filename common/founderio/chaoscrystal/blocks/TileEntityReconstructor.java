@@ -15,7 +15,7 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 	public boolean processAspects(EntityChaosCrystal crystal) {
 		ItemStack is = getStackInSlot(0);
 
-		if (is == null || is.itemID == 0) {
+		if (is == null) {
 			return false;
 		} else {
 			int curDmg = is.getItemDamage();
@@ -24,7 +24,7 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 				return false;
 			}
 
-			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.itemID);
+			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.getItem());
 
 			if (rep == null) {
 				return false;

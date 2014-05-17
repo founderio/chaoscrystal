@@ -7,6 +7,7 @@ import java.io.IOException;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.INetworkManager;
 import net.minecraft.network.packet.Packet250CustomPayload;
@@ -48,16 +49,15 @@ public class ClientProxy extends CommonProxy {
 		render = new RenderApparatus();
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, render);
-		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockReconstructor.blockID, render);
-		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockCreator.blockID, render);
-		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.blockSentry.blockID, render);
-		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.itemManual.itemID, new RenderItemManual());
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockReconstructor), render);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockCreator), render);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockSentry), render);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.itemManual), new RenderItemManual());
 
 
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
+		MinecraftForge.EVENT_BUS.register(render);
 
-
-		TickRegistry.registerTickHandler(render, Side.CLIENT);
 	}
 
 	@Override

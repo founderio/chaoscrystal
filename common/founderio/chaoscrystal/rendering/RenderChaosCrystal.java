@@ -1,5 +1,7 @@
 package founderio.chaoscrystal.rendering;
 
+import javax.swing.Icon;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.Tessellator;
@@ -7,7 +9,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
@@ -30,17 +32,17 @@ public class RenderChaosCrystal extends Render {
 
 		ItemStack itemstack = ecc.buildItemStack();
 
-		Icon par2Icon = ChaosCrystalMain.itemChaosCrystal.getIcon(itemstack, 0);
+		IIcon par2Icon = ChaosCrystalMain.itemChaosCrystal.getIcon(itemstack, 0);
 		boolean renderInFrame = false;
 
 		/*
 		 * From here: Based on RenderItem.renderDroppedItem
 		 */
 
-		float f4 = ((Icon) par2Icon).getMinU();
-		float f5 = ((Icon) par2Icon).getMaxU();
-		float f6 = ((Icon) par2Icon).getMinV();
-		float f7 = ((Icon) par2Icon).getMaxV();
+		float f4 = ((IIcon) par2Icon).getMinU();
+		float f5 = ((IIcon) par2Icon).getMaxU();
+		float f6 = ((IIcon) par2Icon).getMinV();
+		float f7 = ((IIcon) par2Icon).getMaxV();
 		float f9 = 0.5F;
 		float f10 = 0.25F;
 		float f11;

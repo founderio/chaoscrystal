@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.List;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.RenderHelper;
@@ -16,23 +17,21 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.packet.Packet250CustomPayload;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.EnumMovingObjectType;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.MouseEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.event.EventPriority;
-import net.minecraftforge.event.ForgeSubscribe;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.network.PacketDispatcher;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.eventhandler.EventPriority;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
@@ -55,7 +54,7 @@ public class OverlayAspectSelector extends Gui {
 		ri.setRenderManager(RenderManager.instance);
 	}
 
-	@ForgeSubscribe(priority = EventPriority.NORMAL)
+	@EventHandler
 	public void onMouseWheel(MouseEvent event) {
 
 
@@ -104,7 +103,7 @@ public class OverlayAspectSelector extends Gui {
 
 					dos.writeInt(2);
 					dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
-					dos.writeUTF(Minecraft.getMinecraft().thePlayer.username);
+					dos.writeUTF(Minecraft.getMinecraft().thePlayer.getDisplayName());
 					dos.writeInt(modeIndex);
 
 					Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
@@ -120,7 +119,7 @@ public class OverlayAspectSelector extends Gui {
 				}
 			}
 			
-		} else if(currentItemStack.itemID == ChaosCrystalMain.itemManual.itemID) {
+		} else if(currentItemStack.getItem() == ChaosCrystalMain.itemManual) {
 			event.setCanceled(true);
 			if(event.dwheel > 0) {
 				RenderItemManual.page--;
@@ -288,7 +287,7 @@ public class OverlayAspectSelector extends Gui {
 		}
 	}
 
-	@ForgeSubscribe(priority = EventPriority.NORMAL)
+	@EventHandler
 	public void onRenderHud(RenderGameOverlayEvent event) {
 
 		if(event.type != ElementType.CROSSHAIRS) {
@@ -310,7 +309,7 @@ public class OverlayAspectSelector extends Gui {
 		GL11.glDisable(GL11.GL_LIGHTING);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-		if(helmet != null && helmet.itemID == ChaosCrystalMain.itemCrystalGlasses.itemID && !specialSkip) {
+		if(helmet != null && helmet.getItem() == ChaosCrystalMain.itemCrystalGlasses && !specialSkip) {
 			MovingObjectPosition mop = getMouseOver(0);
 
 			if(mop != null) {
@@ -402,7 +401,7 @@ public class OverlayAspectSelector extends Gui {
 							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
 
 							for(int s = 0; s < parents.length; s++) {
-								if(parents[s].itemID != 0) {
+								if(parents[s].getItem() != null) {
 									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
 								}
 							}
@@ -413,14 +412,11 @@ public class OverlayAspectSelector extends Gui {
 					}
 				}
 
-				if(mop.typeOfHit == EnumMovingObjectType.TILE) {
+				if(mop.typeOfHit == MovingObjectType.BLOCK) {
 					World w = Minecraft.getMinecraft().thePlayer.worldObj;
-					int id = w.getBlockId(
-							mop.blockX,
-							mop.blockY,
-							mop.blockZ);
+					Block block = w.getBlock( mop.blockX, mop.blockY, mop.blockZ);
 
-					if(id != 0) {// We can't extract air...
+					if(!block.isAir(w, mop.blockX, mop.blockY, mop.blockZ)) {// We can't extract air...
 
 						int meta = w.getBlockMetadata(
 								mop.blockX,
@@ -428,7 +424,7 @@ public class OverlayAspectSelector extends Gui {
 								mop.blockZ);
 
 						boolean doRenderMiniBlock = false;
-						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(id, 1, meta));
+						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(block, 1, meta));
 						if(degradations.size() != 0) {
 							Node node = degradations.get(0);
 							doRenderMiniBlock = true;
@@ -438,22 +434,20 @@ public class OverlayAspectSelector extends Gui {
 							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
 
 							for(int s = 0; s < parents.length; s++) {
-								if(parents[s].itemID != 0) {
+								if(parents[s].getItem() != null) {
 									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
 								}
 							}
 
 						}
 
-						TileEntity te = w.getBlockTileEntity(mop.blockX,
-								mop.blockY,
-								mop.blockZ);
+						TileEntity te = w.getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
 						if(te instanceof TileEntityApparatus) {
 							TileEntityApparatus apparatus = (TileEntityApparatus)te;
 							doRenderMiniBlock = true;
 							for(int i = 0; i < apparatus.getSizeInventory(); i++) {
 								ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
-								if(its != null && its.itemID != 0) {
+								if(its != null && its.getItem() != null) {
 									renderItem(its, centerW - 16 - 5 - 16*i, centerH + 5);
 								}
 							}
@@ -467,7 +461,7 @@ public class OverlayAspectSelector extends Gui {
 						}
 
 						if(doRenderMiniBlock) {
-							renderItem(new ItemStack(id, 1, meta), centerW - 16 - 5, centerH - 16 - 5);
+							renderItem(new ItemStack(block, 1, meta), centerW - 16 - 5, centerH - 16 - 5);
 						}
 
 					}

@@ -55,7 +55,7 @@ public class GenCrystalPillars implements IWorldGenerator {
 								if (zscroll * zscroll + xscroll * xscroll < ws) {
 									world.setBlock(xAbsolute + xscroll, y
 											+ yBase, zAbsolute + zscroll,
-											ChaosCrystalMain.blockBase.blockID,
+											ChaosCrystalMain.blockBase,
 											meta, 3);
 								}
 							}
@@ -77,7 +77,7 @@ public class GenCrystalPillars implements IWorldGenerator {
 								if (zscroll * zscroll + xscroll * xscroll < ws) {
 									world.setBlock(xAbsolute + xscroll, y
 											+ yBase, zAbsolute + zscroll,
-											ChaosCrystalMain.blockBase.blockID,
+											ChaosCrystalMain.blockBase,
 											meta, 3);
 								}
 							}

@@ -2,7 +2,6 @@ package founderio.chaoscrystal.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
@@ -13,15 +12,15 @@ import founderio.chaoscrystal.Constants;
 
 public class ItemManual extends ItemMap {
 
-	public ItemManual(int par1) {
-		super(par1);
+	public ItemManual() {
+		super();
 		this.setMaxStackSize(1);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister ir) {
-		this.itemIcon = ir.registerIcon(Constants.MOD_ID + ":manual");
+	protected String getIconString() {
+		return Constants.MOD_ID + ":manual";
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -36,7 +35,7 @@ public class ItemManual extends ItemMap {
 			helmet = player.inventory.armorInventory[3];
 		}
 		if (helmet == null
-				|| helmet.itemID != ChaosCrystalMain.itemCrystalGlasses.itemID) {
+				|| helmet.getItem() != ChaosCrystalMain.itemCrystalGlasses) {
 			info.add("You see a lot of written text");
 			info.add("on this stone tablet but you");
 			info.add("can't decipher it. Maybe some");

@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,12 +39,11 @@ public class DegradationHelper {
 
 		if (replacement.length == 1
 				&& replacement[0].getItem() instanceof ItemBlock) {
-			world.setBlock(posX, posY, posZ, replacement[0]
-					.itemID, replacement[0]
+			world.setBlock(posX, posY, posZ, Block.getBlockFromItem(replacement[0].getItem()), replacement[0]
 							.getItemDamage(), 1 + 2);
 
 		} else {
-			world.setBlock(posX, posY, posZ, 0, 0, 1 + 2);
+			world.setBlock(posX, posY, posZ, Blocks.air, 0, 1 + 2);
 			spawnMultiplesOfStacks(replacement, 1, world, posX, posY, posZ);
 		}
 	}
@@ -71,7 +71,7 @@ public class DegradationHelper {
 			World world, int posX, int posY, int posZ) {
 		for (int i = 0; i < nodes.length; i++) {
 			ItemStack p = nodes[i];
-			if (p.itemID == 0 || p.stackSize == 0) {
+			if (p.getItem() == null || p.stackSize == 0) {
 				continue;
 			}
 			int maxStackSize = p.getMaxStackSize();
@@ -113,9 +113,9 @@ public class DegradationHelper {
 					int absY = (int) (posY + offY);
 					int absZ = (int) (posZ + offZ);
 
-					int id = world.getBlockId(absX, absY, absZ);
+					Block id = world.getBlock(absX, absY, absZ);
 
-					if (id != 0) {// We can't extract air...
+					if (id.isAir(world, absX, absY, absZ)) {// We can't extract air...
 
 						int meta = world.getBlockMetadata(absX, absY, absZ);
 						List<Node> nodes;
@@ -181,15 +181,14 @@ public class DegradationHelper {
 
 						} else {
 							if (ChaosCrystalMain.cfgDebugOutput) {
-								System.out.println(Block.blocksList[id]
-										.getLocalizedName()
+								System.out.println(id.getLocalizedName()
 										+ " - "
 										+ id
 										+ "/"
 										+ meta);
 							}
 							if (extract && !ChaosCrystalMain.cfgNonDestructive) {
-								world.setBlock(absX, absY, absZ, 0, 0, 1 + 2);
+								world.setBlock(absX, absY, absZ, Blocks.air, 0, 1 + 2);
 								world.createExplosion(entity, absX, absY, absZ, 1,
 										false);
 							}
@@ -300,7 +299,7 @@ public class DegradationHelper {
 						} else {
 							if (ChaosCrystalMain.cfgDebugOutput) {
 								System.out.println(is.getDisplayName() + " - "
-										+ is.itemID + "/" + is.getItemDamage());
+										+ is.getItem() + "/" + is.getItemDamage());
 							}
 							if (!ChaosCrystalMain.cfgNonDestructive) {
 								it.setDead();

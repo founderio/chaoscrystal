@@ -3,7 +3,6 @@ package founderio.chaoscrystal.blocks;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
@@ -28,7 +27,7 @@ public class TileEntityCreator extends TileEntityApparatus {
 
 		ItemStack is = getStackInSlot(0);
 
-		if (is == null || is.itemID == 0) {
+		if (is == null) {
 
 			List<Node> degs = ChaosCrystalMain.degradationStore.getCreations();
 

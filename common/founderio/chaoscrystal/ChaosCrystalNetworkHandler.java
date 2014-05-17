@@ -1,9 +1,6 @@
 package founderio.chaoscrystal;
 
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet250CustomPayload;
-import cpw.mods.fml.common.network.IPacketHandler;
-import cpw.mods.fml.common.network.Player;
+import ibxm.Player;
 
 public class ChaosCrystalNetworkHandler implements IPacketHandler {
 

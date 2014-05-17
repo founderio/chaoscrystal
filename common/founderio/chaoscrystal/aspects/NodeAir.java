@@ -1,5 +1,7 @@
 package founderio.chaoscrystal.aspects;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 
 public class NodeAir extends Node {
@@ -21,17 +23,17 @@ public class NodeAir extends Node {
 
 	@Override
 	public boolean matchesItemStack(ItemStack is) {
-		return is.itemID == 0;
+		return Block.getBlockFromItem(is.getItem()) == Blocks.air;
 	}
 
 	@Override
 	public ItemStack getDispayItemStack() {
-		return new ItemStack(0, 1, 0);
+		return new ItemStack(Blocks.air, 1, 0);
 	}
 
 	@Override
 	public ItemStack[] getDegradedFrom(ItemStack is) {
-		return new ItemStack[] { new ItemStack(0, 1, 0) };
+		return new ItemStack[] { new ItemStack(Blocks.air, 1, 0) };
 	}
 
 }

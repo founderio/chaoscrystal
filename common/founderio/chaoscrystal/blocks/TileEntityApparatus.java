@@ -1,16 +1,17 @@
 package founderio.chaoscrystal.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.INetworkManager;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.Packet132TileEntityData;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.Packet;
+import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import cpw.mods.fml.common.network.PacketDispatcher;
+import net.minecraftforge.common.util.Constants.NBT;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.machinery.IItemModule;
 import founderio.chaoscrystal.machinery.IModule;
@@ -110,21 +111,11 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
 		ItemStack is = getStackInSlot(i);
-		if (is == null || is.itemID == 0) {
+		if (is == null) {
 			return false;
 		} else {
 			return j == 1 && isItemValidForSlot(i, itemstack);
 		}
-	}
-
-	@Override
-	public String getInvName() {
-		return "inv";// No GUI, so no name...
-	}
-
-	@Override
-	public boolean isInvNameLocalized() {
-		return false;
 	}
 
 	@Override
@@ -133,8 +124,8 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	@Override
-	public void onInventoryChanged() {
-		super.onInventoryChanged();
+	public void markDirty() {
+		super.markDirty();
 		updateState();
 	}
 
@@ -144,12 +135,22 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	@Override
-	public void openChest() {
+	public boolean hasCustomInventoryName() {
+		return false;
+	}
+
+	@Override
+	public String getInventoryName() {
+		return "inv";
+	}
+
+	@Override
+	public void openInventory() {
 		// Nothing to do...
 	}
 
 	@Override
-	public void closeChest() {
+	public void closeInventory() {
 		// Nothing to do...
 	}
 
@@ -158,8 +159,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		if (worldObj.isRemote) {
 			return;
 		}
-		PacketDispatcher.sendPacketToAllAround(xCoord, yCoord, zCoord, 128,
-				worldObj.provider.dimensionId, getDescriptionPacket());
+		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -167,15 +167,14 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		NBTTagCompound nbt = new NBTTagCompound();
 		writePropertiesToNBT(nbt);
 
-		Packet132TileEntityData packet = new Packet132TileEntityData(xCoord,
-				yCoord, zCoord, 0, nbt);
+		S35PacketUpdateTileEntity packet = new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
 
 		return packet;
 	}
-
+	
 	@Override
-	public final void onDataPacket(INetworkManager net, Packet132TileEntityData pkt) {
-		NBTTagCompound nbt = pkt.data;
+	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+		NBTTagCompound nbt = pkt.func_148857_g();
 
 		readPropertiesFromNBT(nbt);
 	}
@@ -192,7 +191,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		for (int i = 0; i < inventory.length; i++) {
 			ItemStack is = inventory[i];
 			if (is == null) {
-				is = new ItemStack(0, 0, 0);
+				is = new ItemStack(Blocks.air, 0, 0);
 			}
 			NBTTagCompound stackTag = new NBTTagCompound();
 			is.writeToNBT(stackTag);
@@ -203,7 +202,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		for (int i = 0; i < moduleItems.length; i++) {
 			ItemStack is = moduleItems[i];
 			if (is == null) {
-				is = new ItemStack(0, 0, 0);
+				is = new ItemStack(Blocks.air, 0, 0);
 			}
 			NBTTagCompound stackTag = new NBTTagCompound();
 			is.writeToNBT(stackTag);
@@ -222,17 +221,17 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	}
 
 	protected void readPropertiesFromNBT(NBTTagCompound par1nbtTagCompound) {
-		NBTTagList items = par1nbtTagCompound.getTagList("inventory");
+		NBTTagList items = par1nbtTagCompound.getTagList("inventory", NBT.TAG_COMPOUND);
 		if (items != null) {
 			for (int i = 0; i < items.tagCount(); i++) {
-				NBTTagCompound stackTag = (NBTTagCompound) items.tagAt(i);
+				NBTTagCompound stackTag = items.getCompoundTagAt(i);
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(stackTag));
 			}
 		}
-		NBTTagList moduleItemsNBT = par1nbtTagCompound.getTagList("modules");
+		NBTTagList moduleItemsNBT = par1nbtTagCompound.getTagList("modules", NBT.TAG_COMPOUND);
 		if (moduleItemsNBT != null) {
 			for (int i = 0; i < moduleItemsNBT.tagCount(); i++) {
-				NBTTagCompound stackTag = (NBTTagCompound) moduleItemsNBT.tagAt(i);
+				NBTTagCompound stackTag = (NBTTagCompound) moduleItemsNBT.getCompoundTagAt(i);
 				ItemStack mi = ItemStack.loadItemStackFromNBT(stackTag);
 				if(mi != null && mi.getItem() instanceof IItemModule) {
 					moduleItems[i] = mi;
@@ -246,13 +245,14 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	
 
 	public boolean onBlockActivated(EntityPlayer player) {
-		ItemStack currentEquip = player.getCurrentEquippedItem();
+		ItemStack currentEquip = player.getHeldItem();
 
-		if((currentEquip == null || currentEquip.itemID == 0) && player.isSneaking()) {
-			if(getOwner().equals(player.username)) {
+		if((currentEquip == null) && player.isSneaking()) {
+			//TODO: Switch to UUID
+			if(getOwner().equals(player.getDisplayName())) {
 				setOwner("");
 			} else if(getOwner().equals("")) {
-				setOwner(player.username);
+				setOwner(player.getDisplayName());
 			}
 		} else {
 		
@@ -263,7 +263,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 					if(isItemValidForSlot(i, currentEquip)) {
 						itemValid = true;
 						ItemStack is = this.getStackInSlot(i);
-						if (is == null || is.itemID == 0) {
+						if (is == null) {
 							setInventorySlotContents(i, currentEquip.copy());
 							player.inventory.mainInventory[player.inventory.currentItem] = null;
 							break;
@@ -308,7 +308,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 			if(!itemValid) {
 				for (int i = 0; i < 4; i++) {
 					ItemStack is = this.getStackInSlot(i);
-					if (is != null && is.itemID != 0 && is.stackSize > 0) {
+					if (is != null && is.stackSize > 0) {
 						if (player.inventory.addItemStackToInventory(is)) {
 							this.setInventorySlotContents(i, null);
 							break;
@@ -317,7 +317,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 				}
 			}
 	
-			onInventoryChanged();
+			markDirty();
 		}
 		return true;
 	}

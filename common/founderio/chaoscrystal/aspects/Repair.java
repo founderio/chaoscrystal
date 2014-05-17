@@ -2,14 +2,15 @@ package founderio.chaoscrystal.aspects;
 
 import java.util.Arrays;
 
+import net.minecraft.item.Item;
+
 public class Repair {
-	public final int itemId;
+	public final Item item;
 	public final String[] aspects;
 	public final int[] amounts;
 
-	public Repair(int itemId, String[] aspects, int[] amounts) {
-		super();
-		this.itemId = itemId;
+	public Repair(Item item, String[] aspects, int[] amounts) {
+		this.item = item;
 		this.aspects = aspects;
 		this.amounts = amounts;
 	}
@@ -20,7 +21,7 @@ public class Repair {
 		int result = 1;
 		result = prime * result + Arrays.hashCode(amounts);
 		result = prime * result + Arrays.hashCode(aspects);
-		result = prime * result + itemId;
+		result = prime * result + item.hashCode();
 		return result;
 	}
 
@@ -37,14 +38,14 @@ public class Repair {
 			return false;
 		if (!Arrays.equals(aspects, other.aspects))
 			return false;
-		if (itemId != other.itemId)
+		if (item != other.item)
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Repair [itemId=" + itemId + ", aspects="
+		return "Repair [item=" + item + ", aspects="
 				+ Arrays.toString(aspects) + ", amounts="
 				+ Arrays.toString(amounts) + "]";
 	}

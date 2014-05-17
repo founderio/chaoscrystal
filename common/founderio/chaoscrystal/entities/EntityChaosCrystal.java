@@ -161,7 +161,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	public ItemStack buildItemStack() {
 		ItemStack is = new ItemStack(ChaosCrystalMain.itemChaosCrystal);
 		NBTTagCompound comp = new NBTTagCompound();
-		comp.setCompoundTag("aspectStore", getAspectStore());
+		comp.setTag("aspectStore", getAspectStore());
 
 		is.setTagCompound(comp);
 		return is;
@@ -183,7 +183,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
-		nbttagcompound.setCompoundTag("aspectStore", getAspectStore());
+		nbttagcompound.setTag("aspectStore", getAspectStore());
 		nbttagcompound.setBoolean("suckMode", isInSuckMode());
 	}
 

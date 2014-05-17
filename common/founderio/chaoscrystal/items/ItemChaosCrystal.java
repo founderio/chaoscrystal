@@ -2,8 +2,9 @@ package founderio.chaoscrystal.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,8 +19,8 @@ import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class ItemChaosCrystal extends Item {
 
-	public ItemChaosCrystal(int par1) {
-		super(par1);
+	public ItemChaosCrystal() {
+		super();
 		this.setMaxStackSize(1);
 	}
 
@@ -28,10 +29,16 @@ public class ItemChaosCrystal extends Item {
 	public boolean hasEffect(ItemStack par1ItemStack, int pass) {
 		return pass == 0;
 	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	protected String getIconString() {
+		return Constants.MOD_ID + ":chaoscrystal";
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister par1IconRegister) {
+	public void registerIcons(IIconRegister par1IconRegister) {
 		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID
 				+ ":chaoscrystal");
 	}
@@ -40,7 +47,7 @@ public class ItemChaosCrystal extends Item {
 	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
 			EntityPlayer par3EntityPlayer) {
 		if (par2World.isRemote) {
-			return new ItemStack(0, 0, 0);
+			return new ItemStack(Blocks.air, 0, 0);
 		}
 
 		EntityChaosCrystal entity = new EntityChaosCrystal(par2World,

@@ -1,10 +1,9 @@
 package founderio.chaoscrystal.worldgen;
 
-import net.minecraft.block.Block;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.SpawnListEntry;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 
@@ -21,8 +20,8 @@ public class BiomeGenCrystal extends BiomeGenBase {
 				10, 1, 6));
 		this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 10,
 				1, 6));
-		this.topBlock = (byte) ChaosCrystalMain.blockBase.blockID;
-		this.fillerBlock = (byte) Block.dirt.blockID;
+		this.topBlock = ChaosCrystalMain.blockBase;
+		this.fillerBlock = Blocks.dirt;
 		this.setDisableRain();
 		this.temperature = 0.3f;
 		this.theBiomeDecorator.treesPerChunk = -999;

@@ -8,8 +8,8 @@ import founderio.chaoscrystal.blocks.BlockBase;
 
 public class ItemBlockBase extends ItemBlockWithMetadata {
 
-	public ItemBlockBase(int par1, Block theBlock) {
-		super(par1, theBlock);
+	public ItemBlockBase(Block theBlock) {
+		super(theBlock, theBlock);
 	}
 
 	@Override

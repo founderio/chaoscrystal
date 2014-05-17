@@ -5,14 +5,13 @@ package founderio.chaoscrystal;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldType;
-import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.Configuration;
+import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -20,7 +19,6 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -51,8 +49,6 @@ import founderio.chaoscrystal.worldgen.GenCrystalPillars;
  *
  */
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION)
-@NetworkMod(clientSideRequired = true, serverSideRequired = false,
-channels = { Constants.CHANNEL_NAME_PARTICLES, Constants.CHANNEL_NAME_OTHER_VISUAL }, packetHandler = ChaosCrystalNetworkHandler.class)
 public class ChaosCrystalMain {
 	@Instance(Constants.MOD_ID)
 	public static ChaosCrystalMain instance;
@@ -94,30 +90,6 @@ public class ChaosCrystalMain {
 	public static boolean cfgSneakToShowAspects = false;
 	
 
-	private int getItemId(String id, int defaultId) {
-		if(config.hasKey("items", id)) {
-			int value = config.get("items", id, defaultId).getInt();
-			config.getItem(Configuration.CATEGORY_ITEM, id, defaultId, null).set(value);
-		}
-		return config.getItem(id, defaultId).getInt();
-	}
-
-	private int getBlockId(String id, int defaultId) {
-		if(config.hasKey("blocks", id)) {
-			int value = config.get("blocks", id, defaultId).getInt();
-			config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").set(value);
-		}
-		return config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").getInt();
-	}
-
-	private int getTerrainBlockId(String id, int defaultId) {
-		if(config.hasKey("blocks", id)) {
-			int value = config.get("blocks", id, defaultId).getInt();
-			config.getBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").set(value);
-		}
-		return config.getTerrainBlock(Configuration.CATEGORY_BLOCK, id, defaultId, "").getInt();
-	}
-
 	private int getBiomeId(String id, int defaultId) {
 		return config.get("Biomes", id, defaultId).getInt();
 	}
@@ -157,36 +129,36 @@ public class ChaosCrystalMain {
 			}
 		};
 
-		itemChaosCrystal = new ItemChaosCrystal(getItemId(Constants.ID_ITEM_CHAOSCRYSTAL, 18200));
+		itemChaosCrystal = new ItemChaosCrystal();
 		itemChaosCrystal.setUnlocalizedName(Constants.ID_ITEM_CHAOSCRYSTAL);
 		itemChaosCrystal.setCreativeTab(creativeTab);
 
-		itemFocus = new ItemFocus(getItemId(Constants.ID_ITEM_FOCUS, 18201));
+		itemFocus = new ItemFocus();
 		itemFocus.setUnlocalizedName(Constants.ID_ITEM_FOCUS);
 		itemFocus.setCreativeTab(creativeTab);
 
-		itemCrystalGlasses = new ItemCrystalGlasses(getItemId(Constants.ID_ITEM_CRYSTALGLASSES, 18202));
+		itemCrystalGlasses = new ItemCrystalGlasses();
 		itemCrystalGlasses.setUnlocalizedName(Constants.ID_ITEM_CRYSTALGLASSES);
 		itemCrystalGlasses.setCreativeTab(creativeTab);
 
-		itemManual = new ItemManual(getItemId(Constants.ID_ITEM_MANUAL, 18203));
+		itemManual = new ItemManual();
 		itemManual.setUnlocalizedName(Constants.ID_ITEM_MANUAL);
 		itemManual.setCreativeTab(creativeTab);
 
-		blockBase = new BlockBase(getTerrainBlockId(Constants.ID_BLOCK_BASE, 230));
-		blockBase.setUnlocalizedName(Constants.ID_BLOCK_BASE);
+		blockBase = new BlockBase();
+		blockBase.setBlockName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
 
-		blockReconstructor = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, 3400), 0);
-		blockReconstructor.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
+		blockReconstructor = new BlockApparatus(0);
+		blockReconstructor.setBlockName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		blockReconstructor.setCreativeTab(creativeTab);
 
-		blockCreator = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_CREATOR, 3401), 1);
-		blockCreator.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_CREATOR);
+		blockCreator = new BlockApparatus(1);
+		blockCreator.setBlockName(Constants.ID_BLOCK_APPARATUS_CREATOR);
 		blockCreator.setCreativeTab(creativeTab);
 
-		blockSentry = new BlockApparatus(getBlockId(Constants.ID_BLOCK_APPARATUS_SENTRY, 3402), 2);
-		blockSentry.setUnlocalizedName(Constants.ID_BLOCK_APPARATUS_SENTRY);
+		blockSentry = new BlockApparatus(2);
+		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
 
 		config.removeCategory(config.getCategory("items"));
@@ -199,25 +171,25 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerItem(itemManual, Constants.ID_ITEM_MANUAL, Constants.MOD_ID);
-		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE, Constants.MOD_ID);
-		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR, Constants.MOD_ID);
-		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR, Constants.MOD_ID);
-		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY, Constants.MOD_ID);
+		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
+		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
+		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
+		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
 
 		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_RECONSTRUCTOR);
 		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 
 
+//TODO: fix
+//		if(cfgForceBiome) {
+//			//Just a test: remove all other biomes...
+//			for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
+//				GameRegistry.
+//				GameRegistry.removeBiome(biome);
+//			}
+//		}
 
-		if(cfgForceBiome) {
-			//Just a test: remove all other biomes...
-			for(BiomeGenBase biome : WorldType.DEFAULT.getBiomesForWorldType()) {
-				GameRegistry.removeBiome(biome);
-			}
-		}
-
-		GameRegistry.addBiome(biomeCrystal);
 		BiomeManager.addSpawnBiome(biomeCrystal);
 	}
 
@@ -232,55 +204,57 @@ public class ChaosCrystalMain {
 		proxy.registerRenderStuff();
 
 
-		GameRegistry.registerWorldGenerator(new GenCrystalPillars());
-		//GameRegistry.registerWorldGenerator(new GenCrystalFloats());
+		GameRegistry.registerWorldGenerator(new GenCrystalPillars(), 0);
+		//GameRegistry.registerWorldGenerator(new GenCrystalFloats(), 0);
 
-		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), "RDR", "RER", "RDR", 'D', Item.diamond, 'R', new ItemStack(blockBase, 1, 1), 'E', Item.enderPearl);
-		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 0), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 4));
-		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 1), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 10));
-		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 2), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Item.enderPearl, 'd', new ItemStack(Item.dyePowder, 1, 5));
-		GameRegistry.addRecipe(new ItemStack(itemCrystalGlasses, 1, 0), "B B", "GBG", 'B', new ItemStack(blockBase, 1, 0), 'G', Block.thinGlass);
+		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), "RDR", "RER", "RDR", 'D', Items.diamond, 'R', new ItemStack(blockBase, 1, 1), 'E', Items.ender_pearl);
+		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 0), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Items.ender_pearl, 'd', new ItemStack(Items.dye, 1, 4));
+		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 1), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Items.ender_pearl, 'd', new ItemStack(Items.dye, 1, 10));
+		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 2), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Items.ender_pearl, 'd', new ItemStack(Items.dye, 1, 5));
+		GameRegistry.addRecipe(new ItemStack(itemCrystalGlasses, 1, 0), "B B", "GBG", 'B', new ItemStack(blockBase, 1, 0), 'G', Blocks.glass_pane);
 
-		GameRegistry.addRecipe(new ItemStack(blockReconstructor, 1), "gBg", "OOO", 'g', new ItemStack(Item.dyePowder, 1, 8), 'B', new ItemStack(blockBase, 1, 0), 'O', Block.obsidian);
-		GameRegistry.addRecipe(new ItemStack(blockCreator, 1), "gYg", "OOO", 'g', new ItemStack(Item.dyePowder, 1, 8), 'Y', new ItemStack(blockBase, 1, 2), 'O', Block.obsidian);
-		GameRegistry.addRecipe(new ItemStack(blockSentry, 1), "OBO", "gYg", "OOO", 'g', new ItemStack(Item.dyePowder, 1, 8), 'B', new ItemStack(blockBase, 1, 0), 'Y', new ItemStack(blockBase, 1, 2), 'O', Block.obsidian);
+		GameRegistry.addRecipe(new ItemStack(blockReconstructor, 1), "gBg", "OOO", 'g', new ItemStack(Items.dye, 1, 8), 'B', new ItemStack(blockBase, 1, 0), 'O', Blocks.obsidian);
+		GameRegistry.addRecipe(new ItemStack(blockCreator, 1), "gYg", "OOO", 'g', new ItemStack(Items.dye, 1, 8), 'Y', new ItemStack(blockBase, 1, 2), 'O', Blocks.obsidian);
+		GameRegistry.addRecipe(new ItemStack(blockSentry, 1), "OBO", "gYg", "OOO", 'g', new ItemStack(Items.dye, 1, 8), 'B', new ItemStack(blockBase, 1, 0), 'Y', new ItemStack(blockBase, 1, 2), 'O', Blocks.obsidian);
 
-		GameRegistry.addShapelessRecipe(new ItemStack(itemManual), new ItemStack(blockBase, 1, 32767), Item.emptyMap);
+		GameRegistry.addShapelessRecipe(new ItemStack(itemManual), new ItemStack(blockBase, 1, 32767), Items.map);
 
 		degradationStore = new ChaosRegistry();
 
-		degradationStore.registerRepair(Item.pickaxeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.pickaxeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		degradationStore.registerRepair(Item.pickaxeGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.pickaxeStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		degradationStore.registerRepair(Item.pickaxeWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		degradationStore.registerRepair(Items.diamond_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.iron_pickaxe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Items.golden_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.stone_pickaxe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Items.wooden_pickaxe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 
-		degradationStore.registerRepair(Item.axeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.axeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		degradationStore.registerRepair(Item.axeGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.axeStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		degradationStore.registerRepair(Item.axeWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		degradationStore.registerRepair(Items.diamond_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.iron_axe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Items.golden_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.stone_axe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Items.wooden_axe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 
-		degradationStore.registerRepair(Item.shovelDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.shovelIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		degradationStore.registerRepair(Item.shovelGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.shovelStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		degradationStore.registerRepair(Item.shovelWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		degradationStore.registerRepair(Items.diamond_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.iron_shovel, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Items.golden_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.stone_shovel, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Items.wooden_shovel, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 
-		degradationStore.registerRepair(Item.hoeDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.hoeIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		degradationStore.registerRepair(Item.hoeGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.hoeStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		degradationStore.registerRepair(Item.hoeWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		degradationStore.registerRepair(Items.diamond_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.iron_hoe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Items.golden_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.stone_hoe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Items.wooden_hoe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 
-		degradationStore.registerRepair(Item.swordDiamond.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.swordIron.itemID, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		degradationStore.registerRepair(Item.swordGold.itemID, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		degradationStore.registerRepair(Item.swordStone.itemID, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		degradationStore.registerRepair(Item.swordWood.itemID, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		degradationStore.registerRepair(Items.diamond_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.iron_sword, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		degradationStore.registerRepair(Items.golden_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		degradationStore.registerRepair(Items.stone_sword, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		degradationStore.registerRepair(Items.wooden_sword, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
 
-		degradationStore.registerRepair(itemCrystalGlasses.itemID, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
-		degradationStore.registerRepair(Item.bow.itemID, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
+		degradationStore.registerRepair(Items.shears, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		
+		degradationStore.registerRepair(itemCrystalGlasses, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
+		degradationStore.registerRepair(Items.bow, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
 
 
 		/*

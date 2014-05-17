@@ -2,13 +2,13 @@ package founderio.chaoscrystal.items;
 
 import java.util.List;
 
-import net.minecraft.client.renderer.texture.IconRegister;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.Icon;
+import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
@@ -29,14 +29,14 @@ import founderio.chaoscrystal.machinery.modules.ModuleTargetFilter;
 
 public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
-	public ItemFocus(int par1) {
-		super(par1);
+	public ItemFocus() {
+		super();
 		this.setHasSubtypes(true);
 		this.setMaxStackSize(16);
 	}
 
 	@SideOnly(Side.CLIENT)
-	Icon[] iconList;
+	IIcon[] iconList;
 	
 	@Override
 	public int getSelectedModeForItemStack(ItemStack is) {
@@ -108,8 +108,8 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void registerIcons(IconRegister ri) {
-		iconList = new Icon[4];
+	public void registerIcons(IIconRegister ri) {
+		iconList = new IIcon[4];
 		iconList[0] = ri.registerIcon(Constants.MOD_ID + ":focus_transfer");
 		iconList[1] = ri.registerIcon(Constants.MOD_ID + ":focus_border");
 		iconList[2] = ri.registerIcon(Constants.MOD_ID + ":focus_filter");
@@ -118,7 +118,7 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Icon getIconFromDamage(int par1) {
+	public IIcon getIconFromDamage(int par1) {
 		return iconList[MathHelper.clamp_int(par1, 0, 4)];
 	}
 
@@ -189,10 +189,10 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(int par1, CreativeTabs par2CreativeTabs,
-			List par3List) {
+	public void getSubItems(Item item, CreativeTabs creativeTab,
+			List list) {
 		for (int meta = 0; meta < 4; meta++) {
-			par3List.add(new ItemStack(par1, 1, meta));
+			list.add(new ItemStack(item, 1, meta));
 		}
 	}
 

@@ -1,14 +1,13 @@
 package founderio.chaoscrystal.rendering;
 
-import java.util.EnumSet;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -17,8 +16,12 @@ import net.minecraftforge.client.model.techne.TechneModel;
 
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.common.ITickHandler;
-import cpw.mods.fml.common.TickType;
+import cpw.mods.fml.common.Mod.EventHandler;
+import cpw.mods.fml.common.gameevent.TickEvent;
+import cpw.mods.fml.common.gameevent.TickEvent.Phase;
+import cpw.mods.fml.common.gameevent.TickEvent.Type;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
@@ -27,7 +30,7 @@ import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
 
 public class RenderApparatus extends TileEntitySpecialRenderer implements
-		IItemRenderer, ITickHandler {
+		IItemRenderer {
 	public final TechneModel modelReconstructor;
 	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
@@ -42,56 +45,32 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 	private float rot = 0;
 	
 	public RenderApparatus() {
-		String reconstructor = "/assets/" + Constants.MOD_ID
-				+ "/models/reconstructor.tcn";
-		modelReconstructor = new TechneModel(reconstructor,
-				RenderApparatus.class.getResource(reconstructor));
-		resourceReconstructor = new ResourceLocation(Constants.MOD_ID
-				+ ":textures/models/reconstructor.png");
-		String creator = "/assets/" + Constants.MOD_ID + "/models/creator.tcn";
-		modelCreator = new TechneModel(creator,
-				RenderApparatus.class.getResource(creator));
-		resourceCreator = new ResourceLocation(Constants.MOD_ID
-				+ ":textures/models/creator.png");
-		resourceCreatorOff = new ResourceLocation(Constants.MOD_ID
-				+ ":textures/models/creator_off.png");
-		String sentry = "/assets/" + Constants.MOD_ID + "/models/sentry.tcn";
-		modelSentry = new TechneModel(sentry,
-				RenderApparatus.class.getResource(sentry));
-		resourceSentry = new ResourceLocation(Constants.MOD_ID
-				+ ":textures/models/sentry.png");
-		resourceSentryOff = new ResourceLocation(Constants.MOD_ID
-				+ ":textures/models/sentry_off.png");
+		modelReconstructor = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/reconstructor.tcn"));
+		resourceReconstructor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reconstructor.png");
+		modelCreator = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/creator.tcn"));
+		resourceCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
+		resourceCreatorOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator_off.png");
+		modelSentry = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/sentry.tcn"));
+		resourceSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
+		resourceSentryOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry_off.png");
 		ri = new RenderItem() {
 			@Override
 			public boolean shouldBob() {
 				return false;
 			}
 		};
-		ei = new EntityItem(null, 0, 0, 0, new ItemStack(Item.pickaxeDiamond));
+		ei = new EntityItem(null, 0, 0, 0, new ItemStack(Items.diamond_pickaxe));
 		ri.setRenderManager(RenderManager.instance);
 	}
 
-
-	@Override
-	public void tickStart(EnumSet<TickType> type, Object... tickData) {
-	}
-
-	@Override
-	public void tickEnd(EnumSet<TickType> type, Object... tickData) {
-		if (Minecraft.getMinecraft().theWorld != null) {
-			rot = (Minecraft.getMinecraft().theWorld.getWorldTime() % 360f) * 4f;
+	@EventHandler
+	@SideOnly(Side.CLIENT)
+	public void tick(TickEvent event) {
+		if(event.type == Type.CLIENT && event.phase == Phase.END) {
+			if (Minecraft.getMinecraft().theWorld != null) {
+				rot = (Minecraft.getMinecraft().theWorld.getWorldTime() % 360f) * 4f;
+			}
 		}
-	}
-
-	@Override
-	public EnumSet<TickType> ticks() {
-		return EnumSet.of(TickType.CLIENT);
-	}
-
-	@Override
-	public String getLabel() {
-		return "Chaos Crystal TE Rendering Update";
 	}
 
 	@Override
@@ -103,7 +82,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 
 			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);
 			if (is == null) {
-				ei.setEntityItemStack(new ItemStack(0, 0, 0));
+				ei.setEntityItemStack(new ItemStack(Blocks.air, 0, 0));
 			} else {
 				ei.setEntityItemStack(is);
 
@@ -115,7 +94,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 				ei.setPosition(d0, d1 + 1, d2);
 
 				RenderItem.renderInFrame = true;
-				ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
+				ri.doRender(ei, 0, .5f, 0, 0, 0);
 
 				GL11.glPopMatrix();
 			}
@@ -126,7 +105,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 
 			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);
 			if (is == null) {
-				ei.setEntityItemStack(new ItemStack(0, 0, 0));
+				ei.setEntityItemStack(new ItemStack(Blocks.air, 0, 0));
 			} else {
 				ei.setEntityItemStack(is);
 
@@ -138,7 +117,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 				ei.setPosition(d0, d1 + 1, d2);
 
 				RenderItem.renderInFrame = true;
-				ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
+				ri.doRender(ei, 0, .5f, 0, 0, 0);
 
 				GL11.glPopMatrix();
 			}
@@ -155,7 +134,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 				ItemStack is = ((TileEntityApparatus) tileentity)
 						.getStackInSlot(i);
 				if (is == null) {
-					ei.setEntityItemStack(new ItemStack(0, 0, 0));
+					ei.setEntityItemStack(new ItemStack(Blocks.air, 0, 0));
 				} else {
 					ei.setEntityItemStack(is);
 					float offX = (i == 0 || i == 1) ? 0.325f : 0.625f;
@@ -169,7 +148,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 					ei.setPosition(d0, d1 + 1, d2);
 
 					RenderItem.renderInFrame = true;
-					ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
+					ri.doRender(ei, 0, .5f, 0, 0, 0);
 
 					GL11.glPopMatrix();
 				}
@@ -196,7 +175,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 					ei.setPosition(d0, d1 + 1, d2);
 
 					RenderItem.renderInFrame = true;
-					ri.doRenderItem(ei, 0, .5f, 0, 0, 0);
+					ri.doRender(ei, 0, .5f, 0, 0, 0);
 
 					GL11.glPopMatrix();
 				}
@@ -282,7 +261,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 
 	@Override
 	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return Block.blocksList[item.itemID] instanceof BlockApparatus;
+		return Block.getBlockFromItem(item.getItem()) instanceof BlockApparatus;
 	}
 
 	@Override
@@ -296,7 +275,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 		TechneModel model;
 		ResourceLocation resource;
 
-		BlockApparatus block = (BlockApparatus) Block.blocksList[item.itemID];
+		BlockApparatus block = (BlockApparatus) Block.getBlockFromItem(item.getItem());
 
 		switch (block.metaListIndex) {
 		case 0:

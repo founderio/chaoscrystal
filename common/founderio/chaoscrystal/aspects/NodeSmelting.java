@@ -1,7 +1,8 @@
 package founderio.chaoscrystal.aspects;
 
-import founderio.util.ItemUtil;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import founderio.util.ItemUtil;
 
 public class NodeSmelting extends Node {
 
@@ -43,7 +44,7 @@ public class NodeSmelting extends Node {
 	@Override
 	public ItemStack[] getDegradedFrom(ItemStack is) {
 		if(is.stackSize == 0) {
-			return new ItemStack[] { new ItemStack(0, 1, 0) };
+			return new ItemStack[] { new ItemStack(Blocks.air, 1, 0) };
 		}
 		float factor = (float)is.stackSize / (float)reference.stackSize;
 		ItemStack ingItemStack = ingredient.copy();

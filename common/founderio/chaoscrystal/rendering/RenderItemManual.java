@@ -5,7 +5,7 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -58,7 +58,7 @@ public class RenderItemManual implements IItemRenderer {
 
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
 
-		if(helmet == null || helmet.itemID != ChaosCrystalMain.itemCrystalGlasses.itemID) {
+		if(helmet == null || helmet.getItem() != ChaosCrystalMain.itemCrystalGlasses) {
 			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/manual_stubtext.png"));
 
 			tessellator.startDrawingQuads();
@@ -197,15 +197,15 @@ public class RenderItemManual implements IItemRenderer {
 						b1+90, b2+28);
 
 				ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
-						new ItemStack(Item.diamond, 1),
+						new ItemStack(Items.diamond, 1),
 						b1+26, b2+10);
 
 				ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
-						new ItemStack(Item.enderPearl, 1),
+						new ItemStack(Items.ender_pearl, 1),
 						b1+26, b2+26);
 
 				ri.renderItemAndEffectIntoGUI(fr, Minecraft.getMinecraft().renderEngine,
-						new ItemStack(Item.diamond, 1),
+						new ItemStack(Items.diamond, 1),
 						b1+26, b2+42);
 
 				GL11.glDisable(GL11.GL_ALPHA_TEST);

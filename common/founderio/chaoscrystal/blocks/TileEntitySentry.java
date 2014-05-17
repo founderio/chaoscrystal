@@ -7,7 +7,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntitySnowball;
-import net.minecraft.item.Item;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MovingObjectPosition;
@@ -70,7 +70,8 @@ public class TileEntitySentry extends TileEntityApparatus {
 			for (Object obj : this.worldObj.loadedEntityList) {
 				if (obj instanceof EntityLivingBase) {
 					if (obj instanceof EntityPlayer) {
-						if (((EntityPlayer) obj).username.equals(getOwner())) {
+						//TODO: Switch to UUID
+						if (((EntityPlayer) obj).getDisplayName().equals(getOwner())) {
 							continue;
 						}
 					}
@@ -92,8 +93,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 						Vec3 vec32 = Vec3.createVectorHelper(eCheck.posX,
 								eCheck.posY + eCheck.getEyeHeight(),
 								eCheck.posZ);
-						MovingObjectPosition mop = this.worldObj.clip(vec3,
-								vec32);
+						MovingObjectPosition mop = this.worldObj.func_147447_a(vec3, vec32, false, true, false);
 						if (mop == null || mop.hitVec == null) {
 							
 							boolean valid = isValidTarget(eCheck);
@@ -145,9 +145,8 @@ public class TileEntitySentry extends TileEntityApparatus {
 			if (f > 1.0F) {
 				f = 1.0F;
 			}
-
-
-			if(arrowItem.itemID == Item.arrow.itemID) {
+			
+			if(arrowItem.getItem() == Items.arrow) {
 				if (!worldObj.isRemote) {
 					EntityArrow entityarrow = new EntityArrow(worldObj, xCoord + 0.5f,
 							yCoord + 2f, zCoord + 0.5f);
@@ -160,7 +159,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 
 					worldObj.spawnEntityInWorld(entityarrow);
 				}
-			} else if(arrowItem.itemID == Item.snowball.itemID) {
+			} else if(arrowItem.getItem() == Items.snowball) {
 				if (!worldObj.isRemote) {
 					EntitySnowball entitysnowball = new EntityPlayerAwareSnowball(worldObj, xCoord + 0.5f,
 							yCoord + 2f, zCoord + 0.5f);
@@ -212,7 +211,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 		if (itemstack == null) {
 			return false;
 		}
-		return itemstack.itemID == Item.arrow.itemID || itemstack.itemID == Item.snowball.itemID;
+		return itemstack.getItem() == Items.arrow || itemstack.getItem() == Items.snowball;
 	}
 
 	@Override
