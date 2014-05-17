@@ -125,64 +125,63 @@ public class OverlayAspectSelector extends Gui {
 		if (mc.renderViewEntity != null && mc.theWorld != null)
 		{
 			//mc.pointedEntityLiving = null;
-			double d0 = (double)mc.playerController.getBlockReachDistance();
-			MovingObjectPosition mop = mc.renderViewEntity.rayTrace(d0, par1);
-			double d1 = d0;
-			Vec3 vec3 = mc.renderViewEntity.getPosition(par1);
+			double blockReachDistance = (double)mc.playerController.getBlockReachDistance();
+			MovingObjectPosition mop = mc.renderViewEntity.rayTrace(blockReachDistance, par1);
+			double blockHitDistance = blockReachDistance;
+			Vec3 vecPos = mc.renderViewEntity.getPosition(par1);
 
 			if (mc.playerController.extendedReach())
 			{
-				d0 = 6.0D;
-				d1 = 6.0D;
+				blockReachDistance = 6.0D;
 			}
-			else
+			else if (blockReachDistance > 3.0D)
 			{
-				if (d0 > 3.0D)
-				{
-					d1 = 3.0D;
-				}
-
-				d0 = d1;
+				blockReachDistance = 3.0D;
 			}
+			blockHitDistance = blockReachDistance;
 
 			if (mop != null)
 			{
-				d1 = mop.hitVec.distanceTo(vec3);
+				blockHitDistance = mop.hitVec.distanceTo(vecPos);
 			}
 
-			Vec3 vec31 = mc.renderViewEntity.getLook(par1);
-			Vec3 vec32 = vec3.addVector(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0);
+			Vec3 vecLook = mc.renderViewEntity.getLook(par1);
+			Vec3 vecMaxReach = vecPos.addVector(vecLook.xCoord * blockReachDistance, vecLook.yCoord * blockReachDistance, vecLook.zCoord * blockReachDistance);
 			pointedEntity = null;
-			float f1 = 1.0F;
+			float searchRadius = 1.0F;
 			@SuppressWarnings("rawtypes")
-			List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(mc.renderViewEntity, mc.renderViewEntity.boundingBox.addCoord(vec31.xCoord * d0, vec31.yCoord * d0, vec31.zCoord * d0).expand((double)f1, (double)f1, (double)f1));
-			double d2 = d1;
+			List list = mc.theWorld.getEntitiesWithinAABBExcludingEntity(
+					mc.renderViewEntity,
+					mc.renderViewEntity.boundingBox.
+					addCoord(vecLook.xCoord * blockReachDistance, vecLook.yCoord * blockReachDistance, vecLook.zCoord * blockReachDistance)
+					.expand((double)searchRadius, (double)searchRadius, (double)searchRadius));
+			double entityHitDistance = blockHitDistance;
 
 			for (int i = 0; i < list.size(); ++i)
 			{
 				Entity entity = (Entity)list.get(i);
 
-				float f2 = entity.getCollisionBorderSize();
-				AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)f2, (double)f2, (double)f2);
-				MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vec3, vec32);
+				double collistionBorderSize = entity.getCollisionBorderSize();
+				AxisAlignedBB axisalignedbb = entity.boundingBox.expand(collistionBorderSize, collistionBorderSize, collistionBorderSize);
+				MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(vecPos, vecMaxReach);
 
-				if (axisalignedbb.isVecInside(vec3))
+				if (axisalignedbb.isVecInside(vecPos))
 				{
-					if (0.0D < d2 || d2 == 0.0D)
+					if (entityHitDistance >= 0.0D)
 					{
 						pointedEntity = entity;
-						d2 = 0.0D;
+						entityHitDistance = 0.0D;
 					}
 				}
 				else if (movingobjectposition != null)
 				{
-					double d3 = vec3.distanceTo(movingobjectposition.hitVec);
+					double distance = vecPos.distanceTo(movingobjectposition.hitVec);
 
-					if (d3 < d2 || d2 == 0.0D)
+					if (distance < entityHitDistance || entityHitDistance == 0.0D)
 					{
 						if (entity == mc.renderViewEntity.ridingEntity && !entity.canRiderInteract())
 						{
-							if (d2 == 0.0D)
+							if (entityHitDistance == 0.0D)
 							{
 								pointedEntity = entity;
 							}
@@ -190,13 +189,13 @@ public class OverlayAspectSelector extends Gui {
 						else
 						{
 							pointedEntity = entity;
-							d2 = d3;
+							entityHitDistance = distance;
 						}
 					}
 				}
 			}
 
-			if (pointedEntity != null && (d2 < d1 || mop == null))
+			if (pointedEntity != null && (entityHitDistance < blockHitDistance || mop == null))
 			{
 				mop = new MovingObjectPosition(pointedEntity);
 			}
