@@ -1,8 +1,5 @@
 package founderio.chaoscrystal.rendering;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -31,7 +28,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.eventhandler.EventPriority;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
@@ -44,6 +40,7 @@ import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
+import founderio.chaoscrystal.network.CCPModeItemChanged;
 
 public class OverlayAspectSelector extends Gui {
 
@@ -97,26 +94,7 @@ public class OverlayAspectSelector extends Gui {
 				mci.setSelectedModeForItemStack(currentItemStack, modeIndex);
 				
 
-				try {
-					ByteArrayOutputStream bos = new ByteArrayOutputStream(30);
-					DataOutputStream dos = new DataOutputStream(bos);
-
-					dos.writeInt(2);
-					dos.writeInt(Minecraft.getMinecraft().thePlayer.dimension);
-					dos.writeUTF(Minecraft.getMinecraft().thePlayer.getDisplayName());
-					dos.writeInt(modeIndex);
-
-					Packet250CustomPayload degradationPacket = new Packet250CustomPayload();
-					degradationPacket.channel = Constants.CHANNEL_NAME_OTHER_VISUAL;
-					degradationPacket.data = bos.toByteArray();
-					degradationPacket.length = bos.size();
-
-					dos.close();
-
-					PacketDispatcher.sendPacketToServer(degradationPacket);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				ChaosCrystalMain.packetPipeline.sendToServer(new CCPModeItemChanged(modeIndex));
 			}
 			
 		} else if(currentItemStack.getItem() == ChaosCrystalMain.itemManual) {

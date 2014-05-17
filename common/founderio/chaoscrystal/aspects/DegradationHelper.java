@@ -115,7 +115,7 @@ public class DegradationHelper {
 
 					Block id = world.getBlock(absX, absY, absZ);
 
-					if (id.isAir(world, absX, absY, absZ)) {// We can't extract air...
+					if (!id.isAir(world, absX, absY, absZ)) {// We can't extract air...
 
 						int meta = world.getBlockMetadata(absX, absY, absZ);
 						List<Node> nodes;

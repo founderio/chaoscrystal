@@ -41,6 +41,7 @@ import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
 import founderio.chaoscrystal.items.ItemManual;
+import founderio.chaoscrystal.network.CCPacketPipeline;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
@@ -55,6 +56,7 @@ public class ChaosCrystalMain {
 
 	@SidedProxy(clientSide = "founderio.chaoscrystal.ClientProxy", serverSide = "founderio.chaoscrystal.CommonProxy")
 	public static CommonProxy proxy;
+	public static final CCPacketPipeline packetPipeline = new CCPacketPipeline();
 
 	public static ChaosRegistry degradationStore;
 
@@ -196,6 +198,8 @@ public class ChaosCrystalMain {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 
+		packetPipeline.initialise();
+		
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusTransfer.class, Constants.NAME_ENTITY_FOCUS_TRANSFER, 1, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusBorder.class, Constants.NAME_ENTITY_FOCUS_BORDER, 2, this, 128, 1, false);
@@ -323,6 +327,9 @@ public class ChaosCrystalMain {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
+
+		packetPipeline.postInitialise();
+		
 //		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
 //		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
 //		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
