@@ -10,12 +10,14 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
 import net.minecraft.util.ResourceLocation;
@@ -124,9 +126,9 @@ public class OverlayAspectSelector extends Gui {
 
 		if (mc.renderViewEntity != null && mc.theWorld != null)
 		{
-			//mc.pointedEntityLiving = null;
+
 			double blockReachDistance = (double)mc.playerController.getBlockReachDistance();
-			MovingObjectPosition mop = mc.renderViewEntity.rayTrace(blockReachDistance, par1);
+			MovingObjectPosition mop = rayTrace(mc.renderViewEntity, blockReachDistance, par1);
 			double blockHitDistance = blockReachDistance;
 			Vec3 vecPos = mc.renderViewEntity.getPosition(par1);
 
@@ -533,4 +535,228 @@ public class OverlayAspectSelector extends Gui {
 				(double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
 		tessellator.draw();
 	}
+	
+    public static MovingObjectPosition rayTrace(EntityLivingBase player, double par1, float par3)
+    {
+        Vec3 vec3 = player.getPosition(par3);
+        Vec3 vec31 = player.getLook(par3);
+        Vec3 vec32 = vec3.addVector(vec31.xCoord * par1, vec31.yCoord * par1, vec31.zCoord * par1);
+        return raytraceDo(player.worldObj, vec3, vec32, false, false, true);
+    }
+	
+    public static MovingObjectPosition raytraceDo(World world, Vec3 start, Vec3 end, boolean collisionCheck, boolean p_147447_4_, boolean p_147447_5_)
+    {
+        if (!Double.isNaN(start.xCoord) && !Double.isNaN(start.yCoord) && !Double.isNaN(start.zCoord))
+        {
+            if (!Double.isNaN(end.xCoord) && !Double.isNaN(end.yCoord) && !Double.isNaN(end.zCoord))
+            {
+                int i = MathHelper.floor_double(end.xCoord);
+                int j = MathHelper.floor_double(end.yCoord);
+                int k = MathHelper.floor_double(end.zCoord);
+                int l = MathHelper.floor_double(start.xCoord);
+                int i1 = MathHelper.floor_double(start.yCoord);
+                int j1 = MathHelper.floor_double(start.zCoord);
+                Block block = world.getBlock(l, i1, j1);
+                int k1 = world.getBlockMetadata(l, i1, j1);
+
+                if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(k1, collisionCheck) && !world.isAirBlock(l, i1, j1))
+                {
+                    MovingObjectPosition movingobjectposition = block.collisionRayTrace(world, l, i1, j1, start, end);
+
+                    if (movingobjectposition != null)
+                    {
+                        return movingobjectposition;
+                    }
+                }
+
+                MovingObjectPosition movingobjectposition2 = null;
+                k1 = 200;
+
+                while (k1-- >= 0)
+                {
+                    if (Double.isNaN(start.xCoord) || Double.isNaN(start.yCoord) || Double.isNaN(start.zCoord))
+                    {
+                        return null;
+                    }
+
+                    if (l == i && i1 == j && j1 == k)
+                    {
+                        return p_147447_5_ ? movingobjectposition2 : null;
+                    }
+
+                    boolean flag6 = true;
+                    boolean flag3 = true;
+                    boolean flag4 = true;
+                    double d0 = 999.0D;
+                    double d1 = 999.0D;
+                    double d2 = 999.0D;
+
+                    if (i > l)
+                    {
+                        d0 = (double)l + 1.0D;
+                    }
+                    else if (i < l)
+                    {
+                        d0 = (double)l + 0.0D;
+                    }
+                    else
+                    {
+                        flag6 = false;
+                    }
+
+                    if (j > i1)
+                    {
+                        d1 = (double)i1 + 1.0D;
+                    }
+                    else if (j < i1)
+                    {
+                        d1 = (double)i1 + 0.0D;
+                    }
+                    else
+                    {
+                        flag3 = false;
+                    }
+
+                    if (k > j1)
+                    {
+                        d2 = (double)j1 + 1.0D;
+                    }
+                    else if (k < j1)
+                    {
+                        d2 = (double)j1 + 0.0D;
+                    }
+                    else
+                    {
+                        flag4 = false;
+                    }
+
+                    double d3 = 999.0D;
+                    double d4 = 999.0D;
+                    double d5 = 999.0D;
+                    double d6 = end.xCoord - start.xCoord;
+                    double d7 = end.yCoord - start.yCoord;
+                    double d8 = end.zCoord - start.zCoord;
+
+                    if (flag6)
+                    {
+                        d3 = (d0 - start.xCoord) / d6;
+                    }
+
+                    if (flag3)
+                    {
+                        d4 = (d1 - start.yCoord) / d7;
+                    }
+
+                    if (flag4)
+                    {
+                        d5 = (d2 - start.zCoord) / d8;
+                    }
+
+                    boolean flag5 = false;
+                    byte b0;
+
+                    if (d3 < d4 && d3 < d5)
+                    {
+                        if (i > l)
+                        {
+                            b0 = 4;
+                        }
+                        else
+                        {
+                            b0 = 5;
+                        }
+
+                        start.xCoord = d0;
+                        start.yCoord += d7 * d3;
+                        start.zCoord += d8 * d3;
+                    }
+                    else if (d4 < d5)
+                    {
+                        if (j > i1)
+                        {
+                            b0 = 0;
+                        }
+                        else
+                        {
+                            b0 = 1;
+                        }
+
+                        start.xCoord += d6 * d4;
+                        start.yCoord = d1;
+                        start.zCoord += d8 * d4;
+                    }
+                    else
+                    {
+                        if (k > j1)
+                        {
+                            b0 = 2;
+                        }
+                        else
+                        {
+                            b0 = 3;
+                        }
+
+                        start.xCoord += d6 * d5;
+                        start.yCoord += d7 * d5;
+                        start.zCoord = d2;
+                    }
+
+                    Vec3 vec32 = world.getWorldVec3Pool().getVecFromPool(start.xCoord, start.yCoord, start.zCoord);
+                    l = (int)(vec32.xCoord = (double)MathHelper.floor_double(start.xCoord));
+
+                    if (b0 == 5)
+                    {
+                        --l;
+                        ++vec32.xCoord;
+                    }
+
+                    i1 = (int)(vec32.yCoord = (double)MathHelper.floor_double(start.yCoord));
+
+                    if (b0 == 1)
+                    {
+                        --i1;
+                        ++vec32.yCoord;
+                    }
+
+                    j1 = (int)(vec32.zCoord = (double)MathHelper.floor_double(start.zCoord));
+
+                    if (b0 == 3)
+                    {
+                        --j1;
+                        ++vec32.zCoord;
+                    }
+
+                    Block block1 = world.getBlock(l, i1, j1);
+                    int l1 = world.getBlockMetadata(l, i1, j1);
+
+                    if ((!p_147447_4_ || block1.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && !block1.isAir(world, l, i1, j1))
+                    {
+                        if (block1.canCollideCheck(l1, collisionCheck))
+                        {
+                            MovingObjectPosition movingobjectposition1 = block1.collisionRayTrace(world, l, i1, j1, start, end);
+
+                            if (movingobjectposition1 != null)
+                            {
+                                return movingobjectposition1;
+                            }
+                        }
+                        else
+                        {
+                            movingobjectposition2 = new MovingObjectPosition(l, i1, j1, b0, start, false);
+                        }
+                    }
+                }
+
+                return p_147447_5_ ? movingobjectposition2 : null;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
+    }
 }
