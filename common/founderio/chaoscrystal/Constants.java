@@ -10,6 +10,7 @@ public class Constants {
 	public static final String ID_ITEM_FOCUS = "chaoscrystal.focus";
 	public static final String ID_ITEM_CRYSTALGLASSES = "chaoscrystal.crystalglasses";
 	public static final String ID_ITEM_MANUAL = "chaoscrystal.manual";
+	public static final String ID_ITEM_LIFELESS_SHARD = "chaoscrystal.lifeless_shard";
 
 	public static final String ID_BLOCK_BASE = "chaoscrystal.base";
 	public static final String ID_BLOCK_BASE_CRYSTALLINE = "chaoscrystal.base.crystalline";
@@ -19,6 +20,7 @@ public class Constants {
 	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
 	public static final String ID_BLOCK_APPARATUS_CREATOR = "chaoscrystal.apparatus.creator";
 	public static final String ID_BLOCK_APPARATUS_SENTRY = "chaoscrystal.apparatus.sentry";
+	public static final String ID_BLOCK_LIFELESS = "chaoscrystal.lifeless";
 
 	public static final String ID_TILEENTITY_RECONSTRUCTOR = "chaoscrystal.reconstructor";
 	public static final String ID_TILEENTITY_CREATOR = "chaoscrystal.creator";

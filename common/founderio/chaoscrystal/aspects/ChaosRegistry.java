@@ -15,6 +15,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.aspects.modules.ModuleChaosCrystal;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.util.ItemUtil;
 
@@ -34,6 +35,7 @@ public class ChaosRegistry {
 		creations = Collections.unmodifiableList(new ArrayList<Node>());
 
 		registerAspectModule(new ModuleVanillaWorldgen());
+		registerAspectModule(new ModuleChaosCrystal());
 	}
 	
 	public void registerAspectModule(AspectModule module) {

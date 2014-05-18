@@ -27,6 +27,7 @@ import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
+import founderio.chaoscrystal.blocks.BlockLifeless;
 import founderio.chaoscrystal.blocks.TileEntityCreator;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
@@ -40,6 +41,7 @@ import founderio.chaoscrystal.items.ItemBlockBase;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
+import founderio.chaoscrystal.items.ItemLifelessShard;
 import founderio.chaoscrystal.items.ItemManual;
 import founderio.chaoscrystal.network.CCPacketPipeline;
 import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
@@ -66,11 +68,13 @@ public class ChaosCrystalMain {
 	public static Item itemFocus;
 	public static Item itemCrystalGlasses;
 	public static Item itemManual;
+	public static Item itemLifelessShard;
 
 	public static BlockBase blockBase;
 	public static BlockApparatus blockReconstructor;
 	public static BlockApparatus blockCreator;
 	public static BlockApparatus blockSentry;
+	public static BlockLifeless blockLifeless;
 
 	public static BiomeGenCrystal biomeCrystal;
 
@@ -103,7 +107,7 @@ public class ChaosCrystalMain {
 
 		cfgForceBiome = config.get("Settings", "force_biomes", cfgForceBiome).getBoolean(cfgForceBiome);
 		cfgDebugOutput = config.get("Settings", "degradation_debug_output", cfgDebugOutput).getBoolean(cfgDebugOutput);
-		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", false).getBoolean(cfgSneakToShowAspects);
+		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", true).getBoolean(cfgSneakToShowAspects);
 
 		cfgCrystalAspectStorage = config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).getInt();
 
@@ -147,9 +151,17 @@ public class ChaosCrystalMain {
 		itemManual.setUnlocalizedName(Constants.ID_ITEM_MANUAL);
 		itemManual.setCreativeTab(creativeTab);
 
+		itemLifelessShard = new ItemLifelessShard();
+		itemLifelessShard.setUnlocalizedName(Constants.ID_ITEM_LIFELESS_SHARD);
+		itemLifelessShard.setCreativeTab(creativeTab);
+
 		blockBase = new BlockBase();
 		blockBase.setBlockName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
+
+		blockLifeless = new BlockLifeless();
+		blockLifeless.setBlockName(Constants.ID_BLOCK_LIFELESS);
+		blockLifeless.setCreativeTab(creativeTab);
 
 		blockReconstructor = new BlockApparatus(0);
 		blockReconstructor.setBlockName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
@@ -173,7 +185,10 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerItem(itemManual, Constants.ID_ITEM_MANUAL, Constants.MOD_ID);
+		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
+		
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
+		GameRegistry.registerBlock(blockLifeless, ItemBlockBase.class, Constants.ID_BLOCK_LIFELESS);
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
@@ -293,26 +308,6 @@ public class ChaosCrystalMain {
 		//					nullStack);
 		//		}
 
-		/*
-		 * Ores/Metals
-		 */
-
-		//		degradationStore.registerDegradation(
-		//				new ItemStack(ChaosCrystalMain.blockBase, 0, 0),
-		//				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_HEAT},
-		//				new int[]{5, 2, 4},
-		//				new ItemStack(ChaosCrystalMain.blockBase, 0, 1));
-		//		degradationStore.registerDegradation(
-		//				new ItemStack(ChaosCrystalMain.blockBase, 0, 1),
-		//				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE},
-		//				new int[]{15, 5, 5},
-		//				new ItemStack(Block.glass, 0, 0));
-		//		degradationStore.registerDegradation(
-		//				new ItemStack(ChaosCrystalMain.blockBase, 0, 2),
-		//				new String[]{Aspects.ASPECT_CRYSTAL, Aspects.ASPECT_VALUE, Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_LIGHT},
-		//				new int[]{15, 5, 5, 150},
-		//				new ItemStack(Block.glass, 0, 0));
-		//		
 		//		
 		//
 		//		degradationStore.registerDegradation(
