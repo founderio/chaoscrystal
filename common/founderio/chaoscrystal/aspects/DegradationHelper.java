@@ -142,8 +142,8 @@ public class DegradationHelper {
 							}
 							int[] aspects = degradation.getAspectDifference();
 
-							if (!filterTargets.isEmpty()
-									&& !filterTargets.containsAll(Arrays.asList(Aspects
+							if (!filterAspects.isEmpty()
+									&& !filterAspects.containsAll(Arrays.asList(Aspects
 											.getAspectNames(aspects)))) {
 								continue;
 							}
@@ -248,8 +248,8 @@ public class DegradationHelper {
 
 								int[] aspects = degradation.getAspectDifference();
 
-								if (!filterTargets.isEmpty()
-										&& !filterTargets.containsAll(Arrays
+								if (!filterAspects.isEmpty()
+										&& !filterAspects.containsAll(Arrays
 												.asList(Aspects
 														.getAspectNames(aspects)))) {
 									// continue;

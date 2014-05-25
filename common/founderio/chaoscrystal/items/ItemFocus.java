@@ -75,9 +75,11 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 		case 2:
 			tags.setString("aspect", Aspects.ASPECTS[mode]);
 			is.setTagCompound(tags);
+			break;
 		case 3:
 			tags.setString("target", Targets.TARGETS[mode]);
 			is.setTagCompound(tags);
+			break;
 		}
 	}
 

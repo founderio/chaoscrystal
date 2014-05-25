@@ -2,6 +2,7 @@ package founderio.util;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -12,10 +13,19 @@ public final class ItemUtil {
 	}
 
 	public static boolean itemsMatch(ItemStack reference, ItemStack compare) {
-		return compare != null
-				&& compare.getItem() == reference.getItem()
-				&& (reference.getItemDamage() == 32767 || compare.getItemDamage() == 32767 || reference
-						.getItemDamage() == compare.getItemDamage());
+		if(reference == null) {
+			return compare == null;
+		}
+		if(compare == null) {
+			return reference == null;
+		}
+		Item a = compare.getItem();
+		Item b = reference.getItem();
+		if(a != b) {
+			return false;
+		}
+		return reference.getItemDamage() == 32767 || compare.getItemDamage() == 32767 ||
+				reference.getItemDamage() == compare.getItemDamage();
 	}
 
 	public static void spawnItemStack(ItemStack is, World world,

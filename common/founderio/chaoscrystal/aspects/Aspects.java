@@ -72,6 +72,7 @@ public final class Aspects {
 		for (int a = 0; a < ASPECTS.length; a++) {
 			if (aspectArray[a] > 0) {
 				aspectNames[idx] = ASPECTS[a];
+				idx++;
 			}
 		}
 		return Arrays.copyOfRange(aspectNames, 0, idx);
