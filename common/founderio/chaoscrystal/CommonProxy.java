@@ -2,6 +2,7 @@ package founderio.chaoscrystal;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import founderio.chaoscrystal.network.CCPParticle;
 
@@ -50,5 +51,17 @@ public class CommonProxy {
 		ChaosCrystalMain.packetPipeline.sendToAllAround(new CCPParticle(effect, sourceX, sourceY, sourceZ, offX, offY, offZ, variation),
 				new TargetPoint(dimension, sourceX, sourceY, sourceZ, 32));
 		
+	}
+	
+	public void spawnParticleEntity(World world,
+			int type,
+			double posX,
+			double posY,
+			double posZ,
+			double offX,
+			double offY,
+			double offZ,
+			float variation) {
+		// Client Only
 	}
 }

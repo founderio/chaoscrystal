@@ -61,33 +61,7 @@ public class CCPParticle extends CCAbstractPacket {
 
 	@Override
 	public void handleClientSide(EntityPlayer player) {
-		World w = player.worldObj;
-		if(w != null) {
-			float varHalf = variation/2;
-			if(type == 2) {
-				for(int i = 0; i < 5 + ChaosCrystalMain.rand.nextInt(20); i++) {
-					Minecraft.getMinecraft().effectRenderer.addEffect(
-							new EntityAuraFX(
-									w,
-									posX + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									posY + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									posZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf, 1, 1, 1));
-				}
-			} else {
-				for(int i = 0; i < 5 + ChaosCrystalMain.rand.nextInt(5); i++) {
-					Minecraft.getMinecraft().effectRenderer.addEffect(
-							new DegradationParticles(
-									w,
-									posX + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									posY + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									posZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									offX + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									offY + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									offZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf,
-									type));
-				}
-			}
-		}
+		ChaosCrystalMain.proxy.spawnParticleEntity(player.worldObj, type, posX, posY, posZ, offX, offY, offZ, variation);
 	}
 
 	@Override

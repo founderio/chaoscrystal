@@ -41,7 +41,7 @@ public class CCPModeItemChanged extends CCAbstractPacket {
 	}
 	
 	private void handle(EntityPlayer player) {
-		ItemStack currentItemStack = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
+		ItemStack currentItemStack = player.inventory.getCurrentItem();
 		if(currentItemStack == null) {
 			return;
 		}
@@ -60,6 +60,7 @@ public class CCPModeItemChanged extends CCAbstractPacket {
 			modeIndex = modeCount;
 		}
 		mci.setSelectedModeForItemStack(currentItemStack, modeIndex);
+		
 	}
 
 }
