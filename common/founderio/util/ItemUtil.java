@@ -24,6 +24,9 @@ public final class ItemUtil {
 		if(a != b) {
 			return false;
 		}
+		if(a == null) {
+			return true;
+		}
 		return reference.getItemDamage() == 32767 || compare.getItemDamage() == 32767 ||
 				reference.getItemDamage() == compare.getItemDamage();
 	}
