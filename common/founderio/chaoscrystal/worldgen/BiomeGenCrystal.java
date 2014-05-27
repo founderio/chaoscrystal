@@ -11,7 +11,7 @@ public class BiomeGenCrystal extends BiomeGenBase {
 
 	@SuppressWarnings("unchecked")
 	public BiomeGenCrystal(int par1) {
-		super(par1);
+		super(par1, false);
 		this.spawnableCreatureList.clear();
 		this.spawnableMonsterList.clear();
 		this.spawnableCaveCreatureList.clear();

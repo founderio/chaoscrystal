@@ -10,6 +10,9 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.WorldType;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.common.Mod;
@@ -197,7 +200,8 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 
-
+		BiomeDictionary.registerBiomeType(biomeCrystal, Type.BEACH);
+		//TODO: add GenLayer or add to GenLayerBiome.field_151620_f etc. (reflection)
 //TODO: fix
 //		if(cfgForceBiome) {
 //			//Just a test: remove all other biomes...
