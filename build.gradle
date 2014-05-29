@@ -17,7 +17,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.5.0.1"
+version = "0.5.1b1"
 group= "founderio.chaoscrystal" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "chaoscrystal-1.7.2"
 
