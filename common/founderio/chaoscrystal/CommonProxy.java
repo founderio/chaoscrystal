@@ -19,23 +19,23 @@ public class CommonProxy {
 				0, 0, 0, 1.0f);
 	}
 
-	public static void spawnParticleEffects(Entity to, int effect) {
-		spawnParticleEffects(to.worldObj.provider.dimensionId, effect,
-				(double)to.posX, (double)to.posY, (double)to.posZ,
+	public static void spawnParticleEffects(Entity at, int effect) {
+		spawnParticleEffects(at.worldObj.provider.dimensionId, effect,
+				at.posX, at.posY, at.posZ,
 				0, 0, 0, 0.5f);
 	}
 
 	public static void spawnParticleEffects(Entity from, TileEntity to, int effect) {
 		spawnParticleEffects(from.worldObj.provider.dimensionId, effect,
+				from.posX, from.posY, from.posZ,
 				to.xCoord, to.yCoord, to.zCoord,
-				(double)(from.posX - to.xCoord), (double)(from.posY - to.yCoord), (double)(from.posZ - to.zCoord),
 				1);
 	}
 
 	public static void spawnParticleEffects(Entity from, Entity to, int effect) {
 		spawnParticleEffects(from.worldObj.provider.dimensionId, effect,
-				(double)to.posX, (double)to.posY, (double)to.posZ,
-				(double)(from.posX - to.posX), (double)(from.posY - to.posY), (double)(from.posZ - to.posZ),
+				from.posX, from.posY, from.posZ,
+				to.posX, to.posY, to.posZ,
 				1);
 	}
 

@@ -8,7 +8,7 @@ import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.aspects.Node;
-import founderio.chaoscrystal.aspects.NodeAir;
+import founderio.chaoscrystal.aspects.NodeLifeless;
 import founderio.chaoscrystal.aspects.NodeDegradation;
 import founderio.chaoscrystal.aspects.NodeSimpleOre;
 
@@ -81,7 +81,7 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		 * "Ignore"-Blocks
 		 */
 		//TODO: In NonDestructive Mode, use Lifeless Block once added
-		degradationStore.addNode(AIR = new NodeAir());
+		degradationStore.addNode(AIR = new NodeLifeless());
 		//TODO: IgnoreList
 		//degradationStore.addNode(WATER_MOVING = new NodeDegradation(null, ab.toAspectArray(), new ItemStack(Blocks.waterMoving, 1, 32767), false, false));
 

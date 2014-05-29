@@ -115,8 +115,9 @@ public class DegradationHelper {
 
 					Block id = world.getBlock(absX, absY, absZ);
 
-					if (!id.isAir(world, absX, absY, absZ)) {// We can't extract air...
-
+					if (!id.isAir(world, absX, absY, absZ)
+							&& (!extract || id != ChaosCrystalMain.blockLifeless)) {// We can't extract air...
+						
 						int meta = world.getBlockMetadata(absX, absY, absZ);
 						List<Node> nodes;
 						if (extract) {
@@ -157,12 +158,10 @@ public class DegradationHelper {
 											results);
 
 									CommonProxy.spawnParticleEffects(
-											world.provider.dimensionId, 0, posX,
-											posY, posZ, offX, offY, offZ);
+											world.provider.dimensionId, 0, absX, absY, absZ, posX,
+											posY, posZ);
 									CommonProxy.spawnParticleEffects(
-											world.provider.dimensionId, 2, posX
-											+ offX, posY + offY, posZ
-											+ offZ);
+											world.provider.dimensionId, 2, absX, absY, absZ);
 								}
 							} else {
 								if (entity.canProvideAspects(aspects)) {
@@ -173,9 +172,7 @@ public class DegradationHelper {
 											results);
 
 									CommonProxy.spawnParticleEffects(
-											world.provider.dimensionId, 0, posX
-											+ offX, posY + offY, posZ
-											+ offZ, -offX, -offY, -offZ);
+											world.provider.dimensionId, 0, posX, posY, posZ, absX, absY, absZ);
 								}
 							}
 

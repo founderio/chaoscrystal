@@ -191,7 +191,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
 		
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
-		GameRegistry.registerBlock(blockLifeless, ItemBlockBase.class, Constants.ID_BLOCK_LIFELESS);
+		GameRegistry.registerBlock(blockLifeless, Constants.ID_BLOCK_LIFELESS);
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);

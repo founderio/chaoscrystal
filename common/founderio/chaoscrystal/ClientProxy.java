@@ -65,7 +65,7 @@ public class ClientProxy extends CommonProxy {
 									posZ + ChaosCrystalMain.rand.nextDouble()*variation-varHalf, 1, 1, 1));
 				}
 			} else {
-				for(int i = 0; i < 5 + ChaosCrystalMain.rand.nextInt(5); i++) {
+				for(int i = 0; i < 5; i++) {
 					Minecraft.getMinecraft().effectRenderer.addEffect(
 							new DegradationParticles(
 									world,
