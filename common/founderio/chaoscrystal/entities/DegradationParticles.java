@@ -5,6 +5,7 @@ import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
 
 public class DegradationParticles extends EntityFX {
@@ -48,7 +49,7 @@ public class DegradationParticles extends EntityFX {
         this.noClip = true;
         this.particleScale = 0.5f;
 		
-		this.setParticleTextureIndex((int) (Math.random() * 16.0D));
+		this.setParticleTextureIndex(ChaosCrystalMain.rand.nextInt(17));
 	}
 	
 	@Override

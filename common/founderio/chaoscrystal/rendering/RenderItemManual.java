@@ -75,9 +75,11 @@ public class RenderItemManual implements IItemRenderer {
 			if(page <= 0) {
 				page = maxPage;
 			}
+			if(page > maxPage) {
+				page = 1;
+			}
 			switch(page) {
 			default:
-				page = 1;
 			case 1:
 				strWidth= fr.getStringWidth("Chaos Crystals");
 				fr.drawStringWithShadow("Chaos Crystals", b1 + w/2 - strWidth/2, b2, 0xFFFFFF);

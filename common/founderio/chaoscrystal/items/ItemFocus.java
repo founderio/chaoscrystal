@@ -68,10 +68,10 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 	@Override
 	public void setSelectedModeForItemStack(ItemStack is, int mode) {
 		NBTTagCompound tags = is.getTagCompound();
-		if(tags == null) {
+		if (tags == null) {
 			tags = new NBTTagCompound();
 		}
-		switch(is.getItemDamage()) {
+		switch (is.getItemDamage()) {
 		case 2:
 			tags.setString("aspect", Aspects.ASPECTS[mode]);
 			is.setTagCompound(tags);
@@ -80,12 +80,14 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 			tags.setString("target", Targets.TARGETS[mode]);
 			is.setTagCompound(tags);
 			break;
+		default:
+			return;
 		}
 	}
 
 	@Override
 	public int getModeCount(ItemStack is) {
-		switch(is.getItemDamage()) {
+		switch (is.getItemDamage()) {
 		case 2:
 			return Aspects.ASPECTS.length;
 		case 3:
@@ -97,7 +99,7 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
 	@Override
 	public ResourceLocation getIconForMode(ItemStack is, int mode) {
-		switch(is.getItemDamage()) {
+		switch (is.getItemDamage()) {
 		case 2:
 			return Aspects.RESOURCE_LOCATIONS[mode];
 		case 3:
@@ -106,7 +108,6 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 			return null;
 		}
 	}
-	
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -120,35 +121,35 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public IIcon getIconFromDamage(int par1) {
-		return iconList[MathHelper.clamp_int(par1, 0, 4)];
+	public IIcon getIconFromDamage(int meta) {
+		return iconList[MathHelper.clamp_int(meta, 0, 4)];
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World,
-			EntityPlayer par3EntityPlayer) {
-		if (!par2World.isRemote) {
-			if (par1ItemStack.getItemDamage() == 0) {
-				EntityFocusTransfer entity = new EntityFocusTransfer(par2World,
-						par3EntityPlayer.posX, par3EntityPlayer.posY + 3,
-						par3EntityPlayer.posZ,
-						180f - par3EntityPlayer.rotationYaw,
-						par3EntityPlayer.rotationPitch);
-				par2World.spawnEntityInWorld(entity);
-			} else if (par1ItemStack.getItemDamage() == 1) {
-				EntityFocusBorder entity = new EntityFocusBorder(par2World,
-						par3EntityPlayer.posX, par3EntityPlayer.posY + 3,
-						par3EntityPlayer.posZ,
-						180f - par3EntityPlayer.rotationYaw,
-						par3EntityPlayer.rotationPitch);
-				par2World.spawnEntityInWorld(entity);
-			} else if (par1ItemStack.getItemDamage() == 2) {
-				EntityFocusFilter entity = new EntityFocusFilter(par2World,
-						par3EntityPlayer.posX, par3EntityPlayer.posY + 3,
-						par3EntityPlayer.posZ,
-						180f - par3EntityPlayer.rotationYaw,
-						par3EntityPlayer.rotationPitch);
-				NBTTagCompound tags = par1ItemStack.getTagCompound();
+	public ItemStack onItemRightClick(ItemStack itemStack, World world,
+			EntityPlayer player) {
+		if (!world.isRemote) {
+			if (itemStack.getItemDamage() == 0) {
+				EntityFocusTransfer entity = new EntityFocusTransfer(world,
+						player.posX, player.posY + 3,
+						player.posZ,
+						180f - player.rotationYaw,
+						player.rotationPitch);
+				world.spawnEntityInWorld(entity);
+			} else if (itemStack.getItemDamage() == 1) {
+				EntityFocusBorder entity = new EntityFocusBorder(world,
+						player.posX, player.posY + 3,
+						player.posZ,
+						180f - player.rotationYaw,
+						player.rotationPitch);
+				world.spawnEntityInWorld(entity);
+			} else if (itemStack.getItemDamage() == 2) {
+				EntityFocusFilter entity = new EntityFocusFilter(world,
+						player.posX, player.posY + 3,
+						player.posZ,
+						180f - player.rotationYaw,
+						player.rotationPitch);
+				NBTTagCompound tags = itemStack.getTagCompound();
 				if (tags != null) {
 					String aspect = tags.getString("aspect");
 					if (!Aspects.isAspect(aspect)) {
@@ -160,14 +161,14 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 				}
 				// System.out.println("Spawning Entity with aspect: " +
 				// entity.aspect);
-				par2World.spawnEntityInWorld(entity);
-			} else if (par1ItemStack.getItemDamage() == 3) {
-				EntityFocusFilterTarget entity = new EntityFocusFilterTarget(par2World,
-						par3EntityPlayer.posX, par3EntityPlayer.posY + 3,
-						par3EntityPlayer.posZ,
-						180f - par3EntityPlayer.rotationYaw,
-						par3EntityPlayer.rotationPitch);
-				NBTTagCompound tags = par1ItemStack.getTagCompound();
+				world.spawnEntityInWorld(entity);
+			} else if (itemStack.getItemDamage() == 3) {
+				EntityFocusFilterTarget entity = new EntityFocusFilterTarget(world,
+						player.posX, player.posY + 3,
+						player.posZ,
+						180f - player.rotationYaw,
+						player.rotationPitch);
+				NBTTagCompound tags = itemStack.getTagCompound();
 				if (tags != null) {
 					String target = tags.getString("target");
 					if (!Targets.isTarget(target)) {
@@ -179,11 +180,11 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 				}
 				// System.out.println("Spawning Entity with aspect: " +
 				// entity.aspect);
-				par2World.spawnEntityInWorld(entity);
+				world.spawnEntityInWorld(entity);
 			}
 			// entity.playSpawnSound();
 		}
-		ItemStack retVal = par1ItemStack.copy();
+		ItemStack retVal = itemStack.copy();
 		retVal.stackSize--;
 		return retVal;
 	}

@@ -34,10 +34,10 @@ import cpw.mods.fml.relauncher.SideOnly;
 @ChannelHandler.Sharable
 public class CCPacketPipeline extends MessageToMessageCodec<FMLProxyPacket, CCAbstractPacket>{
 
-    private EnumMap<Side, FMLEmbeddedChannel>           channels;
-    private LinkedList<Class<? extends CCAbstractPacket>> packets           = new LinkedList<Class<? extends CCAbstractPacket>>();
-    private boolean                                     isPostInitialised = false;
-    
+	private EnumMap<Side, FMLEmbeddedChannel> channels;
+	private LinkedList<Class<? extends CCAbstractPacket>> packets = new LinkedList<Class<? extends CCAbstractPacket>>();
+	private boolean isPostInitialised = false;
+
     /**
      * Register your packet with the pipeline. Discriminators are automatically set.
      *

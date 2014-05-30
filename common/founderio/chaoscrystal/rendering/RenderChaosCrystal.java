@@ -25,6 +25,9 @@ public class RenderChaosCrystal extends Render {
 	public void doRender(Entity entity, double d0, double d1, double d2,
 			float f, float f1) {
 
+		if(!(entity instanceof EntityChaosCrystal)) {
+			return;
+		}
 		EntityChaosCrystal ecc = (EntityChaosCrystal) entity;
 
 		Tessellator tessellator = Tessellator.instance;

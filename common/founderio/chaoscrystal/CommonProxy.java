@@ -41,8 +41,9 @@ public class CommonProxy {
 
 	public static void spawnParticleEffects(int dimension, int effect,
 			double sourceX, double sourceY, double sourceZ,
-			double offX, double offY, double offZ) {
-		spawnParticleEffects(dimension, effect, sourceX, sourceY, sourceZ, offX, offY, offZ, 1);
+			double targetX, double targetY, double targetZ) {
+		spawnParticleEffects(dimension, effect, sourceX, sourceY, sourceZ,
+				targetX, targetY, targetZ, 1);
 	}
 
 	public static void spawnParticleEffects(int dimension, int effect,
@@ -52,15 +53,9 @@ public class CommonProxy {
 				new TargetPoint(dimension, sourceX, sourceY, sourceZ, 32));
 		
 	}
-	
-	public void spawnParticleEntity(World world,
-			int type,
-			double posX,
-			double posY,
-			double posZ,
-			double offX,
-			double offY,
-			double offZ,
+
+	public void spawnParticleEntity(World world, int type, double posX,
+			double posY, double posZ, double offX, double offY, double offZ,
 			float variation) {
 		// Client Only
 	}

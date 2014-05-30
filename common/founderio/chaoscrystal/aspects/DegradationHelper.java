@@ -56,7 +56,7 @@ public class DegradationHelper {
 				continue;
 			}
 			int maxStackSize = p.getDispayItemStack().getMaxStackSize();
-			for (int ists = 0; ists < Math.floor(count / maxStackSize); ists++) {
+			for (int ists = 0; ists < count / maxStackSize; ists++) {
 				ItemStack spawnStack = p.getDispayItemStack().copy();
 				spawnStack.stackSize = maxStackSize;
 				ItemUtil.spawnItemStack(spawnStack, world, reference);
@@ -75,7 +75,7 @@ public class DegradationHelper {
 				continue;
 			}
 			int maxStackSize = p.getMaxStackSize();
-			for (int ists = 0; ists < Math.floor(count / maxStackSize); ists++) {
+			for (int ists = 0; ists < count / maxStackSize; ists++) {
 				ItemStack spawnStack = p.copy();
 				spawnStack.stackSize = maxStackSize;
 				ItemUtil.spawnItemStack(spawnStack, world, posX + 0.5,
@@ -158,10 +158,11 @@ public class DegradationHelper {
 											results);
 
 									CommonProxy.spawnParticleEffects(
-											world.provider.dimensionId, 0, absX, absY, absZ, posX,
-											posY, posZ);
+											world.provider.dimensionId, 0,
+											absX, absY, absZ, posX, posY, posZ);
 									CommonProxy.spawnParticleEffects(
-											world.provider.dimensionId, 2, absX, absY, absZ);
+											world.provider.dimensionId, 2,
+											absX, absY, absZ);
 								}
 							} else {
 								if (entity.canProvideAspects(aspects)) {
@@ -172,22 +173,21 @@ public class DegradationHelper {
 											results);
 
 									CommonProxy.spawnParticleEffects(
-											world.provider.dimensionId, 0, posX, posY, posZ, absX, absY, absZ);
+											world.provider.dimensionId, 0,
+											posX, posY, posZ, absX, absY, absZ);
 								}
 							}
 
 						} else {
 							if (ChaosCrystalMain.cfgDebugOutput) {
 								System.out.println(id.getLocalizedName()
-										+ " - "
-										+ id
-										+ "/"
-										+ meta);
+										+ " - " + id + "/" + meta);
 							}
 							if (extract && !ChaosCrystalMain.cfgNonDestructive) {
-								world.setBlock(absX, absY, absZ, Blocks.air, 0, 1 + 2);
-								world.createExplosion(entity, absX, absY, absZ, 1,
-										false);
+								world.setBlock(absX, absY, absZ, Blocks.air, 0,
+										1 + 2);
+								world.createExplosion(entity, absX, absY, absZ,
+										1, false);
 							}
 						}
 					}

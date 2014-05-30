@@ -17,7 +17,7 @@ public final class ItemUtil {
 			return compare == null;
 		}
 		if(compare == null) {
-			return reference == null;
+			return false;// reference cannot be null here.
 		}
 		Item a = compare.getItem();
 		Item b = reference.getItem();

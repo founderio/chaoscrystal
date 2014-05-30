@@ -3,9 +3,7 @@ package founderio.chaoscrystal.network;
 import founderio.chaoscrystal.IModeChangingItem;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
 public class CCPModeItemChanged extends CCAbstractPacket {
@@ -42,9 +40,6 @@ public class CCPModeItemChanged extends CCAbstractPacket {
 	
 	private void handle(EntityPlayer player) {
 		ItemStack currentItemStack = player.inventory.getCurrentItem();
-		if(currentItemStack == null) {
-			return;
-		}
 		if(currentItemStack == null || !(currentItemStack.getItem() instanceof IModeChangingItem)) {
 			return;
 		}

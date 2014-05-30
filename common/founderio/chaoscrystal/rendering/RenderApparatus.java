@@ -17,12 +17,8 @@ import net.minecraftforge.client.model.techne.TechneModel;
 import org.lwjgl.opengl.GL11;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.ClientTickEvent;
 import cpw.mods.fml.common.gameevent.TickEvent.Phase;
-import cpw.mods.fml.common.gameevent.TickEvent.Type;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
@@ -295,9 +291,6 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 		}
 
 		switch (type) {
-		case ENTITY:
-			renderModelAt(model, resource, -0.5, -0.5, -0.5);
-			break;
 		case EQUIPPED:
 		case EQUIPPED_FIRST_PERSON:
 			renderModelAt(model, resource, 0, 0, 0);
@@ -305,9 +298,8 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 		case INVENTORY:
 			renderModelAt(model, resource, 0.125, 0, 0.125);
 			break;
+		case ENTITY:
 		case FIRST_PERSON_MAP:
-			renderModelAt(model, resource, -0.5, -0.5, -0.5);
-			break;
 		default:
 			renderModelAt(model, resource, -0.5, -0.5, -0.5);
 			break;
