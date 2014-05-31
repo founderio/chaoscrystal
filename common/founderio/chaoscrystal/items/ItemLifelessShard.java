@@ -14,7 +14,7 @@ public class ItemLifelessShard extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return Constants.MOD_ID + ":lifeless";
+		return Constants.MOD_ID + ":lifeless_shard";
 	}
 
 }

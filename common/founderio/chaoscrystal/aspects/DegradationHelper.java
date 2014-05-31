@@ -187,13 +187,15 @@ public class DegradationHelper {
 	
 						if (Aspects.isFilterMatched(filterAspects, aspects)) {
 							int count = 0;
+							// Limit max amount of processed items by max hits and stack size
 							int size = ChaosCrystalMain.cfgHitsPerTick - hit;
-							// TODO: Additionally limit stack size with random
-							// number, so higher max hit does not cause while
-							// stacks to get processed at once
 							if(is.stackSize < size) {
 								size = is.stackSize;
 							}
+							// Additionally limits stack size with random
+							// number, so higher max hit does not cause while
+							// stacks to get processed at once:
+							size = ChaosCrystalMain.rand.nextInt(size) + 1;
 							
 							if (extract) {
 								for (int st = 0; st < size; st++) {

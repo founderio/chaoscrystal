@@ -1,11 +1,9 @@
 package founderio.chaoscrystal.aspects;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
 
-public class NodeLifeless extends Node {
+public class NodeLifelessShard extends Node {
 
 	@Override
 	public int[] getAspectDifference() {
@@ -24,23 +22,21 @@ public class NodeLifeless extends Node {
 
 	@Override
 	public boolean matchesItemStack(ItemStack is) {
-		return Block.getBlockFromItem(is.getItem()) == ChaosCrystalMain.blockLifeless;
+		return is != null && is.getItem() == ChaosCrystalMain.itemLifelessShard;
 	}
 
 	@Override
 	public ItemStack getDispayItemStack() {
-		return new ItemStack(ChaosCrystalMain.blockLifeless, 1, 0);
+		return new ItemStack(ChaosCrystalMain.itemLifelessShard, 1, 0);
 	}
 
 	@Override
 	public ItemStack[] getDegradedFrom(ItemStack is) {
-		if(is == null || is.getItem() == null) {
+		if (is == null || is.getItem() == null) {
 			return new ItemStack[0];
-		} else if(is.getItem() instanceof ItemBlock) {
-			return new ItemStack[] { new ItemStack(ChaosCrystalMain.blockLifeless, is.stackSize, 0) };
-		} else {
-			return new ItemStack[] { new ItemStack(ChaosCrystalMain.itemLifelessShard, is.stackSize, 0) };
 		}
+		return new ItemStack[] { new ItemStack(
+				ChaosCrystalMain.itemLifelessShard, is.stackSize, 0) };
 	}
 
 }

@@ -84,7 +84,7 @@ public class ChaosRegistry {
 			List<Node> creations = new ArrayList<Node>();
 			for (Node node : nodes) {
 				Node[] parents = node.getParents();
-				if (parents.length == 1 && parents[0] == ModuleVanillaWorldgen.AIR) {
+				if (parents.length == 1 && (parents[0] == ModuleVanillaWorldgen.LIFELESS_BLOCK || parents[0] == ModuleVanillaWorldgen.LIFELESS_SHARD)) {
 					creations.add(node);
 				}
 			}

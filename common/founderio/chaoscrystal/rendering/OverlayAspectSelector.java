@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderItem;
@@ -28,6 +29,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import founderio.chaoscrystal.ChaosCrystalMain;
@@ -116,6 +118,10 @@ public class OverlayAspectSelector extends Gui {
 			return;
 		}
 		RenderHelper.enableGUIStandardItemLighting();
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)240 / 1.0F, (float)240 / 1.0F);
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+        GL11.glEnable(GL11.GL_LIGHTING);
 		ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
 		ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
 	}
@@ -375,8 +381,8 @@ public class OverlayAspectSelector extends Gui {
 
 						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(is);
 						if(degradations.size() == 0) {
-
-						} else {
+							//TODO: Render Questionmark
+						} else if(!ChaosCrystalMain.degradationStore.isIgnoreItem(is.getItem(), true)) {
 							Node node = degradations.get(0);
 
 							renderAspectList(centerW, centerH, node.getAspects());
@@ -394,13 +400,20 @@ public class OverlayAspectSelector extends Gui {
 						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
 						
 						if(ChaosCrystalMain.cfgDebugGlasses) {
-							String[] lines = new String[6];
-							lines[0] = "Lifespan: " + ei.lifespan;
-							lines[1] = "Age: " + ei.age;
-							lines[2] = "Added to chunk: " + ei.addedToChunk;
-							lines[3] = "Time Until Portal: " + ei.timeUntilPortal;
-							lines[4] = "Delay before can pickup: " + ei.delayBeforeCanPickup;
-							lines[5] = "Hover Start: " + ei.hoverStart;
+							String[] lines = new String[8];
+							if(is.getItem() != null) {
+								lines[0] = is.getDisplayName() + "(" + is.getUnlocalizedName() + ":" + is.getItemDamage() + ")";
+								lines[1] = "Internal ID: " + Item.getIdFromItem(is.getItem());
+							} else {
+								lines[0] = "";
+								lines[1] = "";
+							}
+							lines[2] = "Lifespan: " + ei.lifespan;
+							lines[3] = "Age: " + ei.age;
+							lines[4] = "Ticks existed: " + ei.ticksExisted;
+							lines[5] = "Time Until Portal: " + ei.timeUntilPortal;
+							lines[6] = "Delay before can pickup: " + ei.delayBeforeCanPickup;
+							lines[7] = "Hover Start: " + ei.hoverStart;
 							
 							for(int l = 0; l < lines.length; l++) {
 								Minecraft.getMinecraft().fontRenderer.drawString(
@@ -423,11 +436,11 @@ public class OverlayAspectSelector extends Gui {
 								mop.blockY,
 								mop.blockZ);
 
-						boolean doRenderMiniBlock = false;
 						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(block, 1, meta));
-						if(degradations.size() != 0) {
+						if(degradations.size() == 0) {
+							//TODO: Render Questionmark
+						} else if(!ChaosCrystalMain.degradationStore.isIgnoreBlock(block, true)) {
 							Node node = degradations.get(0);
-							doRenderMiniBlock = true;
 
 							renderAspectList(centerW, centerH, node.getAspects());
 
@@ -444,7 +457,6 @@ public class OverlayAspectSelector extends Gui {
 						TileEntity te = w.getTileEntity(mop.blockX, mop.blockY, mop.blockZ);
 						if(te instanceof TileEntityApparatus) {
 							TileEntityApparatus apparatus = (TileEntityApparatus)te;
-							doRenderMiniBlock = true;
 							for(int i = 0; i < apparatus.getSizeInventory(); i++) {
 								ItemStack its = ((TileEntityApparatus) te).getStackInSlot(i);
 								if(its != null && its.getItem() != null) {
@@ -460,8 +472,26 @@ public class OverlayAspectSelector extends Gui {
 							
 						}
 
-						if(doRenderMiniBlock) {
-							renderItem(new ItemStack(block, 1, meta), centerW - 16 - 5, centerH - 16 - 5);
+						ItemStack is = new ItemStack(block, 1, meta);
+						
+						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
+						
+						if(ChaosCrystalMain.cfgDebugGlasses) {
+							String[] lines = new String[3];
+							lines[0] = block.getLocalizedName() + "(" + block.getUnlocalizedName() + ":" + meta + ")";
+							if(is.getItem() != null) {
+								lines[1] = is.getDisplayName() + "(" + is.getUnlocalizedName() + ":" + is.getItemDamageForDisplay() + ")";
+							} else {
+								lines[1] = "";
+							}
+							lines[2] = "Internal ID: " + Block.getIdFromBlock(block);
+							
+							for(int l = 0; l < lines.length; l++) {
+								Minecraft.getMinecraft().fontRenderer.drawString(
+										lines[l], centerW + 10, centerH - 33 - l * 10,
+										16777215);
+							}
+							
 						}
 
 					}
