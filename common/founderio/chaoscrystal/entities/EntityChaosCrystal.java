@@ -133,8 +133,8 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 			}
 		}
 
-		DegradationHelper.crystalTick(this, worldObj, (int) posX, (int) posY,
-				(int) posZ, filterAspects, filterTargets, range, isInSuckMode());
+		DegradationHelper.crystalTick(this, worldObj, posX, posY,
+				posZ, filterAspects, filterTargets, range, isInSuckMode());
 
 	}
 

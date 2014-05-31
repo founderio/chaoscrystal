@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.CraftingManager;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -36,6 +39,34 @@ public class ChaosRegistry {
 
 		registerAspectModule(new ModuleVanillaWorldgen());
 		registerAspectModule(new ModuleChaosCrystal());
+	}
+	
+	public boolean isIgnoreItem(Item item, boolean extract) {
+		if(item == null) {
+			return true;
+		}
+		if(extract && item == ChaosCrystalMain.itemLifelessShard) {
+			return true;
+		}
+		if(item instanceof ItemBlock) {
+			Block block = Block.getBlockFromItem(item);
+			return isIgnoreBlock(block, extract);
+		}
+		
+		return false;
+	}
+	
+	public boolean isIgnoreBlock(Block block, boolean extract) {
+		if(block == null) {
+			return true;
+		}
+		if(block == Blocks.air) {
+			return true;
+		}
+		if(extract && block == ChaosCrystalMain.blockLifeless) {
+			return true;
+		}
+		return false;
 	}
 	
 	public void registerAspectModule(AspectModule module) {

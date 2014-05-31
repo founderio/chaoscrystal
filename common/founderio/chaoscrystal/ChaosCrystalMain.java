@@ -95,8 +95,8 @@ public class ChaosCrystalMain {
 	public static int cfgCrystalAspectStorage = 1000000;
 	public static boolean cfgForceBiome = false;
 	public static boolean cfgDebugOutput = false;
-	public static boolean cfgNonDestructive = true;
 	public static boolean cfgSneakToShowAspects = false;
+	public static boolean cfgDebugGlasses = false;
 	
 
 	private int getBiomeId(String id, int defaultId) {
@@ -111,6 +111,7 @@ public class ChaosCrystalMain {
 		cfgForceBiome = config.get("Settings", "force_biomes", cfgForceBiome).getBoolean(cfgForceBiome);
 		cfgDebugOutput = config.get("Settings", "degradation_debug_output", cfgDebugOutput).getBoolean(cfgDebugOutput);
 		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", true).getBoolean(cfgSneakToShowAspects);
+		cfgDebugGlasses = config.get("Settings", "debug_glasses", false, "Enabled the debug mode on crystal glasses. (Displays additional info.)").getBoolean(cfgDebugGlasses);
 
 		cfgCrystalAspectStorage = config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).getInt();
 
@@ -128,7 +129,6 @@ public class ChaosCrystalMain {
 		cfgFocusTickInterval = config.get("Settings", "focus_tick_interval", cfgFocusTickInterval).getInt();
 
 
-		cfgNonDestructive = config.get("Settings", "non_destructive", cfgNonDestructive).getBoolean(cfgNonDestructive);
 
 		creativeTab = new CreativeTabs(Constants.MOD_ID) {
 			@Override
@@ -177,9 +177,6 @@ public class ChaosCrystalMain {
 		blockSentry = new BlockApparatus(2);
 		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
-
-		config.removeCategory(config.getCategory("items"));
-		config.removeCategory(config.getCategory("blocks"));
 
 		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 

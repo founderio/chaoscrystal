@@ -1,10 +1,10 @@
 package founderio.chaoscrystal.aspects;
 
 import java.util.Arrays;
-
-import founderio.chaoscrystal.Constants;
+import java.util.List;
 
 import net.minecraft.util.ResourceLocation;
+import founderio.chaoscrystal.Constants;
 
 public final class Aspects {
 
@@ -76,6 +76,14 @@ public final class Aspects {
 			}
 		}
 		return Arrays.copyOfRange(aspectNames, 0, idx);
+	}
+	
+	public static boolean allAspectsContained(List<String> whitelist, int[] aspects) {
+		return whitelist.containsAll(Arrays.asList(Aspects.getAspectNames(aspects)));
+	}
+	
+	public static boolean isFilterMatched(List<String> filter, int[] aspects) {
+		return filter.isEmpty() || allAspectsContained(filter, aspects);
 	}
 
 	private Aspects() {

@@ -43,6 +43,7 @@ import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.network.CCPModeItemChanged;
+import founderio.util.GeometryHelper;
 
 public class OverlayAspectSelector extends Gui {
 
@@ -111,6 +112,9 @@ public class OverlayAspectSelector extends Gui {
 	}
 
 	public void renderItem(ItemStack is, int x, int y) {
+		if(is == null || is.getItem() == null) {
+			return;
+		}
 		RenderHelper.enableGUIStandardItemLighting();
 		ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
 		ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
@@ -366,8 +370,8 @@ public class OverlayAspectSelector extends Gui {
 
 					} else if(lookingAt instanceof EntityItem) {
 
-
-						ItemStack is = ((EntityItem)lookingAt).getEntityItem();
+						EntityItem ei = ((EntityItem)lookingAt);
+						ItemStack is = ei.getEntityItem();
 
 						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(is);
 						if(degradations.size() == 0) {
@@ -388,6 +392,23 @@ public class OverlayAspectSelector extends Gui {
 						}
 
 						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
+						
+						if(ChaosCrystalMain.cfgDebugGlasses) {
+							String[] lines = new String[6];
+							lines[0] = "Lifespan: " + ei.lifespan;
+							lines[1] = "Age: " + ei.age;
+							lines[2] = "Added to chunk: " + ei.addedToChunk;
+							lines[3] = "Time Until Portal: " + ei.timeUntilPortal;
+							lines[4] = "Delay before can pickup: " + ei.delayBeforeCanPickup;
+							lines[5] = "Hover Start: " + ei.hoverStart;
+							
+							for(int l = 0; l < lines.length; l++) {
+								Minecraft.getMinecraft().fontRenderer.drawString(
+										lines[l], centerW + 10, centerH - 33 - l * 10,
+										16777215);
+							}
+							
+						}
 					}
 				}
 
@@ -541,7 +562,7 @@ public class OverlayAspectSelector extends Gui {
         Vec3 vec3 = player.getPosition(par3);
         Vec3 vec31 = player.getLook(par3);
         Vec3 vec32 = vec3.addVector(vec31.xCoord * par1, vec31.yCoord * par1, vec31.zCoord * par1);
-        return raytraceDo(player.worldObj, vec3, vec32, false, false, true);
+        return raytraceDo(player.worldObj, vec3, vec32, !GeometryHelper.isEntityInBlock(player, true), false, true);
     }
 	
     public static MovingObjectPosition raytraceDo(World world, Vec3 start, Vec3 end, boolean collisionCheck, boolean p_147447_4_, boolean p_147447_5_)
