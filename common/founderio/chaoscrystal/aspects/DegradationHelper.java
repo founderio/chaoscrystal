@@ -192,49 +192,52 @@ public class DegradationHelper {
 							if(is.stackSize < size) {
 								size = is.stackSize;
 							}
-							// Additionally limits stack size with random
-							// number, so higher max hit does not cause while
-							// stacks to get processed at once:
-							size = ChaosCrystalMain.rand.nextInt(size) + 1;
-							
-							if (extract) {
-								for (int st = 0; st < size; st++) {
-									if (entity.canAcceptAspects(aspects)) {
-										count++;
-	
-										entity.addAspects(aspects);
-									} else {
-										break;
-									}
-								}
-							} else {
-								for (int st = 0; st < size; st++) {
-									if (entity.canProvideAspects(aspects)) {
-										count++;
-	
-										entity.subtractAspects(aspects);
-									} else {
-										break;
-									}
-								}
-							}
-							hit += count;
-							if (count > 0) {
-								is.stackSize -= count;
+							if(size > 0) {
+								// Additionally limits stack size with random
+								// number, so higher max hit does not cause while
+								// stacks to get processed at once:
+								size = ChaosCrystalMain.rand.nextInt(size) + 1;
 								
-								spawnMultiplesOfStacks(results, count, world, it);
-	
-								if (is.stackSize == 0) {
-									it.setDead();
+								if (extract) {
+									for (int st = 0; st < size; st++) {
+										if (entity.canAcceptAspects(aspects)) {
+											count++;
+		
+											entity.addAspects(aspects);
+										} else {
+											break;
+										}
+									}
 								} else {
-									it.setEntityItemStack(is);
+									for (int st = 0; st < size; st++) {
+										if (entity.canProvideAspects(aspects)) {
+											count++;
+		
+											entity.subtractAspects(aspects);
+										} else {
+											break;
+										}
+									}
 								}
-								if(extract) {
-									CommonProxy.spawnParticleEffects(it, entity, 0);
-								} else {
-									CommonProxy.spawnParticleEffects(entity, it, 0);
+								hit += count;
+								if (count > 0) {
+									is.stackSize -= count;
+									
+									spawnMultiplesOfStacks(results, count, world, it);
+		
+									if (is.stackSize == 0) {
+										it.setDead();
+									} else {
+										it.setEntityItemStack(is);
+									}
+									if(extract) {
+										CommonProxy.spawnParticleEffects(it, entity, 0);
+									} else {
+										CommonProxy.spawnParticleEffects(entity, it, 0);
+									}
+									CommonProxy.spawnParticleEffects(it, 2);
 								}
-								CommonProxy.spawnParticleEffects(it, 2);
+								
 							}
 						}
 					}
