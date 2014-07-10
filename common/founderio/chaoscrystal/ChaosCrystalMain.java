@@ -1,6 +1,3 @@
-/**
- * 
- */
 package founderio.chaoscrystal;
 
 import java.util.Random;
@@ -10,7 +7,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.WorldType;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
@@ -51,7 +47,7 @@ import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
 /**
- * @author Oliver
+ * @author founderio
  *
  */
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION)
