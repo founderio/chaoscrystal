@@ -12,6 +12,7 @@ tile.chaoscrystal.lifeless.name=Lifeless Block
 tile.chaoscrystal.apparatus.name=Apparatus
 tile.chaoscrystal.apparatus.reconstructor.name=Reconstructor
 tile.chaoscrystal.apparatus.creator.name=Creator
+tile.chaoscrystal.apparatus.infuser.name=Infuser
 tile.chaoscrystal.apparatus.sentry.name=Sentry
 chaoscrystal.aspect.growth=Growth
 chaoscrystal.aspect.earth=Earth

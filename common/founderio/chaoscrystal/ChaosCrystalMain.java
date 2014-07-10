@@ -27,7 +27,7 @@ import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.BlockLifeless;
-import founderio.chaoscrystal.blocks.TileEntityCreator;
+import founderio.chaoscrystal.blocks.TileEntityInfuser;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -189,11 +189,12 @@ public class ChaosCrystalMain {
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
 
-		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_RECONSTRUCTOR);
-		GameRegistry.registerTileEntity(TileEntityCreator.class, Constants.ID_TILEENTITY_CREATOR);
+		GameRegistry.registerTileEntityWithAlternatives(TileEntityReconstructor.class, Constants.ID_TILEENTITY_INFUSER, Constants.ID_TILEENTITY_RECONSTRUCTOR);
+		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 
 		BiomeDictionary.registerBiomeType(biomeCrystal, Type.BEACH);
+		
 		//TODO: add GenLayer or add to GenLayerBiome.field_151620_f etc. (reflection)
 //TODO: fix
 //		if(cfgForceBiome) {

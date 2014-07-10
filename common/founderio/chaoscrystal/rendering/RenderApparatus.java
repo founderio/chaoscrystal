@@ -22,7 +22,7 @@ import cpw.mods.fml.common.gameevent.TickEvent.Phase;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
-import founderio.chaoscrystal.blocks.TileEntityCreator;
+import founderio.chaoscrystal.blocks.TileEntityInfuser;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
 
@@ -94,9 +94,9 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 
 				GL11.glPopMatrix();
 			}
-		} else if (tileentity instanceof TileEntityCreator) {
+		} else if (tileentity instanceof TileEntityInfuser) {
 			renderModelAt(modelCreator,
-					((TileEntityCreator) tileentity).isActive ? resourceCreator
+					((TileEntityInfuser) tileentity).isActive ? resourceCreator
 							: resourceCreatorOff, d0, d1, d2);
 
 			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);

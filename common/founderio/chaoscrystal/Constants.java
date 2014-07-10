@@ -22,7 +22,11 @@ public class Constants {
 	public static final String ID_BLOCK_APPARATUS_SENTRY = "chaoscrystal.apparatus.sentry";
 	public static final String ID_BLOCK_LIFELESS = "chaoscrystal.lifeless";
 
+	/**
+	 * Not in use anymore. (Alternative to ID_TILEENTITY_INFUSER)
+	 */
 	public static final String ID_TILEENTITY_RECONSTRUCTOR = "chaoscrystal.reconstructor";
+	public static final String ID_TILEENTITY_INFUSER = "chaoscrystal.infuser";
 	public static final String ID_TILEENTITY_CREATOR = "chaoscrystal.creator";
 	public static final String ID_TILEENTITY_SENTRY = "chaoscrystal.sentry";
 

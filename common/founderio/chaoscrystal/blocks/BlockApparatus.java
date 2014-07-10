@@ -43,7 +43,7 @@ public class BlockApparatus extends BlockContainer {
 		case 0:
 			return new TileEntityReconstructor();
 		case 1:
-			return new TileEntityCreator();
+			return new TileEntityInfuser();
 		case 2:
 			return new TileEntitySentry();
 		default:
@@ -101,14 +101,14 @@ public class BlockApparatus extends BlockContainer {
 			for (int index = 0; index < te.getSizeInventory(); index++) {
 				ItemStack itemstack = te.getStackInSlot(index);
 
-				if (itemstack != null) {
+				if (itemstack != null && itemstack.getItem() != null) {
 					ItemUtil.spawnItemStackDropped(itemstack, world, x, y, z);
 				}
 			}
 			for (int index = 0; index < te.getSizeModules(); index++) {
 				ItemStack itemstack = te.getModuleItemStack(index);
 
-				if (itemstack != null) {
+				if (itemstack != null && itemstack.getItem() != null) {
 					ItemUtil.spawnItemStackDropped(itemstack, world, x, y, z);
 				}
 			}

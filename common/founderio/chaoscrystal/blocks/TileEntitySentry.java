@@ -2,6 +2,7 @@ package founderio.chaoscrystal.blocks;
 
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -93,14 +94,22 @@ public class TileEntitySentry extends TileEntityApparatus {
 						Vec3 vec32 = Vec3.createVectorHelper(eCheck.posX,
 								eCheck.posY + eCheck.getEyeHeight(),
 								eCheck.posZ);
-						MovingObjectPosition mop = this.worldObj.func_147447_a(vec3, vec32, false, true, false);
-						if (mop == null || mop.hitVec == null) {
+						//TODO: Fix Sentry trying to shoot through player
+						MovingObjectPosition mop = this.worldObj.func_147447_a(vec3, vec32, false, false, true);
+						if (mop == null) {
+							//hm.. ignore?
+						} else if(mop.hitVec == null && mop.entityHit == null) {
 							
 							boolean valid = isValidTarget(eCheck);
 							
 							if(valid) {
 								dist = tmp_dist;
 								target = eCheck;
+							}
+						} else if(mop.entityHit != null) {
+							if(isValidTarget(mop.entityHit)) {
+								dist = tmp_dist;
+								target = (EntityLivingBase)mop.entityHit;
 							}
 						} else {
 							
@@ -115,14 +124,14 @@ public class TileEntitySentry extends TileEntityApparatus {
 											mop.hitVec.yCoord + .5f,
 											mop.hitVec.zCoord + .5f));
 							if (!list.isEmpty()) {
-								//TODO: Safe Mode-Module?
+								//TODO: Safe Mode-Module? -> don't shoot at 2-3 blocks around non-target entities
 								EntityLivingBase ent = list.get(0);
 								
 								boolean valid = isValidTarget(ent);
 								
 								if(valid) {
 									dist = tmp_dist;
-									target = eCheck;
+									target = ent;
 								}
 								
 							}
@@ -184,8 +193,12 @@ public class TileEntitySentry extends TileEntityApparatus {
 		}
 	}
 
-	public boolean isValidTarget(EntityLivingBase ent) {
+	public boolean isValidTarget(Entity ent) {
 		HostilityLevel hostilityLevel = HostilityLevel.Docile;
+		
+		if(!(ent instanceof EntityLivingBase)) {
+			return false;
+		}
 		
 		if(ent instanceof EntityMob) {
 			hostilityLevel = HostilityLevel.Hostile;

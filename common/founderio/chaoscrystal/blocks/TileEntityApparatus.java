@@ -1,5 +1,7 @@
 package founderio.chaoscrystal.blocks;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -110,11 +112,11 @@ public abstract class TileEntityApparatus extends TileEntity implements
 
 	@Override
 	public boolean canInsertItem(int i, ItemStack itemstack, int j) {
-		ItemStack is = getStackInSlot(i);
-		if (is == null) {
+		if (itemstack == null) {
 			return false;
 		} else {
-			return j == 1 && isItemValidForSlot(i, itemstack);
+			boolean isValidSlot = ArrayUtils.contains(getAccessibleSlotsFromSide(j), i);
+			return isValidSlot && isItemValidForSlot(i, itemstack);
 		}
 	}
 
@@ -263,12 +265,23 @@ public abstract class TileEntityApparatus extends TileEntity implements
 					if(isItemValidForSlot(i, currentEquip)) {
 						itemValid = true;
 						ItemStack is = this.getStackInSlot(i);
-						if (is == null) {
-							setInventorySlotContents(i, currentEquip.copy());
-							player.inventory.mainInventory[player.inventory.currentItem] = null;
-							break;
-						}
-						if (is.isItemEqual(currentEquip)) {
+						if (is == null || is.getItem() == null) {
+							if (currentEquip.stackSize <= getInventoryStackLimit()) {
+								setInventorySlotContents(i, currentEquip.copy());
+								player.inventory.mainInventory[player.inventory.currentItem] = null;
+								break;
+							} else {
+								currentEquip.stackSize -= getInventoryStackLimit();
+								
+								ItemStack copy = currentEquip.copy();
+								copy.stackSize = getInventoryStackLimit();
+								setInventorySlotContents(i, copy);
+								if (currentEquip.stackSize == 0) {
+									player.inventory.mainInventory[player.inventory.currentItem] = null;
+									break;
+								}
+							}
+						} else if (is.isItemEqual(currentEquip)) {
 							if (is.stackSize + currentEquip.stackSize <= getInventoryStackLimit()) {
 								is.stackSize += currentEquip.stackSize;
 								player.inventory.mainInventory[player.inventory.currentItem] = null;
