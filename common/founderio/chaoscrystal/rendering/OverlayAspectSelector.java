@@ -33,6 +33,7 @@ import org.lwjgl.opengl.GL12;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
 import founderio.chaoscrystal.aspects.Aspects;
@@ -287,7 +288,7 @@ public class OverlayAspectSelector extends Gui {
 
 		ItemStack currentItemStack = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 
-		boolean specialSkip = (currentItemStack != null && currentItemStack.getItem() instanceof ItemMap) || ChaosCrystalMain.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		boolean specialSkip = (currentItemStack != null && currentItemStack.getItem() instanceof ItemMap) || Config.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
 
 		int centerW = event.resolution.getScaledWidth()/2;
 		int centerH = event.resolution.getScaledHeight()/2;
@@ -399,7 +400,7 @@ public class OverlayAspectSelector extends Gui {
 
 						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
 						
-						if(ChaosCrystalMain.cfgDebugGlasses) {
+						if(Config.cfgDebugGlasses) {
 							String[] lines = new String[8];
 							if(is.getItem() != null) {
 								lines[0] = is.getDisplayName() + "(" + is.getUnlocalizedName() + ":" + is.getItemDamage() + ")";
@@ -476,7 +477,7 @@ public class OverlayAspectSelector extends Gui {
 						
 						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
 						
-						if(ChaosCrystalMain.cfgDebugGlasses) {
+						if(Config.cfgDebugGlasses) {
 							String[] lines = new String[3];
 							lines[0] = block.getLocalizedName() + "(" + block.getUnlocalizedName() + ":" + meta + ")";
 							if(is.getItem() != null) {

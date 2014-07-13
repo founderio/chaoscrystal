@@ -7,10 +7,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.BiomeDictionary;
-import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.BiomeManager;
-import net.minecraftforge.common.config.Configuration;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -50,7 +48,7 @@ import founderio.chaoscrystal.worldgen.GenCrystalPillars;
  * @author founderio
  *
  */
-@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION)
+@Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, guiFactory = Constants.GUI_FACTORY_CLASS)
 public class ChaosCrystalMain {
 	@Instance(Constants.MOD_ID)
 	public static ChaosCrystalMain instance;
@@ -79,52 +77,11 @@ public class ChaosCrystalMain {
 
 	public static CreativeTabs creativeTab;
 
-	private Configuration config;
-
-	public static int cfgHitsPerTick = 1;
-	public static int cfgMaxTriesPerTick = 80;
-	public static int cfgCrystalRange = 10;
-	public static int cfgCrystalTickInterval = 1;
-	public static int cfgFocusRange = 20;
-	public static int cfgFocusTickInterval = 60;
-
-	public static int cfgCrystalAspectStorage = 1000000;
-	public static boolean cfgForceBiome = false;
-	public static boolean cfgDebugOutput = false;
-	public static boolean cfgSneakToShowAspects = false;
-	public static boolean cfgDebugGlasses = false;
-	
-
-	private int getBiomeId(String id, int defaultId) {
-		return config.get("Biomes", id, defaultId).getInt();
-	}
-
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		config = new Configuration(event.getSuggestedConfigurationFile());
-		config.load();
-
-		cfgForceBiome = config.get("Settings", "force_biomes", cfgForceBiome).getBoolean(cfgForceBiome);
-		cfgDebugOutput = config.get("Settings", "degradation_debug_output", cfgDebugOutput).getBoolean(cfgDebugOutput);
-		cfgSneakToShowAspects = config.get("Settings", "sneak_to_show_aspects", true).getBoolean(cfgSneakToShowAspects);
-		cfgDebugGlasses = config.get("Settings", "debug_glasses", false, "Enabled the debug mode on crystal glasses. (Displays additional info.)").getBoolean(cfgDebugGlasses);
-
-		cfgCrystalAspectStorage = config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).getInt();
-
-		if(cfgCrystalAspectStorage < 10) {
-			cfgCrystalAspectStorage = 10;
-			config.get("Settings", "crystal_aspect_storage", cfgCrystalAspectStorage).set(cfgCrystalAspectStorage);
-		}
-
-		cfgHitsPerTick = config.get("Settings", "crystal_hits_per_tick", cfgHitsPerTick).getInt();
-		cfgMaxTriesPerTick = config.get("Settings", "crystal_max_tries_per_tick", cfgMaxTriesPerTick).getInt();
-		cfgCrystalRange = config.get("Settings", "crystal_range", cfgCrystalRange).getInt();
-		cfgCrystalTickInterval = config.get("Settings", "crystal_tick_interval", cfgCrystalTickInterval).getInt();
-
-		cfgFocusRange = config.get("Settings", "focus_range", cfgFocusRange).getInt();
-		cfgFocusTickInterval = config.get("Settings", "focus_tick_interval", cfgFocusTickInterval).getInt();
-
-
+		FMLCommonHandler.instance().bus().register(new Config());
+		
+		Config.init(event.getSuggestedConfigurationFile());
 
 		creativeTab = new CreativeTabs(Constants.MOD_ID) {
 			@Override
@@ -174,9 +131,8 @@ public class ChaosCrystalMain {
 		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
 
-		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
+//		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 
-		config.save();
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
@@ -193,7 +149,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 
-		BiomeDictionary.registerBiomeType(biomeCrystal, Type.BEACH);
+//		BiomeDictionary.registerBiomeType(biomeCrystal, Type.BEACH);
 		
 		//TODO: add GenLayer or add to GenLayerBiome.field_151620_f etc. (reflection)
 //TODO: fix
@@ -347,7 +303,7 @@ public class ChaosCrystalMain {
 //		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
 		//degradationStore.autoRegisterDegradation(new ItemStack(Item.arrow));
 
-		if(cfgDebugOutput) {
+		if(Config.cfgDebugOutput) {
 			degradationStore.debugOutput();
 		}
 	}
