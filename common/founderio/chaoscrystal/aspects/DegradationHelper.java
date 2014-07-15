@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.util.GeometryHelper;
 import founderio.util.ItemUtil;
@@ -164,12 +165,12 @@ public class DegradationHelper {
 						}
 					}
 				}
-			} while (hit < ChaosCrystalMain.cfgHitsPerTick
-					&& tries < ChaosCrystalMain.cfgMaxTriesPerTick);
+			} while (hit < Config.cfgHitsPerTick
+					&& tries < Config.cfgMaxTriesPerTick);
 		}
 
 		if(allowItems) {
-			if (hit < ChaosCrystalMain.cfgHitsPerTick) {
+			if (hit < Config.cfgHitsPerTick) {
 				List<EntityItem> items = GeometryHelper.getEntitiesInRange(world, posX, posY, posZ, range, EntityItem.class);
 				
 				if (items.size() != 0) {
@@ -188,7 +189,7 @@ public class DegradationHelper {
 						if (Aspects.isFilterMatched(filterAspects, aspects)) {
 							int count = 0;
 							// Limit max amount of processed items by max hits and stack size
-							int size = ChaosCrystalMain.cfgHitsPerTick - hit;
+							int size = Config.cfgHitsPerTick - hit;
 							if(is.stackSize < size) {
 								size = is.stackSize;
 							}
@@ -271,7 +272,7 @@ public class DegradationHelper {
 	public static ItemStack[] getDegradationResults(Node node, ItemStack is, boolean extract) {
 
 		if (node == null) {
-			if (ChaosCrystalMain.cfgDebugOutput) {
+			if (Config.cfgDebugOutput) {
 				System.out.println(is.getDisplayName() + " - "
 						+ is.getItem() + "/" + is.getItemDamage());
 			}
@@ -289,7 +290,7 @@ public class DegradationHelper {
 	public static boolean canAcceptAspects(String[] aspects, int[] amounts,
 			IAspectStore aspectStore) {
 		for (int a = 0; a < aspects.length; a++) {
-			if (aspectStore.getAspect(aspects[a]) + amounts[a] > ChaosCrystalMain.cfgCrystalAspectStorage) {
+			if (aspectStore.getAspect(aspects[a]) + amounts[a] > Config.cfgCrystalAspectStorage) {
 				return false;
 			}
 		}

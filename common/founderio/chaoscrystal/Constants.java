@@ -37,4 +37,6 @@ public class Constants {
 	public static final String NAME_ENTITY_FOCUS_FILTER_TARGET = "chaoscrystal.focus.filter.target";
 
 	public static final String NAME_BIOME_CRYSTAL = "Crystal Beach";
+	
+	public static final String GUI_FACTORY_CLASS = "founderio.chaoscrystal.client.gui.GuiFactory";
 }

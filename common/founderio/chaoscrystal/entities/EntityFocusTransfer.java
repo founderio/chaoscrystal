@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.util.GeometryHelper;
@@ -17,13 +18,13 @@ public class EntityFocusTransfer extends EntityFocus {
 
 	public EntityFocusTransfer(World world) {
 		super(world);
-		this.tickInterval = ChaosCrystalMain.cfgFocusTickInterval;
+		this.tickInterval = Config.cfgFocusTickInterval;
 	}
 
 	public EntityFocusTransfer(World world, double x, double y,
 			double z, float yaw, float pitch) {
 		super(world, x, y, z, yaw, pitch);
-		this.tickInterval = ChaosCrystalMain.cfgFocusTickInterval;
+		this.tickInterval = Config.cfgFocusTickInterval;
 	}
 
 	public boolean didTransferToEntity = false;
@@ -40,7 +41,7 @@ public class EntityFocusTransfer extends EntityFocus {
 		for(Object obj : this.worldObj.loadedEntityList) {
 			if(obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity)obj, this);
-				if(tmp_dist < ChaosCrystalMain.cfgFocusRange) {
+				if(tmp_dist < Config.cfgFocusRange) {
 					ents.add((EntityChaosCrystal)obj);
 				}
 			}
@@ -50,7 +51,7 @@ public class EntityFocusTransfer extends EntityFocus {
 		for(Object obj : this.worldObj.loadedTileEntityList) {
 			if(obj instanceof TileEntityApparatus) {
 				double tmp_dist = GeometryHelper.entityDistance((TileEntity)obj, this);
-				if(tmp_dist < ChaosCrystalMain.cfgFocusRange) {
+				if(tmp_dist < Config.cfgFocusRange) {
 					tEnts.add((TileEntityApparatus)obj);
 				}
 			}
