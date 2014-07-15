@@ -18,6 +18,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.aspects.modules.ModuleChaosCrystal;
 import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.util.ItemUtil;
@@ -168,7 +169,7 @@ public class ChaosRegistry {
 				}
 				return autoRegisterWithItemStacks(r.getRecipeOutput(), recipeItems, 0);
 			} else {
-				if (ChaosCrystalMain.cfgDebugOutput) {
+				if (Config.cfgDebugOutput) {
 					System.out.println("Registering Item " + is
 							+ " failed. No supported crafting recipes.");
 				}
@@ -188,7 +189,7 @@ public class ChaosRegistry {
 		}
 		
 		
-		if (ChaosCrystalMain.cfgDebugOutput) {
+		if (Config.cfgDebugOutput) {
 			System.out.println("Registering Item " + is
 					+ " failed. No (supported) recipes.");
 		}
@@ -202,7 +203,7 @@ public class ChaosRegistry {
 		List<Node> parentNodes = new ArrayList<Node>();
 		for(ItemStack crafting : recipeItems) {
 			if(crafting == null || crafting.stackSize <= 0) {
-				if(ChaosCrystalMain.cfgDebugOutput) {
+				if(Config.cfgDebugOutput) {
         			System.out.println("Registering Item " + is + " failed. Crafting recipe for subsequent Item " + crafting + " has zero stack size.");
 				}
 				return null;
@@ -212,7 +213,7 @@ public class ChaosRegistry {
 			if(nodes.isEmpty()) {
 				Node autoReg = autoRegisterDegradation(crafting);
 				if(autoReg == null) {
-					if(ChaosCrystalMain.cfgDebugOutput) {
+					if(Config.cfgDebugOutput) {
 	        			System.out.println("Registering Item " + is + " failed. Could not find aspects for subsequent Item " + crafting + ".");
 					}
 					return null;

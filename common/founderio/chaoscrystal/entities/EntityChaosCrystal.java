@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.aspects.DegradationHelper;
 import founderio.chaoscrystal.aspects.IAspectStore;
@@ -17,13 +18,13 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	public EntityChaosCrystal(World world) {
 		super(world);
-		this.tickInterval = ChaosCrystalMain.cfgCrystalTickInterval;
+		this.tickInterval = Config.cfgCrystalTickInterval;
 	}
 
 	public EntityChaosCrystal(World world, double x, double y, double z,
 			float yaw, float pitch) {
 		super(world, x, y, z, yaw, pitch);
-		this.tickInterval = ChaosCrystalMain.cfgCrystalTickInterval;
+		this.tickInterval = Config.cfgCrystalTickInterval;
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public int getSingleAspectCapacity() {
-		return ChaosCrystalMain.cfgCrystalAspectStorage;
+		return Config.cfgCrystalAspectStorage;
 	}
 
 	@Override
@@ -103,13 +104,13 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	protected void logicUpdate() {
 		List<String> filterAspects = new ArrayList<String>();
 		List<String> filterTargets = new ArrayList<String>();
-		double range = ChaosCrystalMain.cfgCrystalRange;
+		double range = Config.cfgCrystalRange;
 
 		for (Object obj : this.worldObj.loadedEntityList) {
 			if (obj instanceof EntityFocusFilter) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
-				if (tmp_dist < ChaosCrystalMain.cfgFocusRange) {
+				if (tmp_dist < Config.cfgFocusRange) {
 					String asp = ((EntityFocusFilter) obj).getAspect();
 					if (!filterAspects.contains(asp)) {
 						filterAspects.add(asp);
@@ -118,7 +119,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 			} else if (obj instanceof EntityFocusFilterTarget) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
-				if (tmp_dist < ChaosCrystalMain.cfgFocusRange) {
+				if (tmp_dist < Config.cfgFocusRange) {
 					String target = ((EntityFocusFilterTarget) obj).getTarget();
 					if (!filterTargets.contains(target)) {
 						filterTargets.add(target);

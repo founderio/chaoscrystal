@@ -1,13 +1,9 @@
 package founderio.chaoscrystal.network;
 
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.entities.DegradationParticles;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityAuraFX;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.world.World;
 
 public class CCPParticle extends CCAbstractPacket {
 

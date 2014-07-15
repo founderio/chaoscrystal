@@ -3,6 +3,7 @@ package founderio.chaoscrystal.entities;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.util.GeometryHelper;
 
 public class EntityFocusBorder extends EntityFocus {
@@ -23,7 +24,7 @@ public class EntityFocusBorder extends EntityFocus {
 
 	@Override
 	protected void logicUpdate() {
-		if (age > ChaosCrystalMain.cfgFocusTickInterval) {
+		if (age > Config.cfgFocusTickInterval) {
 			age = 0;
 		}
 		EntityChaosCrystal crystal1 = null;
