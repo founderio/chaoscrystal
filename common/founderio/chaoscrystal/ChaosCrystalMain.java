@@ -24,9 +24,11 @@ import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.BlockLifeless;
+import founderio.chaoscrystal.blocks.BlockSproutingCrystal;
 import founderio.chaoscrystal.blocks.TileEntityInfuser;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
+import founderio.chaoscrystal.blocks.TileEntityTicker;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -34,6 +36,7 @@ import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.items.ItemBlockApparatus;
 import founderio.chaoscrystal.items.ItemBlockBase;
+import founderio.chaoscrystal.items.ItemBlockSproutingCrystal;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
@@ -68,6 +71,7 @@ public class ChaosCrystalMain {
 	public static Item itemLifelessShard;
 
 	public static BlockBase blockBase;
+	public static BlockSproutingCrystal blockSproutingCrystal;
 	public static BlockApparatus blockReconstructor;
 	public static BlockApparatus blockCreator;
 	public static BlockApparatus blockSentry;
@@ -115,6 +119,10 @@ public class ChaosCrystalMain {
 		blockBase.setBlockName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
 
+		blockSproutingCrystal = new BlockSproutingCrystal();
+		blockSproutingCrystal.setBlockName(Constants.ID_BLOCK_SPROUTING_CRYSTAL);
+		blockSproutingCrystal.setCreativeTab(creativeTab);
+
 		blockLifeless = new BlockLifeless();
 		blockLifeless.setBlockName(Constants.ID_BLOCK_LIFELESS);
 		blockLifeless.setCreativeTab(creativeTab);
@@ -131,6 +139,10 @@ public class ChaosCrystalMain {
 		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
 
+		blockSentry = new BlockApparatus(3);
+		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_TICKER);
+		blockSentry.setCreativeTab(creativeTab);
+
 //		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
@@ -140,6 +152,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
 		
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
+		GameRegistry.registerBlock(blockSproutingCrystal, ItemBlockSproutingCrystal.class, Constants.ID_BLOCK_SPROUTING_CRYSTAL);
 		GameRegistry.registerBlock(blockLifeless, Constants.ID_BLOCK_LIFELESS);
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
@@ -148,6 +161,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntityWithAlternatives(TileEntityReconstructor.class, Constants.ID_TILEENTITY_INFUSER, Constants.ID_TILEENTITY_RECONSTRUCTOR);
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
+		GameRegistry.registerTileEntity(TileEntityTicker.class, Constants.ID_TILEENTITY_TICKER);
 
 //		BiomeDictionary.registerBiomeType(biomeCrystal, Type.BEACH);
 		
