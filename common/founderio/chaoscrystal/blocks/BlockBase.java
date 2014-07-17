@@ -93,6 +93,7 @@ public class BlockBase extends Block {
 	}
 	
 	public void checkBlockCrack(World world, int x, int y, int z) {
+		//TODO: Respect SilkTouch (less likely to break)
 		if(world.getBlock(x, y, z) == ChaosCrystalMain.blockBase) {
 			int meta = world.getBlockMetadata(x, y, z);
 			if(meta < 2) {
