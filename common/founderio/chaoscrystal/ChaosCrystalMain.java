@@ -7,7 +7,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.BiomeManager;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -41,12 +40,13 @@ import founderio.chaoscrystal.items.ItemFocus;
 import founderio.chaoscrystal.items.ItemLifelessShard;
 import founderio.chaoscrystal.items.ItemManual;
 import founderio.chaoscrystal.network.CCPacketPipeline;
-import founderio.chaoscrystal.worldgen.BiomeGenCrystal;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
 /**
+ * Chaos Crystal Mod class
+ * 
  * @author founderio
- *
+ * 
  */
 @Mod(modid = Constants.MOD_ID, name = Constants.MOD_NAME, version = Constants.MOD_VERSION, guiFactory = Constants.GUI_FACTORY_CLASS)
 public class ChaosCrystalMain {
@@ -73,7 +73,7 @@ public class ChaosCrystalMain {
 	public static BlockApparatus blockSentry;
 	public static BlockLifeless blockLifeless;
 
-	public static BiomeGenCrystal biomeCrystal;
+//	public static BiomeGenCrystal biomeCrystal;
 
 	public static CreativeTabs creativeTab;
 
@@ -161,7 +161,7 @@ public class ChaosCrystalMain {
 //			}
 //		}
 
-		BiomeManager.addSpawnBiome(biomeCrystal);
+//		BiomeManager.addSpawnBiome(biomeCrystal);
 	}
 
 	@EventHandler
