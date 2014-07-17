@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.aspects.Aspects;
 import founderio.util.GeometryHelper;
 
@@ -43,7 +44,7 @@ public class EntityFocusFilter extends EntityFocus {
 
 	@Override
 	protected void logicUpdate() {
-		if (age > ChaosCrystalMain.cfgFocusTickInterval) {
+		if (age > Config.cfgFocusTickInterval) {
 			age = 0;
 		}
 		List<EntityChaosCrystal> crystals = new ArrayList<EntityChaosCrystal>();
@@ -52,7 +53,7 @@ public class EntityFocusFilter extends EntityFocus {
 			if (obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance(
 						(EntityChaosCrystal) obj, this);
-				if (tmp_dist < ChaosCrystalMain.cfgFocusRange) {
+				if (tmp_dist < Config.cfgFocusRange) {
 					crystals.add((EntityChaosCrystal) obj);
 				}
 			}
