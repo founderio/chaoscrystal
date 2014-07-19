@@ -259,8 +259,8 @@ public class BlockSproutingCrystal extends Block {
 		//TODO: check whether to eat that block or grow around it & create item/aspect storage
 		
 		world.setBlock(x, y, z, ChaosCrystalMain.blockBase, meta, 1 + 2);
-		return false;//true
-	}
+		return true;
+	}//TODO: Make dev-switch to allow insta-growth without code changes
 	
 	@Override
 	public void onBlockClicked(World world, int x,
