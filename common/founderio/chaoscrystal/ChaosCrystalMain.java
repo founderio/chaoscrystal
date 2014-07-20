@@ -45,6 +45,7 @@ import founderio.chaoscrystal.items.ItemManual;
 import founderio.chaoscrystal.items.ItemShard;
 import founderio.chaoscrystal.network.CCPacketPipeline;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
+import founderio.chaoscrystal.worldgen.GenCrystalSprouts;
 
 /**
  * Chaos Crystal Mod class
@@ -82,6 +83,8 @@ public class ChaosCrystalMain {
 //	public static BiomeGenCrystal biomeCrystal;
 
 	public static CreativeTabs creativeTab;
+	
+	public static GenCrystalSprouts genCrystalSprouts;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -150,6 +153,9 @@ public class ChaosCrystalMain {
 		blockSentry.setCreativeTab(creativeTab);
 
 //		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
+		
+		genCrystalSprouts = new GenCrystalSprouts();
+		GameRegistry.registerWorldGenerator(genCrystalSprouts, 5);
 
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);

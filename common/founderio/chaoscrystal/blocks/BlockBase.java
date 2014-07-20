@@ -7,8 +7,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +24,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.Constants;
 
 public class BlockBase extends Block {
@@ -186,17 +189,23 @@ public class BlockBase extends Block {
 	
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion) {
+		if(!Config.crackCrystalsOnExplosion){
+			return;
+		}
 		checkBlockCracksAround(world, x, y, z, 0.9f, 0);
 	}
 	
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
+		if(!Config.crackCrystalsOnHarvest) {
+			return;
+		}
 		// Don't break stuff if in creative mode
 		if(player.capabilities.isCreativeMode) {
 			return;
 		}
 		// Less likely to break stuff if the player uses silk touch
-		boolean hasSilkTouch = EnchantmentHelper.getSilkTouchModifier(player);
+		boolean hasSilkTouch = Config.crackCrystalsLessLikelyWithSilkTouch && EnchantmentHelper.getSilkTouchModifier(player);
 		int fortune = EnchantmentHelper.getFortuneModifier(player);
 		checkBlockCracksAround(world, x, y, z, hasSilkTouch ? 0.45f : 0.90f, fortune);
 	}
@@ -221,6 +230,9 @@ public class BlockBase extends Block {
 		if(world.isRemote) {
 			return;
 		}
+		if(!Config.crackCrystalsOnCollition) {
+			return;
+		}
 		// Don't Destroy stuff in Creative Mode
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer ep = (EntityPlayer)entity;
@@ -228,6 +240,15 @@ public class BlockBase extends Block {
 				return;
 			}
 		}
+		if(Config.crackCrystalsLessLikelyWithFeatherFalling && entity instanceof EntityLivingBase) {
+			EntityLivingBase ep = (EntityLivingBase)entity;
+			int featherFalling = EnchantmentHelper.getEnchantmentLevel(Enchantment.featherFalling.effectId, ep.getEquipmentInSlot(1));
+			if(ChaosCrystalMain.rand.nextInt(10) < featherFalling) {
+				return;
+			}
+		}
+		
+		
 		// Bigger smash or smaller depending on force
 		if(force > 5) {
 			boolean result1 = checkBlockCrack(world, x, y, z, 1, 0);

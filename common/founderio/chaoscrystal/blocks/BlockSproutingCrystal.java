@@ -19,6 +19,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.Constants;
 
 public class BlockSproutingCrystal extends Block {
@@ -123,6 +124,18 @@ public class BlockSproutingCrystal extends Block {
 	}
 	
 	@Override
+	public Item getItemDropped(int meta, Random rand, int fortune) {
+		// Drop regular crystal block
+		return Item.getItemFromBlock(ChaosCrystalMain.blockBase);
+	}
+	
+	@Override
+	public int getDamageValue(World world, int x, int y, int z) {
+		int meta = world.getBlockMetadata(x, y, z);
+		return MathHelper.clamp_int(meta, 0, metaList.length - 1);
+	}
+	
+	@Override
 	protected boolean canSilkHarvest() {
 		return true;
 	}
@@ -132,46 +145,62 @@ public class BlockSproutingCrystal extends Block {
 
 		int meta = world.getBlockMetadata(x, y, z);
 		
-		int maxHeight = 50;
-		int spikeRadiusOverallMax = 5;
 		int currentGrowthHeight = 0;
 		
 		/*
 		 * Growth will stop at any time if a block was "grown" unless insta-growth is enabled.
 		 */
+		boolean allowGrowth = false;
 		
-		for(int dy = 0; dy < maxHeight; dy ++) {
-			Block bl = world.getBlock(x, y + dy, z);
-			if(enableInstaGrowth || bl == ChaosCrystalMain.blockBase || bl == ChaosCrystalMain.blockSproutingCrystal) {
-				// Check for current growth height (more guessed than checked)
-				// This decides how big the crystal will grow width-wise
-				currentGrowthHeight = dy;
-				// Repair all cracked pieces on the way
-				if(eatBlock(world, x, y + dy, z, meta)) {
-					return;
-				}
-				if(eatBlock(world, x, y - dy, z, meta)) {
-					return;
-				}
-				if(eatBlock(world, x, y, z + dy, meta)) {
-					return;                    
-				}                              
-				if(eatBlock(world, x, y, z - dy, meta)) {
-					return;
-				}
-				if(eatBlock(world, x + dy, y, z, meta)) {
-					return;              
-				}                        
-				if(eatBlock(world, x - dy, y, z, meta)) {
-					return;
+		for(int dy = 0; dy < Config.spikeMaxHeight; dy ++) {
+			Block bl1 = world.getBlock(x, y + dy, z);
+			Block bl2 = world.getBlock(x, y - dy, z);
+			Block bl3 = world.getBlock(x, y, z + dy);
+			Block bl4 = world.getBlock(x, y, z - dy);
+			Block bl5 = world.getBlock(x + dy, y, z);
+			Block bl6 = world.getBlock(x - dy, y, z);
+			allowGrowth = isAcceptedBlockOrAir(bl1, world, x, y + dy, z)
+					&& isAcceptedBlockOrAir(bl2, world, x, y - dy, z)
+					&& isAcceptedBlockOrAir(bl3, world, x, y, z + dy)
+					&& isAcceptedBlockOrAir(bl4, world, x, y, z - dy)
+					&& isAcceptedBlockOrAir(bl5, world, x + dy, y, z)
+					&& isAcceptedBlockOrAir(bl6, world, x - dy, y, z);
+			// Stop crystal growing in length if there is a block in the way somewhere
+			// But still grow in width as far as possible (encased blocks can happen)
+			if(allowGrowth) {
+				if(Config.enableInstaGrowth || (isCrystalBlock(bl1) && isCrystalBlock(bl2) && isCrystalBlock(bl3) && isCrystalBlock(bl4) && isCrystalBlock(bl5) && isCrystalBlock(bl6))) {
+					// Check for current growth height (more guessed than checked)
+					// This decides how big the crystal will grow width-wise
+					currentGrowthHeight = dy;
+					// Repair all cracked pieces on the way
+					if(eatBlock(world, x, y + dy, z, meta)) {
+						return;
+					}
+					if(eatBlock(world, x, y - dy, z, meta)) {
+						return;
+					}
+					if(eatBlock(world, x, y, z + dy, meta)) {
+						return;                    
+					}                              
+					if(eatBlock(world, x, y, z - dy, meta)) {
+						return;
+					}
+					if(eatBlock(world, x + dy, y, z, meta)) {
+						return;              
+					}                        
+					if(eatBlock(world, x - dy, y, z, meta)) {
+						return;
+					}
+				} else {
+					// Current growth height reached.
+					break;
 				}
 			} else {
-				// Current growth height reached.
 				break;
 			}
 		}
-		float spikeRadiusMax = currentGrowthHeight/(float)maxHeight;
-		spikeRadiusMax *= spikeRadiusOverallMax;
+		float spikeRadiusMax = currentGrowthHeight/(float)Config.spikeMaxHeight;
+		spikeRadiusMax *= Config.spikeMaxRadius;
 		
 		// Grow the spikes
 		for(int dy = 0; dy < currentGrowthHeight; dy ++) {
@@ -263,6 +292,10 @@ public class BlockSproutingCrystal extends Block {
 			}
 		}
 		
+		if(!allowGrowth) {
+			return;
+		}
+		
 		// Finally grow the tips longer if everything else is intact.
 		if(eatBlock(world, x, y + currentGrowthHeight + 1, z, meta)) {
 			return;
@@ -299,28 +332,42 @@ public class BlockSproutingCrystal extends Block {
 			if(ChaosCrystalMain.blockBase.isCrackedVersion(worldMeta)) {
 				int uncracked = ChaosCrystalMain.blockBase.getUncrackedVersion(worldMeta);
 				world.setBlock(x, y, z, ChaosCrystalMain.blockBase, uncracked, 1 + 2);
-				return !enableInstaGrowth;
+				return !Config.enableInstaGrowth;
 			} else {
 				return false;
 			}
 			//TODO: if meta is different than sprout, mix some of these blocks in the rest somehow?
 		}
 		//TODO: check for blocks that limit growth (red slowed by blue) or speed up growth (red sped up by yellow) or nullify each other (yellow <> blue)
-		//TODO: check whether to eat that block or grow around it & create item/aspect storage
 		
-		world.setBlock(x, y, z, ChaosCrystalMain.blockBase, meta, 1 + 2);
-		return !enableInstaGrowth;
+		if(isAcceptedBlockOrAir(currentWorldBlock, world, x, y, z)) {
+			world.setBlock(x, y, z, ChaosCrystalMain.blockBase, meta, 1 + 2);
+			return !Config.enableInstaGrowth;
+		} else {
+			return false;
+		}
+		
 	}
+	
+	public static boolean isAcceptedBlock(Block block) {
+		return block == Blocks.stone || block == Blocks.dirt || block == Blocks.gravel || block == Blocks.grass || block == Blocks.sandstone || block == Blocks.netherrack || block == Blocks.water;
+	}
+	
+	public static boolean isCrystalBlock(Block block) {
+		return block == ChaosCrystalMain.blockSproutingCrystal || block == ChaosCrystalMain.blockBase;
+	}
+	
+	public static boolean isAcceptedBlockOrAir(Block block, World world, int x, int y, int z) {
+		return block.isAir(world, x, z, z) || isAcceptedBlock(block) || isCrystalBlock(block);
+	}
+	
 	
 	@Override
 	public void onBlockClicked(World world, int x,
 			int y, int z, EntityPlayer player) {
 		// Just DEV...
-		if(enableClickTick) {
+		if(Config.enableClickTick) {
 			updateTick(world, x, y, z, ChaosCrystalMain.rand);
 		}
 	}
-	
-	public static boolean enableInstaGrowth = false;
-	public static boolean enableClickTick = false;
 }
