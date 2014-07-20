@@ -13,7 +13,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
@@ -23,8 +25,9 @@ public class BlockSproutingCrystal extends Block {
 
 	public static final String[] metaList = new String[] {
 			Constants.ID_BLOCK_CRYSTALLINE_ENERGY_SPROUT,
-			Constants.ID_BLOCK_CRYSTAL_SPROUT,
-			Constants.ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT, };
+			Constants.ID_BLOCK_CRYSTALLINE_CHAOS_SPROUT,
+			Constants.ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT,
+			Constants.ID_BLOCK_CRYSTAL_CLEAR_SPROUT, };
 	public IIcon[] iconList;
 
 	public BlockSproutingCrystal() {
@@ -54,15 +57,17 @@ public class BlockSproutingCrystal extends Block {
 		iconList[0] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
 				+ "crystalline_energy_sprout");
 		iconList[1] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
-				+ "crystal_sprout");
+				+ "crystalline_chaos_sprout");
 		iconList[2] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
 				+ "crystalline_light_sprout");
+		iconList[3] = par1IconRegister.registerIcon(Constants.MOD_ID + ":"
+				+ "crystal_clear_sprout");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIcon(int par1, int par2) {
-		int idx = MathHelper.clamp_int(par2, 0, iconList.length - 1);
+		int idx = MathHelper.clamp_int(par2, 0, metaList.length - 1);
 		return iconList[idx];
 	}
 
@@ -76,6 +81,41 @@ public class BlockSproutingCrystal extends Block {
 	public boolean isOpaqueCube() {
 		return false;
 	}
+	
+	/**
+     * Returns true if the given side of this block type should be rendered (if it's solid or not), if the adjacent
+     * block is at the given coordinates. Args: blockAccess, x, y, z, side
+     */
+    public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side)
+    {
+    	Block adjacent = blockAccess.getBlock(x, y, z);
+    	if(adjacent == this || adjacent == ChaosCrystalMain.blockBase) {
+        	ForgeDirection dir = ForgeDirection.getOrientation(side);
+    		int adjacentMeta = blockAccess.getBlockMetadata(x, y, z);
+    		int thisMeta = blockAccess.getBlockMetadata(x - dir.offsetX, y - dir.offsetY, z - dir.offsetZ);
+    		return thisMeta != adjacentMeta;
+    	} else {
+    		return true;
+    	}
+    }
+
+    /**
+     * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
+     * coordinates.  Args: blockAccess, x, y, z, side
+     */
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side)
+    {
+    	Block adjacent = blockAccess.getBlock(x, y, z);
+    	if(adjacent == this || adjacent == ChaosCrystalMain.blockBase) {
+        	ForgeDirection dir = ForgeDirection.getOrientation(side);
+    		int adjacentMeta = blockAccess.getBlockMetadata(x, y, z);
+    		int thisMeta = blockAccess.getBlockMetadata(x - dir.offsetX, y - dir.offsetY, z - dir.offsetZ);
+    		return thisMeta != adjacentMeta;
+    	} else {
+    		return true;
+    	}
+    }
 
 	@Override
 	public int damageDropped(int par1) {
@@ -93,13 +133,20 @@ public class BlockSproutingCrystal extends Block {
 		int meta = world.getBlockMetadata(x, y, z);
 		
 		int maxHeight = 50;
-		int maxTrunkRadius = 5;
-		
+		int spikeRadiusOverallMax = 5;
 		int currentGrowthHeight = 0;
+		
+		/*
+		 * Growth will stop at any time if a block was "grown" unless insta-growth is enabled.
+		 */
+		
 		for(int dy = 0; dy < maxHeight; dy ++) {
 			Block bl = world.getBlock(x, y + dy, z);
-			if(bl == ChaosCrystalMain.blockBase || bl == ChaosCrystalMain.blockSproutingCrystal) {
+			if(enableInstaGrowth || bl == ChaosCrystalMain.blockBase || bl == ChaosCrystalMain.blockSproutingCrystal) {
+				// Check for current growth height (more guessed than checked)
+				// This decides how big the crystal will grow width-wise
 				currentGrowthHeight = dy;
+				// Repair all cracked pieces on the way
 				if(eatBlock(world, x, y + dy, z, meta)) {
 					return;
 				}
@@ -119,18 +166,21 @@ public class BlockSproutingCrystal extends Block {
 					return;
 				}
 			} else {
-				//TODO: just save and grow if rest of crystal is intact (afterwards)
+				// Current growth height reached.
 				break;
 			}
 		}
-		float trunkwidthCurMax = currentGrowthHeight/(float)maxHeight;
-		trunkwidthCurMax *= maxTrunkRadius;
+		float spikeRadiusMax = currentGrowthHeight/(float)maxHeight;
+		spikeRadiusMax *= spikeRadiusOverallMax;
 		
+		// Grow the spikes
 		for(int dy = 0; dy < currentGrowthHeight; dy ++) {
-			float trunkWidthCurLevel = 1f - (float)dy/currentGrowthHeight/2;
-			trunkWidthCurLevel *= trunkwidthCurMax;
-			for(int dx = 1; dx < trunkWidthCurLevel; dx++) {
-				for(int dz = 1; dz < trunkWidthCurLevel; dz++) {
+			// Spike radius at current level (will be thickest at the center)
+			float spikeRadiusCurLevel = 1f - (float)dy/currentGrowthHeight/2;
+			spikeRadiusCurLevel *= spikeRadiusMax;
+			
+			for(int dx = 1; dx < spikeRadiusCurLevel; dx++) {
+				for(int dz = 1; dz < spikeRadiusCurLevel; dz++) {
 					// Up
 					if(eatBlock(world, x + dx, y + dy, z + dz, meta)) {
 						return;
@@ -209,7 +259,6 @@ public class BlockSproutingCrystal extends Block {
 					if(eatBlock(world, x - dx, y + dz, z - dy, meta)) {
 						return;
 					}
-					//TODO: N, W, S, E
 				}
 			}
 		}
@@ -247,25 +296,31 @@ public class BlockSproutingCrystal extends Block {
 		}
 		if(currentWorldBlock == ChaosCrystalMain.blockBase) {
 			int worldMeta = world.getBlockMetadata(x, y, z);
-			if(worldMeta > 2) {
-				world.setBlock(x, y, z, ChaosCrystalMain.blockBase, worldMeta - 3, 1 + 2);
-				return true;
+			if(ChaosCrystalMain.blockBase.isCrackedVersion(worldMeta)) {
+				int uncracked = ChaosCrystalMain.blockBase.getUncrackedVersion(worldMeta);
+				world.setBlock(x, y, z, ChaosCrystalMain.blockBase, uncracked, 1 + 2);
+				return !enableInstaGrowth;
 			} else {
 				return false;
 			}
 			//TODO: if meta is different than sprout, mix some of these blocks in the rest somehow?
 		}
-				
+		//TODO: check for blocks that limit growth (red slowed by blue) or speed up growth (red sped up by yellow) or nullify each other (yellow <> blue)
 		//TODO: check whether to eat that block or grow around it & create item/aspect storage
 		
 		world.setBlock(x, y, z, ChaosCrystalMain.blockBase, meta, 1 + 2);
-		return true;
-	}//TODO: Make dev-switch to allow insta-growth without code changes
+		return !enableInstaGrowth;
+	}
 	
 	@Override
 	public void onBlockClicked(World world, int x,
 			int y, int z, EntityPlayer player) {
 		// Just DEV...
-//		updateTick(world, x, y, z, ChaosCrystalMain.rand);
+		if(enableClickTick) {
+			updateTick(world, x, y, z, ChaosCrystalMain.rand);
+		}
 	}
+	
+	public static boolean enableInstaGrowth = false;
+	public static boolean enableClickTick = false;
 }

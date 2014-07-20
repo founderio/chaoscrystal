@@ -42,6 +42,7 @@ import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
 import founderio.chaoscrystal.items.ItemLifelessShard;
 import founderio.chaoscrystal.items.ItemManual;
+import founderio.chaoscrystal.items.ItemShard;
 import founderio.chaoscrystal.network.CCPacketPipeline;
 import founderio.chaoscrystal.worldgen.GenCrystalPillars;
 
@@ -69,6 +70,7 @@ public class ChaosCrystalMain {
 	public static Item itemCrystalGlasses;
 	public static Item itemManual;
 	public static Item itemLifelessShard;
+	public static Item itemShard;
 
 	public static BlockBase blockBase;
 	public static BlockSproutingCrystal blockSproutingCrystal;
@@ -115,6 +117,10 @@ public class ChaosCrystalMain {
 		itemLifelessShard.setUnlocalizedName(Constants.ID_ITEM_LIFELESS_SHARD);
 		itemLifelessShard.setCreativeTab(creativeTab);
 
+		itemShard = new ItemShard();
+		itemShard.setUnlocalizedName(Constants.ID_ITEM_SHARD);
+		itemShard.setCreativeTab(creativeTab);
+
 		blockBase = new BlockBase();
 		blockBase.setBlockName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
@@ -150,6 +156,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerItem(itemManual, Constants.ID_ITEM_MANUAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
+		GameRegistry.registerItem(itemShard, Constants.ID_ITEM_SHARD, Constants.MOD_ID);
 		
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
 		GameRegistry.registerBlock(blockSproutingCrystal, ItemBlockSproutingCrystal.class, Constants.ID_BLOCK_SPROUTING_CRYSTAL);

@@ -11,23 +11,32 @@ public class Constants {
 	public static final String ID_ITEM_CRYSTALGLASSES = "chaoscrystal.crystalglasses";
 	public static final String ID_ITEM_MANUAL = "chaoscrystal.manual";
 	public static final String ID_ITEM_LIFELESS_SHARD = "chaoscrystal.lifeless_shard";
-
+	public static final String ID_ITEM_SHARD = "chaoscrystal.shard";
+	public static final String ID_ITEM_SHARD_CRYSTALLINE_ENERGY = "chaoscrystal.shard.crystalline_energy";
+	public static final String ID_ITEM_SHARD_CRYSTALLINE_CHAOS = "chaoscrystal.shard.crystalline_chaos";
+	public static final String ID_ITEM_SHARD_CRYSTALLINE_LIGHT = "chaoscrystal.shard.crystalline_light";
+	public static final String ID_ITEM_SHARD_CRYSTAL_CLEAR = "chaoscrystal.shard.crystal_clear";
+	
 	public static final String ID_BLOCK_BASE = "chaoscrystal.base";
 	
 	public static final String ID_BLOCK_CRYSTALLINE_ENERGY = "chaoscrystal.base.crystalline";
-	public static final String ID_BLOCK_CRYSTAL = "chaoscrystal.base.crystal";
+	public static final String ID_BLOCK_CRYSTALLINE_CHAOS = "chaoscrystal.base.crystal";
 	public static final String ID_BLOCK_CRYSTALLINE_LIGHT = "chaoscrystal.base.crystalline_light";
+	public static final String ID_BLOCK_CRYSTAL_CLEAR = "chaoscrystal.base.crystal_clear";
 	
 	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_CRACKED = "chaoscrystal.base.crystalline_energy_cracked";
-	public static final String ID_BLOCK_CRYSTAL_CRACKED = "chaoscrystal.base.crystal_cracked";
+	public static final String ID_BLOCK_CRYSTALLINE_CHAOS_CRACKED = "chaoscrystal.base.crystalline_chaos_cracked";
 	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_CRACKED = "chaoscrystal.base.crystalline_light_cracked";
-	
-	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_SPROUT = "chaoscrystal.base.crystalline_energy_sprout";
-	public static final String ID_BLOCK_CRYSTAL_SPROUT = "chaoscrystal.base.crystal_sprout";
-	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT = "chaoscrystal.base.crystalline_light_sprout";
-	
-	
+	public static final String ID_BLOCK_CRYSTAL_CLEAR_CRACKED = "chaoscrystal.base.crystal_clear_cracked";
+
 	public static final String ID_BLOCK_SPROUTING_CRYSTAL = "chaoscrystal.sprouting_crystal";
+	
+	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_SPROUT = "chaoscrystal.sprout.crystalline_energy";
+	public static final String ID_BLOCK_CRYSTALLINE_CHAOS_SPROUT = "chaoscrystal.sprout.crystalline_chaos";
+	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT = "chaoscrystal.sprout.crystalline_light";
+	public static final String ID_BLOCK_CRYSTAL_CLEAR_SPROUT = "chaoscrystal.sprout.crystal_clear";
+	
+	
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
 	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
 	public static final String ID_BLOCK_APPARATUS_CREATOR = "chaoscrystal.apparatus.creator";
