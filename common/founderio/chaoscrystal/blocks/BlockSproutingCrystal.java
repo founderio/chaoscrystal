@@ -173,22 +173,22 @@ public class BlockSproutingCrystal extends Block {
 					// This decides how big the crystal will grow width-wise
 					currentGrowthHeight = dy;
 					// Repair all cracked pieces on the way
-					if(eatBlock(world, x, y + dy, z, meta)) {
+					if (eatBlock(world, x, y + dy, z, meta)) {
 						return;
 					}
-					if(eatBlock(world, x, y - dy, z, meta)) {
+					if (eatBlock(world, x, y - dy, z, meta)) {
 						return;
 					}
-					if(eatBlock(world, x, y, z + dy, meta)) {
-						return;                    
-					}                              
-					if(eatBlock(world, x, y, z - dy, meta)) {
+					if (eatBlock(world, x, y, z + dy, meta)) {
 						return;
 					}
-					if(eatBlock(world, x + dy, y, z, meta)) {
-						return;              
-					}                        
-					if(eatBlock(world, x - dy, y, z, meta)) {
+					if (eatBlock(world, x, y, z - dy, meta)) {
+						return;
+					}
+					if (eatBlock(world, x + dy, y, z, meta)) {
+						return;
+					}
+					if (eatBlock(world, x - dy, y, z, meta)) {
 						return;
 					}
 				} else {
