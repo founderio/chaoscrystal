@@ -135,14 +135,6 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		degradationStore.addNode(GLOWSTONE = new NodeDegradation(GLASS, ab.toAspectArray(), new ItemStack(Blocks.glowstone), false, false));
 		ab.clear();
 
-		ab.setAspect(Aspects.ASPECT_STRUCTURE, 5);
-		degradationStore.addNode(GRAVEL = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Blocks.gravel), false, false));
-		degradationStore.addNode(COBBLESTONE = new NodeDegradation(GRAVEL, ab.toAspectArray(), new ItemStack(Blocks.cobblestone), false, false));
-		degradationStore.addNode(STONE = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Blocks.stone), false, false));
-		//TODO: Crafting rec?
-		degradationStore.addNode(STONE_BRICK = degradationStore.autoRegisterDegradation(new ItemStack(Blocks.stonebrick)));
-		ab.clear();
-
 		ab.setAspect(Aspects.ASPECT_LIVING, 15);
 		degradationStore.addNode(COBBLESTONE_MOSSY = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Blocks.mossy_cobblestone), false, false));
 		degradationStore.addNode(SILVERFISH_STONE = new NodeDegradation(STONE, ab.toAspectArray(), new ItemStack(Blocks.monster_egg, 1, 0), false, false));

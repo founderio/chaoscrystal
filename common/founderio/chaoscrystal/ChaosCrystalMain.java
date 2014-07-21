@@ -67,6 +67,7 @@ public class ChaosCrystalMain {
 
 	@SidedProxy(clientSide = "founderio.chaoscrystal.ClientProxy", serverSide = "founderio.chaoscrystal.CommonProxy")
 	public static CommonProxy proxy;
+	//TODO: http://www.minecraftforge.net/forum/index.php/topic,20135.0.html
 	public static final CCPacketPipeline packetPipeline = new CCPacketPipeline();
 
 	public static ChaosRegistry chaosRegistry;
