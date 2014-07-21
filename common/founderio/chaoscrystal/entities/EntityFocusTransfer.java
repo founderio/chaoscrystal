@@ -10,7 +10,7 @@ import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.CommonProxy;
 import founderio.chaoscrystal.Config;
-import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.util.GeometryHelper;
 
@@ -102,7 +102,7 @@ public class EntityFocusTransfer extends EntityFocus {
 
 
 
-				for(String aspect : Aspects.ASPECTS) {
+				for(Aspect aspect : Aspect.values()) {
 					int aspects = crystal1.getAspect(aspect) + crystal2.getAspect(aspect);
 					int asp1 = aspects/2;
 					int asp2 = aspects - asp1;

@@ -11,6 +11,8 @@ public final class ItemUtil {
 	private ItemUtil() {
 		// Util Class
 	}
+	
+	public static final int WILDCARD_META = 32767;
 
 	public static boolean itemsMatch(ItemStack reference, ItemStack compare) {
 		if(reference == null) {
@@ -27,8 +29,12 @@ public final class ItemUtil {
 		if(a == null) {
 			return true;
 		}
-		return reference.getItemDamage() == 32767 || compare.getItemDamage() == 32767 ||
-				reference.getItemDamage() == compare.getItemDamage();
+		return metaMatch(reference.getItemDamage(), compare.getItemDamage());
+		
+	}
+	
+	public static boolean metaMatch(int reference, int compare) {
+		return reference == WILDCARD_META || compare == WILDCARD_META || reference == compare;
 	}
 
 	public static void spawnItemStack(ItemStack is, World world,

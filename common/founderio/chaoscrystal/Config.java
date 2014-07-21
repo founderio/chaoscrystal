@@ -10,7 +10,8 @@ public class Config {
 
 	public static Configuration config;
 
-	public static boolean cfgDebugOutput = false;
+	public static boolean showDebugOutput = false;
+	public static boolean showDebugUtil = false;
 	public static boolean cfgSneakToShowAspects = true;
 	public static boolean cfgDebugGlasses = false;
 
@@ -50,7 +51,8 @@ public class Config {
 		crackCrystalsLessLikelyWithSilkTouch = config.getBoolean("crack_crystals_less_likely_with_silk_touch", "physics", true, "Crack / Destroy surrounding crystals when mining is less likely when using silk touch.");
 		crackCrystalsLessLikelyWithFeatherFalling = config.getBoolean("crack_crystals_less_likely_with_feather_falling", "physics", true, "Crack / Destroy surrounding crystals when colliding with an entity is less likely when the boots have feather falling.");
 		
-		cfgDebugOutput = config.getBoolean("debug_output", Configuration.CATEGORY_GENERAL, false, "Enable aspect registration debug output.");
+		showDebugOutput = config.getBoolean("debug_output", Configuration.CATEGORY_GENERAL, false, "Enable aspect registration debug output.");
+		showDebugUtil = config.getBoolean("debug_util", Configuration.CATEGORY_GENERAL, true, "Enable the aspect registration debug util.");
 		cfgSneakToShowAspects = config.getBoolean("sneak_to_show_aspects", Configuration.CATEGORY_GENERAL, true, "Require sneaking to display aspects in the crystal glasses.");
 		cfgDebugGlasses = config.getBoolean("debug_glasses", Configuration.CATEGORY_GENERAL, false, "Enable the debug mode on crystal glasses. (Displays additional info, mostly useless for regular gameplay)");
 				

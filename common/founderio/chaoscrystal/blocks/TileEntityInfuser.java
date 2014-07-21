@@ -31,7 +31,7 @@ public class TileEntityInfuser extends TileEntityApparatus {
 
 		if (is != null) {
 			
-			List<Node> degs = ChaosCrystalMain.degradationStore.getInfusionsFrom(is);
+			List<Node> degs = ChaosCrystalMain.chaosRegistry.getInfusionsFrom(is);
 
 			for (int i = degs.size() - 1; i >= 0; i--) {
 				Node creation = degs.get(i);
@@ -75,7 +75,7 @@ public class TileEntityInfuser extends TileEntityApparatus {
 		if (itemstack == null) {
 			return false;
 		}
-		if(!ChaosCrystalMain.degradationStore.getInfusionsFrom(itemstack).isEmpty()) {
+		if(!ChaosCrystalMain.chaosRegistry.getInfusionsFrom(itemstack).isEmpty()) {
 			return true;
 		}
 		return false;

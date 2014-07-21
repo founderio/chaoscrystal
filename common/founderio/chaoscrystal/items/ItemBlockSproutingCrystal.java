@@ -7,7 +7,7 @@ import net.minecraft.util.MathHelper;
 import founderio.chaoscrystal.blocks.BlockSproutingCrystal;
 
 public class ItemBlockSproutingCrystal extends ItemBlockWithMetadata {
-
+	//TODO: Migrate to ItemMultiTexture
 	public ItemBlockSproutingCrystal(Block theBlock) {
 		super(theBlock, theBlock);
 	}

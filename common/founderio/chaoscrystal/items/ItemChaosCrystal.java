@@ -14,7 +14,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Constants;
-import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class ItemChaosCrystal extends Item {
@@ -57,8 +57,8 @@ public class ItemChaosCrystal extends Item {
 			NBTTagCompound aspectStore = par1ItemStack.getTagCompound()
 					.getCompoundTag("aspectStore");
 			if (aspectStore != null) {
-				for (String aspect : Aspects.ASPECTS) {
-					entity.setAspect(aspect, aspectStore.getInteger(aspect));
+				for (Aspect aspect : Aspect.values()) {
+					entity.setAspect(aspect, aspectStore.getInteger(aspect.stringRep));
 				}
 			}
 		}
@@ -86,8 +86,8 @@ public class ItemChaosCrystal extends Item {
 			return;
 		}
 		boolean hasAspects = false;
-		for (String aspect : Aspects.ASPECTS) {
-			int asp = aspectStore.getInteger(aspect);
+		for (Aspect aspect : Aspect.values()) {
+			int asp = aspectStore.getInteger(aspect.stringRep);
 			if (asp > 0) {
 				hasAspects = true;
 

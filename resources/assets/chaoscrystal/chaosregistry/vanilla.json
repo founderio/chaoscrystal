@@ -1,0 +1,33 @@
+{
+  "name": "founderio.chaoscrystal.aspects.AspectModule@3e52f8c1",
+  "nodes": [
+    {
+      "lesser": {
+        "uniqueName": "minecraft:cobblestone",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:stone",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    }
+  ]
+}

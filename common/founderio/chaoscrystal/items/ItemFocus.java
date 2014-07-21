@@ -17,7 +17,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
-import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.aspects.Targets;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
@@ -48,7 +48,7 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 		switch(is.getItemDamage()) {
 		case 2:
 			String selectedAspect = tags.getString("aspect");
-			mode = Aspects.getAspectIndex(selectedAspect);
+			mode = Aspect.findByStringRep(selectedAspect).ordinal();
 			if(mode == -1) {
 				mode = 0;
 			}
@@ -73,7 +73,7 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 		}
 		switch (is.getItemDamage()) {
 		case 2:
-			tags.setString("aspect", Aspects.ASPECTS[mode]);
+			tags.setString("aspect", Aspect.values()[mode].stringRep);
 			is.setTagCompound(tags);
 			break;
 		case 3:
@@ -89,7 +89,7 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 	public int getModeCount(ItemStack is) {
 		switch (is.getItemDamage()) {
 		case 2:
-			return Aspects.ASPECTS.length;
+			return Aspect.values().length;
 		case 3:
 			return Targets.TARGETS.length;
 		default:
@@ -101,7 +101,7 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 	public ResourceLocation getIconForMode(ItemStack is, int mode) {
 		switch (is.getItemDamage()) {
 		case 2:
-			return Aspects.RESOURCE_LOCATIONS[mode];
+			return Aspect.RESOURCE_LOCATIONS[mode];
 		case 3:
 			return Targets.RESOURCE_LOCATIONS[mode];
 		default:
@@ -152,12 +152,13 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 				NBTTagCompound tags = itemStack.getTagCompound();
 				if (tags != null) {
 					String aspect = tags.getString("aspect");
-					if (!Aspects.isAspect(aspect)) {
-						aspect = Aspects.ASPECTS[0];
+					Aspect a = Aspect.findByStringRep(aspect);
+					if (a == null) {
+						a = Aspect.values()[0];
 					}
-					entity.setAspect(aspect);
+					entity.setAspect(a);
 				} else {
-					entity.setAspect(Aspects.ASPECTS[0]);
+					entity.setAspect(Aspect.values()[0]);
 				}
 				// System.out.println("Spawning Entity with aspect: " +
 				// entity.aspect);
@@ -215,14 +216,13 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 		case 2:
 			par3List.add("Aspect Filter");
 			String selectedAspect;
-			
 			if (tags != null) {
 				selectedAspect = tags.getString("aspect");
-				if (!Aspects.isAspect(selectedAspect)) {
-					selectedAspect = Aspects.ASPECTS[0];
+				if (!Aspect.isAspect(selectedAspect)) {
+					selectedAspect = Aspect.values()[0].stringRep;
 				}
 			} else {
-				selectedAspect = Aspects.ASPECTS[0];
+				selectedAspect = Aspect.values()[0].stringRep;
 			}
 			par3List.add("Aspect: "
 					+ StatCollector.translateToLocal(Constants.MOD_ID
@@ -277,7 +277,5 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 			return null;
 		}
 	}
-
-	
 
 }

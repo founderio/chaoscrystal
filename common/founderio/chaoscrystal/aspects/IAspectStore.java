@@ -1,9 +1,9 @@
 package founderio.chaoscrystal.aspects;
 
 public interface IAspectStore {
-	int getAspect(String aspect);
+	int getAspect(Aspect aspect);
 
-	void setAspect(String aspect, int value);
+	void setAspect(Aspect aspect, int value);
 
 	int getSingleAspectCapacity();
 

@@ -9,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Config;
-import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.aspects.DegradationHelper;
 import founderio.chaoscrystal.aspects.IAspectStore;
 import founderio.util.GeometryHelper;
@@ -30,7 +30,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	@Override
 	protected void entityInit() {
 		this.dataWatcher.addObject(9, Byte.valueOf((byte) 0));
-		for (int i = 0; i < Aspects.ASPECTS.length; i++) {
+		for (int i = 0; i < Aspect.values().length; i++) {
 			this.dataWatcher.addObject(10 + i, Integer.valueOf(0));
 		}
 	}
@@ -44,15 +44,13 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	}
 
 	@Override
-	public int getAspect(String aspect) {
-		return this.dataWatcher.getWatchableObjectInt(10 + Aspects
-				.getAspectIndex(aspect));
+	public int getAspect(Aspect aspect) {
+		return this.dataWatcher.getWatchableObjectInt(10 + aspect.ordinal());
 	}
 
 	@Override
-	public void setAspect(String aspect, int value) {
-		this.dataWatcher.updateObject(10 + Aspects.getAspectIndex(aspect),
-				Integer.valueOf(value));
+	public void setAspect(Aspect aspect, int value) {
+		this.dataWatcher.updateObject(10 + aspect.ordinal(), Integer.valueOf(value));
 	}
 
 	@Override
@@ -62,7 +60,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public void addAspects(int[] aspectArray) {
-		for (int i = 0; i < Aspects.ASPECTS.length; i++) {
+		for (int i = 0; i < Aspect.values().length; i++) {
 			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i)
 					+ aspectArray[i];
 			this.dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
@@ -71,7 +69,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public void subtractAspects(int[] aspectArray) {
-		for (int i = 0; i < Aspects.ASPECTS.length; i++) {
+		for (int i = 0; i < Aspect.values().length; i++) {
 			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i)
 					- aspectArray[i];
 			this.dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
@@ -80,7 +78,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public boolean canProvideAspects(int[] aspectArray) {
-		for (int i = 0; i < Aspects.ASPECTS.length; i++) {
+		for (int i = 0; i < Aspect.values().length; i++) {
 			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i);
 			if (aspectCount - aspectArray[i] < 0) {
 				return false;
@@ -91,7 +89,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public boolean canAcceptAspects(int[] aspectArray) {
-		for (int i = 0; i < Aspects.ASPECTS.length; i++) {
+		for (int i = 0; i < Aspect.values().length; i++) {
 			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i);
 			if (aspectCount + aspectArray[i] > getSingleAspectCapacity()) {
 				return false;
@@ -102,7 +100,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	protected void logicUpdate() {
-		List<String> filterAspects = new ArrayList<String>();
+		List<Aspect> filterAspects = new ArrayList<Aspect>();
 		List<String> filterTargets = new ArrayList<String>();
 		double range = Config.cfgCrystalRange;
 
@@ -111,7 +109,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
 				if (tmp_dist < Config.cfgFocusRange) {
-					String asp = ((EntityFocusFilter) obj).getAspect();
+					Aspect asp = ((EntityFocusFilter) obj).getAspect();
 					if (!filterAspects.contains(asp)) {
 						filterAspects.add(asp);
 					}
@@ -152,8 +150,8 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	private NBTTagCompound getAspectStore() {
 		NBTTagCompound comp = new NBTTagCompound();
-		for (String aspect : Aspects.ASPECTS) {
-			comp.setInteger(aspect, getAspect(aspect));
+		for (Aspect aspect : Aspect.values()) {
+			comp.setInteger(aspect.stringRep, getAspect(aspect));
 		}
 		return comp;
 	}
@@ -174,8 +172,8 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 		NBTTagCompound aspectStore = nbttagcompound
 				.getCompoundTag("aspectStore");
 		if (aspectStore != null) {
-			for (String aspect : Aspects.ASPECTS) {
-				setAspect(aspect, aspectStore.getInteger(aspect));
+			for (Aspect aspect : Aspect.values()) {
+				setAspect(aspect, aspectStore.getInteger(aspect.stringRep));
 			}
 		}
 		setSuckMode(nbttagcompound.getBoolean("suckMode"));

@@ -5,13 +5,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.aspects.AspectBuilder;
 import founderio.chaoscrystal.aspects.AspectModule;
-import founderio.chaoscrystal.aspects.Aspects;
 import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.aspects.Node;
-import founderio.chaoscrystal.aspects.NodeLifelessBlock;
-import founderio.chaoscrystal.aspects.NodeDegradation;
-import founderio.chaoscrystal.aspects.NodeLifelessShard;
-import founderio.chaoscrystal.aspects.NodeSimpleOre;
 
 public class ModuleVanillaWorldgen extends AspectModule {
 

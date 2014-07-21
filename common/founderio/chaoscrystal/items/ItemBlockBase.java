@@ -7,7 +7,7 @@ import net.minecraft.util.MathHelper;
 import founderio.chaoscrystal.blocks.BlockBase;
 
 public class ItemBlockBase extends ItemBlockWithMetadata {
-
+	//TODO: Migrate to ItemMultiTexture
 	public ItemBlockBase(Block theBlock) {
 		super(theBlock, theBlock);
 	}

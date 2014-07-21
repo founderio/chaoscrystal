@@ -2,6 +2,7 @@ package founderio.chaoscrystal.blocks;
 
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.aspects.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
@@ -24,7 +25,7 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 				return false;
 			}
 
-			Repair rep = ChaosCrystalMain.degradationStore.getRepair(is.getItem());
+			Repair rep = ChaosCrystalMain.chaosRegistry.getRepair(is.getItem());
 
 			if (rep == null) {
 				return false;
@@ -32,21 +33,12 @@ public class TileEntityReconstructor extends TileEntityApparatus {
 			boolean didRepair = false;
 
 			for (int step = 0; step < stepsPerTick && curDmg > 0; step++) {
-				boolean capable = true;
-				for (int a = 0; a < rep.aspects.length; a++) {
-					if (crystal.getAspect(rep.aspects[a]) < rep.amounts[a]) {
-						capable = false;
-					}
-				}
+				boolean capable = crystal.canProvideAspects(rep.aspects);;
 				if (!capable) {
 					break;
 				}
 				didRepair = true;
-
-				for (int a = 0; a < rep.aspects.length; a++) {
-					crystal.setAspect(rep.aspects[a],
-							crystal.getAspect(rep.aspects[a]) - rep.amounts[a]);
-				}
+				crystal.subtractAspects(rep.aspects);
 
 				curDmg--;
 				is.setItemDamage(curDmg);

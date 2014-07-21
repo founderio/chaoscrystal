@@ -6,20 +6,17 @@ import net.minecraft.item.Item;
 
 public class Repair {
 	public final Item item;
-	public final String[] aspects;
-	public final int[] amounts;
+	public final int[] aspects;
 
-	public Repair(Item item, String[] aspects, int[] amounts) {
+	public Repair(Item item, int[] aspects) {
 		this.item = item;
 		this.aspects = aspects;
-		this.amounts = amounts;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + Arrays.hashCode(amounts);
 		result = prime * result + Arrays.hashCode(aspects);
 		result = prime * result + item.hashCode();
 		return result;
@@ -34,8 +31,6 @@ public class Repair {
 		if (getClass() != obj.getClass())
 			return false;
 		Repair other = (Repair) obj;
-		if (!Arrays.equals(amounts, other.amounts))
-			return false;
 		if (!Arrays.equals(aspects, other.aspects))
 			return false;
 		if (item != other.item)
@@ -45,9 +40,8 @@ public class Repair {
 
 	@Override
 	public String toString() {
-		return "Repair [item=" + item + ", aspects="
-				+ Arrays.toString(aspects) + ", amounts="
-				+ Arrays.toString(amounts) + "]";
+		return "Repair [item=" + item + ", aspects=" + Arrays.toString(aspects)
+				+ "]";
 	}
 
 }

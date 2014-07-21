@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Config;
-import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.util.GeometryHelper;
 
 public class EntityFocusFilter extends EntityFocus {
@@ -25,15 +25,15 @@ public class EntityFocusFilter extends EntityFocus {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(30, Aspects.ASPECTS[0]);
+		setAspect(Aspect.values()[0]);
 	}
 
-	public String getAspect() {
-		return this.dataWatcher.getWatchableObjectString(30);
+	public Aspect getAspect() {
+		return Aspect.findByStringRep(this.dataWatcher.getWatchableObjectString(30));
 	}
 
-	public void setAspect(String aspect) {
-		this.dataWatcher.updateObject(30, aspect);
+	public void setAspect(Aspect aspect) {
+		this.dataWatcher.updateObject(30, aspect.stringRep);
 	}
 
 	@Override
@@ -78,16 +78,17 @@ public class EntityFocusFilter extends EntityFocus {
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
 		String aspect = nbttagcompound.getString("aspect");
-		if (!Aspects.isAspect(aspect)) {
-			aspect = Aspects.ASPECTS[0];
+		Aspect a = Aspect.findByStringRep(aspect);
+		if(a == null) {
+			a = Aspect.values()[0];
 		}
-		setAspect(aspect);
+		setAspect(a);
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
-		nbttagcompound.setString("aspect", getAspect());
+		nbttagcompound.setString("aspect", getAspect().stringRep);
 	}
 
 }

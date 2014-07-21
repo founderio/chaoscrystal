@@ -23,8 +23,8 @@ public class DegradationHelper {
 			return true;
 		}
 		boolean hasAspects = false;
-		for (String aspect : Aspects.ASPECTS) {
-			int asp = aspectStore.getInteger(aspect);
+		for (Aspect aspect : Aspect.values()) {
+			int asp = aspectStore.getInteger(aspect.stringRep);
 			if (asp > 0) {
 				hasAspects = true;
 				break;
@@ -88,7 +88,7 @@ public class DegradationHelper {
 	}
 
 	public static void crystalTick(EntityChaosCrystal entity, World world,
-			double posX, double posY, double posZ, List<String> filterAspects, List<String> filterTargets, double range,
+			double posX, double posY, double posZ, List<Aspect> filterAspects, List<String> filterTargets, double range,
 			boolean extract) {
 
 		boolean allowBlocks = filterTargets.isEmpty() || filterTargets.contains(Targets.TARGET_ALL) || filterTargets.contains(Targets.TARGET_BLOCKS);
@@ -115,20 +115,20 @@ public class DegradationHelper {
 					Block id = world.getBlock(absX, absY, absZ);
 
 					if (!id.isAir(world, absX, absY, absZ)
-							&& !ChaosCrystalMain.degradationStore.isIgnoreBlock(id, extract)) {// We can't extract air...
+							&& !ChaosCrystalMain.chaosRegistry.isIgnoreBlock(id, extract)) {// We can't extract air...
 						
 						int meta = world.getBlockMetadata(absX, absY, absZ);
 						ItemStack is = new ItemStack(id, 1, meta);
 						
 						Node degradation = getDegradation(is, extract);
-						ItemStack[] results = getDegradationResults(degradation, is, extract);
+						ItemStack results = getDegradationResult(degradation, extract);
 						
-						if (results == null || results.length == 0) {
+						if (results == null) {
 							continue;
 						}
-						int[] aspects = degradation.getAspectDifference();
+						int[] aspects = degradation.getAspects();
 
-						if (!Aspects.isFilterMatched(filterAspects, aspects)) {
+						if (!Aspect.isFilterMatched(filterAspects, aspects)) {
 							continue;
 						}
 
@@ -138,7 +138,7 @@ public class DegradationHelper {
 
 								entity.addAspects(aspects);
 								processReplacement(world, absX, absY, absZ,
-										results);
+										new ItemStack[] {results});
 
 								CommonProxy.spawnParticleEffects(
 										world.provider.dimensionId, 0,
@@ -153,7 +153,7 @@ public class DegradationHelper {
 
 								entity.subtractAspects(aspects);
 								processReplacement(world, absX, absY, absZ,
-										results);
+										new ItemStack[] {results});
 
 								CommonProxy.spawnParticleEffects(
 										world.provider.dimensionId, 0,
@@ -179,14 +179,14 @@ public class DegradationHelper {
 					ItemStack is = it.getEntityItem();
 					
 					Node degradation = getDegradation(is, extract);
-					ItemStack[] results = getDegradationResults(degradation, is, extract);
+					ItemStack result = getDegradationResult(degradation, extract);
 
-					if (results == null || results.length == 0) {
+					if (result == null) {
 						// continue;
 					} else {
-						int[] aspects = degradation.getAspectDifference();
+						int[] aspects = degradation.getAspects();
 	
-						if (Aspects.isFilterMatched(filterAspects, aspects)) {
+						if (Aspect.isFilterMatched(filterAspects, aspects)) {
 							int count = 0;
 							// Limit max amount of processed items by max hits and stack size
 							int size = Config.cfgHitsPerTick - hit;
@@ -224,7 +224,8 @@ public class DegradationHelper {
 								if (count > 0) {
 									is.stackSize -= count;
 									
-									spawnMultiplesOfStacks(results, count, world, it);
+									//TODO: non-erray variant of spawnMultiplesOfStacks
+									spawnMultiplesOfStacks(new ItemStack[] {result}, count, world, it);
 		
 									if (is.stackSize == 0) {
 										it.setDead();
@@ -254,40 +255,33 @@ public class DegradationHelper {
 		if(is == null) {
 			return null;
 		}
-		if(ChaosCrystalMain.degradationStore.isIgnoreItem(is.getItem(), extract)) {
+		if(ChaosCrystalMain.chaosRegistry.isIgnoreItem(is.getItem(), extract)) {
 			return null;
 		}
 		List<Node> nodes;
 		if (extract) {
-			nodes = ChaosCrystalMain.degradationStore
-					.getExtractionsFrom(is);
+			nodes = ChaosCrystalMain.chaosRegistry.getExtractionsFrom(is);
 		} else {
-			nodes = ChaosCrystalMain.degradationStore
-					.getInfusionsFrom(is);
+			nodes = ChaosCrystalMain.chaosRegistry.getInfusionsFrom(is);
 		}
 		return ListUtil.getRandomFromList(nodes,
 				ChaosCrystalMain.rand);
 	}
 	
-	public static ItemStack[] getDegradationResults(Node node, ItemStack is, boolean extract) {
-
+	public static ItemStack getDegradationResult(Node node, boolean extract) {
 		if (node == null) {
-			if (Config.cfgDebugOutput) {
-				System.out.println(is.getDisplayName() + " - "
-						+ is.getItem() + "/" + is.getItemDamage());
-			}
 			return null;
 		}
-		ItemStack[] results;
+		ItemStack result;
 		if (extract) {
-			results = node.getDegradedFrom(new ItemStack(is.getItem(), 1, is.getItemDamage()));
+			result = node.getLesser().createItemStack();
 		} else {
-			results = new ItemStack[] { node.getDispayItemStack() };
+			result = node.getGreater().createItemStack();
 		}
-		return results;
+		return result;
 	}
 
-	public static boolean canAcceptAspects(String[] aspects, int[] amounts,
+	public static boolean canAcceptAspects(Aspect[] aspects, int[] amounts,
 			IAspectStore aspectStore) {
 		for (int a = 0; a < aspects.length; a++) {
 			if (aspectStore.getAspect(aspects[a]) + amounts[a] > Config.cfgCrystalAspectStorage) {
@@ -297,7 +291,7 @@ public class DegradationHelper {
 		return true;
 	}
 
-	public static boolean canProvideAspects(String[] aspects, int[] amounts,
+	public static boolean canProvideAspects(Aspect[] aspects, int[] amounts,
 			IAspectStore aspectStore) {
 		for (int a = 0; a < aspects.length; a++) {
 			if (aspectStore.getAspect(aspects[a]) < amounts[a]) {

@@ -36,9 +36,10 @@ import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Config;
 import founderio.chaoscrystal.Constants;
 import founderio.chaoscrystal.IModeChangingItem;
-import founderio.chaoscrystal.aspects.Aspects;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.aspects.IAspectStore;
 import founderio.chaoscrystal.aspects.Node;
+import founderio.chaoscrystal.aspects.NodePoint;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.entities.EntityFocusBorder;
@@ -222,11 +223,11 @@ public class OverlayAspectSelector extends Gui {
 		int colOffset = 0;
 		final int colWidth = 64;
 
-		for(String aspect : Aspects.ASPECTS) {
+		for(int i = 0; i < Aspect.values().length; i++) {
+			Aspect aspect = Aspect.values()[i];
 			int asp = store.getAspect(aspect);
 
-			Minecraft.getMinecraft().renderEngine.bindTexture(
-					new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+			Minecraft.getMinecraft().renderEngine.bindTexture(Aspect.RESOURCE_LOCATIONS[aspect.ordinal()]);
 			this.drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5, 0, 0, 10, 10, 256, 256);
 
 			Minecraft.getMinecraft().fontRenderer.drawString(
@@ -251,11 +252,11 @@ public class OverlayAspectSelector extends Gui {
 
 
 		for(int i = 0; i < aspectArray.length; i++) {
-			String aspect = Aspects.ASPECTS[i];
+			Aspect aspect = Aspect.values()[i];
 			int asp = aspectArray[i];
 
 			if(asp > 0) {
-				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+				Minecraft.getMinecraft().renderEngine.bindTexture(Aspect.RESOURCE_LOCATIONS[aspect.ordinal()]);
 				this.drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5,
 						0, 0,
 						10, 10,
@@ -337,10 +338,9 @@ public class OverlayAspectSelector extends Gui {
 						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
-						String aspect = ((EntityFocusFilter)lookingAt).getAspect();
+						Aspect aspect = ((EntityFocusFilter)lookingAt).getAspect();
 
-						Minecraft.getMinecraft().renderEngine.bindTexture(
-								new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + aspect + ".png"));
+						Minecraft.getMinecraft().renderEngine.bindTexture(Aspect.RESOURCE_LOCATIONS[aspect.ordinal()]);
 						this.drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
@@ -380,21 +380,31 @@ public class OverlayAspectSelector extends Gui {
 						EntityItem ei = ((EntityItem)lookingAt);
 						ItemStack is = ei.getEntityItem();
 
-						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(is);
+						List<Node> degradations = ChaosCrystalMain.chaosRegistry.getExtractionsFrom(is);
 						if(degradations.size() == 0) {
 							//TODO: Render Questionmark
-						} else if(!ChaosCrystalMain.degradationStore.isIgnoreItem(is.getItem(), true)) {
+						} else if(!ChaosCrystalMain.chaosRegistry.isIgnoreItem(is.getItem(), true)) {
 							Node node = degradations.get(0);
-
+							
+							//TODO: get full aspect list
 							renderAspectList(centerW, centerH, node.getAspects());
 
-							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
-
-							for(int s = 0; s < parents.length; s++) {
-								if(parents[s].getItem() != null) {
-									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
-								}
+							NodePoint np = node.getLesser();
+							
+							ItemStack display = np.createItemStack();
+							
+							if(display != null) {
+								renderItem(display, centerW + 5, centerH - 16 - 5);
 							}
+							//TODO: render block somehow if item is null
+							
+//							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
+//
+//							for(int s = 0; s < parents.length; s++) {
+//								if(parents[s].getItem() != null) {
+//									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
+//								}
+//							}
 
 						}
 
@@ -437,21 +447,31 @@ public class OverlayAspectSelector extends Gui {
 								mop.blockY,
 								mop.blockZ);
 
-						List<Node> degradations = ChaosCrystalMain.degradationStore.getExtractionsFrom(new ItemStack(block, 1, meta));
+						List<Node> degradations = ChaosCrystalMain.chaosRegistry.getExtractionsFrom(new ItemStack(block, 1, meta));
 						if(degradations.size() == 0) {
 							//TODO: Render Questionmark
-						} else if(!ChaosCrystalMain.degradationStore.isIgnoreBlock(block, true)) {
+						} else if(!ChaosCrystalMain.chaosRegistry.isIgnoreBlock(block, true)) {
 							Node node = degradations.get(0);
 
+							//TODO: get full aspect list
 							renderAspectList(centerW, centerH, node.getAspects());
 
-							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
-
-							for(int s = 0; s < parents.length; s++) {
-								if(parents[s].getItem() != null) {
-									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
-								}
+							NodePoint np = node.getLesser();
+							
+							ItemStack display = np.createItemStack();
+							
+							if(display != null) {
+								renderItem(display, centerW + 5, centerH - 16 - 5);
 							}
+							//TODO: render block somehow if item is null
+							
+//							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
+//
+//							for(int s = 0; s < parents.length; s++) {
+//								if(parents[s].getItem() != null) {
+//									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
+//								}
+//							}
 
 						}
 
