@@ -230,110 +230,13 @@ public class ChaosCrystalMain {
 			AspectModule vanilla = gson.fromJson(new InputStreamReader(vanillaIS, Charsets.UTF_8), AspectModule.class);
 			chaosRegistry.registerAspectModule(vanilla);
 		}
-		//TODO: register these again.
-
-		//		chaosRegistry.registerRepair(Items.diamond_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.iron_pickaxe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		//		chaosRegistry.registerRepair(Items.golden_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.stone_pickaxe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		//		chaosRegistry.registerRepair(Items.wooden_pickaxe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-		//
-		//		chaosRegistry.registerRepair(Items.diamond_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.iron_axe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		//		chaosRegistry.registerRepair(Items.golden_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.stone_axe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		//		chaosRegistry.registerRepair(Items.wooden_axe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-		//
-		//		chaosRegistry.registerRepair(Items.diamond_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.iron_shovel, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		//		chaosRegistry.registerRepair(Items.golden_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.stone_shovel, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		//		chaosRegistry.registerRepair(Items.wooden_shovel, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-		//
-		//		chaosRegistry.registerRepair(Items.diamond_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.iron_hoe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		//		chaosRegistry.registerRepair(Items.golden_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.stone_hoe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		//		chaosRegistry.registerRepair(Items.wooden_hoe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-		//
-		//		chaosRegistry.registerRepair(Items.diamond_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.iron_sword, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		//		chaosRegistry.registerRepair(Items.golden_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-		//		chaosRegistry.registerRepair(Items.stone_sword, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-		//		chaosRegistry.registerRepair(Items.wooden_sword, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-		//
-		//		chaosRegistry.registerRepair(Items.shears, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-		//
-		//		chaosRegistry.registerRepair(itemCrystalGlasses, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
-		//		chaosRegistry.registerRepair(Items.bow, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
-
-
-		/*
-		 * Grass, Dirt
-		 */
-
-		//		degradationStore.registerDegradation(
-		//				new ItemStack(Block.tilledField, 0, 0),
-		//				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_GROWTH},
-		//				new int[]{2, 1},
-		//				new ItemStack(Block.dirt, 0, 0));
-		//		degradationStore.registerDegradation(
-		//				new ItemStack(Block.tilledField, 0, 1),
-		//				new String[]{Aspects.ASPECT_WATER},
-		//				new int[]{1},
-		//				new ItemStack(Block.tilledField, 0, 0));
-
-
-		/*
-		 * Wood, Leaves
-		 */
-		//		for(int meta = 0; meta < 16; meta++) {//meh, just catch them all.
-		//			degradationStore.registerDegradation(
-		//					new ItemStack(Block.planks, 0, meta),
-		//					new String[]{Aspects.ASPECT_WOOD},
-		//					new int[]{1},
-		//					new ItemStack(Block.leaves, 0, meta&3));// cap, only need 0,1,2,3
-		//			degradationStore.registerDegradation(
-		//					new ItemStack(Block.leaves, 0, meta),
-		//					new String[]{Aspects.ASPECT_LIVING},
-		//					new int[]{5},
-		//					nullStack);
-		//		}
-
-		//
-		//
-		//		degradationStore.registerDegradation(
-		//				new ItemStack(Item.arrow),
-		//				new String[]{Aspects.ASPECT_STRUCTURE, Aspects.ASPECT_WOOD, Aspects.ASPECT_LIVING},
-		//				new int[]{2, 2, 2},
-		//				new ItemStack(0, 0, 0));
-
-
+		
 
 	}
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 2));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.dispenser, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.music, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.rail, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railDetector, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railPowered, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railActivator, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonBase, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonStickyBase, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.furnaceIdle, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneButton, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.woodenButton, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.ladder, 1, 32767));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
-		//		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
-		//degradationStore.autoRegisterDegradation(new ItemStack(Item.arrow));
+
 
 		if(Config.showDebugOutput) {
 			chaosRegistry.debugOutput();

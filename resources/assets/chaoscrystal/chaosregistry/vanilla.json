@@ -1596,6 +1596,370 @@
       ],
       "infusionSunlightRequired": false,
       "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 6
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 7
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 5
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 6
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 4
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 5
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 3
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 4
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 2
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 3
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 2
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:farmland",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": true
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:arrow",
+        "type": "ITEM",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        2,
+        0,
+        0,
+        2
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:leaves",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        1,
+        5,
+        0,
+        3,
+        0,
+        0,
+        1
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:leaves2",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        1,
+        5,
+        0,
+        3,
+        0,
+        0,
+        1
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:log",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        5,
+        0,
+        0,
+        5
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:log2",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        5,
+        0,
+        0,
+        5
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
     }
   ]
 }
