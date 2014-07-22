@@ -151,10 +151,12 @@ public class ChaosCrystalAspectUtil {
 			textField_L.setText(node.getLesser().getUniqueName());
 			spinner_L.setValue(node.getLesser().getMeta());
 			rdbtnBlock_L.setSelected(node.getLesser().getType() == NodePointType.BLOCK);
+			rdbtnItem_L.setSelected(node.getLesser().getType() == NodePointType.ITEM);
 			
 			textField_G.setText(node.getGreater().getUniqueName());
 			spinner_G.setValue(node.getGreater().getMeta());
 			rdbtnBlock_G.setSelected(node.getGreater().getType() == NodePointType.BLOCK);
+			rdbtnItem_G.setSelected(node.getGreater().getType() == NodePointType.ITEM);
 			
 			int[] aspects = selectedNode.getAspects();
 			
@@ -175,15 +177,6 @@ public class ChaosCrystalAspectUtil {
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setDividerSize(5);
 		frame.getContentPane().add(splitPane, BorderLayout.CENTER);
-
-		list = new JList();
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent arg0) {
-				setSelectedNode(module.getNodes().get(list.getSelectedIndex()));
-			}
-		});
-		splitPane.setLeftComponent(list);
-		list.setPreferredSize(new Dimension(10, 0));
 
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
@@ -480,6 +473,65 @@ public class ChaosCrystalAspectUtil {
 		gbl_panel_3.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		panel_3.setLayout(gbl_panel_3);
 		
+		JPanel panel_4 = new JPanel();
+		splitPane.setLeftComponent(panel_4);
+		panel_4.setLayout(new BorderLayout(0, 0));
+		
+		JScrollPane scrollPane = new JScrollPane();
+		panel_4.add(scrollPane, BorderLayout.CENTER);
+		
+		list = new JList();
+		scrollPane.setViewportView(list);
+		
+		JPanel panel_5 = new JPanel();
+		panel_4.add(panel_5, BorderLayout.SOUTH);
+		
+		JButton button = new JButton("+");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Node node = new Node();
+				module.getNodes().add(node);
+				loadDefs();
+				list.setSelectedIndex(module.getNodes().indexOf(node));
+			}
+		});
+		button.setPreferredSize(new Dimension(29, 29));
+		panel_5.add(button);
+		
+		JButton button_1 = new JButton("-");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(selectedNode == null) {
+					return;
+				}
+				Node node = selectedNode;
+				setSelectedNode(null);
+				module.getNodes().remove(node);
+				loadDefs();
+			}
+		});
+		button_1.setPreferredSize(new Dimension(29, 29));
+		panel_5.add(button_1);
+		
+		JButton btnSortList = new JButton("S");
+		btnSortList.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//TODO: Sort nodes
+			}
+		});
+		btnSortList.setPreferredSize(new Dimension(29, 29));
+		panel_5.add(btnSortList);
+		list.addListSelectionListener(new ListSelectionListener() {
+			public void valueChanged(ListSelectionEvent arg0) {
+				int idx = list.getSelectedIndex();
+				if(idx == -1) {
+					setSelectedNode(null);
+				} else {
+					setSelectedNode(module.getNodes().get(idx));
+				}
+			}
+		});
+		
 		for(int a = 0; a < Aspect.values().length; a++) {
 			JLabel label = new JLabel("");
 			label.setPreferredSize(new Dimension(16, 16));
@@ -638,6 +690,7 @@ public class ChaosCrystalAspectUtil {
 				return module.getNodes().get(index);
 			}
 		});
+		list.setSelectedIndex(0);
 	}
 	
 	private String findBlockOrItemName(NodePointType type) {
