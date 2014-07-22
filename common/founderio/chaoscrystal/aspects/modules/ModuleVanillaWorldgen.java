@@ -98,23 +98,6 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		 */
 
 
-
-		ab.setAspect(Aspects.ASPECT_WATER, 5).setAspect(Aspects.ASPECT_STRUCTURE, 2);
-		degradationStore.addNode(CLAY = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Blocks.clay), false, false));
-		ab.clear();
-
-		//TODO: Smelting Recipe
-		ab.setAspect(Aspects.ASPECT_HEAT, 5);
-		degradationStore.addNode(GLASS = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Blocks.glass), false, false));
-		ab.clear();
-
-		ab.setAspect(Aspects.ASPECT_CRYSTAL, 15)
-		.setAspect(Aspects.ASPECT_VALUE, 5)
-		.setAspect(Aspects.ASPECT_STRUCTURE, 5)
-		.setAspect(Aspects.ASPECT_LIGHT, 20);
-		degradationStore.addNode(GLOWSTONE = new NodeDegradation(GLASS, ab.toAspectArray(), new ItemStack(Blocks.glowstone), false, false));
-		ab.clear();
-
 		ab.setAspect(Aspects.ASPECT_LIVING, 15);
 		degradationStore.addNode(COBBLESTONE_MOSSY = new NodeDegradation(COBBLESTONE, ab.toAspectArray(), new ItemStack(Blocks.mossy_cobblestone), false, false));
 		degradationStore.addNode(SILVERFISH_STONE = new NodeDegradation(STONE, ab.toAspectArray(), new ItemStack(Blocks.monster_egg, 1, 0), false, false));
