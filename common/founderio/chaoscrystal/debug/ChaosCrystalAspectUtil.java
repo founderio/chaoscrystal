@@ -546,6 +546,8 @@ public class ChaosCrystalAspectUtil {
 			aspectLabels[a] = label;
 			
 			JSpinner spinner = new JSpinner();
+			Dimension dim = new Dimension(60, spinner.getPreferredSize().height);
+			spinner.setPreferredSize(dim);
 			GridBagConstraints gbc_spinner = new GridBagConstraints();
 			gbc_spinner.insets = new Insets(0, 0, 5, 5);
 			gbc_spinner.gridx = 2 * (a / 4) + 1;
