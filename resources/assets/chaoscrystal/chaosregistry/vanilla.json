@@ -9,7 +9,7 @@
       },
       "greater": {
         "uniqueName": "minecraft:stone",
-        "type": "ITEM",
+        "type": "BLOCK",
         "meta": 0
       },
       "aspects": [
@@ -29,7 +29,7 @@
       "infusionSunlightRequired": false,
       "infusionAirAboveRequired": false
     },
-     {
+    {
       "lesser": {
         "uniqueName": "minecraft:sand",
         "type": "BLOCK",
@@ -37,7 +37,7 @@
       },
       "greater": {
         "uniqueName": "minecraft:gravel",
-        "type": "ITEM",
+        "type": "BLOCK",
         "meta": 0
       },
       "aspects": [
@@ -57,7 +57,7 @@
       "infusionSunlightRequired": false,
       "infusionAirAboveRequired": false
     },
-     {
+    {
       "lesser": {
         "uniqueName": "minecraft:gravel",
         "type": "BLOCK",
@@ -65,7 +65,7 @@
       },
       "greater": {
         "uniqueName": "minecraft:cobblestone",
-        "type": "ITEM",
+        "type": "BLOCK",
         "meta": 0
       },
       "aspects": [
@@ -85,7 +85,7 @@
       "infusionSunlightRequired": false,
       "infusionAirAboveRequired": false
     },
-     {
+    {
       "lesser": {
         "uniqueName": "minecraft:stone",
         "type": "BLOCK",
@@ -93,7 +93,7 @@
       },
       "greater": {
         "uniqueName": "minecraft:stonebrick",
-        "type": "ITEM",
+        "type": "BLOCK",
         "meta": 0
       },
       "aspects": [
@@ -106,6 +106,258 @@
         0,
         0,
         5,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:water",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:flowing_water",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:sand",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:sand",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "aspects": [
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:sand",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        5,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "greater": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 2
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:grass",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:dirt",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:mycelium",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
         0,
         0,
         0

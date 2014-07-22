@@ -96,28 +96,8 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		/*
 		 * Worldgen-Blocks
 		 */
-		ab.setAspect(Aspects.ASPECT_WATER, 5);
-		degradationStore.addNode(WATER_STILL = new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.water, 1, 32767), false, false));
-		ab.clear();
 
-		ab.setAspect(Aspects.ASPECT_EARTH, 5);
-		degradationStore.addNode(SAND = new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.sand), false, false));
-		degradationStore.addNode(new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.sand, 1, 1), false, false));
-		ab.clear();
 
-		ab.setAspect(Aspects.ASPECT_STRUCTURE, 5).setAspect(Aspects.ASPECT_LIVING, 2);
-		degradationStore.addNode(DIRT_DEAD = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Blocks.dirt, 1, 1), false, false));
-		ab.clear();
-
-		ab.setAspect(Aspects.ASPECT_GROWTH, 5);
-		degradationStore.addNode(DIRT = new NodeDegradation(DIRT_DEAD, ab.toAspectArray(), new ItemStack(Blocks.dirt), false, false));
-		ab.clear();
-
-		ab.setAspect(Aspects.ASPECT_LIVING, 5);
-		degradationStore.addNode(GRASS = new NodeDegradation(DIRT, ab.toAspectArray(), new ItemStack(Blocks.grass), false, true));
-		degradationStore.addNode(MYCELIUM = new NodeDegradation(DIRT, ab.toAspectArray(), new ItemStack(Blocks.mycelium), false, true));
-		degradationStore.addNode(PODZOL = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Blocks.dirt, 1, 2), false, false));
-		ab.clear();
 
 		ab.setAspect(Aspects.ASPECT_WATER, 5).setAspect(Aspects.ASPECT_STRUCTURE, 2);
 		degradationStore.addNode(CLAY = new NodeDegradation(SAND, ab.toAspectArray(), new ItemStack(Blocks.clay), false, false));
