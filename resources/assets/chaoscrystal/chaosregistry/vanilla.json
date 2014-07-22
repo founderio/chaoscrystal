@@ -148,34 +148,6 @@
         "meta": 0
       },
       "greater": {
-        "uniqueName": "minecraft:flowing_water",
-        "type": "BLOCK",
-        "meta": 32767
-      },
-      "aspects": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        5,
-        0
-      ],
-      "infusionSunlightRequired": false,
-      "infusionAirAboveRequired": false
-    },
-    {
-      "lesser": {
-        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
-        "type": "BLOCK",
-        "meta": 0
-      },
-      "greater": {
         "uniqueName": "minecraft:sand",
         "type": "BLOCK",
         "meta": 0
@@ -443,6 +415,118 @@
         0,
         5,
         5,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:stone",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:monster_egg",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:cobblestone",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:monster_egg",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:stonebrick",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:monster_egg",
+        "type": "BLOCK",
+        "meta": 2
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:cobblestone",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:mossy_cobblestone",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        15,
+        0,
+        0,
+        0,
         0,
         0
       ],
