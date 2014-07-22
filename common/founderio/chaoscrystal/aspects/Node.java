@@ -118,20 +118,12 @@ public class Node {
 		return null;
 	}
 
-	// TODO: Need decision on these three methods once the rest is intact.
-
-	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public String getDisplayName() {
-		// TODO Auto-generated method stub
-		return null;
+		return greater.getUniqueName() + ":" + greater.getMeta() + ">" + lesser.getUniqueName() + ":" + lesser.getMeta();
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getSimpleName() + " [" + getDescription() + "]";
+		return getClass().getSimpleName() + " [" + getDisplayName() + "]";
 	}
 }
