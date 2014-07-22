@@ -532,6 +532,1070 @@
       ],
       "infusionSunlightRequired": false,
       "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:vine",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:double_plant",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:red_flower",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:yellow_flower",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:tallgrass",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat_seeds",
+        "type": "ITEM",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:melon_seeds",
+        "type": "ITEM",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:pumpkin_seeds",
+        "type": "ITEM",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 6
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 7
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 5
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 6
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 4
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 5
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 3
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 4
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 2
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 3
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 2
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 1
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat_seeds",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:wheat_seeds",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:wheat",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        16,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:waterlily",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        3,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:reeds",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        3,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:cactus",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:deadbush",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:web",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:red_mushroom",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:brown_mushroom",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        2,
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:red_mushroom_block",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:brown_mushroom_block",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        2,
+        0,
+        2,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:fire",
+        "type": "BLOCK",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:rotten_flesh",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        1,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "minecraft:rotten_flesh",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:leather",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        5,
+        0,
+        0,
+        5,
+        0,
+        5,
+        2,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:melon_block",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        2,
+        0,
+        5,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:pumpkin",
+        "type": "BLOCK",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        5,
+        0,
+        2,
+        0,
+        3,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:gold_ingot",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        45,
+        0,
+        5,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:iron_ingot",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        50,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:diamond",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        500,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        500,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:coal",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        0,
+        5,
+        0,
+        15,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:redstone",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        10,
+        5,
+        0,
+        0,
+        2,
+        1,
+        0,
+        0,
+        0,
+        5,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:dye",
+        "type": "ITEM",
+        "meta": 4
+      },
+      "aspects": [
+        0,
+        0,
+        5,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:emerald",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "aspects": [
+        0,
+        500,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        400,
+        0,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
     }
   ]
 }
