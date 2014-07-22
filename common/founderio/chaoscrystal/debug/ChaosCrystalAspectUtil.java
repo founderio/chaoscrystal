@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.ListModel;
+import javax.swing.WindowConstants;
 import javax.swing.event.ListDataListener;
 import javax.swing.filechooser.FileFilter;
 
@@ -42,7 +43,7 @@ public class ChaosCrystalAspectUtil {
 
 	private final ChaosRegistry registry;
 	private AspectModule module = new AspectModule();
-	
+
 	private JFrame frame;
 	private JList list;
 	private JTextField txtModuleName;
@@ -52,6 +53,7 @@ public class ChaosCrystalAspectUtil {
 	 */
 	public static void open(final ChaosRegistry registry) {
 		EventQueue.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				try {
 					ChaosCrystalAspectUtil window = new ChaosCrystalAspectUtil(registry);
@@ -71,13 +73,13 @@ public class ChaosCrystalAspectUtil {
 		initialize();
 		loadDefs();
 	}
-	
+
 	public void loadModule(AspectModule module) {
 		this.module = module;
 		txtModuleName.setText(module.getName());
 	}
 	//TODO: File paths, handle saving & loading directly in here.
-	
+
 	public void saveModule(AspectModule module) {
 		module.setName(txtModuleName.getText());
 	}
@@ -88,52 +90,54 @@ public class ChaosCrystalAspectUtil {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 450, 300);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
 		JSplitPane splitPane = new JSplitPane();
 		splitPane.setDividerSize(5);
 		frame.getContentPane().add(splitPane, BorderLayout.CENTER);
-		
+
 		list = new JList();
 		splitPane.setLeftComponent(list);
 		list.setPreferredSize(new Dimension(10, 0));
-		
+
 		JPanel panel = new JPanel();
 		splitPane.setRightComponent(panel);
 		panel.setLayout(new BorderLayout(0, 0));
-		
+
 		JPanel panel_1 = new JPanel();
 		panel.add(panel_1, BorderLayout.NORTH);
-		
+
 		JLabel lblModuleName = new JLabel("Module Name");
 		panel_1.add(lblModuleName);
-		
+
 		txtModuleName = new JTextField();
 		txtModuleName.setText("Module Name");
 		panel_1.add(txtModuleName);
 		txtModuleName.setColumns(10);
 		splitPane.setDividerLocation(150);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
-		
+
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
-		
+
 		JMenuItem mntmNewAspectModule = new JMenuItem("New Aspect Module");
 		mntmNewAspectModule.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				loadModule(new AspectModule());
 			}
 		});
 		mnFile.add(mntmNewAspectModule);
-		
+
 		JMenuItem mntmLoadAspectModule = new JMenuItem("Load Aspect Module");
 		mntmLoadAspectModule.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(fileChooser.showOpenDialog(frame) == JFileChooser.APPROVE_OPTION) {
 					Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setVersion(1).disableHtmlEscaping().create();
-					
+
 					try {
 						AspectModule newModule = gson.fromJson(new InputStreamReader(new FileInputStream(fileChooser.getSelectedFile()), Charsets.UTF_8), AspectModule.class);
 						loadModule(newModule);
@@ -147,21 +151,22 @@ public class ChaosCrystalAspectUtil {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
-					
+
 				}
 			}
 		});
 		mnFile.add(mntmLoadAspectModule);
-		
+
 		JMenuItem mntmSaveAspectModule = new JMenuItem("Save Aspect Module");
 		mntmSaveAspectModule.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(fileChooser.showSaveDialog(frame) == JFileChooser.APPROVE_OPTION) {
-					
+
 					saveModule(module);
-					
+
 					Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setVersion(1).disableHtmlEscaping().create();
-					
+
 					FileOutputStream fos = null;
 					OutputStreamWriter osw = null;
 					try {
@@ -195,48 +200,48 @@ public class ChaosCrystalAspectUtil {
 							}
 						}
 					}
-					
+
 				}
 			}
 		});
 		mnFile.add(mntmSaveAspectModule);
-		
+
 		fileChooser = new JFileChooser("assets/chaoscrystal/chaosregistry");
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		fileChooser.setFileFilter(new FileFilter() {
-			
+
 			@Override
 			public String getDescription() {
 				return "json-FIles";
 			}
-			
+
 			@Override
 			public boolean accept(File arg0) {
 				return arg0.getName().toLowerCase().endsWith(".json");
 			}
 		});
 	}
-	
+
 	private void loadDefs() {
 		list.setModel(new ListModel() {
-			
+
 			private final List<ListDataListener> dataListeners = new ArrayList<ListDataListener>();
-			
+
 			@Override
 			public void removeListDataListener(ListDataListener listener) {
 				dataListeners.remove(listener);
 			}
-			
+
 			@Override
 			public int getSize() {
 				return registry.getDegradationNodeCount();
 			}
-			
+
 			@Override
 			public Object getElementAt(int index) {
 				return registry.getDegradationNode(index);
 			}
-			
+
 			@Override
 			public void addListDataListener(ListDataListener listener) {
 				dataListeners.add(listener);

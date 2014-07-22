@@ -25,15 +25,15 @@ public class EntityFocusFilterTarget extends EntityFocus {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.dataWatcher.addObject(30, Targets.TARGET_ALL);
+		dataWatcher.addObject(30, Targets.TARGET_ALL);
 	}
 
 	public String getTarget() {
-		return this.dataWatcher.getWatchableObjectString(30);
+		return dataWatcher.getWatchableObjectString(30);
 	}
 
 	public void setTarget(String target) {
-		this.dataWatcher.updateObject(30, target);
+		dataWatcher.updateObject(30, target);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EntityFocusFilterTarget extends EntityFocus {
 		}
 		List<EntityChaosCrystal> crystals = new ArrayList<EntityChaosCrystal>();
 
-		for (Object obj : this.worldObj.loadedEntityList) {
+		for (Object obj : worldObj.loadedEntityList) {
 			if (obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance(
 						(EntityChaosCrystal) obj, this);
@@ -67,9 +67,9 @@ public class EntityFocusFilterTarget extends EntityFocus {
 			lookZ = (float) crystal1.posZ;
 			updateLook();
 		} else if (age == 0) {
-			lookX = (float) posX + (this.rand.nextFloat() - 0.5f) * 10;
+			lookX = (float) posX + (rand.nextFloat() - 0.5f) * 10;
 			lookY = (float) posY;
-			lookZ = (float) posZ + (this.rand.nextFloat() - 0.5f) * 10;
+			lookZ = (float) posZ + (rand.nextFloat() - 0.5f) * 10;
 			updateLook();
 		}
 	}

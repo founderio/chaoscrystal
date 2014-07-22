@@ -19,14 +19,14 @@ public enum Aspect {
 	VALUE("value"),
 	WATER("water"),
 	WOOD("wood");
-	
-	
+
+
 	public final String stringRep;
-	
+
 	private Aspect(String stringRep) {
 		this.stringRep = stringRep;
 	}
-	
+
 	public static final ResourceLocation[] RESOURCE_LOCATIONS = new ResourceLocation[Aspect.values().length];
 
 	static {
@@ -34,7 +34,7 @@ public enum Aspect {
 			RESOURCE_LOCATIONS[a] = new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/aspect_" + Aspect.values()[a].stringRep + ".png");
 		}
 	}
-	
+
 	public static Aspect findByStringRep(String stringRep) {
 		// For now, this works. In the future there is space for aliases here.
 		Aspect found = null;
@@ -46,28 +46,28 @@ public enum Aspect {
 		}
 		return found;
 	}
-	
+
 	public static int[] pack(IAspectStore store) {
 		return pack(store, new int[Aspect.values().length]);
 	}
-	
+
 	public static int[] pack(IAspectStore store, int[] aspectShortArray) {
 		//TODO: Pack the values from the store into the array
 		return aspectShortArray;
 	}
-	
+
 	public static void unpack(int[] aspectShortArray, IAspectStore store) {
 		//TODO: Unpack the array values to the store
 	}
-	
+
 	public static int getAspectIndex(String aspect) {
 		return Aspect.findByStringRep(aspect).ordinal();
 	}
-	
+
 	public static boolean isAspect(String aspect) {
 		return Aspect.findByStringRep(aspect) != null;
 	}
-	
+
 	public static int[] addAspects(int[] aspectsA, int[] aspectsB) {
 		int[] aspectsR = new int[Aspect.values().length];
 		for (int a = 0; a < Aspect.values().length; a++) {
@@ -99,12 +99,12 @@ public enum Aspect {
 		}
 		return Arrays.copyOfRange(aspects, 0, idx);
 	}
-	
+
 	@Deprecated
 	public static boolean allAspectsContained(List<Aspect> whitelist, int[] aspects) {
 		return whitelist.containsAll(Arrays.asList(getAspects(aspects)));
 	}
-	
+
 	public static boolean isFilterMatched(List<Aspect> filter, int[] aspects) {
 		return filter.isEmpty() || allAspectsContained(filter, aspects);
 	}

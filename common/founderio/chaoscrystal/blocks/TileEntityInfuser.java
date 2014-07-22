@@ -30,7 +30,7 @@ public class TileEntityInfuser extends TileEntityApparatus {
 		ItemStack is = getStackInSlot(0);
 
 		if (is != null) {
-			
+
 			List<Node> degs = ChaosCrystalMain.chaosRegistry.getInfusionsFrom(is);
 
 			for (int i = degs.size() - 1; i >= 0; i--) {
@@ -48,14 +48,14 @@ public class TileEntityInfuser extends TileEntityApparatus {
 			crystal.subtractAspects(creation.getAspects());
 
 			CommonProxy.spawnParticleEffects(worldObj.provider.dimensionId, 2,
-					(float) xCoord + 0.5f, (float) yCoord + 0.5f,
-					(float) zCoord + 0.5f, 0, 0, 0, 0.7f);
-			
+					xCoord + 0.5f, yCoord + 0.5f,
+					zCoord + 0.5f, 0, 0, 0, 0.7f);
+
 			// TODO: respect stack size...
 			is = creation.getDispayItemStack().copy();
 			setInventorySlotContents(0, is);
 			didInfuse = true;
-			
+
 			updateState();
 
 			return true;
@@ -86,7 +86,7 @@ public class TileEntityInfuser extends TileEntityApparatus {
 		super.setInventorySlotContents(i, itemstack);
 		didInfuse = false;
 	}
-	
+
 	@Override
 	public boolean canExtractItem(int i, ItemStack itemstack, int j) {
 		return didInfuse;
@@ -96,14 +96,14 @@ public class TileEntityInfuser extends TileEntityApparatus {
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return new int[] { 0 };
 	}
-	
+
 	@Override
 	protected void readPropertiesFromNBT(NBTTagCompound par1nbtTagCompound) {
 		super.readPropertiesFromNBT(par1nbtTagCompound);
 		par1nbtTagCompound.setBoolean("didInfuse", didInfuse);
 	}
 
-	
+
 	@Override
 	protected void writePropertiesToNBT(NBTTagCompound par1nbtTagCompound) {
 		super.writePropertiesToNBT(par1nbtTagCompound);

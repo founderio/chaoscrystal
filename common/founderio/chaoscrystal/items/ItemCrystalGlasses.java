@@ -11,7 +11,7 @@ public class ItemCrystalGlasses extends ItemArmor {
 
 	public ItemCrystalGlasses() {
 		super(ArmorMaterial.DIAMOND, 0, 0);
-		this.setHasSubtypes(false);
+		setHasSubtypes(false);
 	}
 
 	@Override

@@ -1,12 +1,12 @@
 package founderio.chaoscrystal.entities;
 
-import founderio.chaoscrystal.blocks.DamageSourceSentrySnowball;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import founderio.chaoscrystal.blocks.DamageSourceSentrySnowball;
 
 public class EntityPlayerAwareSnowball extends EntitySnowball {
 
@@ -23,7 +23,7 @@ public class EntityPlayerAwareSnowball extends EntitySnowball {
 	public EntityPlayerAwareSnowball(World par1World) {
 		super(par1World);
 	}
-	
+
 	@Override
 	protected void onImpact(
 			MovingObjectPosition par1MovingObjectPosition) {
@@ -37,24 +37,24 @@ public class EntityPlayerAwareSnowball extends EntitySnowball {
 			}
 
 
-			DamageSource dmgSource = new DamageSourceSentrySnowball("thrown", this, this.getThrower());
+			DamageSource dmgSource = new DamageSourceSentrySnowball("thrown", this, getThrower());
 
 			par1MovingObjectPosition.entityHit.attackEntityFrom(dmgSource, b0);
 			float i = 0.1f;//knockback factor
-			
-			par1MovingObjectPosition.entityHit.addVelocity(this.motionX * i, this.motionY * i, this.motionZ * i);
-			
-			
+
+			par1MovingObjectPosition.entityHit.addVelocity(motionX * i, motionY * i, motionZ * i);
+
+
 		}
 
 		for (int i = 0; i < 8; ++i)
 		{
-			this.worldObj.spawnParticle("snowballpoof", this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D);
+			worldObj.spawnParticle("snowballpoof", posX, posY, posZ, 0.0D, 0.0D, 0.0D);
 		}
 
-		if (!this.worldObj.isRemote)
+		if (!worldObj.isRemote)
 		{
-			this.setDead();
+			setDead();
 		}
 	}
 

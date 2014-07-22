@@ -15,7 +15,7 @@ import founderio.chaoscrystal.machinery.IModuleTarget;
 public class ModuleTargetFilter implements IModule, IModuleTarget {
 
 	public String targets;
-	
+
 	@Override
 	public boolean isTargetValid(Entity target, HostilityLevel hostilityLevel) {
 		if(Targets.TARGET_ALL.equals(targets)) {

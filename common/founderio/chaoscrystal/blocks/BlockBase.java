@@ -30,22 +30,22 @@ import founderio.chaoscrystal.Constants;
 public class BlockBase extends Block {
 
 	public static final String[] metaList = new String[] {
-			Constants.ID_BLOCK_CRYSTALLINE_ENERGY,
-			Constants.ID_BLOCK_CRYSTALLINE_CHAOS,
-			Constants.ID_BLOCK_CRYSTALLINE_LIGHT,
-			Constants.ID_BLOCK_CRYSTAL_CLEAR,
-			Constants.ID_BLOCK_CRYSTALLINE_ENERGY_CRACKED,
-			Constants.ID_BLOCK_CRYSTALLINE_CHAOS_CRACKED,
-			Constants.ID_BLOCK_CRYSTALLINE_LIGHT_CRACKED,
-			Constants.ID_BLOCK_CRYSTAL_CLEAR_CRACKED, };
+		Constants.ID_BLOCK_CRYSTALLINE_ENERGY,
+		Constants.ID_BLOCK_CRYSTALLINE_CHAOS,
+		Constants.ID_BLOCK_CRYSTALLINE_LIGHT,
+		Constants.ID_BLOCK_CRYSTAL_CLEAR,
+		Constants.ID_BLOCK_CRYSTALLINE_ENERGY_CRACKED,
+		Constants.ID_BLOCK_CRYSTALLINE_CHAOS_CRACKED,
+		Constants.ID_BLOCK_CRYSTALLINE_LIGHT_CRACKED,
+		Constants.ID_BLOCK_CRYSTAL_CLEAR_CRACKED, };
 	public IIcon[] iconList;
 
 	public BlockBase() {
 		super(Material.glass);
-		this.setHardness(4);
-		this.setLightLevel(0.2f);
-		this.setResistance(1.5f);
-		this.setStepSound(Block.soundTypeGlass);
+		setHardness(4);
+		setLightLevel(0.2f);
+		setResistance(1.5f);
+		setStepSound(Block.soundTypeGlass);
 		this.setHarvestLevel("pickaxe", 1);
 	}
 
@@ -59,41 +59,43 @@ public class BlockBase extends Block {
 		}
 	}
 
-    /**
-     * Returns true if the given side of this block type should be rendered (if it's solid or not), if the adjacent
-     * block is at the given coordinates. Args: blockAccess, x, y, z, side
-     */
-    public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side)
-    {
-    	Block adjacent = blockAccess.getBlock(x, y, z);
-    	if(adjacent == this || adjacent == ChaosCrystalMain.blockSproutingCrystal) {
-        	ForgeDirection dir = ForgeDirection.getOrientation(side);
-    		int adjacentMeta = blockAccess.getBlockMetadata(x, y, z);
-    		int thisMeta = blockAccess.getBlockMetadata(x - dir.offsetX, y - dir.offsetY, z - dir.offsetZ);
-    		return thisMeta != adjacentMeta;
-    	} else {
-    		return true;
-    	}
-    }
+	/**
+	 * Returns true if the given side of this block type should be rendered (if it's solid or not), if the adjacent
+	 * block is at the given coordinates. Args: blockAccess, x, y, z, side
+	 */
+	@Override
+	public boolean isBlockSolid(IBlockAccess blockAccess, int x, int y, int z, int side)
+	{
+		Block adjacent = blockAccess.getBlock(x, y, z);
+		if(adjacent == this || adjacent == ChaosCrystalMain.blockSproutingCrystal) {
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			int adjacentMeta = blockAccess.getBlockMetadata(x, y, z);
+			int thisMeta = blockAccess.getBlockMetadata(x - dir.offsetX, y - dir.offsetY, z - dir.offsetZ);
+			return thisMeta != adjacentMeta;
+		} else {
+			return true;
+		}
+	}
 
-    /**
-     * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
-     * coordinates.  Args: blockAccess, x, y, z, side
-     */
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side)
-    {
-    	Block adjacent = blockAccess.getBlock(x, y, z);
-    	if(adjacent == this || adjacent == ChaosCrystalMain.blockSproutingCrystal) {
-        	ForgeDirection dir = ForgeDirection.getOrientation(side);
-    		int adjacentMeta = blockAccess.getBlockMetadata(x, y, z);
-    		int thisMeta = blockAccess.getBlockMetadata(x - dir.offsetX, y - dir.offsetY, z - dir.offsetZ);
-    		return thisMeta != adjacentMeta;
-    	} else {
-    		return true;
-    	}
-    }
-	
+	/**
+	 * Returns true if the given side of this block type should be rendered, if the adjacent block is at the given
+	 * coordinates.  Args: blockAccess, x, y, z, side
+	 */
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean shouldSideBeRendered(IBlockAccess blockAccess, int x, int y, int z, int side)
+	{
+		Block adjacent = blockAccess.getBlock(x, y, z);
+		if(adjacent == this || adjacent == ChaosCrystalMain.blockSproutingCrystal) {
+			ForgeDirection dir = ForgeDirection.getOrientation(side);
+			int adjacentMeta = blockAccess.getBlockMetadata(x, y, z);
+			int thisMeta = blockAccess.getBlockMetadata(x - dir.offsetX, y - dir.offsetY, z - dir.offsetZ);
+			return thisMeta != adjacentMeta;
+		} else {
+			return true;
+		}
+	}
+
 	@Override
 	public Item getItemDropped(int meta, Random rand, int fortune) {
 		if(isCrackedVersion(meta)) {
@@ -102,7 +104,7 @@ public class BlockBase extends Block {
 			return Item.getItemFromBlock(this);
 		}
 	}
-	
+
 	@Override
 	public int getDamageValue(World world, int x, int y, int z) {
 		int meta = world.getBlockMetadata(x, y, z);
@@ -119,7 +121,7 @@ public class BlockBase extends Block {
 			return MathHelper.clamp_int(meta, 0, metaList.length - 1);
 		}
 	}
-	
+
 	@Override
 	public int quantityDropped(int meta, int fortune, Random random) {
 		if(isCrackedVersion(meta)) {
@@ -130,7 +132,7 @@ public class BlockBase extends Block {
 			return 1;
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister ir) {
@@ -139,18 +141,18 @@ public class BlockBase extends Block {
 		iconList[1] = ir.registerIcon(Constants.MOD_ID + ":crystalline_chaos");
 		iconList[2] = ir.registerIcon(Constants.MOD_ID + ":crystalline_light");
 		iconList[3] = ir.registerIcon(Constants.MOD_ID + ":crystal_clear");
-		
+
 		iconList[4] = ir.registerIcon(Constants.MOD_ID + ":crystalline_energy_cracked");
 		iconList[5] = ir.registerIcon(Constants.MOD_ID + ":crystalline_chaos_cracked");
 		iconList[6] = ir.registerIcon(Constants.MOD_ID + ":crystalline_light_cracked");
 		iconList[7] = ir.registerIcon(Constants.MOD_ID + ":crystal_clear_cracked");
 	}
-	
+
 	public boolean isCrackedVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, metaList.length - 1);
 		return idx > 3;
 	}
-	
+
 	public int getUncrackedVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, metaList.length - 1);
 		if(isCrackedVersion(idx)) {
@@ -159,7 +161,7 @@ public class BlockBase extends Block {
 			return idx;
 		}
 	}
-	
+
 	public int getCrackedVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, metaList.length - 1);
 		if(isCrackedVersion(idx)) {
@@ -186,7 +188,7 @@ public class BlockBase extends Block {
 	public boolean isOpaqueCube() {
 		return false;
 	}
-	
+
 	@Override
 	public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion) {
 		if(!Config.crackCrystalsOnExplosion){
@@ -194,7 +196,7 @@ public class BlockBase extends Block {
 		}
 		checkBlockCracksAround(world, x, y, z, 0.9f, 0);
 	}
-	
+
 	@Override
 	public void onBlockHarvested(World world, int x, int y, int z, int meta, EntityPlayer player) {
 		if(!Config.crackCrystalsOnHarvest) {
@@ -209,21 +211,21 @@ public class BlockBase extends Block {
 		int fortune = EnchantmentHelper.getFortuneModifier(player);
 		checkBlockCracksAround(world, x, y, z, hasSilkTouch ? 0.45f : 0.90f, fortune);
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World world, int x,
 			int y, int z, Entity entity) {
 		double motion = Vec3.createVectorHelper(entity.motionX, entity.motionY, entity.motionZ).lengthVector();
 		handleCollision(world, x, y, z, entity, motion);
 	}
-	
+
 	@Override
 	public void onFallenUpon(World world, int x,
 			int y, int z, Entity entity,
 			float force) {
 		handleCollision(world, x, y, z, entity, force);
 	}
-	
+
 	public void handleCollision(World world, int x,
 			int y, int z, Entity entity,
 			double force) {
@@ -247,8 +249,8 @@ public class BlockBase extends Block {
 				return;
 			}
 		}
-		
-		
+
+
 		// Bigger smash or smaller depending on force
 		if(force > 5) {
 			boolean result1 = checkBlockCrack(world, x, y, z, 1, 0);
@@ -262,7 +264,7 @@ public class BlockBase extends Block {
 			}
 		}
 	}
-	
+
 	public boolean checkBlockCrack(World world, int x, int y, int z, float chance, int fortune) {
 		if(world.getBlock(x, y, z) == ChaosCrystalMain.blockBase) {
 			int meta = world.getBlockMetadata(x, y, z);
@@ -272,7 +274,7 @@ public class BlockBase extends Block {
 			if(isCrackedVersion(meta)) {
 				// Break
 				world.setBlockToAir(x, y, z);
-	            this.dropBlockAsItem(world, x, y, z, meta, fortune);
+				this.dropBlockAsItem(world, x, y, z, meta, fortune);
 			} else {
 				// Crack
 				int cracked = getCrackedVersion(meta);
@@ -282,7 +284,7 @@ public class BlockBase extends Block {
 		}
 		return false;
 	}
-	
+
 	public boolean checkBlockCracksAround(World world, int x, int y, int z, float chance, int fortune) {
 		boolean result = false;
 		result |= checkBlockCrack(world, x + 1, y, z, chance, fortune);

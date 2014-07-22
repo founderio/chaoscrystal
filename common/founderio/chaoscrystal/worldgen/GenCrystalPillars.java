@@ -36,22 +36,24 @@ public class GenCrystalPillars implements IWorldGenerator {
 				int width = 3 + random.nextInt(2);
 				if (yBase + height > world.getActualHeight() - 10) {
 					height = world.getActualHeight() - 10 - yBase;
-					if (height <= 0)
+					if (height <= 0) {
 						height = 1;
+					}
 				}
 				if (random.nextInt(5) < 4) {
 					// Generate Needle
 					for (int y = 0; y < height; y++) {
 						for (int zscroll = -width / 2; zscroll < width / 2; zscroll++) {
 							for (int xscroll = -width / 2; xscroll < width / 2; xscroll++) {
-								double ws = (width * 0.5f) * (width * 0.5f);
+								double ws = width * 0.5f * (width * 0.5f);
 								double cos = 1.0
-										- Math.sin((y / (float) height)
+										- Math.sin(y / (float) height
 												* Math.PI * 0.5) + 0.2
-										- random.nextDouble() * 0.4;
+												- random.nextDouble() * 0.4;
 								ws = ws * 0.5 + (float) (ws * 0.5 * cos);
-								if (ws < 2)
+								if (ws < 2) {
 									ws = 2;
+								}
 								if (zscroll * zscroll + xscroll * xscroll < ws) {
 									world.setBlock(xAbsolute + xscroll, y
 											+ yBase, zAbsolute + zscroll,
@@ -66,14 +68,15 @@ public class GenCrystalPillars implements IWorldGenerator {
 					for (int y = 0; y < height; y++) {
 						for (int zscroll = -width / 2; zscroll < width / 2; zscroll++) {
 							for (int xscroll = -width / 2; xscroll < width / 2; xscroll++) {
-								double ws = (width * 0.5f) * (width * 0.5f);
+								double ws = width * 0.5f * (width * 0.5f);
 								double cos = 1.0
-										- Math.sin((y / (float) height)
+										- Math.sin(y / (float) height
 												* Math.PI) + 0.2
-										- random.nextDouble() * 0.4;
+												- random.nextDouble() * 0.4;
 								ws = ws * 0.5 + (float) (ws * 0.5 * cos);
-								if (ws < 2)
+								if (ws < 2) {
 									ws = 2;
+								}
 								if (zscroll * zscroll + xscroll * xscroll < ws) {
 									world.setBlock(xAbsolute + xscroll, y
 											+ yBase, zAbsolute + zscroll,

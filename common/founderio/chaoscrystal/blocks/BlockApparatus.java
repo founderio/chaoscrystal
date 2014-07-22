@@ -16,20 +16,20 @@ import founderio.util.ItemUtil;
 public class BlockApparatus extends BlockContainer {
 
 	public static final String[] metaList = new String[] {
-			Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR,
-			Constants.ID_BLOCK_APPARATUS_CREATOR,
-			Constants.ID_BLOCK_APPARATUS_SENTRY,
-			Constants.ID_BLOCK_APPARATUS_TICKER };
+		Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR,
+		Constants.ID_BLOCK_APPARATUS_CREATOR,
+		Constants.ID_BLOCK_APPARATUS_SENTRY,
+		Constants.ID_BLOCK_APPARATUS_TICKER };
 
 	public final int metaListIndex;
 
 	public BlockApparatus(int meta) {
 		super(Material.rock);
-		this.metaListIndex = meta;
-		this.setHardness(2);
-		this.setLightLevel(0.3f);
-		this.setResistance(6f);
-		this.setStepSound(Block.soundTypeStone);
+		metaListIndex = meta;
+		setHardness(2);
+		setLightLevel(0.3f);
+		setResistance(6f);
+		setStepSound(Block.soundTypeStone);
 		this.setHarvestLevel("pickaxe", 0);
 	}
 
@@ -69,7 +69,7 @@ public class BlockApparatus extends BlockContainer {
 			EntityLivingBase entity, ItemStack itemStack) {
 		if (entity instanceof EntityPlayer) {
 			TileEntityApparatus te = getTileEntityApparatus(world, x, y, z);
-//TODO: Nullchecks
+			//TODO: Nullchecks
 			// TODO: switch to UUID
 			te.setOwner(((EntityPlayer) entity).getDisplayName());
 		}
@@ -92,7 +92,7 @@ public class BlockApparatus extends BlockContainer {
 			return null;
 		}
 	}
-	
+
 	@Override
 	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
 		if (world.isRemote) {

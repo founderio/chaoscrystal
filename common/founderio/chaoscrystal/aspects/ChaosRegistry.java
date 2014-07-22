@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 
 public class ChaosRegistry {
 
@@ -23,7 +22,7 @@ public class ChaosRegistry {
 		nodes = new ArrayList<Node>();
 		modules = new ArrayList<AspectModule>();
 	}
-	
+
 	public boolean isIgnoreItem(Item item, boolean extract) {
 		if(item == null) {
 			return true;
@@ -35,10 +34,10 @@ public class ChaosRegistry {
 			Block block = Block.getBlockFromItem(item);
 			return isIgnoreBlock(block, extract);
 		}
-		
+
 		return false;
 	}
-	
+
 	public boolean isIgnoreBlock(Block block, boolean extract) {
 		if(block == null) {
 			return true;
@@ -51,7 +50,7 @@ public class ChaosRegistry {
 		}
 		return false;
 	}
-	
+
 	public void registerAspectModule(AspectModule module) {
 		if(module == null) {
 			//TODO: log!
@@ -60,15 +59,15 @@ public class ChaosRegistry {
 		modules.add(module);
 		nodes.addAll(module.getNodes());
 	}
-	
+
 	public void addNode(Node node) {
 		nodes.add(node);
 	}
-	
+
 	public int getDegradationNodeCount() {
 		return nodes.size();
 	}
-	
+
 	public Node getDegradationNode(int index) {
 		return nodes.get(index);
 	}
@@ -115,36 +114,36 @@ public class ChaosRegistry {
 
 	public void debugOutput() {
 		//TODO: add that output again...
-		
-//		System.out.println("Degradation List:");
-//		for(Integer key : degradations.keySet()) {
-//			Degradation[] degradationList = degradations.get(key);
-//			System.out.println(Block.blocksList[key].getLocalizedName() + " (" + key + ") Transforms to:");
-//			for (int i = 0; i < degradationList.length; i++) {
-//				for(int d = 0; d < degradationList[i].degraded.length; d++) {
-//					if(degradationList[i].degraded[d].itemID == 0) {
-//						System.out.println("Air");
-//					} else {
-//						System.out.println(Block.blocksList[degradationList[i].degraded[d].itemID].getLocalizedName() + " - " + degradationList[i].degraded[d].getItemDamage());
-//					}
-//				}
-//			}
-//		}
-//		
-//		System.out.println("Inverse Degradation List:");
-//		for(Integer key : degradationsInverse.keySet()) {
-//			Degradation[] degradationList = degradationsInverse.get(key);
-//			if(key == 0) {
-//				continue;
-//			}
-//			System.out.println(Block.blocksList[key].getLocalizedName() + " Transforms to:");
-//			for (int i = 0; i < degradationList.length; i++) {
-//				if(degradationList[i].source.itemID == 0) {
-//					System.out.println("Air");
-//				} else {
-//					System.out.println(Block.blocksList[degradationList[i].source.itemID].getLocalizedName() + " - " + degradationList[i].source.getItemDamage());
-//				}
-//			}
-//		}
+
+		//		System.out.println("Degradation List:");
+		//		for(Integer key : degradations.keySet()) {
+		//			Degradation[] degradationList = degradations.get(key);
+		//			System.out.println(Block.blocksList[key].getLocalizedName() + " (" + key + ") Transforms to:");
+		//			for (int i = 0; i < degradationList.length; i++) {
+		//				for(int d = 0; d < degradationList[i].degraded.length; d++) {
+		//					if(degradationList[i].degraded[d].itemID == 0) {
+		//						System.out.println("Air");
+		//					} else {
+		//						System.out.println(Block.blocksList[degradationList[i].degraded[d].itemID].getLocalizedName() + " - " + degradationList[i].degraded[d].getItemDamage());
+		//					}
+		//				}
+		//			}
+		//		}
+		//
+		//		System.out.println("Inverse Degradation List:");
+		//		for(Integer key : degradationsInverse.keySet()) {
+		//			Degradation[] degradationList = degradationsInverse.get(key);
+		//			if(key == 0) {
+		//				continue;
+		//			}
+		//			System.out.println(Block.blocksList[key].getLocalizedName() + " Transforms to:");
+		//			for (int i = 0; i < degradationList.length; i++) {
+		//				if(degradationList[i].source.itemID == 0) {
+		//					System.out.println("Air");
+		//				} else {
+		//					System.out.println(Block.blocksList[degradationList[i].source.itemID].getLocalizedName() + " - " + degradationList[i].source.getItemDamage());
+		//				}
+		//			}
+		//		}
 	}
 }

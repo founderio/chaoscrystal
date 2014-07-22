@@ -72,7 +72,7 @@ public class ModuleVanillaWorldgen extends AspectModule {
 	public static Node WHEAT_5;
 	public static Node WHEAT_6;
 	public static Node WHEAT_7;
-	
+
 	public static Node MELON;
 	public static Node PUMPKIN;
 
@@ -197,14 +197,14 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		degradationStore.addNode(VINE = new NodeDegradation(LIFELESS_SHARD, ab.toAspectArray(), new ItemStack(Blocks.vine, 1, 32767), false, false));
 		ab.clear();
 
-		
+
 		ab.setAspect(Aspects.ASPECT_LIVING, 2).setAspect(Aspects.ASPECT_GROWTH, 2).setAspect(Aspects.ASPECT_WATER, 1);
 		degradationStore.addNode(PLANT_RED = new NodeDegradation(LIFELESS_SHARD, ab.toAspectArray(), new ItemStack(Blocks.red_flower), true, false));
 		degradationStore.addNode(PLANT_YELLOW = new NodeDegradation(LIFELESS_SHARD, ab.toAspectArray(), new ItemStack(Blocks.yellow_flower), true, false));
 		degradationStore.addNode(TALL_GRASS = new NodeDegradation(LIFELESS_SHARD, ab.toAspectArray(), new ItemStack(Blocks.tallgrass, 1, 32767), true, false));
 		degradationStore.addNode(WHEAT_SEEDS = new NodeDegradation(LIFELESS_SHARD, ab.toAspectArray(), new ItemStack(Items.wheat_seeds, 1, 32767), true, false));
 		ab.clear();
-		
+
 		ab.setAspect(Aspects.ASPECT_GROWTH, 2).setAspect(Aspects.ASPECT_WATER, 1);
 		degradationStore.addNode(WHEAT_0 = new NodeDegradation(WHEAT_SEEDS, ab.toAspectArray(), new ItemStack(Blocks.wheat, 1, 0), true, false));
 		degradationStore.addNode(WHEAT_1 = new NodeDegradation(WHEAT_0, ab.toAspectArray(), new ItemStack(Blocks.wheat, 1, 1), true, false));
@@ -215,10 +215,10 @@ public class ModuleVanillaWorldgen extends AspectModule {
 		degradationStore.addNode(WHEAT_6 = new NodeDegradation(WHEAT_5, ab.toAspectArray(), new ItemStack(Blocks.wheat, 1, 6), true, false));
 		degradationStore.addNode(WHEAT_7 = new NodeDegradation(WHEAT_6, ab.toAspectArray(), new ItemStack(Blocks.wheat, 1, 7), true, false));
 		degradationStore.addNode(new NodeDegradation(WHEAT_7, ab.toAspectArray(), new ItemStack(Blocks.wheat, 1, 8), true, false));
-		
+
 		ab.setAspect(Aspects.ASPECT_GROWTH, 16).setAspect(Aspects.ASPECT_WATER, 8);
 		degradationStore.addNode(new NodeDegradation(WHEAT_SEEDS, ab.toAspectArray(), new ItemStack(Items.wheat, 1, 32767), true, false));
-		
+
 		ab.setAspect(Aspects.ASPECT_LIVING, 2).setAspect(Aspects.ASPECT_GROWTH, 2).setAspect(Aspects.ASPECT_WATER, 3);
 		degradationStore.addNode(WATERLILY = new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.waterlily), true, false));
 		degradationStore.addNode(REEDS = new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.reeds), true, false));
@@ -245,7 +245,7 @@ public class ModuleVanillaWorldgen extends AspectModule {
 
 		degradationStore.addNode(MUSHROOM_CAP_RED = new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.red_mushroom_block, 1, 32767), false, false));
 		degradationStore.addNode(MUSHROOM_CAP_BROWN = new NodeDegradation(LIFELESS_BLOCK, ab.toAspectArray(), new ItemStack(Blocks.brown_mushroom_block, 1, 32767), false, false));
-		
+
 		ab.clear();
 
 		ab.setAspect(Aspects.ASPECT_LIVING, 5)

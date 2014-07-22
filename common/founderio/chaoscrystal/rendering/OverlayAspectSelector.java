@@ -75,35 +75,35 @@ public class OverlayAspectSelector extends Gui {
 			return;
 		}
 		Item item = currentItemStack.getItem();
-		
+
 		if(item instanceof IModeChangingItem) {
-			IModeChangingItem mci = ((IModeChangingItem) item);
+			IModeChangingItem mci = (IModeChangingItem) item;
 			event.setCanceled(true);
-			
+
 			if(mci.getModeCount(currentItemStack) > 0) {
 				int modeIndex = mci.getSelectedModeForItemStack(currentItemStack);
-				
-				
+
+
 				if(event.dwheel > 0) {
 					modeIndex++;
 				} else if(event.dwheel < 0) {
 					modeIndex--;
 				}
-				
+
 				if(modeIndex >= mci.getModeCount(currentItemStack)) {
 					modeIndex = mci.getModeCount(currentItemStack) - 1;
 				}
-				
+
 				if(modeIndex < 0) {
 					modeIndex = 0;
 				}
-				
-				mci.setSelectedModeForItemStack(currentItemStack, modeIndex);
-				
 
-				ChaosCrystalMain.packetPipeline.sendToServer(new CCPModeItemChanged(modeIndex));
+				mci.setSelectedModeForItemStack(currentItemStack, modeIndex);
+
+
+				ChaosCrystalMain.network.sendToServer(new CCPModeItemChanged(modeIndex));
 			}
-			
+
 		} else if(currentItemStack.getItem() == ChaosCrystalMain.itemManual) {
 			event.setCanceled(true);
 			if(event.dwheel > 0) {
@@ -120,10 +120,10 @@ public class OverlayAspectSelector extends Gui {
 			return;
 		}
 		RenderHelper.enableGUIStandardItemLighting();
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)240 / 1.0F, (float)240 / 1.0F);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL12.GL_RESCALE_NORMAL);
-        GL11.glEnable(GL11.GL_LIGHTING);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240 / 1.0F, 240 / 1.0F);
+		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GL11.glEnable(GL12.GL_RESCALE_NORMAL);
+		GL11.glEnable(GL11.GL_LIGHTING);
 		ri.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
 		ri.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().renderEngine, is, x, y);
 	}
@@ -139,7 +139,7 @@ public class OverlayAspectSelector extends Gui {
 		if (mc.renderViewEntity != null && mc.theWorld != null)
 		{
 
-			double blockReachDistance = (double)mc.playerController.getBlockReachDistance();
+			double blockReachDistance = mc.playerController.getBlockReachDistance();
 			MovingObjectPosition mop = rayTrace(mc.renderViewEntity, blockReachDistance, par1);
 			double blockHitDistance = blockReachDistance;
 			Vec3 vecPos = mc.renderViewEntity.getPosition(par1);
@@ -168,7 +168,7 @@ public class OverlayAspectSelector extends Gui {
 					mc.renderViewEntity,
 					mc.renderViewEntity.boundingBox.
 					addCoord(vecLook.xCoord * blockReachDistance, vecLook.yCoord * blockReachDistance, vecLook.zCoord * blockReachDistance)
-					.expand((double)searchRadius, (double)searchRadius, (double)searchRadius));
+					.expand(searchRadius, searchRadius, searchRadius));
 			double entityHitDistance = blockHitDistance;
 
 			for (int i = 0; i < list.size(); ++i)
@@ -228,7 +228,7 @@ public class OverlayAspectSelector extends Gui {
 			int asp = store.getAspect(aspect);
 
 			Minecraft.getMinecraft().renderEngine.bindTexture(Aspect.RESOURCE_LOCATIONS[aspect.ordinal()]);
-			this.drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5, 0, 0, 10, 10, 256, 256);
+			drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5, 0, 0, 10, 10, 256, 256);
 
 			Minecraft.getMinecraft().fontRenderer.drawString(
 					Integer.toString(asp),
@@ -257,7 +257,7 @@ public class OverlayAspectSelector extends Gui {
 
 			if(asp > 0) {
 				Minecraft.getMinecraft().renderEngine.bindTexture(Aspect.RESOURCE_LOCATIONS[aspect.ordinal()]);
-				this.drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5,
+				drawTexturedModalRectScaled(xPos + 5 + colOffset, yPos + offset + 5,
 						0, 0,
 						10, 10,
 						256, 256);
@@ -289,7 +289,7 @@ public class OverlayAspectSelector extends Gui {
 
 		ItemStack currentItemStack = Minecraft.getMinecraft().thePlayer.inventory.getCurrentItem();
 
-		boolean specialSkip = (currentItemStack != null && currentItemStack.getItem() instanceof ItemMap) || Config.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
+		boolean specialSkip = currentItemStack != null && currentItemStack.getItem() instanceof ItemMap || Config.cfgSneakToShowAspects && !Minecraft.getMinecraft().thePlayer.isSneaking();
 
 		int centerW = event.resolution.getScaledWidth()/2;
 		int centerH = event.resolution.getScaledHeight()/2;
@@ -316,7 +316,7 @@ public class OverlayAspectSelector extends Gui {
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/chaoscrystal.png"));
-						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 						if(e.isInSuckMode()) {
 							Minecraft.getMinecraft().renderEngine.bindTexture(
@@ -325,7 +325,7 @@ public class OverlayAspectSelector extends Gui {
 							Minecraft.getMinecraft().renderEngine.bindTexture(
 									new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/mode_expel.png"));
 						}
-						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH - 16 - 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW - 16 - 5, centerH - 16 - 5, 0, 0, 16, 16, 256, 256);
 
 						renderAspectList(centerW, centerH, e);
 
@@ -335,13 +335,13 @@ public class OverlayAspectSelector extends Gui {
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter.png"));
-						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 						Aspect aspect = ((EntityFocusFilter)lookingAt).getAspect();
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(Aspect.RESOURCE_LOCATIONS[aspect.ordinal()]);
-						this.drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 					} else if(lookingAt instanceof EntityFocusFilterTarget) {
@@ -349,14 +349,14 @@ public class OverlayAspectSelector extends Gui {
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_filter_type.png"));
-						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 						String target = ((EntityFocusFilterTarget)lookingAt).getTarget();
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/hud/target_" + target + ".png"));
-						this.drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW + 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 					} else if(lookingAt instanceof EntityFocusBorder) {
@@ -364,7 +364,7 @@ public class OverlayAspectSelector extends Gui {
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_border.png"));
-						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 					} else if(lookingAt instanceof EntityFocusTransfer) {
@@ -372,12 +372,12 @@ public class OverlayAspectSelector extends Gui {
 
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								new ResourceLocation(Constants.MOD_ID + ":" + "textures/items/focus_transfer.png"));
-						this.drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
+						drawTexturedModalRectScaled(centerW - 16 - 5, centerH + 5, 0, 0, 16, 16, 256, 256);
 
 
 					} else if(lookingAt instanceof EntityItem) {
 
-						EntityItem ei = ((EntityItem)lookingAt);
+						EntityItem ei = (EntityItem)lookingAt;
 						ItemStack is = ei.getEntityItem();
 
 						List<Node> degradations = ChaosCrystalMain.chaosRegistry.getExtractionsFrom(is);
@@ -385,31 +385,31 @@ public class OverlayAspectSelector extends Gui {
 							//TODO: Render Questionmark
 						} else if(!ChaosCrystalMain.chaosRegistry.isIgnoreItem(is.getItem(), true)) {
 							Node node = degradations.get(0);
-							
+
 							//TODO: get full aspect list
 							renderAspectList(centerW, centerH, node.getAspects());
 
 							NodePoint np = node.getLesser();
-							
+
 							ItemStack display = np.createItemStack();
-							
+
 							if(display != null) {
 								renderItem(display, centerW + 5, centerH - 16 - 5);
 							}
 							//TODO: render block somehow if item is null
-							
-//							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
-//
-//							for(int s = 0; s < parents.length; s++) {
-//								if(parents[s].getItem() != null) {
-//									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
-//								}
-//							}
+
+							//							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
+							//
+							//							for(int s = 0; s < parents.length; s++) {
+							//								if(parents[s].getItem() != null) {
+							//									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
+							//								}
+							//							}
 
 						}
 
 						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
-						
+
 						if(Config.cfgDebugGlasses) {
 							String[] lines = new String[8];
 							if(is.getItem() != null) {
@@ -425,13 +425,13 @@ public class OverlayAspectSelector extends Gui {
 							lines[5] = "Time Until Portal: " + ei.timeUntilPortal;
 							lines[6] = "Delay before can pickup: " + ei.delayBeforeCanPickup;
 							lines[7] = "Hover Start: " + ei.hoverStart;
-							
+
 							for(int l = 0; l < lines.length; l++) {
 								Minecraft.getMinecraft().fontRenderer.drawString(
 										lines[l], centerW + 10, centerH - 33 - l * 10,
 										16777215);
 							}
-							
+
 						}
 					}
 				}
@@ -457,21 +457,21 @@ public class OverlayAspectSelector extends Gui {
 							renderAspectList(centerW, centerH, node.getAspects());
 
 							NodePoint np = node.getLesser();
-							
+
 							ItemStack display = np.createItemStack();
-							
+
 							if(display != null) {
 								renderItem(display, centerW + 5, centerH - 16 - 5);
 							}
 							//TODO: render block somehow if item is null
-							
-//							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
-//
-//							for(int s = 0; s < parents.length; s++) {
-//								if(parents[s].getItem() != null) {
-//									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
-//								}
-//							}
+
+							//							ItemStack[] parents = node.getDegradedFrom(node.getDispayItemStack());
+							//
+							//							for(int s = 0; s < parents.length; s++) {
+							//								if(parents[s].getItem() != null) {
+							//									renderItem(parents[s], centerW + 5 + s*16, centerH - 16 - 5);
+							//								}
+							//							}
 
 						}
 
@@ -490,13 +490,13 @@ public class OverlayAspectSelector extends Gui {
 										centerW + 10, centerH - 3,
 										16777215);
 							}
-							
+
 						}
 
 						ItemStack is = new ItemStack(block, 1, meta);
-						
+
 						renderItem(is, centerW - 16 - 5, centerH - 16 - 5);
-						
+
 						if(Config.cfgDebugGlasses) {
 							String[] lines = new String[3];
 							lines[0] = block.getLocalizedName() + "(" + block.getUnlocalizedName() + ":" + meta + ")";
@@ -506,13 +506,13 @@ public class OverlayAspectSelector extends Gui {
 								lines[1] = "";
 							}
 							lines[2] = "Internal ID: " + Block.getIdFromBlock(block);
-							
+
 							for(int l = 0; l < lines.length; l++) {
 								Minecraft.getMinecraft().fontRenderer.drawString(
 										lines[l], centerW + 10, centerH - 33 - l * 10,
 										16777215);
 							}
-							
+
 						}
 
 					}
@@ -521,38 +521,38 @@ public class OverlayAspectSelector extends Gui {
 		}
 
 		if(currentItemStack != null) {
-			
+
 			Item item = currentItemStack.getItem();
-			
+
 			if(item instanceof IModeChangingItem) {
-				IModeChangingItem mci = ((IModeChangingItem) item);
+				IModeChangingItem mci = (IModeChangingItem) item;
 
 
 				int modeCount = mci.getModeCount(currentItemStack);
 				if(modeCount > 0) {
 					int modeIndex = mci.getSelectedModeForItemStack(currentItemStack);
-					
+
 
 					int bottom = event.resolution.getScaledHeight() - 80;
 
 
 					Minecraft.getMinecraft().renderEngine.bindTexture(
 							mci.getIconForMode(currentItemStack, modeIndex));
-					this.drawTexturedModalRectScaled(centerW - 8, bottom, 0, 0, 16, 16, 256, 256);
+					drawTexturedModalRectScaled(centerW - 8, bottom, 0, 0, 16, 16, 256, 256);
 
 					GL11.glColor4f(0.4F, 0.4F, 0.4F, 0.4F);
 
 					if(modeIndex > 0) {
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								mci.getIconForMode(currentItemStack, modeIndex - 1));
-						this.drawTexturedModalRectScaled(centerW - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+						drawTexturedModalRectScaled(centerW - 8 - 14 - 2, bottom + 2, 0, 0, 14, 14, 256, 256);
 
 					}
 
 					if(modeIndex < modeCount - 1) {
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								mci.getIconForMode(currentItemStack, modeIndex + 1));
-						this.drawTexturedModalRectScaled(centerW - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
+						drawTexturedModalRectScaled(centerW - 8 + 14 + 2, bottom + 2, 0, 0, 14, 14, 256, 256);
 
 					}
 
@@ -561,14 +561,14 @@ public class OverlayAspectSelector extends Gui {
 					if(modeIndex > 1) {
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								mci.getIconForMode(currentItemStack, modeIndex - 2));
-						this.drawTexturedModalRectScaled(centerW - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+						drawTexturedModalRectScaled(centerW - 8 - 26 - 4, bottom + 6, 0, 0, 10, 10, 256, 256);
 
 					}
 
 					if(modeIndex < modeCount - 2) {
 						Minecraft.getMinecraft().renderEngine.bindTexture(
 								mci.getIconForMode(currentItemStack, modeIndex + 2));
-						this.drawTexturedModalRectScaled(centerW - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
+						drawTexturedModalRectScaled(centerW - 8 + 26 + 4, bottom + 6, 0, 0, 10, 10, 256, 256);
 
 					}
 				}
@@ -594,241 +594,241 @@ public class OverlayAspectSelector extends Gui {
 		float f1 = 0.00390625F;
 		Tessellator tessellator = Tessellator.instance;
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV((double)(x + 0), (double)(y + height), (double)this.zLevel,
-				(double)((float)(u + 0) * f), (double)((float)(v + texHeight) * f1));
+		tessellator.addVertexWithUV(x + 0, y + height, zLevel,
+				(u + 0) * f, (v + texHeight) * f1);
 
-		tessellator.addVertexWithUV((double)(x + width), (double)(y + height), (double)this.zLevel,
-				(double)((float)(u + texWidth) * f), (double)((float)(v + texHeight) * f1));
+		tessellator.addVertexWithUV(x + width, y + height, zLevel,
+				(u + texWidth) * f, (v + texHeight) * f1);
 
-		tessellator.addVertexWithUV((double)(x + width), (double)(y + 0), (double)this.zLevel,
-				(double)((float)(u + texWidth) * f), (double)((float)(v + 0) * f1));
+		tessellator.addVertexWithUV(x + width, y + 0, zLevel,
+				(u + texWidth) * f, (v + 0) * f1);
 
-		tessellator.addVertexWithUV((double)(x + 0), (double)(y + 0), (double)this.zLevel,
-				(double)((float)(u + 0) * f), (double)((float)(v + 0) * f1));
+		tessellator.addVertexWithUV(x + 0, y + 0, zLevel,
+				(u + 0) * f, (v + 0) * f1);
 		tessellator.draw();
 	}
-	
-    public static MovingObjectPosition rayTrace(EntityLivingBase player, double par1, float par3)
-    {
-        Vec3 vec3 = player.getPosition(par3);
-        Vec3 vec31 = player.getLook(par3);
-        Vec3 vec32 = vec3.addVector(vec31.xCoord * par1, vec31.yCoord * par1, vec31.zCoord * par1);
-        return raytraceDo(player.worldObj, vec3, vec32, !GeometryHelper.isEntityInBlock(player, true), false, true);
-    }
-	
-    public static MovingObjectPosition raytraceDo(World world, Vec3 start, Vec3 end, boolean collisionCheck, boolean p_147447_4_, boolean p_147447_5_)
-    {
-        if (!Double.isNaN(start.xCoord) && !Double.isNaN(start.yCoord) && !Double.isNaN(start.zCoord))
-        {
-            if (!Double.isNaN(end.xCoord) && !Double.isNaN(end.yCoord) && !Double.isNaN(end.zCoord))
-            {
-                int i = MathHelper.floor_double(end.xCoord);
-                int j = MathHelper.floor_double(end.yCoord);
-                int k = MathHelper.floor_double(end.zCoord);
-                int l = MathHelper.floor_double(start.xCoord);
-                int i1 = MathHelper.floor_double(start.yCoord);
-                int j1 = MathHelper.floor_double(start.zCoord);
-                Block block = world.getBlock(l, i1, j1);
-                int k1 = world.getBlockMetadata(l, i1, j1);
 
-                if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(k1, collisionCheck) && !world.isAirBlock(l, i1, j1))
-                {
-                    MovingObjectPosition movingobjectposition = block.collisionRayTrace(world, l, i1, j1, start, end);
+	public static MovingObjectPosition rayTrace(EntityLivingBase player, double par1, float par3)
+	{
+		Vec3 vec3 = player.getPosition(par3);
+		Vec3 vec31 = player.getLook(par3);
+		Vec3 vec32 = vec3.addVector(vec31.xCoord * par1, vec31.yCoord * par1, vec31.zCoord * par1);
+		return raytraceDo(player.worldObj, vec3, vec32, !GeometryHelper.isEntityInBlock(player, true), false, true);
+	}
 
-                    if (movingobjectposition != null)
-                    {
-                        return movingobjectposition;
-                    }
-                }
+	public static MovingObjectPosition raytraceDo(World world, Vec3 start, Vec3 end, boolean collisionCheck, boolean p_147447_4_, boolean p_147447_5_)
+	{
+		if (!Double.isNaN(start.xCoord) && !Double.isNaN(start.yCoord) && !Double.isNaN(start.zCoord))
+		{
+			if (!Double.isNaN(end.xCoord) && !Double.isNaN(end.yCoord) && !Double.isNaN(end.zCoord))
+			{
+				int i = MathHelper.floor_double(end.xCoord);
+				int j = MathHelper.floor_double(end.yCoord);
+				int k = MathHelper.floor_double(end.zCoord);
+				int l = MathHelper.floor_double(start.xCoord);
+				int i1 = MathHelper.floor_double(start.yCoord);
+				int j1 = MathHelper.floor_double(start.zCoord);
+				Block block = world.getBlock(l, i1, j1);
+				int k1 = world.getBlockMetadata(l, i1, j1);
 
-                MovingObjectPosition movingobjectposition2 = null;
-                k1 = 200;
+				if ((!p_147447_4_ || block.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && block.canCollideCheck(k1, collisionCheck) && !world.isAirBlock(l, i1, j1))
+				{
+					MovingObjectPosition movingobjectposition = block.collisionRayTrace(world, l, i1, j1, start, end);
 
-                while (k1-- >= 0)
-                {
-                    if (Double.isNaN(start.xCoord) || Double.isNaN(start.yCoord) || Double.isNaN(start.zCoord))
-                    {
-                        return null;
-                    }
+					if (movingobjectposition != null)
+					{
+						return movingobjectposition;
+					}
+				}
 
-                    if (l == i && i1 == j && j1 == k)
-                    {
-                        return p_147447_5_ ? movingobjectposition2 : null;
-                    }
+				MovingObjectPosition movingobjectposition2 = null;
+				k1 = 200;
 
-                    boolean flag6 = true;
-                    boolean flag3 = true;
-                    boolean flag4 = true;
-                    double d0 = 999.0D;
-                    double d1 = 999.0D;
-                    double d2 = 999.0D;
+				while (k1-- >= 0)
+				{
+					if (Double.isNaN(start.xCoord) || Double.isNaN(start.yCoord) || Double.isNaN(start.zCoord))
+					{
+						return null;
+					}
 
-                    if (i > l)
-                    {
-                        d0 = (double)l + 1.0D;
-                    }
-                    else if (i < l)
-                    {
-                        d0 = (double)l + 0.0D;
-                    }
-                    else
-                    {
-                        flag6 = false;
-                    }
+					if (l == i && i1 == j && j1 == k)
+					{
+						return p_147447_5_ ? movingobjectposition2 : null;
+					}
 
-                    if (j > i1)
-                    {
-                        d1 = (double)i1 + 1.0D;
-                    }
-                    else if (j < i1)
-                    {
-                        d1 = (double)i1 + 0.0D;
-                    }
-                    else
-                    {
-                        flag3 = false;
-                    }
+					boolean flag6 = true;
+					boolean flag3 = true;
+					boolean flag4 = true;
+					double d0 = 999.0D;
+					double d1 = 999.0D;
+					double d2 = 999.0D;
 
-                    if (k > j1)
-                    {
-                        d2 = (double)j1 + 1.0D;
-                    }
-                    else if (k < j1)
-                    {
-                        d2 = (double)j1 + 0.0D;
-                    }
-                    else
-                    {
-                        flag4 = false;
-                    }
+					if (i > l)
+					{
+						d0 = l + 1.0D;
+					}
+					else if (i < l)
+					{
+						d0 = l + 0.0D;
+					}
+					else
+					{
+						flag6 = false;
+					}
 
-                    double d3 = 999.0D;
-                    double d4 = 999.0D;
-                    double d5 = 999.0D;
-                    double d6 = end.xCoord - start.xCoord;
-                    double d7 = end.yCoord - start.yCoord;
-                    double d8 = end.zCoord - start.zCoord;
+					if (j > i1)
+					{
+						d1 = i1 + 1.0D;
+					}
+					else if (j < i1)
+					{
+						d1 = i1 + 0.0D;
+					}
+					else
+					{
+						flag3 = false;
+					}
 
-                    if (flag6)
-                    {
-                        d3 = (d0 - start.xCoord) / d6;
-                    }
+					if (k > j1)
+					{
+						d2 = j1 + 1.0D;
+					}
+					else if (k < j1)
+					{
+						d2 = j1 + 0.0D;
+					}
+					else
+					{
+						flag4 = false;
+					}
 
-                    if (flag3)
-                    {
-                        d4 = (d1 - start.yCoord) / d7;
-                    }
+					double d3 = 999.0D;
+					double d4 = 999.0D;
+					double d5 = 999.0D;
+					double d6 = end.xCoord - start.xCoord;
+					double d7 = end.yCoord - start.yCoord;
+					double d8 = end.zCoord - start.zCoord;
 
-                    if (flag4)
-                    {
-                        d5 = (d2 - start.zCoord) / d8;
-                    }
+					if (flag6)
+					{
+						d3 = (d0 - start.xCoord) / d6;
+					}
 
-//                   boolean flag5 = false;
-                    byte b0;
+					if (flag3)
+					{
+						d4 = (d1 - start.yCoord) / d7;
+					}
 
-                    if (d3 < d4 && d3 < d5)
-                    {
-                        if (i > l)
-                        {
-                            b0 = 4;
-                        }
-                        else
-                        {
-                            b0 = 5;
-                        }
+					if (flag4)
+					{
+						d5 = (d2 - start.zCoord) / d8;
+					}
 
-                        start.xCoord = d0;
-                        start.yCoord += d7 * d3;
-                        start.zCoord += d8 * d3;
-                    }
-                    else if (d4 < d5)
-                    {
-                        if (j > i1)
-                        {
-                            b0 = 0;
-                        }
-                        else
-                        {
-                            b0 = 1;
-                        }
+					//                   boolean flag5 = false;
+					byte b0;
 
-                        start.xCoord += d6 * d4;
-                        start.yCoord = d1;
-                        start.zCoord += d8 * d4;
-                    }
-                    else
-                    {
-                        if (k > j1)
-                        {
-                            b0 = 2;
-                        }
-                        else
-                        {
-                            b0 = 3;
-                        }
+					if (d3 < d4 && d3 < d5)
+					{
+						if (i > l)
+						{
+							b0 = 4;
+						}
+						else
+						{
+							b0 = 5;
+						}
 
-                        start.xCoord += d6 * d5;
-                        start.yCoord += d7 * d5;
-                        start.zCoord = d2;
-                    }
+						start.xCoord = d0;
+						start.yCoord += d7 * d3;
+						start.zCoord += d8 * d3;
+					}
+					else if (d4 < d5)
+					{
+						if (j > i1)
+						{
+							b0 = 0;
+						}
+						else
+						{
+							b0 = 1;
+						}
 
-                    Vec3 vec32 = Vec3.createVectorHelper(start.xCoord, start.yCoord, start.zCoord);
-                    l = (int)(vec32.xCoord = (double)MathHelper.floor_double(start.xCoord));
+						start.xCoord += d6 * d4;
+						start.yCoord = d1;
+						start.zCoord += d8 * d4;
+					}
+					else
+					{
+						if (k > j1)
+						{
+							b0 = 2;
+						}
+						else
+						{
+							b0 = 3;
+						}
 
-                    if (b0 == 5)
-                    {
-                        --l;
-                        ++vec32.xCoord;
-                    }
+						start.xCoord += d6 * d5;
+						start.yCoord += d7 * d5;
+						start.zCoord = d2;
+					}
 
-                    i1 = (int)(vec32.yCoord = (double)MathHelper.floor_double(start.yCoord));
+					Vec3 vec32 = Vec3.createVectorHelper(start.xCoord, start.yCoord, start.zCoord);
+					l = (int)(vec32.xCoord = MathHelper.floor_double(start.xCoord));
 
-                    if (b0 == 1)
-                    {
-                        --i1;
-                        ++vec32.yCoord;
-                    }
+					if (b0 == 5)
+					{
+						--l;
+						++vec32.xCoord;
+					}
 
-                    j1 = (int)(vec32.zCoord = (double)MathHelper.floor_double(start.zCoord));
+					i1 = (int)(vec32.yCoord = MathHelper.floor_double(start.yCoord));
 
-                    if (b0 == 3)
-                    {
-                        --j1;
-                        ++vec32.zCoord;
-                    }
+					if (b0 == 1)
+					{
+						--i1;
+						++vec32.yCoord;
+					}
 
-                    Block block1 = world.getBlock(l, i1, j1);
-                    int l1 = world.getBlockMetadata(l, i1, j1);
+					j1 = (int)(vec32.zCoord = MathHelper.floor_double(start.zCoord));
 
-                    if ((!p_147447_4_ || block1.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && !block1.isAir(world, l, i1, j1))
-                    {
-                        if (block1.canCollideCheck(l1, collisionCheck))
-                        {
-                            MovingObjectPosition movingobjectposition1 = block1.collisionRayTrace(world, l, i1, j1, start, end);
+					if (b0 == 3)
+					{
+						--j1;
+						++vec32.zCoord;
+					}
 
-                            if (movingobjectposition1 != null)
-                            {
-                                return movingobjectposition1;
-                            }
-                        }
-                        else
-                        {
-                            movingobjectposition2 = new MovingObjectPosition(l, i1, j1, b0, start, false);
-                        }
-                    }
-                }
+					Block block1 = world.getBlock(l, i1, j1);
+					int l1 = world.getBlockMetadata(l, i1, j1);
 
-                return p_147447_5_ ? movingobjectposition2 : null;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        else
-        {
-            return null;
-        }
-    }
+					if ((!p_147447_4_ || block1.getCollisionBoundingBoxFromPool(world, l, i1, j1) != null) && !block1.isAir(world, l, i1, j1))
+					{
+						if (block1.canCollideCheck(l1, collisionCheck))
+						{
+							MovingObjectPosition movingobjectposition1 = block1.collisionRayTrace(world, l, i1, j1, start, end);
+
+							if (movingobjectposition1 != null)
+							{
+								return movingobjectposition1;
+							}
+						}
+						else
+						{
+							movingobjectposition2 = new MovingObjectPosition(l, i1, j1, b0, start, false);
+						}
+					}
+				}
+
+				return p_147447_5_ ? movingobjectposition2 : null;
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

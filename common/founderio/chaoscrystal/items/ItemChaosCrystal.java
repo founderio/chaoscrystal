@@ -21,7 +21,7 @@ public class ItemChaosCrystal extends Item {
 
 	public ItemChaosCrystal() {
 		super();
-		this.setMaxStackSize(1);
+		setMaxStackSize(1);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class ItemChaosCrystal extends Item {
 	public boolean hasEffect(ItemStack par1ItemStack, int pass) {
 		return pass == 0;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
@@ -39,7 +39,7 @@ public class ItemChaosCrystal extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister par1IconRegister) {
-		this.itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID
+		itemIcon = par1IconRegister.registerIcon(Constants.MOD_ID
 				+ ":chaoscrystal");
 	}
 

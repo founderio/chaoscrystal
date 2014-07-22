@@ -11,11 +11,11 @@ public class ModGuiConfig extends GuiConfig {
 	public ModGuiConfig(GuiScreen guiScreen)
 	{
 		super(guiScreen,
-		new ConfigElement<Object>(Config.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-		Constants.MOD_ID,
-		false,
-		false,
-		GuiConfig.getAbridgedConfigPath(Config.config.toString()));
-		
+				new ConfigElement<Object>(Config.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
+				Constants.MOD_ID,
+				false,
+				false,
+				GuiConfig.getAbridgedConfigPath(Config.config.toString()));
+
 	}
 }

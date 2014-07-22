@@ -49,9 +49,9 @@ public class CommonProxy {
 	public static void spawnParticleEffects(int dimension, int effect,
 			double sourceX, double sourceY, double sourceZ,
 			double offX, double offY, double offZ, float variation) {
-		ChaosCrystalMain.packetPipeline.sendToAllAround(new CCPParticle(effect, sourceX, sourceY, sourceZ, offX, offY, offZ, variation),
+		ChaosCrystalMain.network.sendToAllAround(new CCPParticle(effect, sourceX, sourceY, sourceZ, offX, offY, offZ, variation),
 				new TargetPoint(dimension, sourceX, sourceY, sourceZ, 32));
-		
+
 	}
 
 	public void spawnParticleEntity(World world, int type, double posX,

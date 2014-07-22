@@ -29,20 +29,20 @@ public class TileEntityTicker extends TileEntityApparatus {
 				zCoord);
 
 		acc++;
-		
+
 		if(acc >= interval) {
 			acc = 0;
-			
+
 			Block blockAbove = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
 			if(blockAbove != null) {
 				blockAbove.updateTick(worldObj, xCoord, yCoord + 1, zCoord, ChaosCrystalMain.rand);
 			}
 		}
-		
-		
+
+
 	}
 
-	
+
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return new int[] { };

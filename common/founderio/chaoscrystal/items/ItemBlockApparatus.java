@@ -7,7 +7,7 @@ public class ItemBlockApparatus extends ItemBlock {
 
 	public ItemBlockApparatus(Block theBlock) {
 		super(theBlock);
-		this.setMaxStackSize(16);
-		this.setMaxDamage(0);
+		setMaxStackSize(16);
+		setMaxDamage(0);
 	}
 }

@@ -41,10 +41,10 @@ public class RenderChaosCrystal extends Render {
 		 * From here: Based on RenderItem.renderDroppedItem
 		 */
 
-		float f4 = ((IIcon) par2Icon).getMinU();
-		float f5 = ((IIcon) par2Icon).getMaxU();
-		float f6 = ((IIcon) par2Icon).getMinV();
-		float f7 = ((IIcon) par2Icon).getMaxV();
+		float f4 = par2Icon.getMinU();
+		float f5 = par2Icon.getMaxU();
+		float f6 = par2Icon.getMinV();
+		float f7 = par2Icon.getMaxV();
 		float f9 = 0.5F;
 		float f10 = 0.25F;
 		float f11;
@@ -61,24 +61,24 @@ public class RenderChaosCrystal extends Render {
 		float f12 = 0.0625F;
 		f11 = 0.021875F;
 
-		GL11.glTranslatef(-f9, -f10, -((f12 + f11)));
+		GL11.glTranslatef(-f9, -f10, -(f12 + f11));
 
 		GL11.glTranslatef(0f, 0f, f12 + f11);
 
 		if (itemstack.getItemSpriteNumber() == 0) {
-			this.bindTexture(TextureMap.locationBlocksTexture);
+			bindTexture(TextureMap.locationBlocksTexture);
 		} else {
-			this.bindTexture(TextureMap.locationItemsTexture);
+			bindTexture(TextureMap.locationItemsTexture);
 		}
 
 		ItemRenderer.renderItemIn2D(tessellator, f5, f6, f4, f7,
-				((IIcon) par2Icon).getIconWidth(),
-				((IIcon) par2Icon).getIconHeight(), f12);
+				par2Icon.getIconWidth(),
+				par2Icon.getIconHeight(), f12);
 
 		if (itemstack.hasEffect(0)) {
 			GL11.glDepthFunc(GL11.GL_EQUAL);
 			GL11.glDisable(GL11.GL_LIGHTING);
-			this.renderManager.renderEngine.bindTexture(RES_ITEM_GLINT);
+			renderManager.renderEngine.bindTexture(RES_ITEM_GLINT);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
 			float f13 = 0.76F;
@@ -87,7 +87,7 @@ public class RenderChaosCrystal extends Render {
 			GL11.glPushMatrix();
 			float f14 = 0.125F;
 			GL11.glScalef(f14, f14, f14);
-			float f15 = (float) (Minecraft.getSystemTime() % 3000L) / 3000.0F * 8.0F;
+			float f15 = Minecraft.getSystemTime() % 3000L / 3000.0F * 8.0F;
 			GL11.glTranslatef(f15, 0.0F, 0.0F);
 			GL11.glRotatef(-50.0F, 0.0F, 0.0F, 1.0F);
 			ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F,
@@ -95,7 +95,7 @@ public class RenderChaosCrystal extends Render {
 			GL11.glPopMatrix();
 			GL11.glPushMatrix();
 			GL11.glScalef(f14, f14, f14);
-			f15 = (float) (Minecraft.getSystemTime() % 4873L) / 4873.0F * 8.0F;
+			f15 = Minecraft.getSystemTime() % 4873L / 4873.0F * 8.0F;
 			GL11.glTranslatef(-f15, 0.0F, 0.0F);
 			GL11.glRotatef(10.0F, 0.0F, 0.0F, 1.0F);
 			ItemRenderer.renderItemIn2D(tessellator, 0.0F, 0.0F, 1.0F, 1.0F,

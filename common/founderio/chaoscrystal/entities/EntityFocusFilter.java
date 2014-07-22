@@ -29,11 +29,11 @@ public class EntityFocusFilter extends EntityFocus {
 	}
 
 	public Aspect getAspect() {
-		return Aspect.findByStringRep(this.dataWatcher.getWatchableObjectString(30));
+		return Aspect.findByStringRep(dataWatcher.getWatchableObjectString(30));
 	}
 
 	public void setAspect(Aspect aspect) {
-		this.dataWatcher.updateObject(30, aspect.stringRep);
+		dataWatcher.updateObject(30, aspect.stringRep);
 	}
 
 	@Override
@@ -49,7 +49,7 @@ public class EntityFocusFilter extends EntityFocus {
 		}
 		List<EntityChaosCrystal> crystals = new ArrayList<EntityChaosCrystal>();
 
-		for (Object obj : this.worldObj.loadedEntityList) {
+		for (Object obj : worldObj.loadedEntityList) {
 			if (obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance(
 						(EntityChaosCrystal) obj, this);
@@ -67,9 +67,9 @@ public class EntityFocusFilter extends EntityFocus {
 			lookZ = (float) crystal1.posZ;
 			updateLook();
 		} else if (age == 0) {
-			lookX = (float) posX + (this.rand.nextFloat() - 0.5f) * 10;
+			lookX = (float) posX + (rand.nextFloat() - 0.5f) * 10;
 			lookY = (float) posY;
-			lookZ = (float) posZ + (this.rand.nextFloat() - 0.5f) * 10;
+			lookZ = (float) posZ + (rand.nextFloat() - 0.5f) * 10;
 			updateLook();
 		}
 	}

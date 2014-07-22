@@ -1,17 +1,17 @@
 package founderio.util;
 
-import founderio.chaoscrystal.ChaosCrystalMain;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import founderio.chaoscrystal.ChaosCrystalMain;
 
 public final class ItemUtil {
 	private ItemUtil() {
 		// Util Class
 	}
-	
+
 	public static final int WILDCARD_META = 32767;
 
 	public static boolean itemsMatch(ItemStack reference, ItemStack compare) {
@@ -30,9 +30,9 @@ public final class ItemUtil {
 			return true;
 		}
 		return metaMatch(reference.getItemDamage(), compare.getItemDamage());
-		
+
 	}
-	
+
 	public static boolean metaMatch(int reference, int compare) {
 		return reference == WILDCARD_META || compare == WILDCARD_META || reference == compare;
 	}
@@ -62,7 +62,7 @@ public final class ItemUtil {
 
 		world.spawnEntityInWorld(item);
 	}
-	
+
 	public static void spawnItemStackDropped(ItemStack is, World world, int x, int y, int z) {
 		float f = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
 		float f1 = ChaosCrystalMain.rand.nextFloat() * 0.8F + 0.1F;
@@ -76,16 +76,16 @@ public final class ItemUtil {
 			}
 
 			is.stackSize -= k1;
-			entityitem = new EntityItem(world, (double) ((float) x + f),
-					(double) ((float) y + f1), (double) ((float) z + f2),
+			entityitem = new EntityItem(world, x + f,
+					y + f1, z + f2,
 					new ItemStack(is.getItem(), k1, is.getItemDamage()));
 			float f3 = 0.05F;
-			entityitem.motionX = (double) ((float) ChaosCrystalMain.rand
-					.nextGaussian() * f3);
-			entityitem.motionY = (double) ((float) ChaosCrystalMain.rand
-					.nextGaussian() * f3 + 0.2F);
-			entityitem.motionZ = (double) ((float) ChaosCrystalMain.rand
-					.nextGaussian() * f3);
+			entityitem.motionX = (float) ChaosCrystalMain.rand
+					.nextGaussian() * f3;
+			entityitem.motionY = (float) ChaosCrystalMain.rand
+					.nextGaussian() * f3 + 0.2F;
+			entityitem.motionZ = (float) ChaosCrystalMain.rand
+					.nextGaussian() * f3;
 
 			if (is.hasTagCompound()) {
 				entityitem.getEntityItem().setTagCompound(

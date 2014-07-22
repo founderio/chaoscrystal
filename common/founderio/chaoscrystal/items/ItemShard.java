@@ -19,13 +19,13 @@ public class ItemShard extends Item {
 	}
 
 	public static final String[] metaList = new String[] {
-			Constants.ID_ITEM_SHARD_CRYSTALLINE_ENERGY,
-			Constants.ID_ITEM_SHARD_CRYSTALLINE_CHAOS,
-			Constants.ID_ITEM_SHARD_CRYSTALLINE_LIGHT,
-			Constants.ID_ITEM_SHARD_CRYSTAL_CLEAR };
+		Constants.ID_ITEM_SHARD_CRYSTALLINE_ENERGY,
+		Constants.ID_ITEM_SHARD_CRYSTALLINE_CHAOS,
+		Constants.ID_ITEM_SHARD_CRYSTALLINE_LIGHT,
+		Constants.ID_ITEM_SHARD_CRYSTAL_CLEAR };
 
 	private IIcon[] iconList;
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -34,7 +34,7 @@ public class ItemShard extends Item {
 			list.add(new ItemStack(item, 1, i));
 		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
@@ -46,7 +46,7 @@ public class ItemShard extends Item {
 	public IIcon getIconFromDamage(int damage) {
 		return iconList[MathHelper.clamp_int(damage, 0, metaList.length - 1)];
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister ir) {
@@ -56,7 +56,7 @@ public class ItemShard extends Item {
 		iconList[2] = ir.registerIcon(Constants.MOD_ID + ":shard_crystalline_light");
 		iconList[3] = ir.registerIcon(Constants.MOD_ID + ":shard_crystal_clear");
 	}
-	
+
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
 		int idx = MathHelper.clamp_int(itemStack.getItemDamage(), 0, metaList.length - 1);

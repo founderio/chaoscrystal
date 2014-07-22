@@ -48,7 +48,7 @@ public class ClientProxy extends CommonProxy {
 		FMLCommonHandler.instance().bus().register(render);
 
 	}
-	
+
 	@Override
 	public void spawnParticleEntity(World world, int type, double posX,
 			double posY, double posZ, double offX, double offY, double offZ,

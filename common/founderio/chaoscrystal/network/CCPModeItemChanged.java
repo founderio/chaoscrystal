@@ -1,12 +1,46 @@
 package founderio.chaoscrystal.network;
 
-import founderio.chaoscrystal.IModeChangingItem;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import founderio.chaoscrystal.IModeChangingItem;
 
-public class CCPModeItemChanged extends CCAbstractPacket {
+public class CCPModeItemChanged implements IMessage {
+
+	public static class Handler implements IMessageHandler<CCPModeItemChanged, IMessage> {
+
+		@Override
+		public IMessage onMessage(CCPModeItemChanged message, MessageContext ctx) {
+			EntityPlayer player;
+			if(ctx.side == Side.CLIENT) {
+				player = Minecraft.getMinecraft().thePlayer;
+			} else {
+				player = ctx.getServerHandler().playerEntity;
+			}
+			ItemStack currentItemStack = player.inventory.getCurrentItem();
+			if(currentItemStack == null || !(currentItemStack.getItem() instanceof IModeChangingItem)) {
+				return null;
+			}
+			IModeChangingItem mci = (IModeChangingItem)currentItemStack.getItem();
+			int modeCount = mci.getModeCount(currentItemStack);
+			if(modeCount == 0) {
+				return null;
+			}
+			if(message.modeIndex < 0) {
+				message.modeIndex = 0;
+			}
+			if(message.modeIndex >= modeCount) {
+				message.modeIndex = modeCount;
+			}
+			mci.setSelectedModeForItemStack(currentItemStack, message.modeIndex);
+			return null;
+		}
+	}
 
 	private int modeIndex;
 
@@ -19,43 +53,13 @@ public class CCPModeItemChanged extends CCAbstractPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-		buffer.writeInt(modeIndex);
+	public void fromBytes(ByteBuf buf) {
+		modeIndex = buf.readInt();
 	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-		modeIndex = buffer.readInt();
-	}
-
-	@Override
-	public void handleClientSide(EntityPlayer player) {
-		handle(player);
-	}
-
-	@Override
-	public void handleServerSide(EntityPlayer player) {
-		handle(player);
-	}
-	
-	private void handle(EntityPlayer player) {
-		ItemStack currentItemStack = player.inventory.getCurrentItem();
-		if(currentItemStack == null || !(currentItemStack.getItem() instanceof IModeChangingItem)) {
-			return;
-		}
-		IModeChangingItem mci = (IModeChangingItem)currentItemStack.getItem();
-		int modeCount = mci.getModeCount(currentItemStack);
-		if(modeCount == 0) {
-			return;
-		}
-		if(modeIndex < 0) {
-			modeIndex = 0;
-		}
-		if(modeIndex >= modeCount) {
-			modeIndex = modeCount;
-		}
-		mci.setSelectedModeForItemStack(currentItemStack, modeIndex);
-		
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(modeIndex);
 	}
 
 }

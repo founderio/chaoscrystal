@@ -32,9 +32,9 @@ public final class GeometryHelper {
 	}
 
 	public static boolean isEntityInBlock(Entity ent, boolean fluidsOnly) {
-		double d0 = ent.posY + (double) ent.getEyeHeight();
+		double d0 = ent.posY + ent.getEyeHeight();
 		int i = MathHelper.floor_double(ent.posX);
-		int j = MathHelper.floor_float((float) MathHelper.floor_double(d0));
+		int j = MathHelper.floor_float(MathHelper.floor_double(d0));
 		int k = MathHelper.floor_double(ent.posZ);
 		Block block = ent.worldObj.getBlock(i, j, k);
 
@@ -51,12 +51,12 @@ public final class GeometryHelper {
 
 		if (filled < 0) {
 			filled *= -1;
-			return d0 > (double) (j + (1 - filled));
+			return d0 > j + (1 - filled);
 		} else {
-			return d0 < (double) (j + filled);
+			return d0 < j + filled;
 		}
 	}
-	
+
 	public static <T extends Entity> List<T> getEntitiesInRange(World world, double posX, double posY, double posZ, double range, Class<T> entityClass) {
 		List<T> entities = new ArrayList<T>();
 

@@ -2,7 +2,6 @@ package founderio.chaoscrystal.blocks;
 
 import net.minecraft.item.ItemStack;
 import founderio.chaoscrystal.ChaosCrystalMain;
-import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.aspects.Repair;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 

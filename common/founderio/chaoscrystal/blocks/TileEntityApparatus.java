@@ -1,7 +1,5 @@
 package founderio.chaoscrystal.blocks;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
@@ -14,12 +12,15 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants.NBT;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.machinery.IItemModule;
 import founderio.chaoscrystal.machinery.IModule;
 
 public abstract class TileEntityApparatus extends TileEntity implements
-		IInventory, ISidedInventory {
+IInventory, ISidedInventory {
 
 	public final int stepsPerTick = 5;
 	public short animation;
@@ -40,27 +41,27 @@ public abstract class TileEntityApparatus extends TileEntity implements
 	public int getSizeModules() {
 		return modules.length;
 	}
-	
+
 	public IModule getModule(int index) {
 		return modules[index];
 	}
-	
+
 	public ItemStack getModuleItemStack(int index) {
 		return moduleItems[index];
 	}
 
 	public void setOwner(String username) {
-		this.owner = username;
-		if (this.owner == null) {
-			this.owner = "";
+		owner = username;
+		if (owner == null) {
+			owner = "";
 		}
 		updateState();
 	}
 
 	public String getOwner() {
-		return this.owner;
+		return owner;
 	}
-	
+
 	@Override
 	public int getSizeInventory() {
 		return inventory.length;
@@ -161,7 +162,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		if (worldObj.isRemote) {
 			return;
 		}
-		this.worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
 	@Override
@@ -173,7 +174,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 
 		return packet;
 	}
-	
+
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.func_148857_g();
@@ -233,7 +234,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		NBTTagList moduleItemsNBT = par1nbtTagCompound.getTagList("modules", NBT.TAG_COMPOUND);
 		if (moduleItemsNBT != null) {
 			for (int i = 0; i < moduleItemsNBT.tagCount(); i++) {
-				NBTTagCompound stackTag = (NBTTagCompound) moduleItemsNBT.getCompoundTagAt(i);
+				NBTTagCompound stackTag = moduleItemsNBT.getCompoundTagAt(i);
 				ItemStack mi = ItemStack.loadItemStackFromNBT(stackTag);
 				if(mi != null && mi.getItem() instanceof IItemModule) {
 					moduleItems[i] = mi;
@@ -244,12 +245,12 @@ public abstract class TileEntityApparatus extends TileEntity implements
 		animation = par1nbtTagCompound.getShort("animation");
 		owner = par1nbtTagCompound.getString("owner");
 	}
-	
+
 
 	public boolean onBlockActivated(EntityPlayer player) {
 		ItemStack currentEquip = player.getHeldItem();
 
-		if((currentEquip == null) && player.isSneaking()) {
+		if(currentEquip == null && player.isSneaking()) {
 			//TODO: Switch to UUID
 			if(getOwner().equals(player.getDisplayName())) {
 				setOwner("");
@@ -257,14 +258,14 @@ public abstract class TileEntityApparatus extends TileEntity implements
 				setOwner(player.getDisplayName());
 			}
 		} else {
-		
+
 			boolean itemValid = false;
-			
+
 			if (currentEquip != null) {
 				for (int i = 0; i < inventory.length; i++) {
 					if(isItemValidForSlot(i, currentEquip)) {
 						itemValid = true;
-						ItemStack is = this.getStackInSlot(i);
+						ItemStack is = getStackInSlot(i);
 						if (is == null || is.getItem() == null) {
 							if (currentEquip.stackSize <= getInventoryStackLimit()) {
 								setInventorySlotContents(i, currentEquip.copy());
@@ -272,7 +273,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 								break;
 							} else {
 								currentEquip.stackSize -= getInventoryStackLimit();
-								
+
 								ItemStack copy = currentEquip.copy();
 								copy.stackSize = getInventoryStackLimit();
 								setInventorySlotContents(i, copy);
@@ -298,7 +299,7 @@ public abstract class TileEntityApparatus extends TileEntity implements
 						}
 					}
 				}
-				
+
 				if(currentEquip.getItem() instanceof IItemModule) {
 					IItemModule iim = (IItemModule)currentEquip.getItem();
 					for(int i = 0; i < modules.length; i++) {
@@ -315,21 +316,21 @@ public abstract class TileEntityApparatus extends TileEntity implements
 						}
 					}
 				}
-				
+
 			}
-			
+
 			if(!itemValid) {
 				for (int i = 0; i < 4; i++) {
-					ItemStack is = this.getStackInSlot(i);
+					ItemStack is = getStackInSlot(i);
 					if (is != null && is.stackSize > 0) {
 						if (player.inventory.addItemStackToInventory(is)) {
-							this.setInventorySlotContents(i, null);
+							setInventorySlotContents(i, null);
 							break;
 						}
 					}
 				}
 			}
-	
+
 			markDirty();
 		}
 		return true;

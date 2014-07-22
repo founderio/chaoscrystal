@@ -12,9 +12,9 @@ public class BlockLifeless extends Block {
 
 	public BlockLifeless() {
 		super(Material.coral);
-		this.setHardness(0);
-		this.setResistance(0);
-		this.setStepSound(new SoundType("", 0, 0));
+		setHardness(0);
+		setResistance(0);
+		setStepSound(new SoundType("", 0, 0));
 	}
 
 	@Override
@@ -38,5 +38,5 @@ public class BlockLifeless extends Block {
 			int p_149668_2_, int p_149668_3_, int p_149668_4_) {
 		return null;
 	}
-	
+
 }

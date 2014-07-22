@@ -7,7 +7,7 @@ public class AspectModule {
 
 	public AspectModule() {
 		nodes = new ArrayList<Node>();
-		name = this.toString();
+		name = toString();
 	}
 
 	private String name;

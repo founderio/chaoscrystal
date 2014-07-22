@@ -39,14 +39,14 @@ public class DegradationHelper {
 		if (replacement.length == 1
 				&& replacement[0].getItem() instanceof ItemBlock) {
 			world.setBlock(posX, posY, posZ, Block.getBlockFromItem(replacement[0].getItem()), replacement[0]
-							.getItemDamage(), 1 + 2);
+					.getItemDamage(), 1 + 2);
 
 		} else {
 			world.setBlock(posX, posY, posZ, Blocks.air, 0, 1 + 2);
 			spawnMultiplesOfStacks(replacement, 1, world, posX, posY, posZ);
 		}
 	}
-	
+
 	public static void spawnMultiplesOfStacks(ItemStack[] nodes, int count,
 			World world, EntityItem reference) {
 		for (int i = 0; i < nodes.length; i++) {
@@ -116,13 +116,13 @@ public class DegradationHelper {
 
 					if (!id.isAir(world, absX, absY, absZ)
 							&& !ChaosCrystalMain.chaosRegistry.isIgnoreBlock(id, extract)) {// We can't extract air...
-						
+
 						int meta = world.getBlockMetadata(absX, absY, absZ);
 						ItemStack is = new ItemStack(id, 1, meta);
-						
+
 						Node degradation = getDegradation(is, extract);
 						ItemStack results = getDegradationResult(degradation, extract);
-						
+
 						if (results == null) {
 							continue;
 						}
@@ -172,12 +172,12 @@ public class DegradationHelper {
 		if(allowItems) {
 			if (hit < Config.cfgHitsPerTick) {
 				List<EntityItem> items = GeometryHelper.getEntitiesInRange(world, posX, posY, posZ, range, EntityItem.class);
-				
+
 				if (items.size() != 0) {
 
 					EntityItem it = ListUtil.getRandomFromList(items, ChaosCrystalMain.rand);
 					ItemStack is = it.getEntityItem();
-					
+
 					Node degradation = getDegradation(is, extract);
 					ItemStack result = getDegradationResult(degradation, extract);
 
@@ -185,7 +185,7 @@ public class DegradationHelper {
 						// continue;
 					} else {
 						int[] aspects = degradation.getAspects();
-	
+
 						if (Aspect.isFilterMatched(filterAspects, aspects)) {
 							int count = 0;
 							// Limit max amount of processed items by max hits and stack size
@@ -198,12 +198,12 @@ public class DegradationHelper {
 								// number, so higher max hit does not cause while
 								// stacks to get processed at once:
 								size = ChaosCrystalMain.rand.nextInt(size) + 1;
-								
+
 								if (extract) {
 									for (int st = 0; st < size; st++) {
 										if (entity.canAcceptAspects(aspects)) {
 											count++;
-		
+
 											entity.addAspects(aspects);
 										} else {
 											break;
@@ -213,7 +213,7 @@ public class DegradationHelper {
 									for (int st = 0; st < size; st++) {
 										if (entity.canProvideAspects(aspects)) {
 											count++;
-		
+
 											entity.subtractAspects(aspects);
 										} else {
 											break;
@@ -223,10 +223,10 @@ public class DegradationHelper {
 								hit += count;
 								if (count > 0) {
 									is.stackSize -= count;
-									
+
 									//TODO: non-erray variant of spawnMultiplesOfStacks
 									spawnMultiplesOfStacks(new ItemStack[] {result}, count, world, it);
-		
+
 									if (is.stackSize == 0) {
 										it.setDead();
 									} else {
@@ -239,7 +239,7 @@ public class DegradationHelper {
 									}
 									CommonProxy.spawnParticleEffects(it, 2);
 								}
-								
+
 							}
 						}
 					}
@@ -250,7 +250,7 @@ public class DegradationHelper {
 			entity.playSound("mob.enderdragon.growl", 0.1f, 0.1f);
 		}
 	}
-	
+
 	public static Node getDegradation(ItemStack is, boolean extract) {
 		if(is == null) {
 			return null;
@@ -267,7 +267,7 @@ public class DegradationHelper {
 		return ListUtil.getRandomFromList(nodes,
 				ChaosCrystalMain.rand);
 	}
-	
+
 	public static ItemStack getDegradationResult(Node node, boolean extract) {
 		if (node == null) {
 			return null;

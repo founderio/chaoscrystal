@@ -18,7 +18,7 @@ public class Node {
 		greater = new NodePoint();
 		aspects = new int[Aspect.values().length];
 	}
-	
+
 	public int[] getAspects() {
 		return Arrays.copyOf(aspects, aspects.length);
 	}

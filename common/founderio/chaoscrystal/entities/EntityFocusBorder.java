@@ -17,6 +17,7 @@ public class EntityFocusBorder extends EntityFocus {
 		super(world, x, y, z, yaw, pitch);
 	}
 
+	@Override
 	public ItemStack buildItemStack() {
 		ItemStack is = new ItemStack(ChaosCrystalMain.itemFocus, 1, 1);
 		return is;
@@ -30,7 +31,7 @@ public class EntityFocusBorder extends EntityFocus {
 		EntityChaosCrystal crystal1 = null;
 		double dist = Double.MAX_VALUE;
 
-		for (Object obj : this.worldObj.loadedEntityList) {
+		for (Object obj : worldObj.loadedEntityList) {
 			if (obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance((EntityChaosCrystal) obj, this);
 				if (tmp_dist < dist) {
@@ -46,9 +47,9 @@ public class EntityFocusBorder extends EntityFocus {
 			lookZ = (float) crystal1.posZ;
 			updateLook();
 		} else if (age == 0) {
-			lookX = (float) posX + (this.rand.nextFloat() - 0.5f) * 10;
+			lookX = (float) posX + (rand.nextFloat() - 0.5f) * 10;
 			lookY = (float) posY;
-			lookZ = (float) posZ + (this.rand.nextFloat() - 0.5f) * 10;
+			lookZ = (float) posZ + (rand.nextFloat() - 0.5f) * 10;
 			updateLook();
 		}
 	}

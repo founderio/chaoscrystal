@@ -18,39 +18,39 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	public EntityChaosCrystal(World world) {
 		super(world);
-		this.tickInterval = Config.cfgCrystalTickInterval;
+		tickInterval = Config.cfgCrystalTickInterval;
 	}
 
 	public EntityChaosCrystal(World world, double x, double y, double z,
 			float yaw, float pitch) {
 		super(world, x, y, z, yaw, pitch);
-		this.tickInterval = Config.cfgCrystalTickInterval;
+		tickInterval = Config.cfgCrystalTickInterval;
 	}
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(9, Byte.valueOf((byte) 0));
+		dataWatcher.addObject(9, Byte.valueOf((byte) 0));
 		for (int i = 0; i < Aspect.values().length; i++) {
-			this.dataWatcher.addObject(10 + i, Integer.valueOf(0));
+			dataWatcher.addObject(10 + i, Integer.valueOf(0));
 		}
 	}
 
 	public boolean isInSuckMode() {
-		return this.dataWatcher.getWatchableObjectByte(9) == 1;
+		return dataWatcher.getWatchableObjectByte(9) == 1;
 	}
 
 	public void setSuckMode(boolean value) {
-		this.dataWatcher.updateObject(9, Byte.valueOf((byte) (value ? 1 : 0)));
+		dataWatcher.updateObject(9, Byte.valueOf((byte) (value ? 1 : 0)));
 	}
 
 	@Override
 	public int getAspect(Aspect aspect) {
-		return this.dataWatcher.getWatchableObjectInt(10 + aspect.ordinal());
+		return dataWatcher.getWatchableObjectInt(10 + aspect.ordinal());
 	}
 
 	@Override
 	public void setAspect(Aspect aspect, int value) {
-		this.dataWatcher.updateObject(10 + aspect.ordinal(), Integer.valueOf(value));
+		dataWatcher.updateObject(10 + aspect.ordinal(), Integer.valueOf(value));
 	}
 
 	@Override
@@ -61,25 +61,25 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	@Override
 	public void addAspects(int[] aspectArray) {
 		for (int i = 0; i < Aspect.values().length; i++) {
-			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i)
+			int aspectCount = dataWatcher.getWatchableObjectInt(10 + i)
 					+ aspectArray[i];
-			this.dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
+			dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
 		}
 	}
 
 	@Override
 	public void subtractAspects(int[] aspectArray) {
 		for (int i = 0; i < Aspect.values().length; i++) {
-			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i)
+			int aspectCount = dataWatcher.getWatchableObjectInt(10 + i)
 					- aspectArray[i];
-			this.dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
+			dataWatcher.updateObject(10 + i, Integer.valueOf(aspectCount));
 		}
 	}
 
 	@Override
 	public boolean canProvideAspects(int[] aspectArray) {
 		for (int i = 0; i < Aspect.values().length; i++) {
-			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i);
+			int aspectCount = dataWatcher.getWatchableObjectInt(10 + i);
 			if (aspectCount - aspectArray[i] < 0) {
 				return false;
 			}
@@ -90,7 +90,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	@Override
 	public boolean canAcceptAspects(int[] aspectArray) {
 		for (int i = 0; i < Aspect.values().length; i++) {
-			int aspectCount = this.dataWatcher.getWatchableObjectInt(10 + i);
+			int aspectCount = dataWatcher.getWatchableObjectInt(10 + i);
 			if (aspectCount + aspectArray[i] > getSingleAspectCapacity()) {
 				return false;
 			}
@@ -104,7 +104,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 		List<String> filterTargets = new ArrayList<String>();
 		double range = Config.cfgCrystalRange;
 
-		for (Object obj : this.worldObj.loadedEntityList) {
+		for (Object obj : worldObj.loadedEntityList) {
 			if (obj instanceof EntityFocusFilter) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
@@ -144,8 +144,8 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public void playSpawnSound() {
-		this.playSound("mob.wither.death", 1, .2f);
-		this.playSound("mob.enderdragon.end", 1, .2f);
+		playSound("mob.wither.death", 1, .2f);
+		playSound("mob.enderdragon.end", 1, .2f);
 	}
 
 	private NBTTagCompound getAspectStore() {

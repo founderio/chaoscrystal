@@ -50,10 +50,10 @@ public class RenderItemManual implements IItemRenderer {
 		GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		tessellator.startDrawingQuads();
-		tessellator.addVertexWithUV((double)((float)(b1 + -20) + f), (double)((float)(b2 + 148) - f), -0.009999999776482582D, 0.0D, 1.0D);
-		tessellator.addVertexWithUV((double)((float)(b1 + 148) - f), (double)((float)(b2 + 148) - f), -0.009999999776482582D, 1.0D, 1.0D);
-		tessellator.addVertexWithUV((double)((float)(b1 + 148) - f), (double)((float)(b2 + -20) + f), -0.009999999776482582D, 1.0D, 0.0D);
-		tessellator.addVertexWithUV((double)((float)(b1 + -20) + f), (double)((float)(b2 + -20) + f), -0.009999999776482582D, 0.0D, 0.0D);
+		tessellator.addVertexWithUV(b1 + -20 + f, b2 + 148 - f, -0.009999999776482582D, 0.0D, 1.0D);
+		tessellator.addVertexWithUV(b1 + 148 - f, b2 + 148 - f, -0.009999999776482582D, 1.0D, 1.0D);
+		tessellator.addVertexWithUV(b1 + 148 - f, b2 + -20 + f, -0.009999999776482582D, 1.0D, 0.0D);
+		tessellator.addVertexWithUV(b1 + -20 + f, b2 + -20 + f, -0.009999999776482582D, 0.0D, 0.0D);
 		tessellator.draw();
 
 		ItemStack helmet = Minecraft.getMinecraft().thePlayer.inventory.armorInventory[3];
@@ -62,10 +62,10 @@ public class RenderItemManual implements IItemRenderer {
 			Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/manual_stubtext.png"));
 
 			tessellator.startDrawingQuads();
-			tessellator.addVertexWithUV((double)((float)(b1 + -20) + f), (double)((float)(b2 + 148) - f), -0.009999999776482582D, 0.0D, 1.0D);
-			tessellator.addVertexWithUV((double)((float)(b1 + 148) - f), (double)((float)(b2 + 148) - f), -0.009999999776482582D, 1.0D, 1.0D);
-			tessellator.addVertexWithUV((double)((float)(b1 + 148) - f), (double)((float)(b2 + -20) + f), -0.009999999776482582D, 1.0D, 0.0D);
-			tessellator.addVertexWithUV((double)((float)(b1 + -20) + f), (double)((float)(b2 + -20) + f), -0.009999999776482582D, 0.0D, 0.0D);
+			tessellator.addVertexWithUV(b1 + -20 + f, b2 + 148 - f, -0.009999999776482582D, 0.0D, 1.0D);
+			tessellator.addVertexWithUV(b1 + 148 - f, b2 + 148 - f, -0.009999999776482582D, 1.0D, 1.0D);
+			tessellator.addVertexWithUV(b1 + 148 - f, b2 + -20 + f, -0.009999999776482582D, 1.0D, 0.0D);
+			tessellator.addVertexWithUV(b1 + -20 + f, b2 + -20 + f, -0.009999999776482582D, 0.0D, 0.0D);
 			tessellator.draw();
 		} else {
 			b1 -= 3;
@@ -111,28 +111,28 @@ public class RenderItemManual implements IItemRenderer {
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/craftinggrid.png"));
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 9) + f), (double)((float)(b2 + 59) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 59) - f), (double)((float)(b2 + 59) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 59) - f), (double)((float)(b2 + 9) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 9) + f), (double)((float)(b2 + 9) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 9 + f, b2 + 59 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 59 - f, b2 + 59 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 59 - f, b2 + 9 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 9 + f, b2 + 9 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/craftingarrow.png"));
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 60) + f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 80) - f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 80) - f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 60) + f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 60 + f, b2 + 46 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 80 - f, b2 + 46 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 80 - f, b2 + 26 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 60 + f, b2 + 26 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/craftingoutput.png"));
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 88) + f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 108) - f), (double)((float)(b2 + 46) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 108) - f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 88) + f), (double)((float)(b2 + 26) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 88 + f, b2 + 46 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 108 - f, b2 + 46 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 108 - f, b2 + 26 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 88 + f, b2 + 26 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 				//GL11.glEnable(GL11.GL_DEPTH_TEST);
 				// GL11.glPushMatrix();
@@ -146,45 +146,45 @@ public class RenderItemManual implements IItemRenderer {
 				Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation(Constants.MOD_ID + ":textures/hud/block_red.png"));
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10 + f, b2 + 26 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26 - f, b2 + 26 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26 - f, b2 + 10 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10 + f, b2 + 10 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10 + f, b2 + 26+16 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26 - f, b2 + 26+16 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26 - f, b2 + 10+16 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10 + f, b2 + 10+16 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26) - f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 10) + f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10 + f, b2 + 26+16+16 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26 - f, b2 + 26+16+16 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26 - f, b2 + 10+16+16 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10 + f, b2 + 10+16+16 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 26) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 10) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10+16+16 + f, b2 + 26 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26+16+16 - f, b2 + 26 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26+16+16 - f, b2 + 10 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10+16+16 + f, b2 + 10 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 26+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 10+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10+16+16 + f, b2 + 26+16 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26+16+16 - f, b2 + 26+16 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26+16+16 - f, b2 + 10+16 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10+16+16 + f, b2 + 10+16 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 0.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 26+16+16) - f), -0.009999999776482582D, 1.0D, 1.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 26+16+16) - f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 1.0D, 0.0D);
-				tessellator.addVertexWithUV((double)((float)(b1 + 10+16+16) + f), (double)((float)(b2 + 10+16+16) + f), -0.009999999776482582D, 0.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10+16+16 + f, b2 + 26+16+16 - f, -0.009999999776482582D, 0.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26+16+16 - f, b2 + 26+16+16 - f, -0.009999999776482582D, 1.0D, 1.0D);
+				tessellator.addVertexWithUV(b1 + 26+16+16 - f, b2 + 10+16+16 + f, -0.009999999776482582D, 1.0D, 0.0D);
+				tessellator.addVertexWithUV(b1 + 10+16+16 + f, b2 + 10+16+16 + f, -0.009999999776482582D, 0.0D, 0.0D);
 				tessellator.draw();
 
 				// GL11.glPopMatrix();

@@ -14,15 +14,15 @@ public abstract class EntityCrystal extends Entity {
 
 	public EntityCrystal(World world) {
 		super(world);
-		this.setSize(0.75F, 0.75F);
-		this.isImmuneToFire = true;
+		setSize(0.75F, 0.75F);
+		isImmuneToFire = true;
 	}
 
 	public EntityCrystal(World world, double x, double y, double z, float yaw,
 			float pitch) {
 		this(world);
-		this.setPosition(x, y, z);
-		this.setRotation(yaw, pitch);
+		setPosition(x, y, z);
+		setRotation(yaw, pitch);
 	}
 
 	protected abstract void logicUpdate();
@@ -40,30 +40,30 @@ public abstract class EntityCrystal extends Entity {
 
 	@Override
 	public boolean hitByEntity(Entity par1Entity) {
-		if (this.worldObj.isRemote) {
+		if (worldObj.isRemote) {
 			return true;
 		}
 
-		this.playSound("mob.blaze.hit", 1, .2f);
+		playSound("mob.blaze.hit", 1, .2f);
 
-		EntityItem item = new EntityItem(this.worldObj, this.posX, this.posY,
-				this.posZ, buildItemStack());
+		EntityItem item = new EntityItem(worldObj, posX, posY,
+				posZ, buildItemStack());
 		item.delayBeforeCanPickup = 0;
 
-		this.worldObj.spawnEntityInWorld(item);
+		worldObj.spawnEntityInWorld(item);
 
-		this.setDead();
+		setDead();
 
 		return true;
 	}
 
 	@Override
 	public void onStruckByLightning(EntityLightningBolt par1EntityLightningBolt) {
-		if (this.worldObj.isRemote) {
+		if (worldObj.isRemote) {
 			return;
 		}
 
-		this.playSound("mob.blaze.death", 1, .2f);
+		playSound("mob.blaze.death", 1, .2f);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public abstract class EntityCrystal extends Entity {
 
 		visualUpdate();
 
-		this.worldObj.theProfiler.endSection();
+		worldObj.theProfiler.endSection();
 	}
 
 	@Override

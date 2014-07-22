@@ -31,13 +31,13 @@ public class ItemFocus extends Item implements IModeChangingItem, IItemModule {
 
 	public ItemFocus() {
 		super();
-		this.setHasSubtypes(true);
-		this.setMaxStackSize(16);
+		setHasSubtypes(true);
+		setMaxStackSize(16);
 	}
 
 	@SideOnly(Side.CLIENT)
 	IIcon[] iconList;
-	
+
 	@Override
 	public int getSelectedModeForItemStack(ItemStack is) {
 		NBTTagCompound tags = is.getTagCompound();

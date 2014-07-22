@@ -23,9 +23,9 @@ public abstract class EntityFocus extends EntityCrystal {
 
 	@Override
 	protected void entityInit() {
-		this.dataWatcher.addObject(10, Float.valueOf(lookX));
-		this.dataWatcher.addObject(11, Float.valueOf(lookY));
-		this.dataWatcher.addObject(12, Float.valueOf(lookZ));
+		dataWatcher.addObject(10, Float.valueOf(lookX));
+		dataWatcher.addObject(11, Float.valueOf(lookY));
+		dataWatcher.addObject(12, Float.valueOf(lookZ));
 	}
 
 	@Override
@@ -35,16 +35,16 @@ public abstract class EntityFocus extends EntityCrystal {
 
 	@Override
 	protected void visualUpdate() {
-		lookX = this.dataWatcher.getWatchableObjectFloat(10);
-		lookY = this.dataWatcher.getWatchableObjectFloat(11);
-		lookZ = this.dataWatcher.getWatchableObjectFloat(12);
+		lookX = dataWatcher.getWatchableObjectFloat(10);
+		lookY = dataWatcher.getWatchableObjectFloat(11);
+		lookZ = dataWatcher.getWatchableObjectFloat(12);
 
 		double d0 = lookX - posX;
 		double d1 = lookY - posY;
 		double d2 = lookZ - posZ;
 		float f3 = MathHelper.sqrt_double(d0 * d0 + d2 * d2);
 		float targetYaw = (float) (Math.atan2(d0, d2) * 180.0D / Math.PI);
-		float targetPitch = (float) (Math.atan2(d1, (double) f3) * 180.0D / Math.PI);
+		float targetPitch = (float) (Math.atan2(d1, f3) * 180.0D / Math.PI);
 
 		final float deltaRotation = 3f;
 		float offYaw = targetYaw - rotationYaw;
@@ -61,14 +61,14 @@ public abstract class EntityFocus extends EntityCrystal {
 		if (offPitch < -deltaRotation) {
 			offPitch = -deltaRotation;
 		}
-		this.rotationPitch += offPitch;
-		this.rotationYaw += offYaw;
+		rotationPitch += offPitch;
+		rotationYaw += offYaw;
 	}
 
 	protected void updateLook() {
-		this.dataWatcher.updateObject(10, Float.valueOf(lookX));
-		this.dataWatcher.updateObject(11, Float.valueOf(lookY));
-		this.dataWatcher.updateObject(12, Float.valueOf(lookZ));
+		dataWatcher.updateObject(10, Float.valueOf(lookX));
+		dataWatcher.updateObject(11, Float.valueOf(lookY));
+		dataWatcher.updateObject(12, Float.valueOf(lookZ));
 	}
 
 	@Override

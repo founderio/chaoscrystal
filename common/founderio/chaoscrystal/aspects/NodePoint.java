@@ -16,7 +16,7 @@ public class NodePoint {
 	private transient boolean initialized = false;
 	private transient Item item;
 	private transient Block block;
-	
+
 	private void initialize() {
 		if(initialized) {
 			return;
@@ -36,7 +36,7 @@ public class NodePoint {
 			throw new RuntimeException("Umm.. WHAT? Unexpected Enum value!");
 		}
 	}
-	
+
 	public String getUniqueName() {
 		return uniqueName;
 	}
@@ -60,7 +60,7 @@ public class NodePoint {
 	public void setMeta(int meta) {
 		this.meta = meta;
 	}
-	
+
 	public boolean matches(Item item, int meta) {
 		initialize();
 		return item == this.item && ItemUtil.metaMatch(meta, this.meta);
@@ -70,7 +70,7 @@ public class NodePoint {
 		initialize();
 		return block == this.block && ItemUtil.metaMatch(meta, this.meta);
 	}
-	
+
 	public ItemStack createItemStack() {
 		initialize();
 		if(item == null) {
@@ -78,7 +78,7 @@ public class NodePoint {
 		}
 		return new ItemStack(item, 1, meta);
 	}
-	
+
 	public Block getBlock() {
 		initialize();
 		return block;

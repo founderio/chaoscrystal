@@ -27,7 +27,7 @@ import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
 
 public class RenderApparatus extends TileEntitySpecialRenderer implements
-		IItemRenderer {
+IItemRenderer {
 	public final TechneModel modelReconstructor;
 	public final ResourceLocation resourceReconstructor;
 	public final TechneModel modelCreator;
@@ -40,7 +40,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 	private EntityItem ei;
 
 	private float rot = 0;
-	
+
 	public RenderApparatus() {
 		modelReconstructor = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/reconstructor.tcn"));
 		resourceReconstructor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reconstructor.png");
@@ -64,7 +64,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 	public void tick(ClientTickEvent event) {
 		if(event.phase == Phase.END) {
 			if (Minecraft.getMinecraft().theWorld != null) {
-				rot = (Minecraft.getMinecraft().theWorld.getWorldTime() % 360f) * 4f;
+				rot = Minecraft.getMinecraft().theWorld.getWorldTime() % 360f * 4f;
 			}
 		}
 	}
@@ -133,8 +133,8 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 					ei.setEntityItemStack(new ItemStack(Blocks.air, 0, 0));
 				} else {
 					ei.setEntityItemStack(is);
-					float offX = (i == 0 || i == 1) ? 0.325f : 0.625f;
-					float offZ = (i == 0 || i == 2) ? 0.325f : 0.625f;
+					float offX = i == 0 || i == 1 ? 0.325f : 0.625f;
+					float offZ = i == 0 || i == 2 ? 0.325f : 0.625f;
 					GL11.glPushMatrix();
 					GL11.glTranslatef((float) d0 + offX, (float) d1 + 0.15f,
 							(float) d2 + offZ);
@@ -155,7 +155,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 
 		}
 		if(tileentity instanceof TileEntityApparatus) {
-			TileEntityApparatus tea = ((TileEntityApparatus)tileentity);
+			TileEntityApparatus tea = (TileEntityApparatus)tileentity;
 			for(int i = 0; i < tea.getSizeModules(); i++) {
 				ItemStack is = tea.getModuleItemStack(i);
 				if(is != null) {
@@ -190,7 +190,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements
 				(float) d2 + 0.5f);
 
 		GL11.glScalef(0.0625f, 0.0625f, 0.0625f);// 1/16th scale, as techne
-													// tends to be big..
+		// tends to be big..
 		GL11.glRotatef(180f, 1.0f, 0, 0);
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);

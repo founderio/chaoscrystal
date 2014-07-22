@@ -12,23 +12,23 @@ public class BiomeGenCrystal extends BiomeGenBase {
 	@SuppressWarnings("unchecked")
 	public BiomeGenCrystal(int par1) {
 		super(par1, false);
-		this.spawnableCreatureList.clear();
-		this.spawnableMonsterList.clear();
-		this.spawnableCaveCreatureList.clear();
-		this.spawnableWaterCreatureList.clear();
-		this.spawnableMonsterList.add(new SpawnListEntry(EntityCreeper.class,
+		spawnableCreatureList.clear();
+		spawnableMonsterList.clear();
+		spawnableCaveCreatureList.clear();
+		spawnableWaterCreatureList.clear();
+		spawnableMonsterList.add(new SpawnListEntry(EntityCreeper.class,
 				10, 1, 6));
-		this.spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 10,
+		spawnableMonsterList.add(new SpawnListEntry(EntitySlime.class, 10,
 				1, 6));
-		this.topBlock = ChaosCrystalMain.blockBase;
-		this.fillerBlock = Blocks.dirt;
-		this.setDisableRain();
-		this.temperature = 0.3f;
-		this.theBiomeDecorator.treesPerChunk = -999;
-		this.theBiomeDecorator.deadBushPerChunk = 0;
-		this.theBiomeDecorator.reedsPerChunk = 0;
-		this.theBiomeDecorator.cactiPerChunk = 0;
-		this.biomeName = Constants.NAME_BIOME_CRYSTAL;
+		topBlock = ChaosCrystalMain.blockBase;
+		fillerBlock = Blocks.dirt;
+		setDisableRain();
+		temperature = 0.3f;
+		theBiomeDecorator.treesPerChunk = -999;
+		theBiomeDecorator.deadBushPerChunk = 0;
+		theBiomeDecorator.reedsPerChunk = 0;
+		theBiomeDecorator.cactiPerChunk = 0;
+		biomeName = Constants.NAME_BIOME_CRYSTAL;
 	}
 
 	@Override

@@ -1,11 +1,27 @@
 package founderio.chaoscrystal.network;
 
-import founderio.chaoscrystal.ChaosCrystalMain;
 import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.Minecraft;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import cpw.mods.fml.relauncher.Side;
+import founderio.chaoscrystal.ChaosCrystalMain;
 
-public class CCPParticle extends CCAbstractPacket {
+public class CCPParticle implements IMessage {
+
+	public static final class Handler implements IMessageHandler<CCPParticle, IMessage> {
+
+		@Override
+		public IMessage onMessage(CCPParticle message, MessageContext ctx) {
+			if(ctx.side == Side.CLIENT) {
+				ChaosCrystalMain.proxy.spawnParticleEntity(Minecraft.getMinecraft().thePlayer.worldObj,
+						message.type, message.posX, message.posY, message.posZ, message.offX, message.offY, message.offZ, message.variation);
+			}
+			return null;
+		}
+
+	}
 
 	int type;
 	double posX;
@@ -15,10 +31,10 @@ public class CCPParticle extends CCAbstractPacket {
 	double offY;
 	double offZ;
 	float variation;
-	
+
 	public CCPParticle() {
 	}
-	
+
 	public CCPParticle(int type, double posX, double posY, double posZ,
 			double offX, double offY, double offZ, float variation) {
 		this.type = type;
@@ -32,37 +48,27 @@ public class CCPParticle extends CCAbstractPacket {
 	}
 
 	@Override
-	public void encodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-		buffer.writeInt(type);
-		buffer.writeDouble(posX);
-		buffer.writeDouble(posY);
-		buffer.writeDouble(posZ);
-		buffer.writeDouble(offX);
-		buffer.writeDouble(offY);
-		buffer.writeDouble(offZ);
-		buffer.writeFloat(variation);
+	public void fromBytes(ByteBuf buf) {
+		type = buf.readInt();
+		posX = buf.readDouble();
+		posY = buf.readDouble();
+		posZ = buf.readDouble();
+		offX = buf.readDouble();
+		offY = buf.readDouble();
+		offZ = buf.readDouble();
+		variation = buf.readFloat();
 	}
 
 	@Override
-	public void decodeInto(ChannelHandlerContext ctx, ByteBuf buffer) {
-		type = buffer.readInt();
-		posX = buffer.readDouble();
-		posY = buffer.readDouble();
-		posZ = buffer.readDouble();
-		offX = buffer.readDouble();
-		offY = buffer.readDouble();
-		offZ = buffer.readDouble();
-		variation = buffer.readFloat();
-	}
-
-	@Override
-	public void handleClientSide(EntityPlayer player) {
-		ChaosCrystalMain.proxy.spawnParticleEntity(player.worldObj, type, posX, posY, posZ, offX, offY, offZ, variation);
-	}
-
-	@Override
-	public void handleServerSide(EntityPlayer player) {
-		// No Particles on Server!
+	public void toBytes(ByteBuf buf) {
+		buf.writeInt(type);
+		buf.writeDouble(posX);
+		buf.writeDouble(posY);
+		buf.writeDouble(posZ);
+		buf.writeDouble(offX);
+		buf.writeDouble(offY);
+		buf.writeDouble(offZ);
+		buf.writeFloat(variation);
 	}
 
 }

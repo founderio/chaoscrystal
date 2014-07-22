@@ -22,6 +22,8 @@ import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -51,7 +53,8 @@ import founderio.chaoscrystal.items.ItemFocus;
 import founderio.chaoscrystal.items.ItemLifelessShard;
 import founderio.chaoscrystal.items.ItemManual;
 import founderio.chaoscrystal.items.ItemShard;
-import founderio.chaoscrystal.network.CCPacketPipeline;
+import founderio.chaoscrystal.network.CCPModeItemChanged;
+import founderio.chaoscrystal.network.CCPParticle;
 import founderio.chaoscrystal.worldgen.GenCrystalSprouts;
 
 /**
@@ -67,8 +70,7 @@ public class ChaosCrystalMain {
 
 	@SidedProxy(clientSide = "founderio.chaoscrystal.ClientProxy", serverSide = "founderio.chaoscrystal.CommonProxy")
 	public static CommonProxy proxy;
-	//TODO: http://www.minecraftforge.net/forum/index.php/topic,20135.0.html
-	public static final CCPacketPipeline packetPipeline = new CCPacketPipeline();
+	public static SimpleNetworkWrapper network;
 
 	public static ChaosRegistry chaosRegistry;
 
@@ -88,16 +90,16 @@ public class ChaosCrystalMain {
 	public static BlockApparatus blockSentry;
 	public static BlockLifeless blockLifeless;
 
-//	public static BiomeGenCrystal biomeCrystal;
+	//	public static BiomeGenCrystal biomeCrystal;
 
 	public static CreativeTabs creativeTab;
-	
+
 	public static GenCrystalSprouts genCrystalSprouts;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		FMLCommonHandler.instance().bus().register(new Config());
-		
+
 		Config.init(event.getSuggestedConfigurationFile());
 
 		creativeTab = new CreativeTabs(Constants.MOD_ID) {
@@ -160,8 +162,8 @@ public class ChaosCrystalMain {
 		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_TICKER);
 		blockSentry.setCreativeTab(creativeTab);
 
-//		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
-		
+		//		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
+
 		genCrystalSprouts = new GenCrystalSprouts();
 		GameRegistry.registerWorldGenerator(genCrystalSprouts, 5);
 
@@ -171,7 +173,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemManual, Constants.ID_ITEM_MANUAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
 		GameRegistry.registerItem(itemShard, Constants.ID_ITEM_SHARD, Constants.MOD_ID);
-		
+
 		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
 		GameRegistry.registerBlock(blockSproutingCrystal, ItemBlockSproutingCrystal.class, Constants.ID_BLOCK_SPROUTING_CRYSTAL);
 		GameRegistry.registerBlock(blockLifeless, Constants.ID_BLOCK_LIFELESS);
@@ -183,13 +185,16 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 		GameRegistry.registerTileEntity(TileEntityTicker.class, Constants.ID_TILEENTITY_TICKER);
+
+		network = NetworkRegistry.INSTANCE.newSimpleChannel(Constants.CHANNEL_NAME);
+		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
+		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 1, Side.SERVER);
+		network.registerMessage(CCPParticle.Handler.class, CCPParticle.class, 2, Side.CLIENT);
 	}
 
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 
-		packetPipeline.initialise();
-		
 		EntityRegistry.registerModEntity(EntityChaosCrystal.class, Constants.NAME_ENTITY_CHAOSCRYSTAL, 0, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusTransfer.class, Constants.NAME_ENTITY_FOCUS_TRANSFER, 1, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusBorder.class, Constants.NAME_ENTITY_FOCUS_BORDER, 2, this, 128, 1, false);
@@ -215,52 +220,52 @@ public class ChaosCrystalMain {
 
 		GameRegistry.addRecipe(new ItemStack(blockLifeless, 1, 0), "sss", "sss", "sss", 's', itemLifelessShard);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemLifelessShard, 9, 0), blockLifeless);
-		
+
 		chaosRegistry = new ChaosRegistry();
 
 		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setVersion(1).disableHtmlEscaping().create();
-		
+
 		InputStream vanillaIS = getClass().getResourceAsStream("/assets/chaoscrystal/chaosregistry/vanilla.json");
 		if(vanillaIS != null) {
 			AspectModule vanilla = gson.fromJson(new InputStreamReader(vanillaIS, Charsets.UTF_8), AspectModule.class);
 			chaosRegistry.registerAspectModule(vanilla);
 		}
 		//TODO: register these again.
-		
-//		chaosRegistry.registerRepair(Items.diamond_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.iron_pickaxe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-//		chaosRegistry.registerRepair(Items.golden_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.stone_pickaxe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-//		chaosRegistry.registerRepair(Items.wooden_pickaxe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-//
-//		chaosRegistry.registerRepair(Items.diamond_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.iron_axe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-//		chaosRegistry.registerRepair(Items.golden_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.stone_axe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-//		chaosRegistry.registerRepair(Items.wooden_axe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-//
-//		chaosRegistry.registerRepair(Items.diamond_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.iron_shovel, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-//		chaosRegistry.registerRepair(Items.golden_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.stone_shovel, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-//		chaosRegistry.registerRepair(Items.wooden_shovel, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-//
-//		chaosRegistry.registerRepair(Items.diamond_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.iron_hoe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-//		chaosRegistry.registerRepair(Items.golden_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.stone_hoe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-//		chaosRegistry.registerRepair(Items.wooden_hoe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-//
-//		chaosRegistry.registerRepair(Items.diamond_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.iron_sword, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-//		chaosRegistry.registerRepair(Items.golden_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-//		chaosRegistry.registerRepair(Items.stone_sword, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-//		chaosRegistry.registerRepair(Items.wooden_sword, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-//
-//		chaosRegistry.registerRepair(Items.shears, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-//		
-//		chaosRegistry.registerRepair(itemCrystalGlasses, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
-//		chaosRegistry.registerRepair(Items.bow, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
+
+		//		chaosRegistry.registerRepair(Items.diamond_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.iron_pickaxe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		//		chaosRegistry.registerRepair(Items.golden_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.stone_pickaxe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		//		chaosRegistry.registerRepair(Items.wooden_pickaxe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		//
+		//		chaosRegistry.registerRepair(Items.diamond_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.iron_axe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		//		chaosRegistry.registerRepair(Items.golden_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.stone_axe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		//		chaosRegistry.registerRepair(Items.wooden_axe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		//
+		//		chaosRegistry.registerRepair(Items.diamond_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.iron_shovel, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		//		chaosRegistry.registerRepair(Items.golden_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.stone_shovel, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		//		chaosRegistry.registerRepair(Items.wooden_shovel, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		//
+		//		chaosRegistry.registerRepair(Items.diamond_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.iron_hoe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		//		chaosRegistry.registerRepair(Items.golden_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.stone_hoe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		//		chaosRegistry.registerRepair(Items.wooden_hoe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		//
+		//		chaosRegistry.registerRepair(Items.diamond_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.iron_sword, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		//		chaosRegistry.registerRepair(Items.golden_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
+		//		chaosRegistry.registerRepair(Items.stone_sword, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
+		//		chaosRegistry.registerRepair(Items.wooden_sword, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
+		//
+		//		chaosRegistry.registerRepair(Items.shears, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
+		//
+		//		chaosRegistry.registerRepair(itemCrystalGlasses, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
+		//		chaosRegistry.registerRepair(Items.bow, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
 
 
 		/*
@@ -295,7 +300,7 @@ public class ChaosCrystalMain {
 		//					nullStack);
 		//		}
 
-		//		
+		//
 		//
 		//		degradationStore.registerDegradation(
 		//				new ItemStack(Item.arrow),
@@ -309,28 +314,25 @@ public class ChaosCrystalMain {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-
-		packetPipeline.postInitialise();
-		
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 2));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.dispenser, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.music, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.rail, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railDetector, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railPowered, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railActivator, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonBase, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonStickyBase, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.furnaceIdle, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneButton, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.woodenButton, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Block.ladder, 1, 32767));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
-//		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 2));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.dispenser, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.music, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.rail, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railDetector, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railPowered, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.railActivator, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonBase, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.pistonStickyBase, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.furnaceIdle, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneButton, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.woodenButton, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Block.ladder, 1, 32767));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorWood));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Item.doorIron));
+		//		degradationStore.autoRegisterDegradation(new ItemStack(Item.pickaxeDiamond));
 		//degradationStore.autoRegisterDegradation(new ItemStack(Item.arrow));
 
 		if(Config.showDebugOutput) {

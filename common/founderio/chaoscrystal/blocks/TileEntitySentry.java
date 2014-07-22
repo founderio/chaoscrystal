@@ -42,7 +42,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 		isActive = !worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord,
 				zCoord);
 
-		this.animation++;
+		animation++;
 		if (animation >= 20) {
 			animation = 0;
 
@@ -68,7 +68,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 			double dist = Double.MAX_VALUE;
 			EntityLivingBase target = null;
 
-			for (Object obj : this.worldObj.loadedEntityList) {
+			for (Object obj : worldObj.loadedEntityList) {
 				if (obj instanceof EntityLivingBase) {
 					if (obj instanceof EntityPlayer) {
 						//TODO: Switch to UUID
@@ -78,10 +78,10 @@ public class TileEntitySentry extends TileEntityApparatus {
 					}
 
 					EntityLivingBase eCheck = (EntityLivingBase) obj;
-					double distX = eCheck.posX - ((float) xCoord + 0.5f);
+					double distX = eCheck.posX - (xCoord + 0.5f);
 					double distY = eCheck.posY + eCheck.getEyeHeight()
-							- ((float) yCoord + 1.5f);
-					double distZ = eCheck.posZ - ((float) zCoord + 0.5f);
+							- (yCoord + 1.5f);
+					double distZ = eCheck.posZ - (zCoord + 0.5f);
 					double tmp_dist = Math.sqrt(distX * distX + distY * distY
 							+ distZ * distZ);
 
@@ -89,19 +89,19 @@ public class TileEntitySentry extends TileEntityApparatus {
 							&& eCheck.isEntityAlive()) {
 
 						Vec3 vec3 = Vec3.createVectorHelper(
-								((float) xCoord + 0.5f), (float) yCoord + 2f,
-								(float) zCoord + 0.5f);
+								xCoord + 0.5f, yCoord + 2f,
+								zCoord + 0.5f);
 						Vec3 vec32 = Vec3.createVectorHelper(eCheck.posX,
 								eCheck.posY + eCheck.getEyeHeight(),
 								eCheck.posZ);
 						//TODO: Fix Sentry trying to shoot through player
-						MovingObjectPosition mop = this.worldObj.func_147447_a(vec3, vec32, false, false, true);
+						MovingObjectPosition mop = worldObj.func_147447_a(vec3, vec32, false, false, true);
 						if (mop == null) {
 							//hm.. ignore?
 						} else if(mop.hitVec == null && mop.entityHit == null) {
-							
+
 							boolean valid = isValidTarget(eCheck);
-							
+
 							if(valid) {
 								dist = tmp_dist;
 								target = eCheck;
@@ -112,7 +112,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 								target = (EntityLivingBase)mop.entityHit;
 							}
 						} else {
-							
+
 							@SuppressWarnings("unchecked")
 							List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(
 									EntityLivingBase.class, AxisAlignedBB
@@ -126,14 +126,14 @@ public class TileEntitySentry extends TileEntityApparatus {
 							if (!list.isEmpty()) {
 								//TODO: Safe Mode-Module? -> don't shoot at 2-3 blocks around non-target entities
 								EntityLivingBase ent = list.get(0);
-								
+
 								boolean valid = isValidTarget(ent);
-								
+
 								if(valid) {
 									dist = tmp_dist;
 									target = ent;
 								}
-								
+
 							}
 						}
 
@@ -144,25 +144,25 @@ public class TileEntitySentry extends TileEntityApparatus {
 				return;
 			}
 
-			float f = (float) 20 / 20.0F;
+			float f = 20 / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
-			if ((double) f < 0.1D) {
+			if (f < 0.1D) {
 				return;
 			}
 
 			if (f > 1.0F) {
 				f = 1.0F;
 			}
-			
+
 			if(arrowItem.getItem() == Items.arrow) {
 				if (!worldObj.isRemote) {
 					EntityArrow entityarrow = new EntityArrow(worldObj, xCoord + 0.5f,
 							yCoord + 2f, zCoord + 0.5f);
 					entityarrow.setThrowableHeading(
-							target.posX - ((float) xCoord + 0.5f),
-							target.posY + target.getEyeHeight() * 0.5f - ((float) yCoord + 2f),
-							target.posZ - ((float) zCoord + 0.5f),
+							target.posX - (xCoord + 0.5f),
+							target.posY + target.getEyeHeight() * 0.5f - (yCoord + 2f),
+							target.posZ - (zCoord + 0.5f),
 							8, 0);
 					entityarrow.canBePickedUp = 1;
 
@@ -173,9 +173,9 @@ public class TileEntitySentry extends TileEntityApparatus {
 					EntitySnowball entitysnowball = new EntityPlayerAwareSnowball(worldObj, xCoord + 0.5f,
 							yCoord + 2f, zCoord + 0.5f);
 					entitysnowball.setThrowableHeading(
-							target.posX - ((float) xCoord + 0.5f),
-							target.posY + target.getEyeHeight() - ((float) yCoord + 2f),
-							target.posZ - ((float) zCoord + 0.5f),
+							target.posX - (xCoord + 0.5f),
+							target.posY + target.getEyeHeight() - (yCoord + 2f),
+							target.posZ - (zCoord + 0.5f),
 							5f, 0);
 
 					worldObj.spawnEntityInWorld(entitysnowball);
@@ -195,15 +195,15 @@ public class TileEntitySentry extends TileEntityApparatus {
 
 	public boolean isValidTarget(Entity ent) {
 		HostilityLevel hostilityLevel = HostilityLevel.Docile;
-		
+
 		if(!(ent instanceof EntityLivingBase)) {
 			return false;
 		}
-		
+
 		if(ent instanceof EntityMob) {
 			hostilityLevel = HostilityLevel.Hostile;
 		}
-		
+
 		for(IModule module : modules) {
 			if(module instanceof IModuleTarget) {
 				if(!((IModuleTarget)module).isTargetValid(ent, hostilityLevel)) {
@@ -213,7 +213,7 @@ public class TileEntitySentry extends TileEntityApparatus {
 		}
 		return true;
 	}
-	
+
 	@Override
 	public int[] getAccessibleSlotsFromSide(int var1) {
 		return new int[] { 0, 1, 2, 3 };

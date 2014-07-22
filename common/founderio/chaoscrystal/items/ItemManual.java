@@ -14,7 +14,7 @@ public class ItemManual extends ItemMap {
 
 	public ItemManual() {
 		super();
-		this.setMaxStackSize(1);
+		setMaxStackSize(1);
 	}
 
 	@Override
