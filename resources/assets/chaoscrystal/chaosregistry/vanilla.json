@@ -1960,6 +1960,34 @@
       ],
       "infusionSunlightRequired": false,
       "infusionAirAboveRequired": false
+    },
+    {
+      "lesser": {
+        "uniqueName": "chaoscrystal:chaoscrystal.lifeless_shard",
+        "type": "ITEM",
+        "meta": 0
+      },
+      "greater": {
+        "uniqueName": "minecraft:sapling",
+        "type": "ITEM",
+        "meta": 32767
+      },
+      "aspects": [
+        0,
+        0,
+        0,
+        3,
+        0,
+        0,
+        3,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      "infusionSunlightRequired": false,
+      "infusionAirAboveRequired": false
     }
   ]
 }
