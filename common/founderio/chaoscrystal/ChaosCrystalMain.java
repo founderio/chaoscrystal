@@ -101,7 +101,6 @@ public class ChaosCrystalMain {
 		FMLCommonHandler.instance().bus().register(new Config());
 
 		Config.init(event.getSuggestedConfigurationFile());
-
 		creativeTab = new CreativeTabs(Constants.MOD_ID) {
 			@Override
 			@SideOnly(Side.CLIENT)
@@ -162,11 +161,6 @@ public class ChaosCrystalMain {
 		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_TICKER);
 		blockSentry.setCreativeTab(creativeTab);
 
-		//		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
-
-		genCrystalSprouts = new GenCrystalSprouts();
-		GameRegistry.registerWorldGenerator(genCrystalSprouts, 5);
-
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
@@ -185,6 +179,11 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 		GameRegistry.registerTileEntity(TileEntityTicker.class, Constants.ID_TILEENTITY_TICKER);
+		
+		//		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
+		
+		genCrystalSprouts = new GenCrystalSprouts();
+		GameRegistry.registerWorldGenerator(genCrystalSprouts, 5);
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(Constants.CHANNEL_NAME);
 		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
@@ -225,7 +224,7 @@ public class ChaosCrystalMain {
 
 		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setVersion(1).disableHtmlEscaping().create();
 
-		InputStream vanillaIS = getClass().getResourceAsStream("/assets/chaoscrystal/chaosregistry/vanilla.json");
+		InputStream vanillaIS = ChaosCrystalMain.class.getResourceAsStream("/assets/chaoscrystal/chaosregistry/vanilla.json");
 		if(vanillaIS != null) {
 			AspectModule vanilla = gson.fromJson(new InputStreamReader(vanillaIS, Charsets.UTF_8), AspectModule.class);
 			chaosRegistry.registerAspectModule(vanilla);
@@ -236,8 +235,6 @@ public class ChaosCrystalMain {
 
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
-
-
 		if(Config.showDebugOutput) {
 			chaosRegistry.debugOutput();
 		}

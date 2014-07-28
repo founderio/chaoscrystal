@@ -18,13 +18,13 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	public EntityChaosCrystal(World world) {
 		super(world);
-		tickInterval = Config.cfgCrystalTickInterval;
+		tickInterval = Config.crystalTickInterval;
 	}
 
 	public EntityChaosCrystal(World world, double x, double y, double z,
 			float yaw, float pitch) {
 		super(world, x, y, z, yaw, pitch);
-		tickInterval = Config.cfgCrystalTickInterval;
+		tickInterval = Config.crystalTickInterval;
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 
 	@Override
 	public int getSingleAspectCapacity() {
-		return Config.cfgCrystalAspectStorage;
+		return Config.crystalAspectStorage;
 	}
 
 	@Override
@@ -102,13 +102,13 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 	protected void logicUpdate() {
 		List<Aspect> filterAspects = new ArrayList<Aspect>();
 		List<String> filterTargets = new ArrayList<String>();
-		double range = Config.cfgCrystalRange;
+		double range = Config.crystalRange;
 
 		for (Object obj : worldObj.loadedEntityList) {
 			if (obj instanceof EntityFocusFilter) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
-				if (tmp_dist < Config.cfgFocusRange) {
+				if (tmp_dist < Config.focusRange) {
 					Aspect asp = ((EntityFocusFilter) obj).getAspect();
 					if (!filterAspects.contains(asp)) {
 						filterAspects.add(asp);
@@ -117,7 +117,7 @@ public class EntityChaosCrystal extends EntityCrystal implements IAspectStore {
 			} else if (obj instanceof EntityFocusFilterTarget) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity) obj,
 						this);
-				if (tmp_dist < Config.cfgFocusRange) {
+				if (tmp_dist < Config.focusRange) {
 					String target = ((EntityFocusFilterTarget) obj).getTarget();
 					if (!filterTargets.contains(target)) {
 						filterTargets.add(target);

@@ -25,7 +25,7 @@ public class EntityFocusBorder extends EntityFocus {
 
 	@Override
 	protected void logicUpdate() {
-		if (age > Config.cfgFocusTickInterval) {
+		if (age > Config.focusTickInterval) {
 			age = 0;
 		}
 		EntityChaosCrystal crystal1 = null;

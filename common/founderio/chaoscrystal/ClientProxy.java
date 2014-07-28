@@ -24,29 +24,32 @@ import founderio.chaoscrystal.rendering.RenderItemManual;
 
 public class ClientProxy extends CommonProxy {
 
-	public static RenderApparatus render;
+	public static RenderFocus renderFocus;
+	public static RenderChaosCrystal renderChaosCrystal;
+	public static RenderApparatus renderApparatus;
+	public static RenderItemManual renderItemManual;
 
 	@Override
 	public void registerRenderStuff() {
-		RenderFocus rf = new RenderFocus();
-		RenderingRegistry.registerEntityRenderingHandler(EntityChaosCrystal.class, new RenderChaosCrystal());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusTransfer.class, rf);
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, rf);
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, rf);
-		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilterTarget.class, rf);
+		renderFocus = new RenderFocus();
+		renderChaosCrystal = new RenderChaosCrystal();
+		renderApparatus = new RenderApparatus();
+		renderItemManual = new RenderItemManual();
+		
+		RenderingRegistry.registerEntityRenderingHandler(EntityChaosCrystal.class, renderChaosCrystal);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusTransfer.class, renderFocus);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusBorder.class, renderFocus);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilter.class, renderFocus);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilterTarget.class, renderFocus);
 
-		render = new RenderApparatus();
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, render);
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockReconstructor), render);
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockCreator), render);
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockSentry), render);
-		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.itemManual, new RenderItemManual());
-
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, renderApparatus);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockReconstructor), renderApparatus);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockCreator), renderApparatus);
+		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockSentry), renderApparatus);
+		MinecraftForgeClient.registerItemRenderer(ChaosCrystalMain.itemManual, renderItemManual);
 
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
-		FMLCommonHandler.instance().bus().register(render);
-
+		FMLCommonHandler.instance().bus().register(renderApparatus);
 	}
 
 	@Override

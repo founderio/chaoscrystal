@@ -165,12 +165,12 @@ public class DegradationHelper {
 						}
 					}
 				}
-			} while (hit < Config.cfgHitsPerTick
-					&& tries < Config.cfgMaxTriesPerTick);
+			} while (hit < Config.crystalHitsPerTick
+					&& tries < Config.crystalMaxTriesPerTick);
 		}
 
 		if(allowItems) {
-			if (hit < Config.cfgHitsPerTick) {
+			if (hit < Config.crystalHitsPerTick) {
 				List<EntityItem> items = GeometryHelper.getEntitiesInRange(world, posX, posY, posZ, range, EntityItem.class);
 
 				if (items.size() != 0) {
@@ -189,7 +189,7 @@ public class DegradationHelper {
 						if (Aspect.isFilterMatched(filterAspects, aspects)) {
 							int count = 0;
 							// Limit max amount of processed items by max hits and stack size
-							int size = Config.cfgHitsPerTick - hit;
+							int size = Config.crystalHitsPerTick - hit;
 							if(is.stackSize < size) {
 								size = is.stackSize;
 							}
@@ -284,7 +284,7 @@ public class DegradationHelper {
 	public static boolean canAcceptAspects(Aspect[] aspects, int[] amounts,
 			IAspectStore aspectStore) {
 		for (int a = 0; a < aspects.length; a++) {
-			if (aspectStore.getAspect(aspects[a]) + amounts[a] > Config.cfgCrystalAspectStorage) {
+			if (aspectStore.getAspect(aspects[a]) + amounts[a] > Config.crystalAspectStorage) {
 				return false;
 			}
 		}

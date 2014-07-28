@@ -18,13 +18,13 @@ public class EntityFocusTransfer extends EntityFocus {
 
 	public EntityFocusTransfer(World world) {
 		super(world);
-		tickInterval = Config.cfgFocusTickInterval;
+		tickInterval = Config.focusTickInterval;
 	}
 
 	public EntityFocusTransfer(World world, double x, double y,
 			double z, float yaw, float pitch) {
 		super(world, x, y, z, yaw, pitch);
-		tickInterval = Config.cfgFocusTickInterval;
+		tickInterval = Config.focusTickInterval;
 	}
 
 	public boolean didTransferToEntity = false;
@@ -41,7 +41,7 @@ public class EntityFocusTransfer extends EntityFocus {
 		for(Object obj : worldObj.loadedEntityList) {
 			if(obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance((Entity)obj, this);
-				if(tmp_dist < Config.cfgFocusRange) {
+				if(tmp_dist < Config.focusRange) {
 					ents.add((EntityChaosCrystal)obj);
 				}
 			}
@@ -51,7 +51,7 @@ public class EntityFocusTransfer extends EntityFocus {
 		for(Object obj : worldObj.loadedTileEntityList) {
 			if(obj instanceof TileEntityApparatus) {
 				double tmp_dist = GeometryHelper.entityDistance((TileEntity)obj, this);
-				if(tmp_dist < Config.cfgFocusRange) {
+				if(tmp_dist < Config.focusRange) {
 					tEnts.add((TileEntityApparatus)obj);
 				}
 			}

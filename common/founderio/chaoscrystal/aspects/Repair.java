@@ -10,7 +10,7 @@ public class Repair {
 
 	public Repair(Item item, int[] aspects) {
 		this.item = item;
-		this.aspects = aspects;
+		this.aspects = aspects.clone();
 	}
 
 	@Override

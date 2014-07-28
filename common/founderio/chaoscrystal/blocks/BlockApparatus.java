@@ -73,7 +73,6 @@ public class BlockApparatus extends BlockContainer {
 			// TODO: switch to UUID
 			te.setOwner(((EntityPlayer) entity).getDisplayName());
 		}
-
 	}
 
 	@Override

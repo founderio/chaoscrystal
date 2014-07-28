@@ -44,7 +44,7 @@ public class EntityFocusFilter extends EntityFocus {
 
 	@Override
 	protected void logicUpdate() {
-		if (age > Config.cfgFocusTickInterval) {
+		if (age > Config.focusTickInterval) {
 			age = 0;
 		}
 		List<EntityChaosCrystal> crystals = new ArrayList<EntityChaosCrystal>();
@@ -53,7 +53,7 @@ public class EntityFocusFilter extends EntityFocus {
 			if (obj instanceof EntityChaosCrystal) {
 				double tmp_dist = GeometryHelper.entityDistance(
 						(EntityChaosCrystal) obj, this);
-				if (tmp_dist < Config.cfgFocusRange) {
+				if (tmp_dist < Config.focusRange) {
 					crystals.add((EntityChaosCrystal) obj);
 				}
 			}
