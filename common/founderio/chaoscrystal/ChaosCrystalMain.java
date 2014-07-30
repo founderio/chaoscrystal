@@ -8,6 +8,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemMultiTexture;
 import net.minecraft.item.ItemStack;
 
 import com.google.common.base.Charsets;
@@ -32,8 +33,8 @@ import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
+import founderio.chaoscrystal.blocks.BlockCrystalLight;
 import founderio.chaoscrystal.blocks.BlockLifeless;
-import founderio.chaoscrystal.blocks.BlockSproutingCrystal;
 import founderio.chaoscrystal.blocks.TileEntityInfuser;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
@@ -45,8 +46,6 @@ import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
 import founderio.chaoscrystal.items.ItemBlockApparatus;
-import founderio.chaoscrystal.items.ItemBlockBase;
-import founderio.chaoscrystal.items.ItemBlockSproutingCrystal;
 import founderio.chaoscrystal.items.ItemChaosCrystal;
 import founderio.chaoscrystal.items.ItemCrystalGlasses;
 import founderio.chaoscrystal.items.ItemFocus;
@@ -84,11 +83,11 @@ public class ChaosCrystalMain {
 	public static Item itemShard;
 
 	public static BlockBase blockBase;
-	public static BlockSproutingCrystal blockSproutingCrystal;
 	public static BlockApparatus blockReconstructor;
 	public static BlockApparatus blockCreator;
 	public static BlockApparatus blockSentry;
 	public static BlockLifeless blockLifeless;
+	public static BlockCrystalLight blockCrystalLight;
 
 	//	public static BiomeGenCrystal biomeCrystal;
 
@@ -137,13 +136,14 @@ public class ChaosCrystalMain {
 		blockBase.setBlockName(Constants.ID_BLOCK_BASE);
 		blockBase.setCreativeTab(creativeTab);
 
-		blockSproutingCrystal = new BlockSproutingCrystal();
-		blockSproutingCrystal.setBlockName(Constants.ID_BLOCK_SPROUTING_CRYSTAL);
-		blockSproutingCrystal.setCreativeTab(creativeTab);
 
 		blockLifeless = new BlockLifeless();
 		blockLifeless.setBlockName(Constants.ID_BLOCK_LIFELESS);
 		blockLifeless.setCreativeTab(creativeTab);
+
+		blockCrystalLight = new BlockCrystalLight();
+		blockCrystalLight.setBlockName(Constants.ID_BLOCK_CRYSTAL_LIGHT);
+		blockCrystalLight.setCreativeTab(creativeTab);
 
 		blockReconstructor = new BlockApparatus(0);
 		blockReconstructor.setBlockName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
@@ -168,13 +168,15 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
 		GameRegistry.registerItem(itemShard, Constants.ID_ITEM_SHARD, Constants.MOD_ID);
 
-		GameRegistry.registerBlock(blockBase, ItemBlockBase.class, Constants.ID_BLOCK_BASE);
-		GameRegistry.registerBlock(blockSproutingCrystal, ItemBlockSproutingCrystal.class, Constants.ID_BLOCK_SPROUTING_CRYSTAL);
+		GameRegistry.registerBlock(blockBase, null, Constants.ID_BLOCK_BASE);
+		GameRegistry.registerItem(new ItemMultiTexture(blockBase, blockBase, Constants.METALIST_BLOCK_BASE), Constants.ID_BLOCK_BASE);
+		
 		GameRegistry.registerBlock(blockLifeless, Constants.ID_BLOCK_LIFELESS);
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
-
+		GameRegistry.registerBlock(blockCrystalLight, Constants.ID_BLOCK_CRYSTAL_LIGHT);
+		
 		GameRegistry.registerTileEntityWithAlternatives(TileEntityReconstructor.class, Constants.ID_TILEENTITY_INFUSER, Constants.ID_TILEENTITY_RECONSTRUCTOR);
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);

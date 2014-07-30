@@ -9,7 +9,7 @@ import net.minecraft.world.chunk.IChunkProvider;
 import cpw.mods.fml.common.IWorldGenerator;
 import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.Config;
-import founderio.chaoscrystal.blocks.BlockSproutingCrystal;
+import founderio.chaoscrystal.blocks.BlockBase;
 
 public class GenCrystalSprouts implements IWorldGenerator {
 	@Override
@@ -96,18 +96,21 @@ public class GenCrystalSprouts implements IWorldGenerator {
 			ySpawnMin = 45;
 		}
 
+		// Convert from regular to sprout
+		meta += 8;
+		
 		int yMax = Math.min(ySpawnMax, world.getTopSolidOrLiquidBlock(xAbsolute, zAbsolute));
 		int yAbsolute = ySpawnMin + random.nextInt(yMax - ySpawnMin);
 
 		Block bl = world.getBlock(xAbsolute, yAbsolute, zAbsolute);
 
-		if(BlockSproutingCrystal.isAcceptedBlock(bl)) {
+		if(BlockBase.isAcceptedBlock(bl)) {
 			// Set the sprout block
 			world.setBlock(xAbsolute, yAbsolute, zAbsolute,
-					ChaosCrystalMain.blockSproutingCrystal, meta, 1 + 3);
+					ChaosCrystalMain.blockBase, meta, 1 + 3);
 			// Pregenerate some of the crystal
 			for(int i = 0; i < 5; i++) {
-				ChaosCrystalMain.blockSproutingCrystal.updateTick(world, xAbsolute, yAbsolute, zAbsolute, random);
+				ChaosCrystalMain.blockBase.updateTick(world, xAbsolute, yAbsolute, zAbsolute, random);
 			}
 		}
 	}

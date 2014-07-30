@@ -19,22 +19,29 @@ public class Constants {
 
 	public static final String ID_BLOCK_BASE = "chaoscrystal.base";
 
-	public static final String ID_BLOCK_CRYSTALLINE_ENERGY = "chaoscrystal.base.crystalline";
-	public static final String ID_BLOCK_CRYSTALLINE_CHAOS = "chaoscrystal.base.crystal";
-	public static final String ID_BLOCK_CRYSTALLINE_LIGHT = "chaoscrystal.base.crystalline_light";
-	public static final String ID_BLOCK_CRYSTAL_CLEAR = "chaoscrystal.base.crystal_clear";
+	public static final String[] METALIST_BLOCK_BASE = {
+		"crystalline",
+		"crystal",
+		"crystalline_light",
+		"crystal_clear",
+		
+		"crystalline_energy_cracked",
+		"crystalline_chaos_cracked",
+		"crystalline_light_cracked",
+		"crystal_clear_cracked",
+		
+		"crystalline_energy_sprout",
+		"crystalline_chaos_sprout",
+		"crystalline_light_sprout",
+		"crystal_clear_sprout"
+	};
 
-	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_CRACKED = "chaoscrystal.base.crystalline_energy_cracked";
-	public static final String ID_BLOCK_CRYSTALLINE_CHAOS_CRACKED = "chaoscrystal.base.crystalline_chaos_cracked";
-	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_CRACKED = "chaoscrystal.base.crystalline_light_cracked";
-	public static final String ID_BLOCK_CRYSTAL_CLEAR_CRACKED = "chaoscrystal.base.crystal_clear_cracked";
-
-	public static final String ID_BLOCK_SPROUTING_CRYSTAL = "chaoscrystal.sprouting_crystal";
-
-	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_SPROUT = "chaoscrystal.sprout.crystalline_energy";
-	public static final String ID_BLOCK_CRYSTALLINE_CHAOS_SPROUT = "chaoscrystal.sprout.crystalline_chaos";
-	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT = "chaoscrystal.sprout.crystalline_light";
-	public static final String ID_BLOCK_CRYSTAL_CLEAR_SPROUT = "chaoscrystal.sprout.crystal_clear";
+//	public static final String ID_BLOCK_SPROUTING_CRYSTAL = "chaoscrystal.sprouting_crystal";
+//
+//	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_SPROUT = "chaoscrystal.sprout.crystalline_energy";
+//	public static final String ID_BLOCK_CRYSTALLINE_CHAOS_SPROUT = "chaoscrystal.sprout.crystalline_chaos";
+//	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT = "chaoscrystal.sprout.crystalline_light";
+//	public static final String ID_BLOCK_CRYSTAL_CLEAR_SPROUT = "chaoscrystal.sprout.crystal_clear";
 
 
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
@@ -43,6 +50,8 @@ public class Constants {
 	public static final String ID_BLOCK_APPARATUS_SENTRY = "chaoscrystal.apparatus.sentry";
 	public static final String ID_BLOCK_APPARATUS_TICKER = "apparatus.ticker";
 	public static final String ID_BLOCK_LIFELESS = "chaoscrystal.lifeless";
+	
+	public static final String ID_BLOCK_CRYSTAL_LIGHT = "chaoscrystal.crystal_light";
 
 	/**
 	 * Not in use anymore. (Alternative to ID_TILEENTITY_INFUSER)
