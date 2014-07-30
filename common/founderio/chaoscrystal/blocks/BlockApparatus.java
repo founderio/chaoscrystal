@@ -14,13 +14,7 @@ import founderio.chaoscrystal.Constants;
 import founderio.util.ItemUtil;
 
 public class BlockApparatus extends BlockContainer {
-
-	public static final String[] metaList = new String[] {
-		Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR,
-		Constants.ID_BLOCK_APPARATUS_CREATOR,
-		Constants.ID_BLOCK_APPARATUS_SENTRY,
-		Constants.ID_BLOCK_APPARATUS_TICKER };
-
+	
 	public final int metaListIndex;
 
 	public BlockApparatus(int meta) {
@@ -69,7 +63,6 @@ public class BlockApparatus extends BlockContainer {
 			EntityLivingBase entity, ItemStack itemStack) {
 		if (entity instanceof EntityPlayer) {
 			TileEntityApparatus te = getTileEntityApparatus(world, x, y, z);
-			//TODO: Nullchecks
 			// TODO: switch to UUID
 			te.setOwner(((EntityPlayer) entity).getDisplayName());
 		}

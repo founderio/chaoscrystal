@@ -186,6 +186,8 @@ public class ChaosCrystalMain {
 		
 		genCrystalSprouts = new GenCrystalSprouts();
 		GameRegistry.registerWorldGenerator(genCrystalSprouts, 5);
+		// GameRegistry.registerWorldGenerator(new GenCrystalPillars(), 0);
+		// GameRegistry.registerWorldGenerator(new GenCrystalFloats(), 0);
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(Constants.CHANNEL_NAME);
 		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
@@ -202,10 +204,6 @@ public class ChaosCrystalMain {
 		EntityRegistry.registerModEntity(EntityFocusFilter.class, Constants.NAME_ENTITY_FOCUS_FILTER, 3, this, 128, 1, false);
 		EntityRegistry.registerModEntity(EntityFocusFilterTarget.class, Constants.NAME_ENTITY_FOCUS_FILTER_TARGET, 4, this, 128, 1, false);
 		proxy.registerRenderStuff();
-
-
-		// GameRegistry.registerWorldGenerator(new GenCrystalPillars(), 0);
-		// GameRegistry.registerWorldGenerator(new GenCrystalFloats(), 0);
 
 		GameRegistry.addRecipe(new ItemStack(itemChaosCrystal, 1), "RDR", "RER", "RDR", 'D', Items.diamond, 'R', new ItemStack(blockBase, 1, 1), 'E', Items.ender_pearl);
 		GameRegistry.addRecipe(new ItemStack(itemFocus, 1, 0), "dBd", "BEB", "dBd", 'B', new ItemStack(blockBase, 1, 0), 'E', Items.ender_pearl, 'd', new ItemStack(Items.dye, 1, 4));
@@ -231,7 +229,6 @@ public class ChaosCrystalMain {
 			AspectModule vanilla = gson.fromJson(new InputStreamReader(vanillaIS, Charsets.UTF_8), AspectModule.class);
 			chaosRegistry.registerAspectModule(vanilla);
 		}
-		
 
 	}
 

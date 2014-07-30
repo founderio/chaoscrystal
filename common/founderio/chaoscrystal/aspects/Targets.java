@@ -4,7 +4,7 @@ import net.minecraft.util.ResourceLocation;
 import founderio.chaoscrystal.Constants;
 
 public final class Targets {
-
+	//TODO: Reformat the same as with Aspects.
 	public static final String TARGET_ALL = "all";
 	public static final String TARGET_ITEMS = "items";
 	public static final String TARGET_BLOCKS = "blocks";

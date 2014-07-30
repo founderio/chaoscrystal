@@ -18,19 +18,13 @@ public class ItemShard extends Item {
 		super();
 	}
 
-	public static final String[] metaList = new String[] {
-		Constants.ID_ITEM_SHARD_CRYSTALLINE_ENERGY,
-		Constants.ID_ITEM_SHARD_CRYSTALLINE_CHAOS,
-		Constants.ID_ITEM_SHARD_CRYSTALLINE_LIGHT,
-		Constants.ID_ITEM_SHARD_CRYSTAL_CLEAR };
-
 	private IIcon[] iconList;
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(Item item, CreativeTabs creativeTab, List list) {
-		for (int i = 0; i < metaList.length; i++) {
+		for (int i = 0; i < Constants.METALIST_ITEM_SHARD.length; i++) {
 			list.add(new ItemStack(item, 1, i));
 		}
 	}
@@ -38,19 +32,22 @@ public class ItemShard extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	protected String getIconString() {
-		return Constants.MOD_ID + ":lifeless_shard";
+		return Constants.MOD_ID + ":shard_crystalline_energy";
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public IIcon getIconFromDamage(int damage) {
-		return iconList[MathHelper.clamp_int(damage, 0, metaList.length - 1)];
+		if(iconList == null) {
+			return null;
+		}
+		return iconList[getMetadata(damage)];
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister ir) {
-		iconList = new IIcon[metaList.length];
+		iconList = new IIcon[Constants.METALIST_ITEM_SHARD.length];
 		iconList[0] = ir.registerIcon(Constants.MOD_ID + ":shard_crystalline_energy");
 		iconList[1] = ir.registerIcon(Constants.MOD_ID + ":shard_crystalline_chaos");
 		iconList[2] = ir.registerIcon(Constants.MOD_ID + ":shard_crystalline_light");
@@ -59,13 +56,13 @@ public class ItemShard extends Item {
 
 	@Override
 	public String getUnlocalizedName(ItemStack itemStack) {
-		int idx = MathHelper.clamp_int(itemStack.getItemDamage(), 0, metaList.length - 1);
-		return "item." + metaList[idx];
+		int idx = getMetadata(itemStack.getItemDamage());
+		return super.getUnlocalizedName(itemStack) + "." + Constants.METALIST_ITEM_SHARD[idx];
 	}
 
 	@Override
 	public int getMetadata(int meta) {
-		return MathHelper.clamp_int(meta, 0, metaList.length - 1);
+		return MathHelper.clamp_int(meta, 0, Constants.METALIST_ITEM_SHARD.length - 1);
 	}
 
 }

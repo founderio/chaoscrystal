@@ -11,14 +11,16 @@ public class Constants {
 	public static final String ID_ITEM_CRYSTALGLASSES = "chaoscrystal.crystalglasses";
 	public static final String ID_ITEM_MANUAL = "chaoscrystal.manual";
 	public static final String ID_ITEM_LIFELESS_SHARD = "chaoscrystal.lifeless_shard";
+	
 	public static final String ID_ITEM_SHARD = "chaoscrystal.shard";
-	public static final String ID_ITEM_SHARD_CRYSTALLINE_ENERGY = "chaoscrystal.shard.crystalline_energy";
-	public static final String ID_ITEM_SHARD_CRYSTALLINE_CHAOS = "chaoscrystal.shard.crystalline_chaos";
-	public static final String ID_ITEM_SHARD_CRYSTALLINE_LIGHT = "chaoscrystal.shard.crystalline_light";
-	public static final String ID_ITEM_SHARD_CRYSTAL_CLEAR = "chaoscrystal.shard.crystal_clear";
-
+	public static final String[] METALIST_ITEM_SHARD = {
+		"crystalline_energy",
+		"crystalline_chaos",
+		"crystalline_light",
+		"crystal_clear"
+	};
+	
 	public static final String ID_BLOCK_BASE = "chaoscrystal.base";
-
 	public static final String[] METALIST_BLOCK_BASE = {
 		"crystalline",
 		"crystal",
@@ -35,7 +37,6 @@ public class Constants {
 		"crystalline_light_sprout",
 		"crystal_clear_sprout"
 	};
-
 
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
 	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
