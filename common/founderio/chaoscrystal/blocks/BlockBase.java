@@ -30,7 +30,7 @@ import founderio.chaoscrystal.Constants;
 
 public class BlockBase extends Block {
 
-	public IIcon[] iconList;
+	private IIcon[] iconList;
 
 	public BlockBase() {
 		super(Material.glass);
@@ -172,6 +172,11 @@ public class BlockBase extends Block {
 		checkBlockCracksAround(world, x, y, z, 0.9f, 0);
 	}
 	
+	public boolean isRegularVersion(int meta) {
+		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
+		return idx < 4;
+	}
+	
 	public boolean isCrackedVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		return idx > 3 && idx < 8;
@@ -182,6 +187,11 @@ public class BlockBase extends Block {
 		return idx > 7;
 	}
 
+	/**
+	 * Cracked > Regular
+	 * @param meta
+	 * @return
+	 */
 	public int getUncrackedVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		if(isCrackedVersion(idx)) {
@@ -191,6 +201,11 @@ public class BlockBase extends Block {
 		}
 	}
 
+	/**
+	 * Regular > Cracked
+	 * @param meta
+	 * @return
+	 */
 	public int getCrackedVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		if(isCrackedVersion(idx)) {
@@ -200,6 +215,11 @@ public class BlockBase extends Block {
 		}
 	}
 
+	/**
+	 * Sprout > Regular
+	 * @param meta
+	 * @return
+	 */
 	public int getNonSproutVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		if(isSproutVersion(idx)) {
@@ -209,6 +229,12 @@ public class BlockBase extends Block {
 		}
 	}
 
+	/**
+	 * Cracked > Sprout
+	 * Regular > Sprout
+	 * @param meta
+	 * @return
+	 */
 	public int getSproutVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		if(isCrackedVersion(idx)) {
@@ -220,6 +246,12 @@ public class BlockBase extends Block {
 		}
 	}
 
+	/**
+	 * Cracked > Regular
+	 * Sprout > Regular
+	 * @param meta
+	 * @return
+	 */
 	public int getRegularVersion(int meta) {
 		int idx = MathHelper.clamp_int(meta, 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		if(isCrackedVersion(idx)) {
@@ -260,6 +292,21 @@ public class BlockBase extends Block {
 		handleCollision(world, x, y, z, entity, force);
 	}
 
+	/**
+	 * Handles collisions (regular and fall) with an entity. This will crack the
+	 * collided crystal blocks and respects configuration settings, feather
+	 * falling, creative mode etc.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param entity
+	 *            Collided entity for enchantment & creative mode check. Can be
+	 *            null.
+	 * @param force
+	 *            Impact force, >2.5 for light crack and >5 for bigger crack.
+	 */
 	public void handleCollision(World world, int x,
 			int y, int z, Entity entity,
 			double force) {
@@ -299,6 +346,17 @@ public class BlockBase extends Block {
 		}
 	}
 
+	/**
+	 * Checks the block at the specified coordinates and cracks it if possible.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param chance
+	 * @param fortune
+	 * @return true if the block was cracked.
+	 */
 	public boolean checkBlockCrack(World world, int x, int y, int z, float chance, int fortune) {
 		if(world.getBlock(x, y, z) == ChaosCrystalMain.blockBase) {
 			if(ChaosCrystalMain.rand.nextFloat() > chance) {
@@ -323,6 +381,19 @@ public class BlockBase extends Block {
 		return false;
 	}
 
+	/**
+	 * Checks in a 1 block radius around a block if any blocks can be cracked
+	 * and cracks those. Does NOT crack the block at the specified coordinates,
+	 * just the adjacent blocks.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param chance
+	 * @param fortune
+	 * @return true if any blocks were cracked.
+	 */
 	public boolean checkBlockCracksAround(World world, int x, int y, int z, float chance, int fortune) {
 		boolean result = false;
 		result |= checkBlockCrack(world, x + 1, y, z, chance, fortune);
@@ -339,6 +410,7 @@ public class BlockBase extends Block {
 
 		int meta = MathHelper.clamp_int(world.getBlockMetadata(x, y, z), 0, Constants.METALIST_BLOCK_BASE.length - 1);
 		
+		// No ticks for non-sprout crystals
 		if(!isSproutVersion(meta)) {
 			return;
 		}
@@ -350,8 +422,9 @@ public class BlockBase extends Block {
 		 * Growth will stop at any time if a block was "grown" unless insta-growth is enabled.
 		 */
 		boolean allowGrowth = false;
-
+		
 		for(int dy = 0; dy < Config.spikeMaxHeight; dy ++) {
+			//TODO: Loop-Version of these? For readability.
 			Block bl1 = world.getBlock(x, y + dy, z);
 			Block bl2 = world.getBlock(x, y - dy, z);
 			Block bl3 = world.getBlock(x, y, z + dy);
@@ -518,6 +591,16 @@ public class BlockBase extends Block {
 		//TODO: Create secondary & tertiary sprouts (limit those, so they don't take over the world)
 	}
 
+	/**
+	 * Eats a world block or reparis a broken crystal.
+	 * 
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param meta
+	 * @return true if a block was eaten or instaGrowth is enabled.
+	 */
 	private boolean eatBlock(World world, int x, int y, int z, int meta) {
 		Block currentWorldBlock = world.getBlock(x, y, z);
 		if(currentWorldBlock == Blocks.bedrock) {
@@ -546,16 +629,44 @@ public class BlockBase extends Block {
 
 	}
 
+	/**
+	 * Determines if a block type can be "eaten" by crystals.
+	 * 
+	 * @param block
+	 * @return true if so, false if not.
+	 */
 	public static boolean isAcceptedBlock(Block block) {
-		return block == Blocks.stone || block == Blocks.dirt || block == Blocks.gravel || block == Blocks.grass || block == Blocks.sandstone || block == Blocks.netherrack || block == Blocks.water;
+		return block == Blocks.stone || block == Blocks.dirt
+				|| block == Blocks.gravel || block == Blocks.grass
+				|| block == Blocks.sandstone || block == Blocks.netherrack
+				|| block == Blocks.water;
 	}
 
+	/**
+	 * Determines if a block type is seen as crystal (Therefore will be regarded
+	 * as part of the crystal when growing crystals)
+	 * 
+	 * @param block
+	 * @return true if so, false if not.
+	 */
 	public static boolean isCrystalBlock(Block block) {
 		return block == ChaosCrystalMain.blockBase;
 	}
 
+	/**
+	 * Determines if a block can be "eaten" by crystals.
+	 * 
+	 * @param block
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return true if the block isAir, canBeReplacedByLeaves or it is an
+	 *         acceptable block that can be "eaten" by crystals or is regarded
+	 *         as a crystal.
+	 */
 	public static boolean isAcceptedBlockOrAir(Block block, World world, int x, int y, int z) {
-		return block.isAir(world, x, z, z) || block.canBeReplacedByLeaves(world, x, y, z) || isAcceptedBlock(block) || isCrystalBlock(block);
+		return block.isAir(world, x, z, z) || block.canBeReplacedByLeaves(world, x, y, z) || isCrystalBlock(block) || isAcceptedBlock(block);
 	}
 
 

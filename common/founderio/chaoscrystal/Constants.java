@@ -36,13 +36,6 @@ public class Constants {
 		"crystal_clear_sprout"
 	};
 
-//	public static final String ID_BLOCK_SPROUTING_CRYSTAL = "chaoscrystal.sprouting_crystal";
-//
-//	public static final String ID_BLOCK_CRYSTALLINE_ENERGY_SPROUT = "chaoscrystal.sprout.crystalline_energy";
-//	public static final String ID_BLOCK_CRYSTALLINE_CHAOS_SPROUT = "chaoscrystal.sprout.crystalline_chaos";
-//	public static final String ID_BLOCK_CRYSTALLINE_LIGHT_SPROUT = "chaoscrystal.sprout.crystalline_light";
-//	public static final String ID_BLOCK_CRYSTAL_CLEAR_SPROUT = "chaoscrystal.sprout.crystal_clear";
-
 
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
 	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
