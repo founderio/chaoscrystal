@@ -5,15 +5,20 @@
 !gradle-wrapper.jar
 *.war
 *.ear
+
+# Derived #
 /bin
 /.pmd
 /.classpath
+/.gradle
+/build
+
+# Runtime #
 /config
 /crash-reports
 /logs
 /mods
 /resourcepacks
 /saves
+/asm
 /options.txt
-/build
-/.gradle
