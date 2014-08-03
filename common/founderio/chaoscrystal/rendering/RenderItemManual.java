@@ -254,7 +254,7 @@ public class RenderItemManual implements IItemRenderer {
 				GL11.glRotatef(-90f, 1f, 0, 0);
 				GL11.glRotatef(45f, 0, 1f, 0);
 
-				ClientProxy.renderApparatus.renderModelAt(ClientProxy.renderApparatus.modelReconstructor, ClientProxy.renderApparatus.resourceReconstructor, b1+2.2f, b1+3, 0.4f);
+				ClientProxy.renderApparatus.renderModelAt(ClientProxy.renderApparatus.modelReconstructor, ClientProxy.renderApparatus.texReconstructor, b1+2.2f, b1+3, 0.4f);
 
 				GL11.glPopMatrix();
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -272,7 +272,7 @@ public class RenderItemManual implements IItemRenderer {
 				GL11.glRotatef(-90f, 1f, 0, 0);
 				GL11.glRotatef(45f, 0, 1f, 0);
 
-				ClientProxy.renderApparatus.renderModelAt(ClientProxy.renderApparatus.modelCreator, ClientProxy.renderApparatus.resourceCreator, b1+2.2f, b1+3, 0.4f);
+				ClientProxy.renderApparatus.renderModelAt(ClientProxy.renderApparatus.modelCreator, ClientProxy.renderApparatus.texCreator, b1+2.2f, b1+3, 0.4f);
 
 				GL11.glPopMatrix();
 				GL11.glDisable(GL11.GL_DEPTH_TEST);
@@ -290,7 +290,7 @@ public class RenderItemManual implements IItemRenderer {
 				GL11.glRotatef(-90f, 1f, 0, 0);
 				GL11.glRotatef(45f, 0, 1f, 0);
 
-				ClientProxy.renderApparatus.renderModelAt(ClientProxy.renderApparatus.modelSentry, ClientProxy.renderApparatus.resourceSentry, b1+2.2f, b1+3, 0.4f);
+				ClientProxy.renderApparatus.renderModelAt(ClientProxy.renderApparatus.modelSentry, ClientProxy.renderApparatus.texSentry, b1+2.2f, b1+3, 0.4f);
 
 				GL11.glPopMatrix();
 				GL11.glDisable(GL11.GL_DEPTH_TEST);

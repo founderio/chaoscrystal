@@ -12,12 +12,16 @@ public class Constants {
 	public static final String ID_ITEM_MANUAL = "chaoscrystal.manual";
 	public static final String ID_ITEM_LIFELESS_SHARD = "chaoscrystal.lifeless_shard";
 	
-	public static final String ID_ITEM_SHARD = "chaoscrystal.shard";
-	public static final String[] METALIST_ITEM_SHARD = {
+	public static final String ID_BLOCK_SHARD = "chaoscrystal.shard";
+	public static final String[] METALIST_SHARD = {
 		"crystalline_energy",
 		"crystalline_chaos",
 		"crystalline_light",
-		"crystal_clear"
+		"crystal_clear",
+		"crystalline_energy_glowing",
+		"crystalline_chaos_glowing",
+		"crystalline_light_glowing",
+		"crystal_clear_glowing"
 	};
 	
 	public static final String ID_BLOCK_BASE = "chaoscrystal.base";
@@ -55,6 +59,7 @@ public class Constants {
 	public static final String ID_TILEENTITY_CREATOR = "chaoscrystal.creator";
 	public static final String ID_TILEENTITY_SENTRY = "chaoscrystal.sentry";
 	public static final String ID_TILEENTITY_TICKER = "chaoscrystal.ticker";
+	public static final String ID_TILEENTITY_SHARD = "chaoscrystal.shard";
 
 	public static final String NAME_ENTITY_CHAOSCRYSTAL = "chaoscrystal.chaoscrystal";
 	public static final String NAME_ENTITY_FOCUS_TRANSFER = "chaoscrystal.focus.transfer";

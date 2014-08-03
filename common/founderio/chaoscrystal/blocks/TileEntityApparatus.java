@@ -11,16 +11,19 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants.NBT;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import founderio.chaoscrystal.blockbase.IOwnable;
+import founderio.chaoscrystal.blockbase.IUseable;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 import founderio.chaoscrystal.machinery.IItemModule;
 import founderio.chaoscrystal.machinery.IModule;
 
 public abstract class TileEntityApparatus extends TileEntity implements
-IInventory, ISidedInventory {
+IInventory, ISidedInventory, IOwnable, IUseable {
 
 	public final int stepsPerTick = 5;
 	public short animation;
@@ -38,6 +41,10 @@ IInventory, ISidedInventory {
 
 	public abstract boolean processAspects(EntityChaosCrystal crystal);
 
+	/*
+	 * BEGIN: IModuleHost
+	 */
+	
 	public int getSizeModules() {
 		return modules.length;
 	}
@@ -50,6 +57,11 @@ IInventory, ISidedInventory {
 		return moduleItems[index];
 	}
 
+	/*
+	 * BEGIN: IOwnable
+	 */
+	
+	@Override
 	public void setOwner(String username) {
 		owner = username;
 		if (owner == null) {
@@ -58,9 +70,15 @@ IInventory, ISidedInventory {
 		updateState();
 	}
 
+	@Override
 	public String getOwner() {
 		return owner;
 	}
+	
+	/*
+	 * BEGIN: IInventory
+	 */
+	
 
 	@Override
 	public int getSizeInventory() {
@@ -157,6 +175,9 @@ IInventory, ISidedInventory {
 		// Nothing to do...
 	}
 
+	/*
+	 * BEGIN: Regular Implementation
+	 */
 
 	public final void updateState() {
 		if (worldObj.isRemote) {
@@ -183,13 +204,13 @@ IInventory, ISidedInventory {
 	}
 
 	@Override
-	public final void writeToNBT(NBTTagCompound par1nbtTagCompound) {
-		super.writeToNBT(par1nbtTagCompound);
+	public final void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
 
-		writePropertiesToNBT(par1nbtTagCompound);
+		writePropertiesToNBT(nbt);
 	}
 
-	protected void writePropertiesToNBT(NBTTagCompound par1nbtTagCompound) {
+	protected void writePropertiesToNBT(NBTTagCompound nbt) {
 		NBTTagList items = new NBTTagList();
 		for (int i = 0; i < inventory.length; i++) {
 			ItemStack is = inventory[i];
@@ -200,7 +221,7 @@ IInventory, ISidedInventory {
 			is.writeToNBT(stackTag);
 			items.appendTag(stackTag);
 		}
-		par1nbtTagCompound.setTag("inventory", items);
+		nbt.setTag("inventory", items);
 		NBTTagList moduleItemsNBT = new NBTTagList();
 		for (int i = 0; i < moduleItems.length; i++) {
 			ItemStack is = moduleItems[i];
@@ -211,27 +232,27 @@ IInventory, ISidedInventory {
 			is.writeToNBT(stackTag);
 			moduleItemsNBT.appendTag(stackTag);
 		}
-		par1nbtTagCompound.setTag("modules", moduleItemsNBT);
-		par1nbtTagCompound.setShort("animation", animation);
-		par1nbtTagCompound.setString("owner", owner);
+		nbt.setTag("modules", moduleItemsNBT);
+		nbt.setShort("animation", animation);
+		nbt.setString("owner", owner);
 	}
 
 	@Override
-	public final void readFromNBT(NBTTagCompound par1nbtTagCompound) {
-		super.readFromNBT(par1nbtTagCompound);
+	public final void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
 
-		readPropertiesFromNBT(par1nbtTagCompound);
+		readPropertiesFromNBT(nbt);
 	}
 
-	protected void readPropertiesFromNBT(NBTTagCompound par1nbtTagCompound) {
-		NBTTagList items = par1nbtTagCompound.getTagList("inventory", NBT.TAG_COMPOUND);
+	protected void readPropertiesFromNBT(NBTTagCompound nbt) {
+		NBTTagList items = nbt.getTagList("inventory", NBT.TAG_COMPOUND);
 		if (items != null) {
 			for (int i = 0; i < items.tagCount(); i++) {
 				NBTTagCompound stackTag = items.getCompoundTagAt(i);
 				setInventorySlotContents(i, ItemStack.loadItemStackFromNBT(stackTag));
 			}
 		}
-		NBTTagList moduleItemsNBT = par1nbtTagCompound.getTagList("modules", NBT.TAG_COMPOUND);
+		NBTTagList moduleItemsNBT = nbt.getTagList("modules", NBT.TAG_COMPOUND);
 		if (moduleItemsNBT != null) {
 			for (int i = 0; i < moduleItemsNBT.tagCount(); i++) {
 				NBTTagCompound stackTag = moduleItemsNBT.getCompoundTagAt(i);
@@ -242,97 +263,88 @@ IInventory, ISidedInventory {
 				}
 			}
 		}
-		animation = par1nbtTagCompound.getShort("animation");
-		owner = par1nbtTagCompound.getString("owner");
+		animation = nbt.getShort("animation");
+		owner = nbt.getString("owner");
 	}
 
 
-	public boolean onBlockActivated(EntityPlayer player) {
+	public boolean onBlockActivated(World world, int x, int y, int z,
+			EntityPlayer player, int side, float hitx, float hity, float hitz) {
 		ItemStack currentEquip = player.getHeldItem();
 
-		if(currentEquip == null && player.isSneaking()) {
-			//TODO: Switch to UUID
-			if(getOwner().equals(player.getDisplayName())) {
-				setOwner("");
-			} else if(getOwner().equals("")) {
-				setOwner(player.getDisplayName());
-			}
-		} else {
+		boolean itemValid = false;
 
-			boolean itemValid = false;
-
-			if (currentEquip != null) {
-				for (int i = 0; i < inventory.length; i++) {
-					if(isItemValidForSlot(i, currentEquip)) {
-						itemValid = true;
-						ItemStack is = getStackInSlot(i);
-						if (is == null || is.getItem() == null) {
-							if (currentEquip.stackSize <= getInventoryStackLimit()) {
-								setInventorySlotContents(i, currentEquip.copy());
-								player.inventory.mainInventory[player.inventory.currentItem] = null;
-								break;
-							} else {
-								currentEquip.stackSize -= getInventoryStackLimit();
-
-								ItemStack copy = currentEquip.copy();
-								copy.stackSize = getInventoryStackLimit();
-								setInventorySlotContents(i, copy);
-								if (currentEquip.stackSize == 0) {
-									player.inventory.mainInventory[player.inventory.currentItem] = null;
-									break;
-								}
-							}
-						} else if (is.isItemEqual(currentEquip)) {
-							if (is.stackSize + currentEquip.stackSize <= getInventoryStackLimit()) {
-								is.stackSize += currentEquip.stackSize;
-								player.inventory.mainInventory[player.inventory.currentItem] = null;
-								break;
-							} else {
-								currentEquip.stackSize -= getInventoryStackLimit()
-										- is.stackSize;
-								is.stackSize = getInventoryStackLimit();
-								if (currentEquip.stackSize == 0) {
-									player.inventory.mainInventory[player.inventory.currentItem] = null;
-									break;
-								}
-							}
-						}
-					}
-				}
-
-				if(currentEquip.getItem() instanceof IItemModule) {
-					IItemModule iim = (IItemModule)currentEquip.getItem();
-					for(int i = 0; i < modules.length; i++) {
-						if(modules[i] == null) {
-							modules[i] = iim.getModuleFromItemStack(currentEquip);
-							if(modules[i] != null) {
-								moduleItems[i] = iim.getItemStackFromModule(modules[i]);
-								currentEquip.stackSize -= 1;
-								if (currentEquip.stackSize == 0) {
-									player.inventory.mainInventory[player.inventory.currentItem] = null;
-								}
-							}
-							break;
-						}
-					}
-				}
-
-			}
-
-			if(!itemValid) {
-				for (int i = 0; i < 4; i++) {
+		if (currentEquip != null) {
+			for (int i = 0; i < inventory.length; i++) {
+				if(isItemValidForSlot(i, currentEquip)) {
+					itemValid = true;
 					ItemStack is = getStackInSlot(i);
-					if (is != null && is.stackSize > 0) {
-						if (player.inventory.addItemStackToInventory(is)) {
-							setInventorySlotContents(i, null);
+					if (is == null || is.getItem() == null) {
+						if (currentEquip.stackSize <= getInventoryStackLimit()) {
+							setInventorySlotContents(i, currentEquip.copy());
+							player.inventory.mainInventory[player.inventory.currentItem] = null;
 							break;
+						} else {
+							currentEquip.stackSize -= getInventoryStackLimit();
+
+							ItemStack copy = currentEquip.copy();
+							copy.stackSize = getInventoryStackLimit();
+							setInventorySlotContents(i, copy);
+							if (currentEquip.stackSize == 0) {
+								player.inventory.mainInventory[player.inventory.currentItem] = null;
+								break;
+							}
+						}
+					} else if (is.isItemEqual(currentEquip)) {
+						if (is.stackSize + currentEquip.stackSize <= getInventoryStackLimit()) {
+							is.stackSize += currentEquip.stackSize;
+							player.inventory.mainInventory[player.inventory.currentItem] = null;
+							break;
+						} else {
+							currentEquip.stackSize -= getInventoryStackLimit()
+									- is.stackSize;
+							is.stackSize = getInventoryStackLimit();
+							if (currentEquip.stackSize == 0) {
+								player.inventory.mainInventory[player.inventory.currentItem] = null;
+								break;
+							}
 						}
 					}
 				}
 			}
 
-			markDirty();
+			if(currentEquip.getItem() instanceof IItemModule) {
+				IItemModule iim = (IItemModule)currentEquip.getItem();
+				for(int i = 0; i < modules.length; i++) {
+					if(modules[i] == null) {
+						modules[i] = iim.getModuleFromItemStack(currentEquip);
+						if(modules[i] != null) {
+							moduleItems[i] = iim.getItemStackFromModule(modules[i]);
+							currentEquip.stackSize -= 1;
+							if (currentEquip.stackSize == 0) {
+								player.inventory.mainInventory[player.inventory.currentItem] = null;
+							}
+						}
+						break;
+					}
+				}
+			}
+
 		}
+
+		if(!itemValid) {
+			for (int i = 0; i < 4; i++) {
+				ItemStack is = getStackInSlot(i);
+				if (is != null && is.stackSize > 0) {
+					if (player.inventory.addItemStackToInventory(is)) {
+						setInventorySlotContents(i, null);
+						break;
+					}
+				}
+			}
+		}
+
+		markDirty();
 		return true;
 	}
 

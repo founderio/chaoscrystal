@@ -31,6 +31,7 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void registerRenderStuff() {
+		
 		renderFocus = new RenderFocus();
 		renderChaosCrystal = new RenderChaosCrystal();
 		renderApparatus = new RenderApparatus();
@@ -43,6 +44,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFocusFilterTarget.class, renderFocus);
 
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityApparatus.class, renderApparatus);
+		//TODO: when detached TileEntityShard, add that here.
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockReconstructor), renderApparatus);
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockCreator), renderApparatus);
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(ChaosCrystalMain.blockSentry), renderApparatus);

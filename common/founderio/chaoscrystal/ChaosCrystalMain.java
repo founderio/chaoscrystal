@@ -35,9 +35,11 @@ import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.BlockCrystalLight;
 import founderio.chaoscrystal.blocks.BlockLifeless;
+import founderio.chaoscrystal.blocks.BlockShard;
 import founderio.chaoscrystal.blocks.TileEntityInfuser;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
+import founderio.chaoscrystal.blocks.TileEntityShard;
 import founderio.chaoscrystal.blocks.TileEntityTicker;
 import founderio.chaoscrystal.debug.ChaosCrystalAspectUtil;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -82,6 +84,7 @@ public class ChaosCrystalMain {
 	public static Item itemLifelessShard;
 	public static Item itemShard;
 
+	public static BlockShard blockShard;
 	public static BlockBase blockBase;
 	public static BlockApparatus blockReconstructor;
 	public static BlockApparatus blockCreator;
@@ -128,8 +131,12 @@ public class ChaosCrystalMain {
 		itemLifelessShard.setUnlocalizedName(Constants.ID_ITEM_LIFELESS_SHARD);
 		itemLifelessShard.setCreativeTab(creativeTab);
 
-		itemShard = new ItemShard();
-		itemShard.setUnlocalizedName(Constants.ID_ITEM_SHARD);
+		blockShard = new BlockShard();
+		blockShard.setBlockName(Constants.ID_BLOCK_SHARD);
+		blockShard.setCreativeTab(creativeTab);
+		
+		itemShard = new ItemShard(blockShard, Constants.METALIST_SHARD);
+		itemShard.setUnlocalizedName(Constants.ID_BLOCK_SHARD);
 		itemShard.setCreativeTab(creativeTab);
 
 		blockBase = new BlockBase();
@@ -166,7 +173,9 @@ public class ChaosCrystalMain {
 		GameRegistry.registerItem(itemCrystalGlasses, Constants.ID_ITEM_CRYSTALGLASSES, Constants.MOD_ID);
 		GameRegistry.registerItem(itemManual, Constants.ID_ITEM_MANUAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemLifelessShard, Constants.ID_ITEM_LIFELESS_SHARD, Constants.MOD_ID);
-		GameRegistry.registerItem(itemShard, Constants.ID_ITEM_SHARD, Constants.MOD_ID);
+		
+		GameRegistry.registerBlock(blockShard, null, Constants.ID_BLOCK_SHARD);
+		GameRegistry.registerItem(itemShard, Constants.ID_BLOCK_SHARD);
 
 		GameRegistry.registerBlock(blockBase, null, Constants.ID_BLOCK_BASE);
 		GameRegistry.registerItem(new ItemMultiTexture(blockBase, blockBase, Constants.METALIST_BLOCK_BASE), Constants.ID_BLOCK_BASE);
@@ -181,6 +190,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 		GameRegistry.registerTileEntity(TileEntityTicker.class, Constants.ID_TILEENTITY_TICKER);
+		GameRegistry.registerTileEntity(TileEntityShard.class, Constants.ID_TILEENTITY_SHARD);
 		
 		//		biomeCrystal = new BiomeGenCrystal(getBiomeId(Constants.NAME_BIOME_CRYSTAL, 68));
 		

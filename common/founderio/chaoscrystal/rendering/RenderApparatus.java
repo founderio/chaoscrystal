@@ -10,8 +10,11 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.model.IModelCustom;
+import net.minecraftforge.client.model.obj.WavefrontObject;
 import net.minecraftforge.client.model.techne.TechneModel;
 
 import org.lwjgl.opengl.GL11;
@@ -25,17 +28,22 @@ import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.blocks.TileEntityInfuser;
 import founderio.chaoscrystal.blocks.TileEntityReconstructor;
 import founderio.chaoscrystal.blocks.TileEntitySentry;
+import founderio.chaoscrystal.blocks.TileEntityShard;
+import founderio.chaoscrystal.blocks.TileEntityTicker;
 
-public class RenderApparatus extends TileEntitySpecialRenderer implements
-IItemRenderer {
+public class RenderApparatus extends TileEntitySpecialRenderer implements IItemRenderer {
 	public final TechneModel modelReconstructor;
-	public final ResourceLocation resourceReconstructor;
+	public final ResourceLocation texReconstructor;
 	public final TechneModel modelCreator;
-	public final ResourceLocation resourceCreator;
-	public final ResourceLocation resourceCreatorOff;
+	public final ResourceLocation texCreator;
+	public final ResourceLocation texCreatorOff;
 	public final TechneModel modelSentry;
-	public final ResourceLocation resourceSentry;
-	public final ResourceLocation resourceSentryOff;
+	public final ResourceLocation texSentry;
+	public final ResourceLocation texSentryOff;
+	
+	public final WavefrontObject modelShard;
+	public final ResourceLocation[] texShard;
+	
 	private RenderItem ri;
 	private EntityItem ei;
 
@@ -43,13 +51,21 @@ IItemRenderer {
 
 	public RenderApparatus() {
 		modelReconstructor = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/reconstructor.tcn"));
-		resourceReconstructor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reconstructor.png");
+		texReconstructor = new ResourceLocation(Constants.MOD_ID + ":textures/models/reconstructor.png");
 		modelCreator = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/creator.tcn"));
-		resourceCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
-		resourceCreatorOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator_off.png");
+		texCreator = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator.png");
+		texCreatorOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/creator_off.png");
 		modelSentry = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/sentry.tcn"));
-		resourceSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
-		resourceSentryOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry_off.png");
+		texSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
+		texSentryOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry_off.png");
+		
+		modelShard = new WavefrontObject(new ResourceLocation(Constants.MOD_ID + ":models/shard.obj"));
+		texShard = new ResourceLocation[4];
+		texShard[0] = new ResourceLocation(Constants.MOD_ID + ":textures/blocks/crystalline_energy.png");
+		texShard[1] = new ResourceLocation(Constants.MOD_ID + ":textures/blocks/crystalline_chaos.png");
+		texShard[2] = new ResourceLocation(Constants.MOD_ID + ":textures/blocks/crystalline_light.png");
+		texShard[3] = new ResourceLocation(Constants.MOD_ID + ":textures/blocks/crystal_clear.png");
+		
 		ri = new RenderItem() {
 			@Override
 			public boolean shouldBob() {
@@ -60,6 +76,10 @@ IItemRenderer {
 		ri.setRenderManager(RenderManager.instance);
 	}
 
+	/**
+	 * Handler for game ticks (rotating & floating model elements)
+	 * @param event
+	 */
 	@SubscribeEvent
 	public void tick(ClientTickEvent event) {
 		if(event.phase == Phase.END) {
@@ -69,12 +89,15 @@ IItemRenderer {
 		}
 	}
 
+	/*
+	 * BEGIN TileEntitySpecialRenderer
+	 */
+	
 	@Override
-	public void renderTileEntityAt(TileEntity tileentity, double d0, double d1,
-			double d2, float f) {
+	public void renderTileEntityAt(TileEntity tileentity, double x, double y, double z, float f) {
 
 		if (tileentity instanceof TileEntityReconstructor) {
-			renderModelAt(modelReconstructor, resourceReconstructor, d0, d1, d2);
+			renderModelAt(modelReconstructor, texReconstructor, x, y, z);
 
 			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);
 			if (is == null) {
@@ -83,11 +106,11 @@ IItemRenderer {
 				ei.setEntityItemStack(is);
 
 				GL11.glPushMatrix();
-				GL11.glTranslatef((float) d0 + 0.5f, (float) d1 + 0.15f,
-						(float) d2 + 0.5f);
+				GL11.glTranslatef((float) x + 0.5f, (float) y + 0.15f,
+						(float) z + 0.5f);
 				GL11.glRotatef(rot, 0, 1, 0);
 
-				ei.setPosition(d0, d1 + 1, d2);
+				ei.setPosition(x, y + 1, z);
 
 				RenderItem.renderInFrame = true;
 				ri.doRender(ei, 0, .5f, 0, 0, 0);
@@ -96,8 +119,8 @@ IItemRenderer {
 			}
 		} else if (tileentity instanceof TileEntityInfuser) {
 			renderModelAt(modelCreator,
-					((TileEntityInfuser) tileentity).isActive ? resourceCreator
-							: resourceCreatorOff, d0, d1, d2);
+					((TileEntityInfuser) tileentity).isActive ? texCreator
+							: texCreatorOff, x, y, z);
 
 			ItemStack is = ((TileEntityApparatus) tileentity).getStackInSlot(0);
 			if (is == null) {
@@ -106,11 +129,11 @@ IItemRenderer {
 				ei.setEntityItemStack(is);
 
 				GL11.glPushMatrix();
-				GL11.glTranslatef((float) d0 + 0.5f, (float) d1 + 0.15f,
-						(float) d2 + 0.5f);
+				GL11.glTranslatef((float) x + 0.5f, (float) y + 0.15f,
+						(float) z + 0.5f);
 				GL11.glRotatef(rot, 0, 1, 0);
 
-				ei.setPosition(d0, d1 + 1, d2);
+				ei.setPosition(x, y + 1, z);
 
 				RenderItem.renderInFrame = true;
 				ri.doRender(ei, 0, .5f, 0, 0, 0);
@@ -119,8 +142,8 @@ IItemRenderer {
 			}
 		} else if (tileentity instanceof TileEntitySentry) {
 			renderModelAt(modelSentry,
-					((TileEntitySentry) tileentity).isActive ? resourceSentry
-							: resourceSentryOff, d0, d1, d2);
+					((TileEntitySentry) tileentity).isActive ? texSentry
+							: texSentryOff, x, y, z);
 
 			GL11.glPushMatrix();
 			//
@@ -136,12 +159,12 @@ IItemRenderer {
 					float offX = i == 0 || i == 1 ? 0.325f : 0.625f;
 					float offZ = i == 0 || i == 2 ? 0.325f : 0.625f;
 					GL11.glPushMatrix();
-					GL11.glTranslatef((float) d0 + offX, (float) d1 + 0.15f,
-							(float) d2 + offZ);
+					GL11.glTranslatef((float) x + offX, (float) y + 0.15f,
+							(float) z + offZ);
 					GL11.glRotatef(rot, 0, 1, 0);
 					GL11.glScalef(1 / 3f, 1 / 3f, 1 / 3f);
 
-					ei.setPosition(d0, d1 + 1, d2);
+					ei.setPosition(x, y + 1, z);
 
 					RenderItem.renderInFrame = true;
 					ri.doRender(ei, 0, .5f, 0, 0, 0);
@@ -150,6 +173,16 @@ IItemRenderer {
 				}
 			}
 			GL11.glPopMatrix();
+
+		} else if (tileentity instanceof TileEntityShard) {
+			int meta = MathHelper.clamp_int(tileentity.blockMetadata, 0, texShard.length * 2 - 1);
+			if(meta >= texShard.length) {
+				meta -= texShard.length;
+			}
+			renderModelAt(modelShard, texShard[meta], x, y, z);
+
+		} else if (tileentity instanceof TileEntityTicker) {
+			renderModelAt(modelShard, texShard[0], x, y, z);
 
 		} else {
 
@@ -163,12 +196,12 @@ IItemRenderer {
 					float offX = 0.15f;
 					float offZ = 0.125f + i * 0.0625f;
 					GL11.glPushMatrix();
-					GL11.glTranslatef((float) d0 + offX, (float) d1 - 0.175f,
-							(float) d2 + offZ);
+					GL11.glTranslatef((float) x + offX, (float) y - 0.175f,
+							(float) z + offZ);
 					//GL11.glRotatef(rot, 0, 1, 0);
 					GL11.glScalef(1 / 2f, 1 / 2f, 1 / 2f);
 
-					ei.setPosition(d0, d1 + 1, d2);
+					ei.setPosition(x, y + 1, z);
 
 					RenderItem.renderInFrame = true;
 					ri.doRender(ei, 0, .5f, 0, 0, 0);
@@ -180,20 +213,96 @@ IItemRenderer {
 
 	}
 
-	public void renderModelAt(TechneModel model, ResourceLocation texture,
+	/*
+	 * BEGIN IItemRenderer
+	 */
+	
+	@Override
+	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
+		return Block.getBlockFromItem(item.getItem()) instanceof BlockApparatus;
+	}
+
+	@Override
+	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
+			ItemRendererHelper helper) {
+		return true;
+	}
+
+	@Override
+	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
+		IModelCustom model;
+		ResourceLocation tex;
+
+		BlockApparatus block = (BlockApparatus) Block.getBlockFromItem(item.getItem());
+
+		switch (block.metaListIndex) {
+		case 0:
+			model = modelReconstructor;
+			tex = texReconstructor;
+			break;
+		case 1:
+			model = modelCreator;
+			tex = texCreator;
+			break;
+		case 2:
+			model = modelSentry;
+			tex = texSentry;
+			break;
+		case 3:
+			model = modelShard;
+			tex = texShard[0];
+			break;
+		case 4:
+			model = modelShard;
+			int meta = MathHelper.clamp_int(item.getItemDamage(), 0, texShard.length - 1);
+			tex = texShard[meta];
+		default:
+			return;
+		}
+
+		switch (type) {
+		case EQUIPPED:
+		case EQUIPPED_FIRST_PERSON:
+			renderModelAt(model, tex, 0, 0, 0);
+			break;
+		case INVENTORY:
+			renderModelAt(model, tex, 0.125, 0, 0.125);
+			break;
+		case ENTITY:
+		case FIRST_PERSON_MAP:
+		default:
+			renderModelAt(model, tex, -0.5, -0.5, -0.5);
+			break;
+		}
+	}
+
+	/*
+	 * BEGIN Helper Methods
+	 */
+
+	public void renderModelAt(IModelCustom model, ResourceLocation texture,
 			double d0, double d1, double d2) {
 		GL11.glPushMatrix();
 
-		// rot = (Minecraft.getMinecraft().theWorld.getWorldTime()) % 360f;
-
 		GL11.glTranslatef((float) d0 + 0.5f, (float) d1 + 0.04f,
 				(float) d2 + 0.5f);
+		
+		// Only need to adjust techne models. OBJs are fine
+		if(model instanceof TechneModel) {
+			// 1/16th scale, as techne tends to be big..
+			GL11.glScalef(0.0625f, 0.0625f, 0.0625f);
+			// Flip upside down
+			GL11.glRotatef(180f, 1.0f, 0, 0);
+		}
 
-		GL11.glScalef(0.0625f, 0.0625f, 0.0625f);// 1/16th scale, as techne
-		// tends to be big..
-		GL11.glRotatef(180f, 1.0f, 0, 0);
-
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glColor4f(1, 1, 1, 1);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		
+		if(texture != null) {
+			Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		}
 
 		if (model == modelReconstructor) {
 			modelReconstructor.renderPart("Base");
@@ -248,62 +357,13 @@ IItemRenderer {
 
 			modelSentry.renderPart("Crystal2");
 			GL11.glPopMatrix();
+//		} else if(model instanceof WavefrontObject) {
+//			((WavefrontObject)model).tessellateAll(Tessellator.instance);
 		} else {
 			model.renderAll();
 		}
 
 		GL11.glPopMatrix();
-	}
-
-	@Override
-	public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-		return Block.getBlockFromItem(item.getItem()) instanceof BlockApparatus;
-	}
-
-	@Override
-	public boolean shouldUseRenderHelper(ItemRenderType type, ItemStack item,
-			ItemRendererHelper helper) {
-		return true;
-	}
-
-	@Override
-	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		TechneModel model;
-		ResourceLocation resource;
-
-		BlockApparatus block = (BlockApparatus) Block.getBlockFromItem(item.getItem());
-
-		switch (block.metaListIndex) {
-		case 0:
-			model = modelReconstructor;
-			resource = resourceReconstructor;
-			break;
-		case 1:
-			model = modelCreator;
-			resource = resourceCreator;
-			break;
-		case 2:
-			model = modelSentry;
-			resource = resourceSentry;
-			break;
-		default:
-			return;
-		}
-
-		switch (type) {
-		case EQUIPPED:
-		case EQUIPPED_FIRST_PERSON:
-			renderModelAt(model, resource, 0, 0, 0);
-			break;
-		case INVENTORY:
-			renderModelAt(model, resource, 0.125, 0, 0.125);
-			break;
-		case ENTITY:
-		case FIRST_PERSON_MAP:
-		default:
-			renderModelAt(model, resource, -0.5, -0.5, -0.5);
-			break;
-		}
 	}
 
 }
