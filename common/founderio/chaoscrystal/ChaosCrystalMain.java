@@ -157,7 +157,7 @@ public class ChaosCrystalMain {
 		blockReconstructor.setCreativeTab(creativeTab);
 
 		blockCreator = new BlockApparatus(1);
-		blockCreator.setBlockName(Constants.ID_BLOCK_APPARATUS_CREATOR);
+		blockCreator.setBlockName(Constants.ID_BLOCK_APPARATUS_INFUSER);
 		blockCreator.setCreativeTab(creativeTab);
 
 		blockSentry = new BlockApparatus(2);
@@ -182,7 +182,7 @@ public class ChaosCrystalMain {
 		
 		GameRegistry.registerBlock(blockLifeless, Constants.ID_BLOCK_LIFELESS);
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
-		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_CREATOR);
+		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_INFUSER);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
 		GameRegistry.registerBlock(blockCrystalLight, Constants.ID_BLOCK_CRYSTAL_LIGHT);
 		

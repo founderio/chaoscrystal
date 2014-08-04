@@ -47,6 +47,7 @@ public class BlockShard extends BlockWithTileEntity {
 		return false;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void addCollisionBoxesToList(World world, int x,
 			int y, int z, AxisAlignedBB aabb,

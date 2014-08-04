@@ -44,9 +44,9 @@ public class Constants {
 
 	public static final String ID_BLOCK_APPARATUS = "chaoscrystal.apparatus";
 	public static final String ID_BLOCK_APPARATUS_RECONSTRUCTOR = "chaoscrystal.apparatus.reconstructor";
-	public static final String ID_BLOCK_APPARATUS_CREATOR = "chaoscrystal.apparatus.creator";
+	public static final String ID_BLOCK_APPARATUS_INFUSER = "chaoscrystal.apparatus.creator";
 	public static final String ID_BLOCK_APPARATUS_SENTRY = "chaoscrystal.apparatus.sentry";
-	public static final String ID_BLOCK_APPARATUS_TICKER = "apparatus.ticker";
+	public static final String ID_BLOCK_APPARATUS_TICKER = "chaoscrystal.apparatus.ticker";
 	public static final String ID_BLOCK_LIFELESS = "chaoscrystal.lifeless";
 	
 	public static final String ID_BLOCK_CRYSTAL_LIGHT = "chaoscrystal.crystal_light";
