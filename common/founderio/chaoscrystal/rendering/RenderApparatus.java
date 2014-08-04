@@ -41,6 +41,8 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 	public final ResourceLocation texSentry;
 	public final ResourceLocation texSentryOff;
 	
+	public final ResourceLocation texApparatus;
+	
 	public final WavefrontObject modelShard;
 	public final ResourceLocation[] texShard;
 	
@@ -58,6 +60,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 		modelSentry = new TechneModel(new ResourceLocation(Constants.MOD_ID + ":models/sentry.tcn"));
 		texSentry = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry.png");
 		texSentryOff = new ResourceLocation(Constants.MOD_ID + ":textures/models/sentry_off.png");
+		texApparatus = new ResourceLocation(Constants.MOD_ID + ":textures/blocks/apparatus.png");
 		
 		modelShard = new WavefrontObject(new ResourceLocation(Constants.MOD_ID + ":models/shard.obj"));
 		texShard = new ResourceLocation[4];
@@ -182,7 +185,7 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 			renderModelAt(modelShard, texShard[meta], x, y, z);
 
 		} else if (tileentity instanceof TileEntityTicker) {
-			renderModelAt(modelShard, texShard[0], x, y, z);
+			renderModelAt(modelShard, texApparatus, x, y, z);
 
 		} else {
 
@@ -237,22 +240,27 @@ public class RenderApparatus extends TileEntitySpecialRenderer implements IItemR
 
 		switch (block.metaListIndex) {
 		case 0:
+			// Reconstructor
 			model = modelReconstructor;
 			tex = texReconstructor;
 			break;
 		case 1:
+			// Infuser
 			model = modelCreator;
 			tex = texCreator;
 			break;
 		case 2:
+			// Sentry
 			model = modelSentry;
 			tex = texSentry;
 			break;
 		case 3:
+			// Ticker
 			model = modelShard;
-			tex = texShard[0];
+			tex = texApparatus;
 			break;
 		case 4:
+			// Shard
 			model = modelShard;
 			int meta = MathHelper.clamp_int(item.getItemDamage(), 0, texShard.length - 1);
 			tex = texShard[meta];
