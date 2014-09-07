@@ -200,9 +200,7 @@ public class ChaosCrystalMain {
 		// GameRegistry.registerWorldGenerator(new GenCrystalFloats(), 0);
 
 		network = NetworkRegistry.INSTANCE.newSimpleChannel(Constants.CHANNEL_NAME);
-		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
-		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 1, Side.SERVER);
-		network.registerMessage(CCPParticle.Handler.class, CCPParticle.class, 2, Side.CLIENT);
+		proxy.registerPackets(network);
 	}
 
 	@EventHandler

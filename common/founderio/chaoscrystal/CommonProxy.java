@@ -4,12 +4,19 @@ import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
+import founderio.chaoscrystal.network.CCPModeItemChanged;
 import founderio.chaoscrystal.network.CCPParticle;
 
 public class CommonProxy {
 
 	public void registerRenderStuff() {
 		// Implemented in ClientProxy
+	}
+	
+	public void registerPackets(SimpleNetworkWrapper network) {
+		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 1, Side.SERVER);
 	}
 
 	public static void spawnParticleEffects(int dimension, int effect,

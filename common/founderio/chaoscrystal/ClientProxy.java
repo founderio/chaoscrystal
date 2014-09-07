@@ -9,6 +9,8 @@ import net.minecraftforge.common.MinecraftForge;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.relauncher.Side;
 import founderio.chaoscrystal.blocks.TileEntityApparatus;
 import founderio.chaoscrystal.entities.DegradationParticles;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
@@ -16,6 +18,8 @@ import founderio.chaoscrystal.entities.EntityFocusBorder;
 import founderio.chaoscrystal.entities.EntityFocusFilter;
 import founderio.chaoscrystal.entities.EntityFocusFilterTarget;
 import founderio.chaoscrystal.entities.EntityFocusTransfer;
+import founderio.chaoscrystal.network.CCPModeItemChanged;
+import founderio.chaoscrystal.network.CCPParticle;
 import founderio.chaoscrystal.rendering.OverlayAspectSelector;
 import founderio.chaoscrystal.rendering.RenderApparatus;
 import founderio.chaoscrystal.rendering.RenderChaosCrystal;
@@ -52,6 +56,13 @@ public class ClientProxy extends CommonProxy {
 
 		MinecraftForge.EVENT_BUS.register(new OverlayAspectSelector());
 		FMLCommonHandler.instance().bus().register(renderApparatus);
+	}
+	
+	@Override
+	public void registerPackets(SimpleNetworkWrapper network) {
+		super.registerPackets(network);
+		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
+		network.registerMessage(CCPParticle.Handler.class, CCPParticle.class, 2, Side.CLIENT);
 	}
 
 	@Override
