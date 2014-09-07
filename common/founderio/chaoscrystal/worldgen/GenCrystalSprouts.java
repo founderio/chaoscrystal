@@ -100,6 +100,9 @@ public class GenCrystalSprouts implements IWorldGenerator {
 		meta += 8;
 		
 		int yMax = Math.min(ySpawnMax, world.getTopSolidOrLiquidBlock(xAbsolute, zAbsolute));
+		if(yMax <= ySpawnMin) {
+			yMax = ySpawnMin + 1;
+		}
 		int yAbsolute = ySpawnMin + random.nextInt(yMax - ySpawnMin);
 
 		Block bl = world.getBlock(xAbsolute, yAbsolute, zAbsolute);

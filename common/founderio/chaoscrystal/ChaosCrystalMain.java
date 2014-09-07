@@ -90,7 +90,7 @@ public class ChaosCrystalMain {
 	public static BlockApparatus blockCreator;
 	public static BlockApparatus blockSentry;
 	public static BlockLifeless blockLifeless;
-	public static BlockCrystalLight blockCrystalLight;
+//	public static BlockCrystalLight blockCrystalLight;
 
 	//	public static BiomeGenCrystal biomeCrystal;
 
@@ -148,9 +148,9 @@ public class ChaosCrystalMain {
 		blockLifeless.setBlockName(Constants.ID_BLOCK_LIFELESS);
 		blockLifeless.setCreativeTab(creativeTab);
 
-		blockCrystalLight = new BlockCrystalLight();
-		blockCrystalLight.setBlockName(Constants.ID_BLOCK_CRYSTAL_LIGHT);
-		blockCrystalLight.setCreativeTab(creativeTab);
+//		blockCrystalLight = new BlockCrystalLight();
+//		blockCrystalLight.setBlockName(Constants.ID_BLOCK_CRYSTAL_LIGHT);
+//		blockCrystalLight.setCreativeTab(creativeTab);
 
 		blockReconstructor = new BlockApparatus(0);
 		blockReconstructor.setBlockName(Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
@@ -184,7 +184,7 @@ public class ChaosCrystalMain {
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_INFUSER);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
-		GameRegistry.registerBlock(blockCrystalLight, Constants.ID_BLOCK_CRYSTAL_LIGHT);
+//		GameRegistry.registerBlock(blockCrystalLight, Constants.ID_BLOCK_CRYSTAL_LIGHT);
 		
 		GameRegistry.registerTileEntityWithAlternatives(TileEntityReconstructor.class, Constants.ID_TILEENTITY_INFUSER, Constants.ID_TILEENTITY_RECONSTRUCTOR);
 		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
@@ -229,7 +229,26 @@ public class ChaosCrystalMain {
 
 		GameRegistry.addRecipe(new ItemStack(blockLifeless, 1, 0), "sss", "sss", "sss", 's', itemLifelessShard);
 		GameRegistry.addShapelessRecipe(new ItemStack(itemLifelessShard, 9, 0), blockLifeless);
+		
+		// Smelting of Crystal to clear crystal
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 0), new ItemStack(blockBase, 1, 3), 0);
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 1), new ItemStack(blockBase, 1, 3), 0);
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 2), new ItemStack(blockBase, 1, 3), 0);
 
+		// Smelting of Crystal to clear crystal (crycked versions)
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 4), new ItemStack(blockBase, 1, 7), 0);
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 5), new ItemStack(blockBase, 1, 7), 0);
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 6), new ItemStack(blockBase, 1, 7), 0);
+
+		// Smelting of cracked clear crytal to clear crystal
+		GameRegistry.addSmelting(new ItemStack(blockBase, 1, 7), new ItemStack(blockBase, 1, 3), 0);
+
+		// Smeleting shards to their glowing counterpart
+		GameRegistry.addSmelting(new ItemStack(itemShard, 1, 0), new ItemStack(itemShard, 1, 4), 0);
+		GameRegistry.addSmelting(new ItemStack(itemShard, 1, 1), new ItemStack(itemShard, 1, 5), 0);
+		GameRegistry.addSmelting(new ItemStack(itemShard, 1, 2), new ItemStack(itemShard, 1, 6), 0);
+		GameRegistry.addSmelting(new ItemStack(itemShard, 1, 3), new ItemStack(itemShard, 1, 7), 0);
+		
 		chaosRegistry = new ChaosRegistry();
 
 		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().setVersion(1).disableHtmlEscaping().create();
