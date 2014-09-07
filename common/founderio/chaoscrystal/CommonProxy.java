@@ -16,7 +16,9 @@ public class CommonProxy {
 	}
 	
 	public void registerPackets(SimpleNetworkWrapper network) {
+		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
 		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 1, Side.SERVER);
+		network.registerMessage(CCPParticle.Handler.class, CCPParticle.class, 2, Side.CLIENT);
 	}
 
 	public static void spawnParticleEffects(int dimension, int effect,

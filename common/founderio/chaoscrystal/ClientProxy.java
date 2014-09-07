@@ -61,8 +61,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerPackets(SimpleNetworkWrapper network) {
 		super.registerPackets(network);
-		network.registerMessage(CCPModeItemChanged.Handler.class, CCPModeItemChanged.class, 0, Side.CLIENT);
-		network.registerMessage(CCPParticle.Handler.class, CCPParticle.class, 2, Side.CLIENT);
 	}
 
 	@Override

@@ -8,6 +8,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.IModeChangingItem;
 
 public class CCPModeItemChanged implements IMessage {
@@ -18,7 +19,7 @@ public class CCPModeItemChanged implements IMessage {
 		public IMessage onMessage(CCPModeItemChanged message, MessageContext ctx) {
 			EntityPlayer player;
 			if(ctx.side == Side.CLIENT) {
-				player = Minecraft.getMinecraft().thePlayer;
+				player = getClientPlayer();
 			} else {
 				player = ctx.getServerHandler().playerEntity;
 			}
@@ -39,6 +40,11 @@ public class CCPModeItemChanged implements IMessage {
 			}
 			mci.setSelectedModeForItemStack(currentItemStack, message.modeIndex);
 			return null;
+		}
+		
+		@SideOnly(Side.CLIENT)
+		private EntityPlayer getClientPlayer() {
+			return Minecraft.getMinecraft().thePlayer;
 		}
 	}
 
