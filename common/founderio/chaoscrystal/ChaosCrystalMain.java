@@ -31,6 +31,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.ChaosRegistry;
+import founderio.chaoscrystal.aspects.modules.ModuleVanillaWorldgen;
 import founderio.chaoscrystal.blocks.BlockApparatus;
 import founderio.chaoscrystal.blocks.BlockBase;
 import founderio.chaoscrystal.blocks.BlockCrystalLight;
@@ -89,6 +90,7 @@ public class ChaosCrystalMain {
 	public static BlockApparatus blockReconstructor;
 	public static BlockApparatus blockCreator;
 	public static BlockApparatus blockSentry;
+	public static BlockApparatus blockTicker;
 	public static BlockLifeless blockLifeless;
 //	public static BlockCrystalLight blockCrystalLight;
 
@@ -164,9 +166,9 @@ public class ChaosCrystalMain {
 		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_SENTRY);
 		blockSentry.setCreativeTab(creativeTab);
 
-		blockSentry = new BlockApparatus(3);
-		blockSentry.setBlockName(Constants.ID_BLOCK_APPARATUS_TICKER);
-		blockSentry.setCreativeTab(creativeTab);
+		blockTicker = new BlockApparatus(3);
+		blockTicker.setBlockName(Constants.ID_BLOCK_APPARATUS_TICKER);
+		blockTicker.setCreativeTab(creativeTab);
 
 		GameRegistry.registerItem(itemChaosCrystal, Constants.ID_ITEM_CHAOSCRYSTAL, Constants.MOD_ID);
 		GameRegistry.registerItem(itemFocus, Constants.ID_ITEM_FOCUS, Constants.MOD_ID);
@@ -184,10 +186,11 @@ public class ChaosCrystalMain {
 		GameRegistry.registerBlock(blockReconstructor, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_RECONSTRUCTOR);
 		GameRegistry.registerBlock(blockCreator, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_INFUSER);
 		GameRegistry.registerBlock(blockSentry, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_SENTRY);
+		GameRegistry.registerBlock(blockTicker, ItemBlockApparatus.class, Constants.ID_BLOCK_APPARATUS_TICKER);
 //		GameRegistry.registerBlock(blockCrystalLight, Constants.ID_BLOCK_CRYSTAL_LIGHT);
 		
-		GameRegistry.registerTileEntityWithAlternatives(TileEntityReconstructor.class, Constants.ID_TILEENTITY_INFUSER, Constants.ID_TILEENTITY_RECONSTRUCTOR);
-		GameRegistry.registerTileEntity(TileEntityInfuser.class, Constants.ID_TILEENTITY_CREATOR);
+		GameRegistry.registerTileEntity(TileEntityReconstructor.class, Constants.ID_TILEENTITY_RECONSTRUCTOR);
+		GameRegistry.registerTileEntityWithAlternatives(TileEntityInfuser.class, Constants.ID_TILEENTITY_INFUSER, Constants.ID_TILEENTITY_CREATOR);
 		GameRegistry.registerTileEntity(TileEntitySentry.class, Constants.ID_TILEENTITY_SENTRY);
 		GameRegistry.registerTileEntity(TileEntityTicker.class, Constants.ID_TILEENTITY_TICKER);
 		GameRegistry.registerTileEntity(TileEntityShard.class, Constants.ID_TILEENTITY_SHARD);
@@ -256,6 +259,8 @@ public class ChaosCrystalMain {
 			AspectModule vanilla = gson.fromJson(new InputStreamReader(vanillaIS, Charsets.UTF_8), AspectModule.class);
 			chaosRegistry.registerAspectModule(vanilla);
 		}
+		
+		ModuleVanillaWorldgen.registerRepairs(chaosRegistry);
 
 	}
 

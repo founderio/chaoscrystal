@@ -3,7 +3,7 @@ package founderio.chaoscrystal;
 public class Constants {
 	public static final String MOD_ID = "chaoscrystal";
 	public static final String MOD_NAME = "Chaos Crystal";
-	public static final String MOD_VERSION = "0.5.1.1";
+	public static final String MOD_VERSION = "0.5.1.2";
 	public static final String CHANNEL_NAME = "ChaosCrystal";
 
 	public static final String ID_ITEM_CHAOSCRYSTAL = "chaoscrystal.chaoscrystal";
@@ -11,6 +11,11 @@ public class Constants {
 	public static final String ID_ITEM_CRYSTALGLASSES = "chaoscrystal.crystalglasses";
 	public static final String ID_ITEM_MANUAL = "chaoscrystal.manual";
 	public static final String ID_ITEM_LIFELESS_SHARD = "chaoscrystal.lifeless_shard";
+	public static final String ID_ITEM_METERIAL = "chaoscrystal.material";
+	public static final String[] METALIST_MATERIAL = new String[] {
+		"machine_plate",
+		"machine_panel"
+	};
 	
 	public static final String ID_BLOCK_SHARD = "chaoscrystal.shard";
 	public static final String[] METALIST_SHARD = {
@@ -51,11 +56,11 @@ public class Constants {
 	
 	public static final String ID_BLOCK_CRYSTAL_LIGHT = "chaoscrystal.crystal_light";
 
+	public static final String ID_TILEENTITY_RECONSTRUCTOR = "chaoscrystal.reconstructor";
+	public static final String ID_TILEENTITY_INFUSER = "chaoscrystal.infuser";
 	/**
 	 * Not in use anymore. (Alternative to ID_TILEENTITY_INFUSER)
 	 */
-	public static final String ID_TILEENTITY_RECONSTRUCTOR = "chaoscrystal.reconstructor";
-	public static final String ID_TILEENTITY_INFUSER = "chaoscrystal.infuser";
 	public static final String ID_TILEENTITY_CREATOR = "chaoscrystal.creator";
 	public static final String ID_TILEENTITY_SENTRY = "chaoscrystal.sentry";
 	public static final String ID_TILEENTITY_TICKER = "chaoscrystal.ticker";

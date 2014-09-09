@@ -3,13 +3,81 @@ package founderio.chaoscrystal.aspects.modules;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import founderio.chaoscrystal.ChaosCrystalMain;
+import founderio.chaoscrystal.aspects.Aspect;
 import founderio.chaoscrystal.aspects.AspectBuilder;
 import founderio.chaoscrystal.aspects.AspectModule;
 import founderio.chaoscrystal.aspects.ChaosRegistry;
 import founderio.chaoscrystal.aspects.Node;
 
-public class ModuleVanillaWorldgen extends AspectModule {
+public class ModuleVanillaWorldgen {
 
+	public static void registerRepairs(ChaosRegistry chaosRegistry) {
+		AspectBuilder builder = new AspectBuilder();
+		
+		builder.clear().setAspect(Aspect.CRYSTAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.diamond_pickaxe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1);
+		chaosRegistry.registerRepair(Items.iron_pickaxe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.golden_pickaxe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.EARTH, 2).setAspect(Aspect.STRUCTURE, 2);
+		chaosRegistry.registerRepair(Items.stone_pickaxe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.WOOD, 3).setAspect(Aspect.GROWTH, 2);
+		chaosRegistry.registerRepair(Items.wooden_pickaxe, builder.toAspectArray());
+
+		builder.clear().setAspect(Aspect.CRYSTAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.diamond_axe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1);
+		chaosRegistry.registerRepair(Items.iron_axe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.golden_axe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.EARTH, 2).setAspect(Aspect.STRUCTURE, 2);
+		chaosRegistry.registerRepair(Items.stone_axe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.WOOD, 3).setAspect(Aspect.GROWTH, 2);
+		chaosRegistry.registerRepair(Items.wooden_axe, builder.toAspectArray());
+
+		builder.clear().setAspect(Aspect.CRYSTAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.diamond_shovel, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1);
+		chaosRegistry.registerRepair(Items.iron_shovel, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.golden_shovel, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.EARTH, 2).setAspect(Aspect.STRUCTURE, 2);
+		chaosRegistry.registerRepair(Items.stone_shovel, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.WOOD, 3).setAspect(Aspect.GROWTH, 2);
+		chaosRegistry.registerRepair(Items.wooden_shovel, builder.toAspectArray());
+
+		builder.clear().setAspect(Aspect.CRYSTAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.diamond_hoe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1);
+		chaosRegistry.registerRepair(Items.iron_hoe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.golden_hoe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.EARTH, 2).setAspect(Aspect.STRUCTURE, 2);
+		chaosRegistry.registerRepair(Items.stone_hoe, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.WOOD, 3).setAspect(Aspect.GROWTH, 2);
+		chaosRegistry.registerRepair(Items.wooden_hoe, builder.toAspectArray());
+
+		builder.clear().setAspect(Aspect.CRYSTAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.diamond_sword, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1);
+		chaosRegistry.registerRepair(Items.iron_sword, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.METAL, 1).setAspect(Aspect.VALUE, 1);
+		chaosRegistry.registerRepair(Items.golden_sword, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.EARTH, 2).setAspect(Aspect.STRUCTURE, 2);
+		chaosRegistry.registerRepair(Items.stone_sword, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.WOOD, 3).setAspect(Aspect.GROWTH, 2);
+		chaosRegistry.registerRepair(Items.wooden_sword, builder.toAspectArray());
+
+		builder.clear().setAspect(Aspect.METAL, 1);
+		chaosRegistry.registerRepair(Items.shears, builder.toAspectArray());
+
+		builder.clear().setAspect(Aspect.CRYSTAL, 1);
+		chaosRegistry.registerRepair(ChaosCrystalMain.itemCrystalGlasses, builder.toAspectArray());
+		builder.clear().setAspect(Aspect.WOOD, 2).setAspect(Aspect.STRUCTURE, 1);
+		chaosRegistry.registerRepair(Items.bow, builder.toAspectArray());
+	}
 
 		//TODO: IgnoreList
 		//degradationStore.addNode(WATER_MOVING = new NodeDegradation(null, ab.toAspectArray(), new ItemStack(Blocks.waterMoving, 1, 32767), false, false));
@@ -26,41 +94,7 @@ public class ModuleVanillaWorldgen extends AspectModule {
 //		degradationStore.addNode(new NodeSimpleOre(INGOT_EMERALD, STONE, 1, new ItemStack(Blocks.emerald_ore)));
 
 	//TODO: register these again.
-
-			//		chaosRegistry.registerRepair(Items.diamond_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.iron_pickaxe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-			//		chaosRegistry.registerRepair(Items.golden_pickaxe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.stone_pickaxe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-			//		chaosRegistry.registerRepair(Items.wooden_pickaxe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-			//
-			//		chaosRegistry.registerRepair(Items.diamond_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.iron_axe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-			//		chaosRegistry.registerRepair(Items.golden_axe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.stone_axe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-			//		chaosRegistry.registerRepair(Items.wooden_axe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-			//
-			//		chaosRegistry.registerRepair(Items.diamond_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.iron_shovel, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-			//		chaosRegistry.registerRepair(Items.golden_shovel, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.stone_shovel, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-			//		chaosRegistry.registerRepair(Items.wooden_shovel, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-			//
-			//		chaosRegistry.registerRepair(Items.diamond_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.iron_hoe, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-			//		chaosRegistry.registerRepair(Items.golden_hoe, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.stone_hoe, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-			//		chaosRegistry.registerRepair(Items.wooden_hoe, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-			//
-			//		chaosRegistry.registerRepair(Items.diamond_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.iron_sword, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-			//		chaosRegistry.registerRepair(Items.golden_sword, new String[] { Aspects.ASPECT_CRYSTAL,  Aspects.ASPECT_VALUE }, new int[] { 1, 1 });
-			//		chaosRegistry.registerRepair(Items.stone_sword, new String[] { Aspects.ASPECT_EARTH,  Aspects.ASPECT_STRUCTURE }, new int[] { 2, 2 });
-			//		chaosRegistry.registerRepair(Items.wooden_sword, new String[] { Aspects.ASPECT_WOOD,  Aspects.ASPECT_GROWTH }, new int[] { 3, 2 });
-			//
-			//		chaosRegistry.registerRepair(Items.shears, new String[] { Aspects.ASPECT_METAL }, new int[] { 1 });
-			//
-			//		chaosRegistry.registerRepair(itemCrystalGlasses, new String[] { Aspects.ASPECT_CRYSTAL }, new int[] { 1 });
-			//		chaosRegistry.registerRepair(Items.bow, new String[] { Aspects.ASPECT_WOOD, Aspects.ASPECT_STRUCTURE }, new int[] { 2, 1 });
+			
 //		degradationStore.autoRegisterDegradation(new ItemStack(Block.stoneBrick));
 //		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 0));
 //		degradationStore.autoRegisterDegradation(new ItemStack(Block.sandStone, 1, 1));
