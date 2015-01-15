@@ -1,8 +1,6 @@
 package founderio.chaoscrystal.blocks;
 
-import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import founderio.chaoscrystal.ChaosCrystalMain;
 import founderio.chaoscrystal.entities.EntityChaosCrystal;
 
 public class TileEntityShard extends TileEntityApparatus {
